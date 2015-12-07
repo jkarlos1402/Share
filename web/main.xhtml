@@ -47,7 +47,7 @@
                                             <p:menuitem value="Information Load"  icon="ui-icon-arrowreturnthick-1-n" action="#{mainBean.setPage('loadInformation','')}" update=":panelMain"/>
                                             <p:menuitem value="Uploads status"  icon=" ui-icon-clipboard" action="#{mainBean.setPage('loadInformation','')}" update=":panelMain"/>
                                             <p:submenu label="Reports" icon="ui-icon-image">
-                                                <p:menuitem value="DASHBOARD" icon="ui-icon-image" url="http://www.prime.com.tr" target="_blank"/>                                                
+                                                    <p:menuitem value="DASHBOARD" icon="ui-icon-image" url="http://kofmxqrboapq1:8080/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&amp;iDocID=AQ1DaH_L0h1DmRNe5STKHD4" target="_blank"/>                                                
                                             </p:submenu>
                                             <p:submenu label="Catalogs" icon="ui-icon-newwin">
                                                 <p:menuitem value="COUNTRY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','country')}" update=":panelMain"/>
@@ -59,6 +59,7 @@
                                             <p:submenu label="Administrator" icon="ui-icon-person">
                                                 <p:menuitem value="CATALOG USERS" icon="ui-icon-person" />
                                                 <p:menuitem value="ROLES AND PROFILES" icon="ui-icon-check"  />                                       
+                                                <p:menuitem value="SCRITPS" icon="ui-icon-document"  action="#{mainBean.setPage('scripts','country')}" update=":panelMain"/>                                       
                                             </p:submenu>
                                         </p:slideMenu>
                                     </h:form>

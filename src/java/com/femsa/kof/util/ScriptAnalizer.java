@@ -66,7 +66,7 @@ public class ScriptAnalizer {
                 b = new BufferedReader(f);
                 while ((cadena = b.readLine()) != null) {
                     cadena = cadena.trim();
-                    if (!cadena.startsWith("/*", 0) && !cadena.startsWith("*", 0) && !cadena.startsWith("--", 0) && !cadena.equals("")) {
+                    if (!cadena.startsWith("/*", 0) && !cadena.startsWith("*", 0) && !cadena.startsWith("--", 0) && !cadena.equals("") && !cadena.equalsIgnoreCase("exit;")) {
                         if (cadena.contains("/*")) {
                             indexComentario = cadena.indexOf("/*");
                             cadena = cadena.substring(0, indexComentario);
