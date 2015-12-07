@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+        <link rel="stylesheet" type="text/css" href="css/estilosGenerales.css"/>
+        <script type="text/javascript" src="js/util.js"/>
+    </h:head>
+    <h:body>        
+        <p:outputPanel id="panelMain">
+            <div class="ui-grid ui-grid-responsive">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-3">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-12">
+                                <p:panel style="background-color: #590A09; border-style: none; opacity: 0.8;">
+
+                                </p:panel>
+                            </div>
+                        </div>
+                        <div class="ui-grid-row" style="margin-top: -18px;">
+                            <div class="ui-grid-col-12">
+                                <p:panel style="background-color: #590A09; border-style: none; opacity: 0.8; text-align: center;">
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-12">
+                                            <p:graphicImage  value="/images/femsa.png"/>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-12">
+                                            <h:outputText value="WELCOME" style="color: #ffffff;"/>
+                                        </div>
+                                    </div>
+
+                                </p:panel>
+                            </div>
+                        </div>
+                        <div class="ui-grid-row" style="margin-top: -18px;">
+                            <div class="ui-grid-col-12">
+                                <p:panel style="background-color: #590A09; border-style: none; opacity: 0.8; text-align: center;">                                    
+                                    <h:form>
+                                        <p:slideMenu style="width:180px">
+                                            <p:menuitem value="Information Load"  icon="ui-icon-arrowreturnthick-1-n" action="#{mainBean.setPage('loadInformation','')}" update=":panelMain"/>
+                                            <p:menuitem value="Uploads status"  icon=" ui-icon-clipboard" action="#{mainBean.setPage('loadInformation','')}" update=":panelMain"/>
+                                            <p:submenu label="Reports" icon="ui-icon-image">
+                                                <p:menuitem value="DASHBOARD" icon="ui-icon-image" url="http://www.prime.com.tr" target="_blank"/>                                                
+                                            </p:submenu>
+                                            <p:submenu label="Catalogs" icon="ui-icon-newwin">
+                                                <p:menuitem value="COUNTRY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','country')}" update=":panelMain"/>
+                                                <p:menuitem value="CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','category')}" update=":panelMain"/>
+                                                <p:menuitem value="GROUP CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','group')}" update=":panelMain"/>
+                                                <p:menuitem value="MANUFACTURER" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','manufacturer')}" update=":panelMain"/>
+                                            </p:submenu>
+                                            <p:separator />
+                                            <p:submenu label="Administrator" icon="ui-icon-person">
+                                                <p:menuitem value="CATALOG USERS" icon="ui-icon-person" />
+                                                <p:menuitem value="ROLES AND PROFILES" icon="ui-icon-check"  />                                       
+                                            </p:submenu>
+                                        </p:slideMenu>
+                                    </h:form>
+
+                                </p:panel>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-grid-col-9" >
+                        <ui:include src="#{mainBean.page}" id="workSpace"/>
+                    </div>
+                </div>
+            </div>
+        </p:outputPanel>
+        <p:ajaxStatus style="position: fixed;display:block;bottom:50px;right: 10px;height:24px;">                
+            <f:facet name="start">
+                <p:graphicImage  value="/images/loader.gif"/>
+            </f:facet>
+            <f:facet name="complete">                    
+            </f:facet>
+        </p:ajaxStatus>
+        <p:graphicImage  value="/images/loader.gif" style="position: fixed;display:block;bottom:50px;right: 10px;height:64px; display: none;" id="loadingGIF"/>
+    </h:body>
+</html>
+

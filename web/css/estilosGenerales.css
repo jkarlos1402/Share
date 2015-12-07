@@ -1,0 +1,75 @@
+body{
+    background: url(../images/bg2.jpg);
+    background-size: cover;
+    font-family: 'Source Sans Pro', sans-serif;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 300;
+    font-size: 12px;   
+}
+
+.ui-grid-col-12{
+    padding: 10px;
+}
+
+.widget {
+  margin-top: 25px;
+  margin-bottom: 15px;
+}
+
+.widget__header {
+  position: relative;
+  width: calc(100% + 0px);
+  overflow: hidden;
+}
+.no-padding--lr .widget__header {
+  padding-left: 25px;
+  padding-right: 25px;
+}
+.no-padding .widget__header {
+  padding: 25px 25px 0 25px;
+}
+
+.widget__title {
+  float: left;
+  padding-right: 10px;
+  display: inline-block;
+  background-color: rgba(0, 0, 0, 0.3);
+  
+  width: calc(100% - 130px);
+  
+}
+.widget__title h3 {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 22px;
+  font-weight: 100;
+  display: inline-block;
+}
+.widget__title i {
+  width: 64px;
+  height: 64px;
+  text-align: center;
+  line-height: 64px;
+  display: inline-block;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 28px;
+  vertical-align: top;
+}
+.widget__title span {
+  font-size: 16px;
+}
+.one-btn .widget__title {
+  width: calc(100% - 64px);
+}
+
+.widget__config {
+  float: left;
+  width: 130px;
+  height: 63px;
+}
+.one-btn .widget__config {
+  width: 64px;
+}
+
+.topElemsClass{    
+    vertical-align: top;   
+}

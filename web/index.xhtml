@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="EmulateIE9"/>
+            <title>Corporate  Market Share Portal ::</title>    
+        </f:facet>             
+        <link rel="stylesheet" type="text/css" href="css/estilosGenerales.css"/>
+    </h:head>
+    <h:body>
+        <p:outputPanel >
+            <div class="ui-grid ui-grid-responsive">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-4"></div>
+                    <div class="ui-grid-col-4">
+                        <h1 class="main-header__title">
+                            <i class="pe-7f-browser"></i>
+                            <span>Corporate  Market Share</span>
+                        </h1>
+                    </div>
+                    <div class="ui-grid-col-4"></div>
+                </div>
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-4"></div>
+                    <div class="ui-grid-col-4">
+                        <div class="widget">                            
+                            <div class="widget__content widget__grid filled pad20">
+                                <h:form>
+                                    <p:growl id="msgs" showDetail="true" />
+                                    <p:outputPanel>
+                                        <div class="ui-grid ui-grid-responsive ">
+                                            <div class="ui-grid-row widget__title">
+                                                <div class="ui-grid-col-12">
+                                                    <h3 style="padding: 10px;" >Login</h3>                                                     
+                                                </div>
+                                            </div>
+                                            <div class="ui-grid-row widget__title">
+                                                <div class="ui-grid-col-12" >
+                                                    <p:outputLabel for="userNameLogIn" value="User name:"/>                                                        
+                                                </div>
+                                            </div>
+                                            <div class="ui-grid-row widget__title">
+                                                <div class="ui-grid-col-12">
+                                                    <p:inputText placeholder="User name" id="userNameLogIn" value="#{userBean.user}" required="true" label="User name" requiredMessage="Enter user name"/>                                                        
+                                                </div>
+                                            </div>
+                                            <div class="ui-grid-row widget__title">
+                                                <div class="ui-grid-col-12">
+                                                    <p:outputLabel for="passwordLogIn" value="Password:"/>                                                        
+                                                </div>
+                                            </div>
+                                            <div class="ui-grid-row widget__title">
+                                                <div class="ui-grid-col-12">
+                                                    <p:inputText type="password" placeholder="Password" id="passwordLogIn" value="#{userBean.password}" required="true" requiredMessage="Enter password"/>                                                        
+                                                </div>
+                                            </div>
+                                            <div class="ui-grid-row widget__title">
+                                                <div class="ui-grid-col-12">
+                                                    <p:commandButton value="Sign in" action="#{userBean.logIn}" update="msgsLogin"/>                                                       
+                                                </div>
+                                            </div>
+                                            <div class="ui-grid-row widget__title">
+                                                <div class="ui-grid-col-12">
+                                                    <p:messages id="msgsLogin"/>                                                   
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </p:outputPanel>                                    
+                                </h:form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-grid-col-4"></div>
+                </div>
+            </div>
+        </p:outputPanel>        
+    </h:body>
+</html>
+
