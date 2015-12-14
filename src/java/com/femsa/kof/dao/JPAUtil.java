@@ -9,10 +9,16 @@ public class JPAUtil {
     private EntityManagerFactory emfactory;
 
     private EntityManager entitymanager;
+    
+    private String error;
 
-    public JPAUtil(){       
-        emfactory = Persistence.createEntityManagerFactory("SharePortalPU");
-        entitymanager = emfactory.createEntityManager();        
+    public JPAUtil() {
+        try {
+            emfactory = Persistence.createEntityManagerFactory("SharePortalPU");
+            entitymanager = emfactory.createEntityManager();
+        } catch (Exception e) {
+            error = "No se puede conectar a la base de datos: " + e.getMessage();            
+        }
     }
 
     public EntityManager getEntityManager() {

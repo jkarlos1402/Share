@@ -1,6 +1,5 @@
 package com.femsa.kof.dao;
 
-import com.femsa.kof.pojos.ShareCatCategorias;
 import com.femsa.kof.pojos.ShareCatFabricante;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -42,8 +41,7 @@ public class ShareCatFabricanteDAO {
                 em.persist(fabricante);
             }
             et.commit();
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+        } catch (Exception e) {            
             if (et.isActive()) {
                 et.rollback();
             }

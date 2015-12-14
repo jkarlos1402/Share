@@ -6,60 +6,59 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>Facelet Title</title>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+            <title>Corporate  Market</title>  
+        </f:facet>             
         <link rel="stylesheet" type="text/css" href="css/estilosGenerales.css"/>
         <script type="text/javascript" src="js/util.js"/>
-    </h:head>
+    </h:head>    
     <h:body>        
         <p:outputPanel id="panelMain">
             <div class="ui-grid ui-grid-responsive">
                 <div class="ui-grid-row">
                     <div class="ui-grid-col-3">
                         <div class="ui-grid-row">
-                            <div class="ui-grid-col-12">
-                                <p:panel style="background-color: #590A09; border-style: none; opacity: 0.8;">
-
-                                </p:panel>
+                            <div class="ui-grid-col-12">                                
                             </div>
                         </div>
-                        <div class="ui-grid-row" style="margin-top: -18px;">
+                        <div class="ui-grid-row" style="margin-top: 0px;">
                             <div class="ui-grid-col-12">
-                                <p:panel style="background-color: #590A09; border-style: none; opacity: 0.8; text-align: center;">
+                                <p:panel style="background-color: rgba(0, 0, 0, 0.3); border-style: none; text-align: center;   margin-left: -60px;">
                                     <div class="ui-grid-row">
-                                        <div class="ui-grid-col-12">
+                                        <div class="ui-grid-col-12" style="padding-left: 0px;">
                                             <p:graphicImage  value="/images/femsa.png"/>
                                         </div>
                                     </div>
                                     <div class="ui-grid-row">
-                                        <div class="ui-grid-col-12">
-                                            <h:outputText value="WELCOME" style="color: #ffffff;"/>
+                                        <div class="ui-grid-col-12" style="padding-left: 0px;">
+                                            <h:panelGrid columns="2" cellspacing="3px">
+                                                <h:outputText value="WELCOME #{mainBean.usuario.nombre}" style="color: #ffffff; font-size: 15px;"/>
+                                                <p:commandLink value="(Logout)" actionListener="#{userBean.logout}" action="index" style="color: #ffffff; font-size: 15px;"/>
+                                            </h:panelGrid>
                                         </div>
                                     </div>
 
                                 </p:panel>
                             </div>
                         </div>
-                        <div class="ui-grid-row" style="margin-top: -18px;">
-                            <div class="ui-grid-col-12">
-                                <p:panel style="background-color: #590A09; border-style: none; opacity: 0.8; text-align: center;">                                    
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-12"  style="padding-top: 0px;">
+                                <p:panel style="background-color: rgba(0, 0, 0, 0.3); border-style: none; text-align: center;   margin-left: -60px;  margin-top: 0px;">                                    
                                     <h:form>
-                                        <p:slideMenu style="width:180px">
+                                        <p:slideMenu style="width:auto; margin-left:4px; font-size:14px;">
                                             <p:menuitem value="Information Load"  icon="ui-icon-arrowreturnthick-1-n" action="#{mainBean.setPage('loadInformation','')}" update=":panelMain"/>
-                                            <p:menuitem value="Uploads status"  icon=" ui-icon-clipboard" action="#{mainBean.setPage('loadInformation','')}" update=":panelMain"/>
-                                            <p:submenu label="Reports" icon="ui-icon-image">
-                                                    <p:menuitem value="DASHBOARD" icon="ui-icon-image" url="http://kofmxqrboapq1:8080/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&amp;iDocID=AQ1DaH_L0h1DmRNe5STKHD4" target="_blank"/>                                                
-                                            </p:submenu>
-                                            <p:submenu label="Catalogs" icon="ui-icon-newwin">
+                                            <p:menuitem value="Uploads status"  icon=" ui-icon-clipboard" action="#{mainBean.setPage('uploadStatus','')}" update=":panelMain"/>                                            
+                                            <p:submenu label="Catalogs" icon="ui-icon-newwin" rendered="#{mainBean.usuario.rol.pkRol eq '1' ? true : false}">
                                                 <p:menuitem value="COUNTRY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','country')}" update=":panelMain"/>
                                                 <p:menuitem value="CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','category')}" update=":panelMain"/>
                                                 <p:menuitem value="GROUP CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','group')}" update=":panelMain"/>
                                                 <p:menuitem value="MANUFACTURER" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','manufacturer')}" update=":panelMain"/>
                                             </p:submenu>
                                             <p:separator />
-                                            <p:submenu label="Administrator" icon="ui-icon-person">
-                                                <p:menuitem value="CATALOG USERS" icon="ui-icon-person" />
-                                                <p:menuitem value="ROLES AND PROFILES" icon="ui-icon-check"  />                                       
-                                                <p:menuitem value="SCRITPS" icon="ui-icon-document"  action="#{mainBean.setPage('scripts','country')}" update=":panelMain"/>                                       
+                                            <p:submenu label="Administrator" icon="ui-icon-person" rendered="#{mainBean.usuario.rol.pkRol eq '1' ? true : false}" >
+                                                <p:menuitem value="CATALOG USERS" icon="ui-icon-person" action="#{mainBean.setPage('adminUsers','')}" update=":panelMain"/>                                                                                     
+                                                <p:menuitem value="SCRIPTS" icon="ui-icon-document"  action="#{mainBean.setPage('scripts','')}" update=":panelMain"/>                                       
                                             </p:submenu>
                                         </p:slideMenu>
                                     </h:form>
@@ -74,14 +73,14 @@
                 </div>
             </div>
         </p:outputPanel>
-        <p:ajaxStatus style="position: fixed;display:block;bottom:50px;right: 10px;height:24px;">                
+        <p:ajaxStatus style="position: fixed;display:block;bottom:100px;right: 20px;height:24px;">                
             <f:facet name="start">
                 <p:graphicImage  value="/images/loader.gif"/>
             </f:facet>
             <f:facet name="complete">                    
             </f:facet>
         </p:ajaxStatus>
-        <p:graphicImage  value="/images/loader.gif" style="position: fixed;display:block;bottom:50px;right: 10px;height:64px; display: none;" id="loadingGIF"/>
+        <p:graphicImage  value="/images/loader.gif" style="position: fixed;display:block;bottom:10px;right: 10px;height:100px; display: none;" id="loadingGIF"/>
     </h:body>
 </html>
 

@@ -6,10 +6,14 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>Scripts</title>
-    </h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+            <title>Scripts</title>
+        </f:facet>                     
+    </h:head>       
     <h:body>
         <ui:component>
+            <h1>Scripts</h1>
             <h:form id="formScript">
                 <p:growl id="msgsScript" showDetail="true"/>
                 <p:messages showDetail="true" closable="true"/>
@@ -29,11 +33,17 @@
                         </p:dataList>
                         <h:panelGrid columns="1" style="width: 100%;" >
                             <p:inputTextarea value="#{scriptBean.scriptText}" rows="20" id="editorScript" style="width: 100%;" autoResize="false" />
-                            <p:commandButton value="Save" id="btnSaveScript" update=":formScript" actionListener="#{scriptBean.saveScriptSelected}" rendered="#{scriptBean.scriptSelected != null ? true : false}"/>
+                            <p:commandButton value="Save" id="btnSaveScript" update=":formScript" actionListener="#{scriptBean.saveScriptSelected}" rendered="#{scriptBean.scriptSelected != null ? true : false}">
+                                <p:confirm message="Are you sure?" header="Save script"/>
+                            </p:commandButton>
                         </h:panelGrid>                        
                     </p:panelGrid>
                 </p:panel>                
             </h:form>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
         </ui:component>
     </h:body>
 </html>

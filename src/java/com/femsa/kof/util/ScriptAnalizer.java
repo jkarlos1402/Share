@@ -1,6 +1,7 @@
 package com.femsa.kof.util;
 
 import com.femsa.kof.dao.JPAUtil;
+import com.femsa.kof.pojos.ShareCatPais;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -15,7 +16,7 @@ import javax.servlet.ServletContext;
 
 public class ScriptAnalizer {
 
-    public static boolean executeScritsShare(List<String> errors) {
+    public static boolean executeScritsShare(List<String> errors,ShareCatPais pais) {
         JPAUtil jpau = new JPAUtil();
         EntityManager em = jpau.getEntityManager();
         ServletContext sc = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
@@ -30,7 +31,7 @@ public class ScriptAnalizer {
             et.begin();
             for (int i = 0; i < ficheros.length; i++) {
                 File fichero = ficheros[i];
-                instructions = getInstructionsSQL(fichero, errors);
+                instructions = getInstructionsSQL(fichero, errors, pais);
                 if (instructions != null) {
                     for (String instruction : instructions) {
                         queryNativo = em.createNativeQuery(instruction);
@@ -39,7 +40,8 @@ public class ScriptAnalizer {
                 }
             }
             et.commit();
-        } catch (Exception e) {
+        } catch (Exception e) { 
+            e.printStackTrace();
             errors.add("Error running script: " + e.getMessage());
             if (et.isActive()) {
                 et.rollback();
@@ -52,7 +54,7 @@ public class ScriptAnalizer {
         return flagOk;
     }
 
-    public static List<String> getInstructionsSQL(File scritpSQL, List<String> errors) throws IOException {
+    private static List<String> getInstructionsSQL(File scritpSQL, List<String> errors, ShareCatPais pais) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
         FileReader f = null;
         BufferedReader b = null;
@@ -71,12 +73,14 @@ public class ScriptAnalizer {
                             indexComentario = cadena.indexOf("/*");
                             cadena = cadena.substring(0, indexComentario);
                         }
+                        cadena = cadena.replaceAll("_CLAVECORTAPAIS_", "_"+pais.getClaveCorta().trim()+"_");
+                        cadena = cadena.replaceAll("'NOMBREPAIS'", "'"+pais.getNombre().trim()+"'");
                         stringBuilder.append(cadena);
                         stringBuilder.append(" ");
                         if (cadena.endsWith(";")) {
                             if (statements == null) {
                                 statements = new ArrayList<String>();
-                            }
+                            }                            
                             statements.add(stringBuilder.toString().replaceAll(";", "").trim());
                             stringBuilder = new StringBuilder();
                         }

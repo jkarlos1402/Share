@@ -5,18 +5,21 @@ import com.femsa.kof.dao.ShareCatPaisDAO;
 import com.femsa.kof.dao.ShareCatCanalesDAO;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 
-public class CatalogLoader {
-    public static void loadCatalogs(){
-        ServletContext sc = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();        
-        
+public class CatalogLoader {    
+
+    public static void loadCatalogs() {
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);     
+        ServletContext sc = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();     
         ShareCatCategoriasDAO catCategoriasDAO = new ShareCatCategoriasDAO();
-        sc.setAttribute("categories_catalog", catCategoriasDAO.getCategorias());
-        
+        session.setAttribute("categories_catalog", catCategoriasDAO.getCategorias());
+
         ShareCatCanalesDAO canalesDAO = new ShareCatCanalesDAO();
-        sc.setAttribute("canales_catalog", canalesDAO.getCanales());
-        
+        session.setAttribute("canales_catalog", canalesDAO.getCanales());
+
         ShareCatPaisDAO catPaisDAO = new ShareCatPaisDAO();
         sc.setAttribute("countries_catalog", catPaisDAO.getCatPais());
     }
+
 }

@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+            <title>Corporate  Market Share Portal ::</title>    
+        </f:facet>
+    </h:head>
+    <h:body>
+        <ui:composition>
+            <h:form>
+                <h1>Upload Status</h1>                 
+                <p:panel id="panelLoad">   
+                    <h:panelGrid columns="1" cellpadding="5px">
+                        <p:dataTable var="status" value="#{uploadStatusBean.status}" reflow="true">
+                            <p:column headerText="DESCRIPTION">
+                                <h:outputText  value="#{status.key}"/>
+                            </p:column>
+
+                            <p:column headerText="DETAIL">
+                                <h:outputText  value="#{status.value}"/>
+                            </p:column>                    
+                        </p:dataTable>
+                    </h:panelGrid>                      
+                </p:panel>
+            </h:form>
+        </ui:composition>
+    </h:body>
+</html>
+

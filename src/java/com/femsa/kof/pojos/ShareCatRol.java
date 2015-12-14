@@ -1,13 +1,10 @@
 package com.femsa.kof.pojos;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
@@ -19,7 +16,7 @@ public class ShareCatRol implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "PK_ROL")
-    private BigDecimal pkRol;
+    private Integer pkRol;
 
     @Column(name = "ROL")
     private String rol;
@@ -27,15 +24,15 @@ public class ShareCatRol implements Serializable {
     public ShareCatRol() {
     }
 
-    public ShareCatRol(BigDecimal pkRol) {
+    public ShareCatRol(Integer pkRol) {
         this.pkRol = pkRol;
     }
 
-    public BigDecimal getPkRol() {
+    public Integer getPkRol() {
         return pkRol;
     }
 
-    public void setPkRol(BigDecimal pkRol) {
+    public void setPkRol(Integer pkRol) {
         this.pkRol = pkRol;
     }
 

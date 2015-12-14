@@ -1,44 +1,49 @@
 package com.femsa.kof.dao;
 
-import com.femsa.kof.pojos.ShareCatCategorias;
+
+import com.femsa.kof.pojos.ShareUsuario;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
-public class ShareCatCategoriasDAO {
+public class ShareUsuarioDAO {
 
-    public List<ShareCatCategorias> getCategorias() {
+    public ShareUsuario getUsuario(String user, String password) {
         JPAUtil jpau = new JPAUtil();
         EntityManager em = jpau.getEntityManager();
-        Query query = em.createQuery("SELECT categ FROM ShareCatCategorias categ WHERE categ.status = 1");
-        List<ShareCatCategorias> categories = query.getResultList();
+        Query query = em.createQuery("SELECT u FROM ShareUsuario u WHERE u.usuario = '" + user.toUpperCase() + "' AND u.password = '" + password + "' AND u.estatus = 1");
+        List<ShareUsuario> usuarios = (List<ShareUsuario>) query.getResultList();
+        ShareUsuario usuario = null;
+        if (usuarios.size() > 0) {
+            return usuarios.get(0);
+        }
         em.clear();
         em.close();
-        return categories;
+        return usuario;
     }
 
-    public List<ShareCatCategorias> getCategoriasAll() {
+    public List<ShareUsuario> getAllUsers() {
         JPAUtil jpau = new JPAUtil();
         EntityManager em = jpau.getEntityManager();
-        Query query = em.createQuery("SELECT categ FROM ShareCatCategorias categ");
-        List<ShareCatCategorias> categories = query.getResultList();
+        Query query = em.createQuery("SELECT u FROM ShareUsuario u");
+        List<ShareUsuario> usuarios = (List<ShareUsuario>) query.getResultList();
         em.clear();
         em.close();
-        return categories;
+        return usuarios;
     }
 
-    public boolean saveCategoria(ShareCatCategorias categoria) {
+    public boolean saveUser(ShareUsuario usuario) {
         JPAUtil jpau = new JPAUtil();
         EntityManager em = jpau.getEntityManager();
         EntityTransaction et = em.getTransaction();
         boolean flagOk = true;
         try {
             et.begin();
-            if (categoria.getPkCategoria() != null) {
-                em.merge(categoria);
-            } else {
-                em.persist(categoria);
+            if (usuario.getPkUsuario() == null) {
+                em.persist(usuario);
+            } else {                
+                em.merge(usuario);
             }
             et.commit();
         } catch (Exception e) {            

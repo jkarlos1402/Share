@@ -2,74 +2,30 @@ body{
     background: url(../images/bg2.jpg);
     background-size: cover;
     font-family: 'Source Sans Pro', sans-serif;
+    color: rgba(255, 255, 255, 1);
+    font-weight: bold; /* 300*/
+    font-size: 13px;  
+
+}
+
+#titulo{ 
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 1000; /* 300*/
+    font-size: 22px;  
+    padding-left: 30px;
+}
+
+#texto{ 
+    font-family: 'Source Sans Pro', sans-serif;
     color: rgba(255, 255, 255, 0.9);
-    font-weight: 300;
-    font-size: 12px;   
+    font-weight: 900; /* 300*/
+    font-size: 20px;   
 }
 
-.ui-grid-col-12{
-    padding: 10px;
-}
 
-.widget {
-    margin-top: 25px;
-    margin-bottom: 15px;
-}
 
-.widget__header {
-    position: relative;
-    width: calc(100% + 0px);
-    overflow: hidden;
-}
-.no-padding--lr .widget__header {
-    padding-left: 25px;
-    padding-right: 25px;
-}
-.no-padding .widget__header {
-    padding: 25px 25px 0 25px;
-}
 
-.widget__title {
-    float: left;
-    padding-right: 10px;
-    display: inline-block;
-    background-color: rgba(0, 0, 0, 0.3);
-
-    width: calc(100% - 130px);
-
-}
-.widget__title h3 {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 22px;
-    font-weight: 100;
-    display: inline-block;
-}
-.widget__title i {
-    width: 64px;
-    height: 64px;
-    text-align: center;
-    line-height: 64px;
-    display: inline-block;
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 28px;
-    vertical-align: top;
-}
-.widget__title span {
-    font-size: 16px;
-}
-.one-btn .widget__title {
-    width: calc(100% - 64px);
-}
-
-.widget__config {
-    float: left;
-    width: 130px;
-    height: 63px;
-}
-.one-btn .widget__config {
-    width: 64px;
-}
-
+/**** ***/
 .topElemsClass{    
     vertical-align: top;   
 }
@@ -85,3 +41,127 @@ body{
 .ui-panelgrid-content.ui-widget-content.ui-grid.ui-grid-responsive{
     border: none;    
 }
+/** ***/
+
+
+.ui-grid-col-12{
+    padding: 10px;
+    padding-left: 40px;	
+}
+
+
+.widget {
+    margin-top: 25px;
+    /* margin-bottom: 15px;*/   
+}
+
+
+/* fondo transparente */
+.widget__title {
+    float: left;
+    display: inline-block;
+    background-color: rgba(0, 0, 0, 0.3);
+    width: calc(100% - 25px);
+    margin-left: -9px;
+}
+
+.ui-menu .ui-menuitem-link {
+    padding: 0.4em;
+    font-size:16px;
+    font-weight:bold;
+}
+
+/*color del texto menu    ROJO QUEMADO A8141C*/
+
+.ui-widget-content a{
+    color: #606060;
+}
+
+
+
+a.ui-menuitem-link.ui-corner-all.ui-state-hover{
+    color:#CC0514; /*#A8141C;*/
+    background: transparent; 
+    width: 100%;
+}
+
+/* forma de la flecha 32 16    20 46*/
+.ui-icon-triangle-1-e{
+    background-position:-50px -16px;
+}
+
+
+/* la posi flechas */
+.ui-menu .ui-menu-parent .ui-icon-triangle-1-e, .ui-menu .ui-menu-parent .ui-icon-triangle-1-s, .ui-menubar .ui-menu-child .ui-icon-triangle-1-s, .ui-menubar .ui-menu-child .ui-icon-triangle-1-s{
+    float:left;
+    margin-left: 10px;
+    display: inline-block;
+
+}
+
+
+/*iconos*/
+.ui-menu .ui-menuitem-link .ui-menuitem-icon{
+    margin-right:10px;
+}
+
+
+/*.widget__header {
+    position: relative;
+    width: calc(100% + 0px);
+    overflow: hidden;
+}
+
+.no-padding--lr .widget__header {
+    padding-left: 25px;
+    padding-right: 25px;
+}
+.no-padding .widget__header {
+    padding: 25px 25px 0 25px;
+}
+
+
+.widget__title h3 {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 22px;
+    font-weight: 100;
+    display: inline-block;
+}
+
+.widget__title i {
+    width: 64px;
+    height: 64px;
+    text-align: center;
+    line-height: 64px;
+    display: inline-block;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 28px;
+    vertical-align: top;
+}
+.widget__title span {
+    font-size: 16px;
+}
+
+.one-btn .widget__title {
+    width: calc(100% - 70px);
+}
+.widget__config {
+    float: left;
+    width: 130px;
+    height: 63px;
+}
+
+.one-btn .widget__config {
+    width: 64px;
+}
+
+*/
+
+
+/*texto del menu */
+
+
+
+
+
+

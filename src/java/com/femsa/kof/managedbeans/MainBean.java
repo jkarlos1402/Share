@@ -1,15 +1,30 @@
 package com.femsa.kof.managedbeans;
 
+import com.femsa.kof.pojos.ShareUsuario;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 @ManagedBean(name = "mainBean")
-@ViewScoped
+@SessionScoped
 public class MainBean implements Serializable{
     private String page = "welcome.xhtml";
     
     private String catalog = "";
+    
+    private ShareUsuario usuario;
+
+    public ShareUsuario getUsuario() {
+        HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        usuario = (ShareUsuario) httpSession.getAttribute("session_user");        
+        return usuario;
+    }
+
+    public void setUsuario(ShareUsuario usuario) {
+        this.usuario = usuario;
+    }
 
     public String getPage() {
         return page;

@@ -7,7 +7,7 @@
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <f:facet name="first">
-            <meta http-equiv="X-UA-Compatible" content="EmulateIE9"/>
+            <meta http-equiv="X-UA-Compatible" content="IE=9"/>
             <title>Corporate  Market Share Portal ::</title>    
         </f:facet>             
         <link rel="stylesheet" type="text/css" href="css/estilosGenerales.css"/>
@@ -19,7 +19,7 @@
                     <div class="ui-grid-col-4"></div>
                     <div class="ui-grid-col-4">
                         <h1 class="main-header__title">
-                            <i class="pe-7f-browser"></i>
+                            <i class="pe-7f-browser" id="titulo"></i>
                             <span>Corporate  Market Share</span>
                         </h1>
                     </div>
@@ -36,7 +36,7 @@
                                         <div class="ui-grid ui-grid-responsive ">
                                             <div class="ui-grid-row widget__title">
                                                 <div class="ui-grid-col-12">
-                                                    <h3 style="padding: 10px;" >Login</h3>                                                     
+                                                    <h3 id="texto">Login</h3>                                                     
                                                 </div>
                                             </div>
                                             <div class="ui-grid-row widget__title">
@@ -78,7 +78,14 @@
                     <div class="ui-grid-col-4"></div>
                 </div>
             </div>
-        </p:outputPanel>        
+        </p:outputPanel>  
+        <p:ajaxStatus style="position: fixed;display:block;bottom:100px;right: 20px;height:24px;">                
+            <f:facet name="start">
+                <p:graphicImage  value="/images/loader.gif"/>
+            </f:facet>
+            <f:facet name="complete">                    
+            </f:facet>
+        </p:ajaxStatus>
     </h:body>
 </html>
 

@@ -1,23 +1,19 @@
 package com.femsa.kof.managedbeans;
 
 import com.femsa.kof.pojos.ScriptKOF;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class ScriptBean implements Serializable {
     
     private List<ScriptKOF> scripts;

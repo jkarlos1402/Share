@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>        
+        <ui:composition>
+            <h1>Users</h1>
+            <h:form id="formUsers">
+                <p:growl id="msgsCat" showDetail="true"/>
+                <p:messages showDetail="true" closable="true"/>
+                <p:panel id="panelUsers" header="Users">
+                    <h:panelGrid columns="6" cellpadding="5px" >                        
+                        <p:outputLabel for="userLogin" value="User:" />
+                        <p:inputText id="userLogin" required="true" value="#{userBean.usuarioNuevo.usuario}" maxlength="15"/>
+
+                        <p:outputLabel for="passLogin" value="Password:" />                                               
+                        <p:inputText id="passLogin" value="#{userBean.usuarioNuevo.password}"  required="true" label="Password" maxlength="80"/>                     
+
+                        <p:outputLabel for="userName" value="Name:" />
+                        <p:inputText id="userName" required="true" value="#{userBean.usuarioNuevo.nombre}" maxlength="60"/>
+
+                        <p:outputLabel for="userMail" value="Mail:" />
+                        <p:inputText id="userMail" required="true" value="#{userBean.usuarioNuevo.mail}" maxlength="60"/>
+
+                        <p:outputLabel for="userRol" value="Rol:" />
+                        <p:selectOneMenu id="userRol" immediate="true" value="#{userBean.usuarioNuevo.rol}" style="width:125px" converter="rolConverter" required="true" label="Rol">
+                            <f:selectItem itemLabel="Select One" itemValue="" />
+                            <f:selectItems value="#{userBean.catRoles}" />                             
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="userPaisOrigen" value="Country:" />
+                        <p:inputText id="userPaisOrigen" required="true" value="#{userBean.usuarioNuevo.pais}" maxlength="20"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="4" cellpadding="5px">
+                        <p:outputLabel for="userPaises" value="Countries:" />
+                        <p:pickList id="userPaises" value="#{userBean.paisesAll}" var="countrieUser" itemLabel="#{countrieUser}" itemValue="#{countrieUser}" converter="countryConverter"/>
+
+                        <p:outputLabel for="userStatus" value="Status:" />
+                        <p:selectOneRadio id="userStatus" layout="pageDirection" required="true" value="#{userBean.usuarioNuevo.estatus}">
+                            <f:selectItem itemLabel="Enable" itemValue="true" />
+                            <f:selectItem itemLabel="Disable" itemValue="false" />                            
+                        </p:selectOneRadio>
+                        <f:facet name="footer">
+                            <h:panelGrid columns="2" cellspacing="10px">
+                                <p:commandButton value="Save" update=":formUsers" actionListener="#{userBean.saveUser}">
+                                    <p:confirm message="Are you sure?" header="Save user"/>
+                                </p:commandButton>
+                                <p:commandButton value="New" update=":formUsers" actionListener="#{userBean.newUser}" rendered="#{userBean.usuarioNuevo.pkUsuario ne null ? true : false}"/>                                
+                            </h:panelGrid>
+                        </f:facet>
+                    </h:panelGrid> 
+                    <p:separator/>
+                    <h:panelGrid columns="1">
+                        <p:dataTable id="tableUsers" var="userTable" value="#{userBean.usuariosAll}" rowKey="#{userTable.pkUsuario}" selection="#{userBean.usuarioSelected}" selectionMode="single" paginator="true" rows="10">
+                            <p:column headerText="User">
+                                <h:outputText value="#{userTable.usuario}"/>
+                            </p:column>
+                            <p:column headerText="Name">
+                                <h:outputText value="#{userTable.nombre}"/>
+                            </p:column>                            
+                            <p:column headerText="Mail">
+                                <h:outputText value="#{userTable.mail}"/>
+                            </p:column>
+                            <p:column headerText="Rol">
+                                <h:outputText value="#{userTable.rol.rol}"/>
+                            </p:column>
+                            <p:column headerText="Country">
+                                <h:outputText value="#{userTable.pais}"/>
+                            </p:column>                            
+                            <p:column headerText="Status">
+                                <h:outputText value="#{userTable.estatus ? 'ENABLED' : 'DISABLED'}"/>
+                            </p:column>
+                            <p:ajax event="rowSelect" update=":formUsers" listener="#{userBean.selectUser}"/>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </p:panel>
+            </h:form>
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+        </ui:composition>
+    </h:body>
+</html>
+

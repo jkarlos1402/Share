@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -39,8 +39,8 @@ public class ShareCatPais implements Serializable {
     @Column(name = "NOMBRE_TABLA")
     private String nombreTabla;
     
-    @ManyToMany(cascade = {CascadeType.ALL},mappedBy = "paises")
-    private List<ShareUsuario> usuarios = new ArrayList();
+    @ManyToMany(mappedBy = "paises",fetch = FetchType.LAZY)
+    private List<ShareUsuario> usuarios = new ArrayList<ShareUsuario>();
 
     public ShareCatPais() {
     }

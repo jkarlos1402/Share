@@ -10,7 +10,8 @@ public class ShareCatCanalesDAO {
         JPAUtil jpau = new JPAUtil();
         EntityManager em = jpau.getEntityManager();         
         Query query = em.createQuery("SELECT canales FROM ShareCatCanales canales");
-        List<ShareCatCanales> canales = query.getResultList();       
+        List<ShareCatCanales> canales = query.getResultList();
+        em.clear();
         em.close();
         return canales;
     }

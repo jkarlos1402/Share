@@ -1,18 +1,21 @@
 package com.femsa.kof.pojos;
 
+import com.femsa.kof.util.EncrypterKOF;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -23,6 +26,8 @@ public class ShareUsuario implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "SHARE_SEQ_USER")
+    @SequenceGenerator(name = "SHARE_SEQ_USER",sequenceName = "SHARE_SEQ_USER", allocationSize = 1)
     @Column(name = "PK_USUARIO")
     private Integer pkUsuario;
 
@@ -44,13 +49,13 @@ public class ShareUsuario implements Serializable {
     private String mail;
 
     @Column(name = "ESTATUS")
-    private Short estatus;
+    private boolean estatus;
 
     @JoinColumn(name = "FK_ID_ROL")
-    @OneToOne(optional = false, cascade = CascadeType.ALL)
+    @OneToOne(optional = false, cascade = CascadeType.MERGE)
     private ShareCatRol rol;
 
-    @ManyToMany(cascade = {CascadeType.REFRESH})    
+    @ManyToMany()    
     @JoinTable(name = "SHARE_USUARIO_PAIS", joinColumns = {
         @JoinColumn(name = "FK_USUARIO")}, inverseJoinColumns = {
         @JoinColumn(name = "FK_PAIS")})
@@ -98,23 +103,25 @@ public class ShareUsuario implements Serializable {
     }
 
     public void setUsuario(String usuario) {
-        this.usuario = usuario;
+        this.usuario = usuario.toUpperCase();
     }
 
     public String getPassword() {
-        return password;
+        EncrypterKOF encrypterKOF = new EncrypterKOF();
+        return encrypterKOF.decrypt(password);
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        EncrypterKOF encrypterKOF = new EncrypterKOF();
+        this.password = encrypterKOF.encrypt(password);
     }
 
-    public String getNombre() {
+    public String getNombre() {        
         return nombre;
     }
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        this.nombre = nombre.toUpperCase();
     }
 
     public String getPais() {
@@ -122,7 +129,7 @@ public class ShareUsuario implements Serializable {
     }
 
     public void setPais(String pais) {
-        this.pais = pais;
+        this.pais = pais.toUpperCase();
     }
 
     public String getMail() {
@@ -133,11 +140,11 @@ public class ShareUsuario implements Serializable {
         this.mail = mail;
     }
 
-    public Short getEstatus() {
+    public boolean getEstatus() {
         return estatus;
     }
 
-    public void setEstatus(Short estatus) {
+    public void setEstatus(boolean estatus) {
         this.estatus = estatus;
     }
 
@@ -163,7 +170,7 @@ public class ShareUsuario implements Serializable {
 
     @Override
     public String toString() {
-        return "com.femsa.kof.pojos.ShareUsuario[ pkUsuario=" + pkUsuario + " ]";
+        return "ShareUsuario{" + "pkUsuario=" + pkUsuario + ", usuario=" + usuario + ", password=" + password + ", nombre=" + nombre + ", pais=" + pais + ", mail=" + mail + ", estatus=" + estatus + ", rol=" + rol + ", paises=" + paises + '}';
     }
-
+   
 }

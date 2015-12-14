@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -26,7 +26,7 @@ public class XlsAnalizer {
     private List<String> errors;
 
     private final String[] mesesEsp = {"ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"};
-    private final String[] mesesIng = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DIC"};
+    private final String[] mesesIng = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
     private final String[] mesesPort = {"JAN", "FEV", "MAR", "APR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"};
 
     public XlsAnalizer() {
@@ -66,7 +66,7 @@ public class XlsAnalizer {
             String extension = getExtension(file.getFileName());
             Iterator<Row> rowIterator = null;
 
-            ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+            HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
             Iterator<Sheet> sheets = null;
             if (extension.equalsIgnoreCase("xlsx")) {
                 excelXLS = new XSSFWorkbook(file.getInputstream());
@@ -78,7 +78,7 @@ public class XlsAnalizer {
                 Sheet sheet = excelXLS.getSheetAt(i);
                 rowIterator = sheet.iterator();
 
-                List<ShareCatCategorias> catCategorias = (List<ShareCatCategorias>) servletContext.getAttribute("categories_catalog");
+                List<ShareCatCategorias> catCategorias = (List<ShareCatCategorias>) session.getAttribute("categories_catalog");
                 ShareCatCategorias categoria = null;
                 ShareCatCategorias categoriaTmp = new ShareCatCategorias();
                 categoriaTmp.setCategoria(sheet.getSheetName().trim());
@@ -128,8 +128,8 @@ public class XlsAnalizer {
         List<ShareTmpAllInfoCarga> cargas = new ArrayList<ShareTmpAllInfoCarga>();
         List<String> fechas = new ArrayList<String>();
         List<Integer> indexCellBimestral = new ArrayList<Integer>();
-        ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
-        List<ShareCatCanales> canales = (List<ShareCatCanales>) servletContext.getAttribute("canales_catalog");
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        List<ShareCatCanales> canales = (List<ShareCatCanales>) session.getAttribute("canales_catalog");
         String canal = "";
         String fabricante = "";
         end:
@@ -140,6 +140,7 @@ public class XlsAnalizer {
             Iterator<Cell> cellIterator = row.cellIterator();
             while (cellIterator.hasNext()) {
                 Cell cell = cellIterator.next();
+                int finAnho = 0;
                 switch (cell.getCellType()) {
                     case Cell.CELL_TYPE_STRING:
                         if (!cell.getStringCellValue().trim().equals("") && numRow == 0 || (numRow == 1 && numCell > 2)) {
@@ -160,7 +161,12 @@ public class XlsAnalizer {
                                         mes = mesesIng[j];
                                     }
                                 }
-                                String fechaObtenida = i == 0 && fechasTmp.length > 1 ? mes + year : fechasTmp[i].replaceFirst(mesReplace, mes);
+                                if (mes.equalsIgnoreCase(mesesIng[11])) {
+                                    finAnho = 1;
+                                } else {
+                                    finAnho = 0;
+                                }
+                                String fechaObtenida = i == 0 && fechasTmp.length > 1 ? mes + " " + (Integer.parseInt(year.trim()) - finAnho) : fechasTmp[i].replaceFirst(mesReplace, mes);
                                 fechas.add(fechaObtenida.toUpperCase());
                             }
                             if (fechasTmp.length > 1) {
@@ -186,8 +192,19 @@ public class XlsAnalizer {
                                 }
                             }
                         } else if (numRow > 0 && numCell == 2) {
-                            if (!cell.getStringCellValue().trim().equals("")) {
-                                fabricante = cell.getStringCellValue().replaceAll(categoria.getCategoria(), "").replaceAll("KO ", "KOF ").replaceAll("INDUSTRY", "TOTAL").replaceAll("RTD", "").replaceAll("SPORT", "").replaceAll(categoria.getCategoriaEsp() != null && !categoria.getCategoriaEsp().trim().equals("") ? categoria.getCategoriaEsp().trim() : categoria.getCategoria(), "").trim().toUpperCase();
+                            if (!cell.getStringCellValue().trim().equals("")) {                                  
+                                fabricante = cell.getStringCellValue().toUpperCase().replaceAll("INDUSTRY", "TOTAL")
+                                        .replaceAll(categoria.getCategoria(), "")                                        
+                                        .replaceAll("KO ", "KOF ")
+                                        .replaceAll(" KO", " KOF")
+                                        .replaceAll("RTD", "")
+                                        .replaceAll("SPORTS", "")
+                                        .replaceAll("SPORT", "")
+                                        .replaceAll(categoria.getCategoriaEsp() != null && !categoria.getCategoriaEsp().trim().equals("") ? categoria.getCategoriaEsp().trim() : categoria.getCategoria(), "")
+                                        .replaceAll(categoria.getCategoria().substring(0, categoria.getCategoria().length() - 1), "")                                        
+                                        .replaceAll(catPais.getNombre().toUpperCase(), "")                                                                                                                   
+                                        .trim().toUpperCase(); 
+                                fabricante = fabricante.replaceAll(!fabricante.trim().endsWith("TOTAL") && fabricante.contains("TOTAL") ? "TOTAL" : "OTHERTHING", "");
                             }
                         } else if (numRow > 0 && numCell > 2) {
                             if (cell.getStringCellValue().trim().equalsIgnoreCase("NA")) {
@@ -242,7 +259,7 @@ public class XlsAnalizer {
                                     errors.add("Approximately " + Character.toString((char) (65 + cell.getColumnIndex())) + "" + (cell.getRowIndex() + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell.getStringCellValue() + "], the sheet has been omitted.");
                                     break end;
                                 }
-                                break;                            
+                                break;
                         }
                         break;
                     case Cell.CELL_TYPE_NUMERIC:
@@ -261,7 +278,7 @@ public class XlsAnalizer {
                             addRecordCarga(canal, categoria, fabricante, fechas, indexFecha, catPais, cell.getNumericCellValue(), cargas, flagValue, flagVolume, usuario);
                             indexFecha++;
                         }
-                        break;                   
+                        break;
                 }
                 numCell++;
             }
