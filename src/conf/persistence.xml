@@ -12,18 +12,18 @@
         <class>com.femsa.kof.pojos.ShareCatFabricante</class>
         <class>com.femsa.kof.pojos.ShareCatCanales</class>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
-         <!-- <properties>
+         <properties>
             <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
             <property name="javax.persistence.jdbc.password" value="kofuser"/>
             <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
             <property name="javax.persistence.jdbc.user" value="kofuser"/>
-        </properties>  -->
-        <properties>
+        </properties>  
+        <!--  <properties>
           <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@10.138.3.32:1527:DSE"/>
           <property name="javax.persistence.jdbc.password" value="temporal"/>
           <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
           <property name="javax.persistence.jdbc.user" value="BOE14DEVHA"/>
-        </properties>
+        </properties> -->
         <!--  <properties>
           <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@10.138.3.239:1527:QSE"/>
           <property name="javax.persistence.jdbc.password" value="B0EI4#QA5AH"/>

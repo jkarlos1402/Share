@@ -31,8 +31,12 @@ public class ShareCatPaisDAO {
     public ShareCatPais getCatPais(String nombrePais) {
         JPAUtil jpau = new JPAUtil();
         EntityManager em = jpau.getEntityManager();
-        Query query = em.createQuery("SELECT pais FROM ShareCatPais pais WHERE pais.nombre = " + nombrePais.toUpperCase() + " AND pais.idstatus = 1");
-        ShareCatPais country = (ShareCatPais) query.getSingleResult();
+        Query query = em.createQuery("SELECT pais FROM ShareCatPais pais WHERE pais.nombre = '" + nombrePais.toUpperCase() + "'");
+        List<ShareCatPais> countries = (List<ShareCatPais>) query.getResultList();
+        ShareCatPais country = null;
+        if (countries.size() > 0) {
+            country = countries.get(0);
+        }
         em.clear();
         em.close();
         return country;
@@ -56,17 +60,15 @@ public class ShareCatPaisDAO {
         boolean flagOk = true;
         try {
             et.begin();
-            if (getCatPais(pais.getNombre()) == null) {
-                if (pais.getPkPais() != null) {
-                    em.merge(pais);
-                } else {
-                    query = em.createNativeQuery("CREATE TABLE " + pais.getNombreTabla() + " (PAIS VARCHAR2(50 BYTE),CANAL VARCHAR2(50 BYTE), "
-                            + "FECHA VARCHAR2(50 BYTE), GRUPO_CATEGORIA VARCHAR2(50 BYTE), CATEGORIA VARCHAR2(50 BYTE), "
-                            + "FABRICANTE VARCHAR2(100 BYTE), VOLUMEN_MES NUMBER, VENTA_MES NUMBER)");
-                    query.executeUpdate();
-                    em.persist(pais);
-                }
-            }else{
+            if (pais.getPkPais() != null) {
+                em.merge(pais);
+            } else if (getCatPais(pais.getNombre()) == null) {
+                query = em.createNativeQuery("CREATE TABLE " + pais.getNombreTabla() + " (PAIS VARCHAR2(50 BYTE),CANAL VARCHAR2(50 BYTE), "
+                        + "FECHA VARCHAR2(50 BYTE), GRUPO_CATEGORIA VARCHAR2(50 BYTE), CATEGORIA VARCHAR2(50 BYTE), "
+                        + "FABRICANTE VARCHAR2(100 BYTE), VOLUMEN_MES NUMBER, VENTA_MES NUMBER)");
+                query.executeUpdate();
+                em.persist(pais);
+            } else {
                 error = "Country already exists";
                 flagOk = false;
             }

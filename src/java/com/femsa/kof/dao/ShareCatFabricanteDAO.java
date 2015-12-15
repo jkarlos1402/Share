@@ -8,6 +8,16 @@ import javax.persistence.Query;
 
 public class ShareCatFabricanteDAO {
 
+    private String error;
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
     public List<ShareCatFabricante> getFabricantesAll() {
         JPAUtil jpau = new JPAUtil();
         EntityManager em = jpau.getEntityManager();
@@ -28,6 +38,20 @@ public class ShareCatFabricanteDAO {
         return fabricantes;
     }
 
+    public ShareCatFabricante getFabricante(String name) {
+        JPAUtil jpau = new JPAUtil();
+        EntityManager em = jpau.getEntityManager();
+        Query query = em.createQuery("SELECT fab FROM ShareCatFabricante fab WHERE fab.fabricante = '" + name.toUpperCase() + "'");
+        List<ShareCatFabricante> fabricantes = query.getResultList();
+        ShareCatFabricante fabricante = null;
+        if(fabricantes.size() > 0){
+            fabricante = fabricantes.get(0);
+        }
+        em.clear();
+        em.close();
+        return fabricante;
+    }
+
     public boolean saveFabricante(ShareCatFabricante fabricante) {
         JPAUtil jpau = new JPAUtil();
         EntityManager em = jpau.getEntityManager();
@@ -37,11 +61,14 @@ public class ShareCatFabricanteDAO {
             et.begin();
             if (fabricante.getPkFabricante() != null) {
                 em.merge(fabricante);
-            } else {
+            } else if(getFabricante(fabricante.getFabricante()) == null){
                 em.persist(fabricante);
+            }else{
+                error = "Manufacturer already exists";
+                flagOk = false;
             }
             et.commit();
-        } catch (Exception e) {            
+        } catch (Exception e) {
             if (et.isActive()) {
                 et.rollback();
             }

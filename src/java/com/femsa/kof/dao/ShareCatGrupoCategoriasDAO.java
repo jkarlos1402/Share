@@ -8,6 +8,16 @@ import javax.persistence.Query;
 
 public class ShareCatGrupoCategoriasDAO {
 
+    private String error;
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
     public List<ShareCatGrupoCategorias> getCategoryGroups() {
         JPAUtil jpau = new JPAUtil();
         EntityManager em = jpau.getEntityManager();
@@ -16,6 +26,20 @@ public class ShareCatGrupoCategoriasDAO {
         em.clear();
         em.close();
         return grupos;
+    }
+
+    public ShareCatGrupoCategorias getCategoryGroup(String name) {
+        JPAUtil jpau = new JPAUtil();
+        EntityManager em = jpau.getEntityManager();
+        Query query = em.createQuery("SELECT gc FROM ShareCatGrupoCategorias gc WHERE gc.grupoCategoria = '" + name.toUpperCase() + "'");
+        List<ShareCatGrupoCategorias> grupos = (List<ShareCatGrupoCategorias>) query.getResultList();
+        ShareCatGrupoCategorias grupo = null;
+        if (grupos.size() > 0) {
+            grupo = grupos.get(0);
+        }
+        em.clear();
+        em.close();
+        return grupo;
     }
 
     public List<ShareCatGrupoCategorias> getCategoryGroupsAll() {
@@ -37,8 +61,11 @@ public class ShareCatGrupoCategoriasDAO {
             et.begin();
             if (grupoCategorias.getPkGrupoCategoria() != null) {
                 em.merge(grupoCategorias);
-            } else {
+            } else if (getCategoryGroup(grupoCategorias.getGrupoCategoria()) == null) {
                 em.persist(grupoCategorias);
+            } else {
+                error = "Group category already exists";
+                flagOk = false;
             }
             et.commit();
         } catch (Exception e) {

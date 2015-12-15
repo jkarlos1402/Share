@@ -8,6 +8,16 @@ import javax.persistence.Query;
 
 public class ShareCatCategoriasDAO {
 
+    private String error;
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
     public List<ShareCatCategorias> getCategorias() {
         JPAUtil jpau = new JPAUtil();
         EntityManager em = jpau.getEntityManager();
@@ -16,6 +26,20 @@ public class ShareCatCategoriasDAO {
         em.clear();
         em.close();
         return categories;
+    }
+
+    public ShareCatCategorias getCategoria(String name) {
+        JPAUtil jpau = new JPAUtil();
+        EntityManager em = jpau.getEntityManager();
+        Query query = em.createQuery("SELECT categ FROM ShareCatCategorias categ WHERE categ.categoria = '" + name.toUpperCase() + "'");
+        List<ShareCatCategorias> categories = query.getResultList();
+        ShareCatCategorias category = null;
+        if (categories.size() > 0) {
+            category = categories.get(0);
+        }
+        em.clear();
+        em.close();
+        return category;
     }
 
     public List<ShareCatCategorias> getCategoriasAll() {
@@ -37,11 +61,14 @@ public class ShareCatCategoriasDAO {
             et.begin();
             if (categoria.getPkCategoria() != null) {
                 em.merge(categoria);
-            } else {
+            } else if (getCategoria(categoria.getCategoria()) == null) {
                 em.persist(categoria);
+            } else {
+                error = "Category already exists";
+                flagOk = false;
             }
             et.commit();
-        } catch (Exception e) {            
+        } catch (Exception e) {
             if (et.isActive()) {
                 et.rollback();
             }

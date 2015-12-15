@@ -24,4 +24,10 @@ public class JPAUtil {
     public EntityManager getEntityManager() {
         return entitymanager;
     }
+    
+    public void closeJPAUtil(){
+        entitymanager.clear();
+        entitymanager.close();
+        emfactory.close();    
+    }
 }
