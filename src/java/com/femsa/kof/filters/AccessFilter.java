@@ -1,6 +1,6 @@
 package com.femsa.kof.filters;
 
-import com.femsa.kof.pojos.ShareUsuario;
+import com.femsa.kof.share.pojos.ShareUsuario;
 import java.io.IOException;
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;

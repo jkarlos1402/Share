@@ -1,8 +1,8 @@
 package com.femsa.kof.listener;
 
-import com.femsa.kof.dao.ShareCatCategoriasDAO;
-import com.femsa.kof.dao.ShareCatPaisDAO;
-import com.femsa.kof.dao.ShareCatCanalesDAO;
+import com.femsa.kof.share.dao.ShareCatCategoriasDAO;
+import com.femsa.kof.share.dao.ShareCatPaisDAO;
+import com.femsa.kof.share.dao.ShareCatCanalesDAO;
 import com.femsa.kof.util.CatalogLoader;
 import java.sql.Driver;
 import java.sql.DriverManager;

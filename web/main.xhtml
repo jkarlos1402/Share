@@ -47,18 +47,25 @@
                                 <p:panel style="background-color: rgba(0, 0, 0, 0.3); border-style: none; text-align: center;   margin-left: -60px;  margin-top: 0px;">                                    
                                     <h:form>
                                         <p:slideMenu style="width:auto; margin-left:4px; font-size:14px;">
-                                            <p:menuitem value="Information Load"  icon="ui-icon-arrowreturnthick-1-n" action="#{mainBean.setPage('loadInformation','')}" update=":panelMain"/>
-                                            <p:menuitem value="Uploads status"  icon=" ui-icon-clipboard" action="#{mainBean.setPage('uploadStatus','')}" update=":panelMain"/>                                            
+                                            <p:menuitem value="Information Load"  icon="ui-icon-arrowreturnthick-1-n" action="#{mainBean.setPage('loadInformation','','share')}" update=":panelMain"/>
+                                            <p:menuitem value="Uploads status"  icon=" ui-icon-clipboard" action="#{mainBean.setPage('uploadStatus','','share')}" update=":panelMain"/>                                            
                                             <p:submenu label="Catalogs" icon="ui-icon-newwin" rendered="#{mainBean.usuario.rol.pkRol eq '1' ? true : false}">
-                                                <p:menuitem value="COUNTRY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','country')}" update=":panelMain"/>
-                                                <p:menuitem value="CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','category')}" update=":panelMain"/>
-                                                <p:menuitem value="GROUP CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','group')}" update=":panelMain"/>
-                                                <p:menuitem value="MANUFACTURER" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','manufacturer')}" update=":panelMain"/>
+                                                <p:menuitem value="COUNTRY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','country','share')}" update=":panelMain"/>
+                                                <p:menuitem value="CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','category','share')}" update=":panelMain"/>
+                                                <p:menuitem value="GROUP CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','group','share')}" update=":panelMain"/>
+                                                <p:menuitem value="MANUFACTURER" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','manufacturer','share')}" update=":panelMain"/>
                                             </p:submenu>
                                             <p:separator />
                                             <p:submenu label="Administrator" icon="ui-icon-person" rendered="#{mainBean.usuario.rol.pkRol eq '1' ? true : false}" >
-                                                <p:menuitem value="CATALOG USERS" icon="ui-icon-person" action="#{mainBean.setPage('adminUsers','')}" update=":panelMain"/>                                                                                     
-                                                <p:menuitem value="SCRIPTS" icon="ui-icon-document"  action="#{mainBean.setPage('scripts','')}" update=":panelMain"/>                                       
+                                                <p:menuitem value="CATALOG USERS" icon="ui-icon-person" action="#{mainBean.setPage('adminUsers','','admin')}" update=":panelMain"/>                                                                                     
+                                                <p:menuitem value="SCRIPTS" icon="ui-icon-document"  action="#{mainBean.setPage('scripts','','share')}" update=":panelMain"/>                                       
+                                            </p:submenu>
+                                            <p:separator />
+                                            <p:submenu label="Catalogs" icon="ui-icon-newwin" rendered="true">
+                                                <p:menuitem value="OFFICIAL CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','officialCategoryDaily','daily')}" update=":panelMain"/>
+                                                <p:menuitem value="CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','category','share')}" update=":panelMain"/>
+                                                <p:menuitem value="GROUP CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','group','share')}" update=":panelMain"/>
+                                                <p:menuitem value="MANUFACTURER" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','manufacturer','share')}" update=":panelMain"/>
                                             </p:submenu>
                                         </p:slideMenu>
                                     </h:form>

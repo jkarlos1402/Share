@@ -1,10 +1,10 @@
 package com.femsa.kof.util;
 
-import com.femsa.kof.pojos.ShareCatCategorias;
-import com.femsa.kof.pojos.ShareCatPais;
-import com.femsa.kof.pojos.ShareCatCanales;
-import com.femsa.kof.pojos.ShareTmpAllInfoCarga;
-import com.femsa.kof.pojos.ShareUsuario;
+import com.femsa.kof.share.pojos.ShareCatCategorias;
+import com.femsa.kof.share.pojos.ShareCatPais;
+import com.femsa.kof.share.pojos.ShareCatCanales;
+import com.femsa.kof.share.pojos.ShareTmpAllInfoCarga;
+import com.femsa.kof.share.pojos.ShareUsuario;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;

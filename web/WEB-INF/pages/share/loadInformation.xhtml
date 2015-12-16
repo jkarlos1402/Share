@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+            <title>Load Information</title>    
+        </f:facet>                     
+    </h:head>                 
+    <h:body>
+        <ui:composition>
+            <h1>Information Load</h1>
+            <h:form id="formLoad">
+                <p:panel id="panelLoad">  
+                    <p:growl id="messagesLoad" showDetail="true"/>
+                    <h:panelGrid columns="1" cellpadding="5px">
+                        <p:messages showDetail="true" closable="true"/>
+                        <h:panelGrid columns="2" cellpadding="5px">
+                            <p:outputLabel for="countryLoad" value="Country:" />
+                            <p:selectOneMenu id="countryLoad" immediate="true" value="#{shareLoadBean.countrySelected}" style="width:125px" converter="countryConverter" required="true" label="Country">
+                                <f:selectItem itemLabel="Select One" itemValue="" />
+                                <f:selectItems value="#{shareLoadBean.catCountriesUser}" /> 
+                                <p:ajax event="valueChange" update=":formLoad:countryLoad" />
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <p:separator />
+                        <p:fileUpload fileUploadListener="#{shareLoadBean.handleFileUpload}" mode="advanced" dragDropSupport="true" 
+                                      update="messagesLoad,panelLoad" sizeLimit="1000000" fileLimit="1" allowTypes="/(\.|\/)(xls|xlsx|XLS|XLSX)$/" 
+                                      onstart="handleResponse(1)" oncomplete="handleResponse(2)"/>
+                        <p:separator />
+                        <h3>Preview</h3>
+                        <p:dataTable var="infoCarga" value="#{shareLoadBean.listInfoCarga}" id="tableInfo" reflow="true" rows="20" paginator="true" widgetVar="tableInfCarga">                    
+                            <f:facet name="header">
+                                <p:outputLabel value="#{shareLoadBean.listInfoCarga.size()} records found." rendered="#{shareLoadBean.listInfoCarga != null ? true : false}" styleClass="imgLoad"/>                                
+                            </f:facet>
+                            <p:column headerText="Country">
+                                <h:outputText value="#{infoCarga.pais}" />
+                            </p:column>
+
+                            <p:column headerText="Channel">
+                                <h:outputText value="#{infoCarga.canal}" />
+                            </p:column>
+
+                            <p:column headerText="Date" filterBy="#{infoCarga.fecha}" filterMatchMode="contains" id="columDate">
+                                <h:outputText value="#{infoCarga.fecha}" />
+                            </p:column>
+
+                            <p:column headerText="Group Category">
+                                <h:outputText value="#{infoCarga.grupoCategoria}" />
+                            </p:column>
+
+                            <p:column headerText="Category" filterBy="#{infoCarga.categoria}" filterMatchMode="contains" id="columCategory">
+                                <h:outputText value="#{infoCarga.categoria}" />
+                            </p:column>
+
+                            <p:column headerText="Manufacturer" filterBy="#{infoCarga.fabricante}" filterMatchMode="contains">
+                                <h:outputText value="#{infoCarga.fabricante}" />
+                            </p:column>
+
+                            <p:column headerText="Volume">
+                                <h:outputText value="#{infoCarga.volumenMes}" />
+                            </p:column>
+
+                            <p:column headerText="Value">
+                                <h:outputText value="#{infoCarga.ventaMes}" />
+                            </p:column>                        
+                        </p:dataTable>
+                        <p:panel>
+                            <h:panelGrid columns="3" cellspacing="5px" style="width: 100%;" columnClasses="topElemsClass,topElemsClass,topElemsClass">
+                                <p:dataList value="#{shareLoadBean.omittedSheets}" var="omittedSheet" type="ordered">
+                                    <f:facet name="header">
+                                        Omitted Sheets
+                                    </f:facet>
+                                    #{omittedSheet}
+                                </p:dataList>
+                                <p:dataList value="#{shareLoadBean.loadedSheets}" var="loadedSheet" type="ordered">
+                                    <f:facet name="header">
+                                        Loaded Sheets
+                                    </f:facet>
+                                    <p:commandLink value="#{loadedSheet}" onclick="setFilter('#{loadedSheet}')" update=":formLoad:tableInfo"/>
+                                </p:dataList>
+                                <p:dataList value="#{shareLoadBean.errors}" var="errorSheet" type="ordered">
+                                    <f:facet name="header">
+                                        Errors
+                                    </f:facet>
+                                    #{errorSheet}
+                                </p:dataList>
+                            </h:panelGrid>
+                        </p:panel>
+                        <f:facet name="footer">
+                            <p:commandButton value="Save" actionListener="#{shareLoadBean.saveInfoCarga}" update=":formLoad" rendered="#{shareLoadBean.listInfoCarga.size() > 0 ? true : false}">
+                                <p:confirm message="Are you sure?" header="Save records"/>
+                            </p:commandButton>                        
+                        </f:facet>
+                    </h:panelGrid>                
+                </p:panel>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+            </h:form>            
+        </ui:composition>
+    </h:body>
+</html>
+

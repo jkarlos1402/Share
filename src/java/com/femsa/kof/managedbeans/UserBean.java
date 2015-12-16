@@ -1,11 +1,11 @@
 package com.femsa.kof.managedbeans;
 
-import com.femsa.kof.dao.ShareCatPaisDAO;
-import com.femsa.kof.dao.ShareCatRolDAO;
-import com.femsa.kof.dao.ShareUsuarioDAO;
-import com.femsa.kof.pojos.ShareCatPais;
-import com.femsa.kof.pojos.ShareCatRol;
-import com.femsa.kof.pojos.ShareUsuario;
+import com.femsa.kof.share.dao.ShareCatPaisDAO;
+import com.femsa.kof.share.dao.ShareCatRolDAO;
+import com.femsa.kof.share.dao.ShareUsuarioDAO;
+import com.femsa.kof.share.pojos.ShareCatPais;
+import com.femsa.kof.share.pojos.ShareCatRol;
+import com.femsa.kof.share.pojos.ShareUsuario;
 import com.femsa.kof.util.EncrypterKOF;
 import java.io.Serializable;
 import java.util.ArrayList;

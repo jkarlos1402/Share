@@ -1,7 +1,6 @@
 package com.femsa.kof.util;
 
-import com.femsa.kof.dao.JPAUtil;
-import com.femsa.kof.pojos.ShareCatPais;
+import com.femsa.kof.share.pojos.ShareCatPais;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;

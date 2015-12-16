@@ -1,6 +1,6 @@
 package com.femsa.kof.listener;
 
-import com.femsa.kof.pojos.ShareUsuario;
+import com.femsa.kof.share.pojos.ShareUsuario;
 import com.femsa.kof.util.CatalogLoader;
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSession;
