@@ -37,10 +37,10 @@ public class ShareUploadStatusBean implements Serializable {
         status = new HashMap<String, String>();
         status.put("Project", "SHARE");
         status.put("Process", "SHARE CARGA");
-        status.put("Data Entries", loadBean.getNumEntriesSaved() != null ? loadBean.getNumEntriesSaved() + "" : "N/A");
-        status.put("Execution date", loadBean.getDateExecution() != null ? loadBean.getDateExecution() + "" : "N/A");
-        status.put("Start", loadBean.getDateExecution() != null ? hourFormat.format(loadBean.getDateExecution()) : "N/A");
-        status.put("End", loadBean.getDateEndExecution() != null ? hourFormat.format(loadBean.getDateEndExecution()) : "N/A ");
+        status.put("Data Entries",loadBean != null && loadBean.getNumEntriesSaved() != null ? loadBean.getNumEntriesSaved() + "" : "N/A");
+        status.put("Execution date",loadBean != null && loadBean.getDateExecution() != null ? loadBean.getDateExecution() + "" : "N/A");
+        status.put("Start",loadBean != null && loadBean.getDateExecution() != null ? hourFormat.format(loadBean.getDateExecution()) : "N/A");
+        status.put("End",loadBean != null && loadBean.getDateEndExecution() != null ? hourFormat.format(loadBean.getDateEndExecution()) : "N/A ");
         Set<Map.Entry<String, String>> statusSet = status.entrySet();
         return new ArrayList<Map.Entry<String, String>>(statusSet);
     }

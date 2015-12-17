@@ -24,8 +24,7 @@ public class ShareCatCategoriasDAO {
         EntityManager em = jpau.getEntityManager();
         Query query = em.createQuery("SELECT categ FROM ShareCatCategorias categ WHERE categ.status = 1");
         List<ShareCatCategorias> categories = query.getResultList();
-        em.clear();
-        em.close();
+        jpau.closeJPAUtil();
         return categories;
     }
 
@@ -38,8 +37,7 @@ public class ShareCatCategoriasDAO {
         if (categories.size() > 0) {
             category = categories.get(0);
         }
-        em.clear();
-        em.close();
+        jpau.closeJPAUtil();
         return category;
     }
 
@@ -48,8 +46,7 @@ public class ShareCatCategoriasDAO {
         EntityManager em = jpau.getEntityManager();
         Query query = em.createQuery("SELECT categ FROM ShareCatCategorias categ");
         List<ShareCatCategorias> categories = query.getResultList();
-        em.clear();
-        em.close();
+        jpau.closeJPAUtil();
         return categories;
     }
 
@@ -75,8 +72,7 @@ public class ShareCatCategoriasDAO {
             }
             flagOk = false;
         } finally {
-            em.clear();
-            em.close();
+            jpau.closeJPAUtil();
         }
         return flagOk;
     }

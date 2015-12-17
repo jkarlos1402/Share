@@ -39,8 +39,7 @@ public class ShareTmpAllInfoCargaDAO {
             }
             flagOk = false;
         } finally {
-            em.clear();
-            em.close();
+            jpau.closeJPAUtil();
         }
         return flagOk;
     }

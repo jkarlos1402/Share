@@ -8,7 +8,19 @@ function handleResponse(status) {
 }
 
 function setFilter(filter) {
-    $("input[name='formLoad:tableInfo:columCategory:filter']").val(filter).keyup();    
+    $("input[name='formLoad:tableInfo:columCategory:filter']").val(filter).keyup();
 }
 
+$(document).ready(function () {
+    setTimeout(function () {
+        showNotifications();
+    }, 1000);
+});
+
+function showNotifications() {    
+    PF('notificationPanel').show();
+    setTimeout(function(){
+        PF('notificationPanel').hide();
+    },10000);
+}
 

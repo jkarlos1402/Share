@@ -13,8 +13,7 @@ public class ShareCatRolDAO {
         EntityManager em = jpau.getEntityManager();
         Query query = em.createQuery("SELECT r FROM ShareCatRol r");
         List<ShareCatRol> roles = query.getResultList();
-        em.clear();
-        em.close();
+        jpau.closeJPAUtil();
         return roles;
     }
 
@@ -22,8 +21,7 @@ public class ShareCatRolDAO {
         JPAUtil jpau = new JPAUtil();
         EntityManager em = jpau.getEntityManager();
         ShareCatRol rol = em.find(ShareCatRol.class, idRol);
-        em.clear();
-        em.close();
+        jpau.closeJPAUtil();
         return rol;
     }
 }

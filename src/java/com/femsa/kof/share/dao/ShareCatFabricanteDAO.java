@@ -24,8 +24,7 @@ public class ShareCatFabricanteDAO {
         EntityManager em = jpau.getEntityManager();
         Query query = em.createQuery("SELECT fab FROM ShareCatFabricante fab");
         List<ShareCatFabricante> fabricantes = query.getResultList();
-        em.clear();
-        em.close();
+        jpau.closeJPAUtil();
         return fabricantes;
     }
 
@@ -34,8 +33,7 @@ public class ShareCatFabricanteDAO {
         EntityManager em = jpau.getEntityManager();
         Query query = em.createQuery("SELECT fab FROM ShareCatFabricante fab WHERE fab.status = 1");
         List<ShareCatFabricante> fabricantes = query.getResultList();
-        em.clear();
-        em.close();
+        jpau.closeJPAUtil();
         return fabricantes;
     }
 
@@ -48,8 +46,7 @@ public class ShareCatFabricanteDAO {
         if(fabricantes.size() > 0){
             fabricante = fabricantes.get(0);
         }
-        em.clear();
-        em.close();
+        jpau.closeJPAUtil();
         return fabricante;
     }
 
@@ -75,8 +72,7 @@ public class ShareCatFabricanteDAO {
             }
             flagOk = false;
         } finally {
-            em.clear();
-            em.close();
+            jpau.closeJPAUtil();
         }
         return flagOk;
     }

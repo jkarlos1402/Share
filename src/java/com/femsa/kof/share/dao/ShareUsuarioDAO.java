@@ -19,8 +19,7 @@ public class ShareUsuarioDAO {
         if (usuarios.size() > 0) {
             return usuarios.get(0);
         }
-        em.clear();
-        em.close();
+        jpau.closeJPAUtil();
         return usuario;
     }
 
@@ -29,8 +28,7 @@ public class ShareUsuarioDAO {
         EntityManager em = jpau.getEntityManager();
         Query query = em.createQuery("SELECT u FROM ShareUsuario u");
         List<ShareUsuario> usuarios = (List<ShareUsuario>) query.getResultList();
-        em.clear();
-        em.close();
+        jpau.closeJPAUtil();
         return usuarios;
     }
 
@@ -53,8 +51,7 @@ public class ShareUsuarioDAO {
             }
             flagOk = false;
         } finally {
-            em.clear();
-            em.close();
+            jpau.closeJPAUtil();
         }
         return flagOk;
     }

@@ -74,7 +74,7 @@ public class RvvdCatCategoria implements Serializable {
     }
 
     public void setCategoriaEn(String categoriaEn) {
-        this.categoriaEn = categoriaEn;
+        this.categoriaEn = categoriaEn.toUpperCase();
     }
 
     public RvvdCatCategoriaOficial getIdCategoriaOficial() {

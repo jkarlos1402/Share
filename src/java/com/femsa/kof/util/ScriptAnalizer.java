@@ -47,8 +47,7 @@ public class ScriptAnalizer {
             }
             flagOk = false;
         } finally {
-            em.clear();
-            em.close();
+            jpau.closeJPAUtil();
         }
         return flagOk;
     }

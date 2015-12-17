@@ -48,7 +48,7 @@ public class CatCategoriaOficialDAO {
     public RvvdCatCategoriaOficial getCategoriaOficial(String categoria) {
         JPAUtil jpau = new JPAUtil();
         EntityManager em = jpau.getEntityManager();
-        Query query = em.createQuery("SELECT co FROM RvvdCatCategoriaOficial co WHERE co.categoriaOficial = '" + categoria.toUpperCase() + "'");
+        Query query = em.createQuery("SELECT co FROM RvvdCatCategoriaOficial co WHERE co.categoriaOficial = '" + categoria.toUpperCase() + "' OR co.categoriaOficialEn = '"+categoria.toUpperCase()+"'");
         List<RvvdCatCategoriaOficial> categoriasOficiales = (List<RvvdCatCategoriaOficial>) query.getResultList();
         RvvdCatCategoriaOficial categOficial = null;
         if(categoriasOficiales.size() > 0){

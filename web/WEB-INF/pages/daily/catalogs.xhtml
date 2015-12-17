@@ -54,131 +54,60 @@
                     </h:panelGrid>
                 </p:panel>
             </h:form> 
-            <h:form id="formGroupCategory" rendered="#{mainBean.catalog eq 'group' ? true : false}">
-                <p:growl id="msgsGroupCate" showDetail="true" />
+            
+            <h:form id="formCategory" rendered="#{mainBean.catalog eq 'categoryDaily' ? true : false}">
+                <p:growl id="msgsCategory" showDetail="true"/>
                 <p:messages showDetail="true" closable="true"/>
-                <p:panel  header="Group category catalog" id="panelGroupCate">                    
-                    <h:panelGrid columns="2" cellpadding="5px" >
-                        <p:outputLabel for="nameGroupCate" value="Name:" />
-                        <p:inputText id="nameGroupCate" required="true" maxlength="20" value="#{shareCatalogsBean.grupoCategoriaNew.grupoCategoria}"/>
-
-                        <p:outputLabel for="statusGroupCate" value="Status:" />
-                        <p:selectOneRadio id="statusGroupCate" layout="pageDirection" required="true" value="#{shareCatalogsBean.grupoCategoriaNew.status}">
-                            <f:selectItem itemLabel="Enable" itemValue="true" />
-                            <f:selectItem itemLabel="Disable" itemValue="false" />                            
-                        </p:selectOneRadio>
-                        <f:facet name="footer">
-                            <h:panelGrid columns="2" cellspacing="10px">
-                                <p:commandButton value="Save" update="formGroupCategory" actionListener="#{shareCatalogsBean.saveGroupCategory}">
-                                    <p:confirm message="Are you sure?" header="Save group category"/>
-                                </p:commandButton>
-                                <p:commandButton value="New" update="formGroupCategory" actionListener="#{shareCatalogsBean.newGroupCategory}" rendered="#{shareCatalogsBean.grupoCategoriaNew.pkGrupoCategoria ne null ? true : false}"/>                                   
-                            </h:panelGrid>
-                        </f:facet>
-                    </h:panelGrid>
-                    <p:separator/>
-                    <h:panelGrid columns="1">
-                        <p:dataTable id="tableGroupCategory" var="group" value="#{shareCatalogsBean.catGrupoCategoriasAll}" rowKey="#{group.pkGrupoCategoria}" selection="#{shareCatalogsBean.grupoCategoriaSelectedTable}" selectionMode="single" paginator="true" rows="10">
-                            <p:column headerText="Group Name">
-                                <h:outputText value="#{group.grupoCategoria}"/>
-                            </p:column>                            
-                            <p:column headerText="Status">
-                                <h:outputText value="#{group.status ? 'ENABLED' : 'DISABLED'}"/>
-                            </p:column> 
-                            <p:ajax event="rowSelect" update=":formGroupCategory:panelGroupCate" listener="#{shareCatalogsBean.selectGroupCategory}"/>
-                        </p:dataTable>
-                    </h:panelGrid>
-                </p:panel>
-            </h:form>             
-            <h:form id="formCategory" rendered="#{mainBean.catalog eq 'category' ? true : false}">
-                <p:growl id="msgsCatCate" showDetail="true"/>
-                <p:messages showDetail="true" closable="true"/>
-                <p:panel  header="Category catalog">                    
-                    <h:panelGrid columns="4" cellpadding="5px" id="panelCategory">
-                        <p:outputLabel for="nameCate" value="Name:" />
-                        <p:inputText id="nameCate" required="true" maxlength="20" value="#{shareCatalogsBean.categoriaSelected.categoria}" immediate="true"/>
-
-                        <p:outputLabel for="nameEsCate" value="Name(ES):" />
-                        <p:inputText id="nameEsCate" required="true" maxlength="20" value="#{shareCatalogsBean.categoriaSelected.categoriaEsp}" immediate="true"/>
-
-                        <p:outputLabel for="idGroupCate" value="Group category:" />
-                        <p:selectOneMenu id="idGroupCate" value="#{shareCatalogsBean.categoriaSelected.fkGrupoCategoria}" converter="groupCategoryConverter" required="true" label="Grupo de categoria" immediate="true">
+                <p:panel header="Categories catalog" id="panelCategory">                    
+                    <h:panelGrid columns="4" cellpadding="5px" >
+                        <p:outputLabel for="nameCateg" value="Category:" />
+                        <p:inputText id="nameCateg" required="true" value="#{dailyCatalogsBean.categoriaNueva.categoria}" maxlength="60"/>
+                        
+                        <p:outputLabel for="nameCategEN" value="Category (English):" />
+                        <p:inputText id="nameCategEN" required="true" value="#{dailyCatalogsBean.categoriaNueva.categoriaEn}" maxlength="60"/>
+                        
+                        <p:outputLabel for="idOfficCate" value="Official category:" />
+                        <p:selectOneMenu id="idOfficCate" value="#{dailyCatalogsBean.categoriaNueva.idCategoriaOficial}" converter="officialCategoryConverter" required="true" label="Offcial Category" immediate="true">
                             <f:selectItem itemLabel="Seleccione" itemValue="" />
-                            <f:selectItems value="#{shareCatalogsBean.catGrupoCategorias}"/>                           
+                            <f:selectItems value="#{dailyCatalogsBean.catCategoriaOficial}"/>                           
                         </p:selectOneMenu>
-
-                        <p:outputLabel for="idStatusCate" value="Status:" />
-                        <p:selectOneRadio id="idStatusCate" layout="pageDirection" required="true" value="#{shareCatalogsBean.categoriaSelected.status}">
+                        
+                        <p:outputLabel for="statusCateg" value="Status:" />
+                        <p:selectOneRadio id="statusCateg" layout="pageDirection" required="true" value="#{dailyCatalogsBean.categoriaNueva.status}">
                             <f:selectItem itemLabel="Enable" itemValue="true" />
                             <f:selectItem itemLabel="Disable" itemValue="false" />                            
                         </p:selectOneRadio>
-
+                       
                         <f:facet name="footer">
                             <h:panelGrid columns="2" cellspacing="10px">
-                                <p:commandButton value="Save" update="formCategory" actionListener="#{shareCatalogsBean.saveCategory}">
-                                    <p:confirm message="Are you sure?" header="Save category"/>
+                                <p:commandButton value="Save" update="formCategory" actionListener="#{dailyCatalogsBean.saveCategory}">
+                                    <p:confirm message="Are you sure?" header="Save Category"/>
                                 </p:commandButton>
-                                <p:commandButton value="New" update="formCategory" actionListener="#{shareCatalogsBean.newCategory}" rendered="#{shareCatalogsBean.categoriaSelected.pkCategoria ne null ? true : false}"/>                                  
-                            </h:panelGrid>                            
-                        </f:facet>
-                    </h:panelGrid>
-                    <p:separator/>
-                    <h:panelGrid columns="1">
-                        <p:dataTable id="tableCate" var="category" value="#{shareCatalogsBean.catCategorias}" rowKey="#{category.pkCategoria}" selection="#{shareCatalogsBean.categoriaSelectedTable}" selectionMode="single" paginator="true" rows="10">
-                            <p:column headerText="Name">
-                                <h:outputText value="#{category.categoria}" />
-                            </p:column>                            
-                            <p:column headerText="Name(ES)">
-                                <h:outputText value="#{category.categoriaEsp}"/>
-                            </p:column>                            
-                            <p:column headerText="Group category">
-                                <h:outputText value="#{category.fkGrupoCategoria.grupoCategoria}"/>
-                            </p:column>  
-                            <p:column headerText="Status">
-                                <h:outputText value="#{category.status ? 'ENABLED' : 'DISABLED'}"/>
-                            </p:column>  
-                            <p:ajax event="rowSelect" update=":formCategory:panelCategory" listener="#{shareCatalogsBean.selectCategory}"/>
-                        </p:dataTable>
-                    </h:panelGrid>
-                </p:panel>
-            </h:form>             
-            <h:form id="formManufacturer" rendered="#{mainBean.catalog eq 'manufacturer' ? true : false}">
-                <p:growl id="msgsManufac" showDetail="true"/>
-                <p:messages showDetail="true" closable="true"/>
-                <p:panel  header="Manufacturer catalog" id="panelManufac">                    
-                    <h:panelGrid columns="2" cellpadding="5px" >
-                        <p:outputLabel for="nameManuf" value="Name:" />
-                        <p:inputText id="nameManuf" required="true" maxlength="20" value="#{shareCatalogsBean.fabricanteNew.fabricante}"/>
-
-                        <p:outputLabel for="idStatusManuf" value="Status:" />
-                        <p:selectOneRadio id="idStatusManuf" layout="pageDirection" required="true" value="#{shareCatalogsBean.fabricanteNew.status}">
-                            <f:selectItem itemLabel="Enable" itemValue="true" />
-                            <f:selectItem itemLabel="Disable" itemValue="false" />                            
-                        </p:selectOneRadio>
-
-                        <f:facet name="footer">
-                            <h:panelGrid columns="2" cellspacing="10px">
-                                <p:commandButton value="Save" update="formManufacturer" actionListener="#{shareCatalogsBean.saveManufacturer}">
-                                    <p:confirm message="Are you sure?" header="Save manufacturer"/>
-                                </p:commandButton>
-                                <p:commandButton value="New" update="formManufacturer" actionListener="#{shareCatalogsBean.newManufacturer}" rendered="#{shareCatalogsBean.fabricanteNew.pkFabricante ne null ? true : false}"/>                                   
+                                <p:commandButton value="New" update="formCategory" actionListener="#{dailyCatalogsBean.newCategory}" rendered="#{dailyCatalogsBean.categoriaSelected.idCategoria ne null ? true : false}"/>
                             </h:panelGrid>
                         </f:facet>
                     </h:panelGrid>
                     <p:separator/>
                     <h:panelGrid columns="1">
-                        <p:dataTable id="tableManuf" var="manufacturerT" value="#{shareCatalogsBean.catFabricanteAll}" rowKey="#{manufacturerT.pkFabricante}" selection="#{shareCatalogsBean.fabricanteSelectedTable}" selectionMode="single" paginator="true" rows="10">
-                            <p:column headerText="Name">
-                                <h:outputText value="#{manufacturerT.fabricante}"/>
-                            </p:column>                            
+                        <p:dataTable id="tableCategory" var="categ" value="#{dailyCatalogsBean.catCategoriaAll}" rowKey="#{categ.idCategoria}" selection="#{dailyCatalogsBean.categoriaSelected}" selectionMode="single" paginator="true" rows="10">
+                            <p:column headerText="Category">
+                                <h:outputText value="#{categ.categoria}"/>
+                            </p:column>
+                            <p:column headerText="Category (English)">
+                                <h:outputText value="#{categ.categoriaEn}"/>
+                            </p:column>                                                        
+                            <p:column headerText="Official category">
+                                <h:outputText value="#{categ.idCategoriaOficial.categoriaOficialEn}"/>
+                            </p:column>                                                        
                             <p:column headerText="Status">
-                                <h:outputText value="#{manufacturerT.status ? 'ENABLED' : 'DISABLED'}"/>
-                            </p:column> 
-                            <p:ajax event="rowSelect" update=":formManufacturer:panelManufac" listener="#{shareCatalogsBean.selectManufacturer}"/>
+                                <h:outputText value="#{categ.status ? 'ENABLED' : 'DISABLED'}"/>
+                            </p:column>
+                            <p:ajax event="rowSelect" update=":formCategory:panelCategory" listener="#{dailyCatalogsBean.selectCategory}"/>
                         </p:dataTable>
                     </h:panelGrid>
                 </p:panel>
-            </h:form>  
+            </h:form> 
+             
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                 <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                 <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />

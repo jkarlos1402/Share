@@ -24,8 +24,7 @@ public class ShareCatPaisDAO {
         EntityManager em = jpau.getEntityManager();
         Query query = em.createQuery("SELECT pais FROM ShareCatPais pais WHERE pais.idstatus = 1");
         List<ShareCatPais> countries = query.getResultList();
-        em.clear();
-        em.close();
+        jpau.closeJPAUtil();
         return countries;
     }
 
@@ -38,8 +37,7 @@ public class ShareCatPaisDAO {
         if (countries.size() > 0) {
             country = countries.get(0);
         }
-        em.clear();
-        em.close();
+        jpau.closeJPAUtil();
         return country;
     }
 
@@ -48,8 +46,7 @@ public class ShareCatPaisDAO {
         EntityManager em = jpau.getEntityManager();
         Query query = em.createQuery("SELECT pais FROM ShareCatPais pais");
         List<ShareCatPais> countries = query.getResultList();
-        em.clear();
-        em.close();
+        jpau.closeJPAUtil();
         return countries;
     }
 
@@ -81,8 +78,7 @@ public class ShareCatPaisDAO {
             }
             flagOk = false;
         } finally {
-            em.clear();
-            em.close();
+            jpau.closeJPAUtil();
         }
         return flagOk;
     }

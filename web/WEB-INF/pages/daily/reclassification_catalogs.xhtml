@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Reclassification</title>
+    </h:head>
+    <h:body>
+        <ui:composition>
+            <h1>Reclassification of catalogs</h1>
+            <h:form id="formReclaCategory" rendered="#{mainBean.catalog eq 'reclassificationCategoryDaily' ? true : false}">
+                <p:growl id="msgsReclaCategory" showDetail="true"/>
+                <p:messages showDetail="true" closable="true"/>
+                <p:panel header="Category" id="panelReclaCategory">                                        
+                    <h:panelGrid columns="1">
+                        <p:dataTable id="tableReclaCategory" var="reclaCategory" value="#{dailyReclassCatalogsBean.categoriasReclasificadas}" editable="true" paginator="true" rows="10" 
+                                     rowStyleClass="#{reclaCategory.categoriaR eq null || reclaCategory.categoriaR eq '' || reclaCategory.categoriaEn eq null || reclaCategory.categoriaEn eq '' || reclaCategory.categoriaOficialR eq null || reclaCategory.categoriaOficialR eq '' || reclaCategory.categoriaOficialEn eq '' || reclaCategory.categoriaOficialEn eq null ? 'ui-state-error' : null}">
+                            <p:ajax event="rowEdit" listener="#{dailyReclassCatalogsBean.onRowEdit}" />
+                            <f:facet name="header">
+                                #{dailyReclassCatalogsBean.categoriasReclasificadas.size()} entries found.
+                            </f:facet>
+                            <p:column headerText="Country">
+                                <h:outputText value="#{reclaCategory.pais}"/>
+                            </p:column>
+                            <p:column headerText="Category" filterBy="##{reclaCategory.categoria}" filterMatchMode="contains">
+                                <h:outputText value="#{reclaCategory.categoria}"/>
+                            </p:column>                                                        
+                            <p:column headerText="Reclassified category">                                
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{reclaCategory.categoriaR}"/></f:facet>
+                                    <f:facet name="input">
+                                        <h:selectOneMenu id="idReclassCate" value="#{dailyReclassCatalogsBean.catCategoriaSelected}" converter="categoryConverterDaily" label="Reclassified Category" immediate="true" required="true" style="width: 100%">                                            
+                                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                            <f:selectItems value="#{dailyReclassCatalogsBean.catCategorias}"/>                           
+                                        </h:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Reclassified category(English)">
+                                <h:outputText value="#{reclaCategory.categoriaEn}"/>
+                            </p:column>
+                            <p:column headerText="Reclassified official category">
+                                <h:outputText value="#{reclaCategory.categoriaOficialR}"/>
+                            </p:column>
+                            <p:column headerText="Reclassified official category(English)">
+                                <h:outputText value="#{reclaCategory.categoriaOficialEn}"/>
+                            </p:column>
+                            <p:column style="width:25px">
+                                <p:rowEditor />
+                            </p:column>                            
+                        </p:dataTable>
+                    </h:panelGrid>
+                    <f:facet name="footer">
+                        <h:panelGrid columns="2" cellspacing="5px">
+                            <p:commandButton value="Save" actionListener="#{dailyReclassCatalogsBean.saveCategoriasReclasificadas}" update=":formReclaCategory">
+                                <p:confirm header="Save changes" message="Are you Sure?" />
+                            </p:commandButton>
+                            <p:commandButton value="Refresh" update=":formReclaCategory" actionListener="#{dailyReclassCatalogsBean.refreshCategoriasReclasificadas}">
+                                <p:confirm header="Refresh table" message="Unsaved changes will be lost, are you Sure?" />
+                            </p:commandButton>
+                        </h:panelGrid>                        
+                    </f:facet>
+                </p:panel>
+            </h:form>             
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+        </ui:composition>
+    </h:body>
+</html>
+

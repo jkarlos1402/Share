@@ -5,6 +5,7 @@
 package com.femsa.kof.share.pojos;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,7 +45,7 @@ public class ShareTmpAllInfoCarga implements Serializable {
     @SequenceGenerator(name = "SHARE_SEQ_ALL_INFO_CARGA", sequenceName = "SHARE_SEQ_ALL_INFO_CARGA", allocationSize = 1)
     @Basic(optional = false)
     @Column(name = "PK_INFO_CARGA")
-    private Integer pkInfoCarga;
+    private BigInteger pkInfoCarga;
     
     @Column(name = "FK_USUARIO")
     private Integer fkUsuario;
@@ -52,7 +53,7 @@ public class ShareTmpAllInfoCarga implements Serializable {
     public ShareTmpAllInfoCarga() {
     }
 
-    public ShareTmpAllInfoCarga(Integer pkInfoCarga) {
+    public ShareTmpAllInfoCarga(BigInteger pkInfoCarga) {
         this.pkInfoCarga = pkInfoCarga;
     }
 
@@ -128,11 +129,11 @@ public class ShareTmpAllInfoCarga implements Serializable {
         this.ventaMes = ventaMes;
     }
 
-    public double getPkInfoCarga() {
+    public BigInteger getPkInfoCarga() {
         return pkInfoCarga;
     }
 
-    public void setPkInfoCarga(Integer pkInfoCarga) {
+    public void setPkInfoCarga(BigInteger pkInfoCarga) {
         this.pkInfoCarga = pkInfoCarga;
     }
 

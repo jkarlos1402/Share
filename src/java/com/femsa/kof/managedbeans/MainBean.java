@@ -2,6 +2,8 @@ package com.femsa.kof.managedbeans;
 
 import com.femsa.kof.share.pojos.ShareUsuario;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -16,6 +18,18 @@ public class MainBean implements Serializable {
     private String catalog = "";
 
     private ShareUsuario usuario;
+
+    List<String> notifications;
+
+    public List<String> getNotifications() {
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        notifications = (List<String>) session.getAttribute("notifications_user");
+        return notifications;
+    }
+
+    public void setNotifications(List<String> notifications) {
+        this.notifications = notifications;
+    }
 
     public ShareUsuario getUsuario() {
         HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
@@ -32,8 +46,12 @@ public class MainBean implements Serializable {
     }
 
     public void setPage(String page, String catalog, String proyecto) {
-        this.page = "/WEB-INF/pages/" + proyecto + "/" + page + ".xhtml";
-        this.catalog = catalog;
+        if (!proyecto.equalsIgnoreCase("")) {
+            this.page = "/WEB-INF/pages/" + proyecto + "/" + page + ".xhtml";
+            this.catalog = catalog;
+        } else {
+            this.page = "/WEB-INF/pages/" + page + ".xhtml";
+        }
     }
 
     public String getCatalog() {
