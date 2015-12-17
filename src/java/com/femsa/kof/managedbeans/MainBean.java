@@ -1,8 +1,8 @@
 package com.femsa.kof.managedbeans;
 
+import com.femsa.kof.daily.util.CheckCatalogs;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -61,5 +61,8 @@ public class MainBean implements Serializable {
     public void setCatalog(String catalog) {
         this.catalog = catalog;
     }
-
+    
+    public void checkCatalogs(){
+        CheckCatalogs.checkAllCatalogs();
+    }
 }

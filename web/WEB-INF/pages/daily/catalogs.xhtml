@@ -107,6 +107,93 @@
                     </h:panelGrid>
                 </p:panel>
             </h:form> 
+            <h:form id="formChannel" rendered="#{mainBean.catalog eq 'channelDaily' ? true : false}">
+                <p:growl id="msgsChannel" showDetail="true"/>
+                <p:messages showDetail="true" closable="true"/>
+                <p:panel header="Channels catalog" id="panelChannel">                    
+                    <h:panelGrid columns="4" cellpadding="5px" >
+                        <p:outputLabel for="nameChannel" value="Channel:" />
+                        <p:inputText id="nameChannel" required="true" value="#{dailyCatalogsBean.canalNuevo.canalR}" maxlength="60"/>
+                        
+                        <p:outputLabel for="nameChannelEN" value="Channel (English):" />
+                        <p:inputText id="nameChannelEN" required="true" value="#{dailyCatalogsBean.canalNuevo.canalEn}" maxlength="60"/>                                                
+                        
+                        <p:outputLabel for="statusChannel" value="Status:" />
+                        <p:selectOneRadio id="statusChannel" layout="pageDirection" required="true" value="#{dailyCatalogsBean.canalNuevo.status}">
+                            <f:selectItem itemLabel="Enable" itemValue="true" />
+                            <f:selectItem itemLabel="Disable" itemValue="false" />                            
+                        </p:selectOneRadio>
+                       
+                        <f:facet name="footer">
+                            <h:panelGrid columns="2" cellspacing="10px">
+                                <p:commandButton value="Save" update="formChannel" actionListener="#{dailyCatalogsBean.saveChannel}">
+                                    <p:confirm message="Are you sure?" header="Save Channel"/>
+                                </p:commandButton>
+                                <p:commandButton value="New" update="formChannel" actionListener="#{dailyCatalogsBean.newChannel}" rendered="#{dailyCatalogsBean.canalSelected.idCanal ne null ? true : false}"/>
+                            </h:panelGrid>
+                        </f:facet>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <h:panelGrid columns="1">
+                        <p:dataTable id="tableChannel" var="channel" value="#{dailyCatalogsBean.catCanalesAll}" rowKey="#{channel.idCanal}" selection="#{dailyCatalogsBean.canalSelected}" selectionMode="single" paginator="true" rows="10">
+                            <p:column headerText="Channel">
+                                <h:outputText value="#{channel.canalR}"/>
+                            </p:column>
+                            <p:column headerText="Channel (English)">
+                                <h:outputText value="#{channel.canalEn}"/>
+                            </p:column>                                                                                                                                         
+                            <p:column headerText="Status">
+                                <h:outputText value="#{channel.status ? 'ENABLED' : 'DISABLED'}"/>
+                            </p:column>
+                            <p:ajax event="rowSelect" update=":formChannel:panelChannel" listener="#{dailyCatalogsBean.selectChannel}"/>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </p:panel>
+            </h:form>
+            
+            <h:form id="formConsumption" rendered="#{mainBean.catalog eq 'consumptionDaily' ? true : false}">
+                <p:growl id="msgsConsumption" showDetail="true"/>
+                <p:messages showDetail="true" closable="true"/>
+                <p:panel header="Types of Consumption catalog" id="panelConsumption">                    
+                    <h:panelGrid columns="4" cellpadding="5px" >
+                        <p:outputLabel for="nameConsumption" value="Type of Consumption:" />
+                        <p:inputText id="nameConsumption" required="true" value="#{dailyCatalogsBean.tipoConsumoNuevo.tipoConsumoR}" maxlength="60"/>
+                        
+                        <p:outputLabel for="nameConsumptionEN" value="Type of Consumption (English):" />
+                        <p:inputText id="nameConsumptionEN" required="true" value="#{dailyCatalogsBean.tipoConsumoNuevo.tipoConsumoEn}" maxlength="60"/>                                                
+                        
+                        <p:outputLabel for="statusConsumption" value="Status:" />
+                        <p:selectOneRadio id="statusConsumption" layout="pageDirection" required="true" value="#{dailyCatalogsBean.tipoConsumoNuevo.status}">
+                            <f:selectItem itemLabel="Enable" itemValue="true" />
+                            <f:selectItem itemLabel="Disable" itemValue="false" />                            
+                        </p:selectOneRadio>
+                       
+                        <f:facet name="footer">
+                            <h:panelGrid columns="2" cellspacing="10px">
+                                <p:commandButton value="Save" update="formConsumption" actionListener="#{dailyCatalogsBean.saveConsumption}">
+                                    <p:confirm message="Are you sure?" header="Save Type of Consumption"/>
+                                </p:commandButton>
+                                <p:commandButton value="New" update="formConsumption" actionListener="#{dailyCatalogsBean.newConsumption}" rendered="#{dailyCatalogsBean.tipoConsumoSelected.idTipoConsumo ne null ? true : false}"/>
+                            </h:panelGrid>
+                        </f:facet>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <h:panelGrid columns="1">
+                        <p:dataTable id="tableConsumption" var="consumption" value="#{dailyCatalogsBean.catTiposConsumoAll}" rowKey="#{consumption.idTipoConsumo}" selection="#{dailyCatalogsBean.tipoConsumoSelected}" selectionMode="single" paginator="true" rows="10">
+                            <p:column headerText="Type of Consumption">
+                                <h:outputText value="#{consumption.tipoConsumoR}"/>
+                            </p:column>
+                            <p:column headerText="Types of Consumption (English)">
+                                <h:outputText value="#{consumption.tipoConsumoEn}"/>
+                            </p:column>                                                                                                                                         
+                            <p:column headerText="Status">
+                                <h:outputText value="#{consumption.status ? 'ENABLED' : 'DISABLED'}"/>
+                            </p:column>
+                            <p:ajax event="rowSelect" update=":formConsumption:panelConsumption" listener="#{dailyCatalogsBean.selectConsumption}"/>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </p:panel>
+            </h:form> 
              
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                 <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />

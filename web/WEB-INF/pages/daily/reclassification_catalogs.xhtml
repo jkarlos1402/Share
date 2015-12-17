@@ -64,6 +64,55 @@
                         </h:panelGrid>                        
                     </f:facet>
                 </p:panel>
+            </h:form>  
+            
+            <h:form id="formReclaChannel" rendered="#{mainBean.catalog eq 'reclassificationChannelDaily' ? true : false}">
+                <p:growl id="msgsReclaChannel" showDetail="true"/>
+                <p:messages showDetail="true" closable="true"/>
+                <p:panel header="Channel" id="panelReclaChannel">                                        
+                    <h:panelGrid columns="1">
+                        <p:dataTable id="tableReclaChannel" var="reclaChannel" value="#{dailyReclassCatalogsBean.canalesReclasificados}" editable="true" paginator="true" rows="10" 
+                                     rowStyleClass="#{reclaChannel.canalR eq null || reclaChannel.canalR eq '' || reclaChannel.canalEn eq null || reclaChannel.canalEn eq '' ? 'ui-state-error' : null}">
+                            <p:ajax event="rowEdit" listener="#{dailyReclassCatalogsBean.onRowEditCanal}" />
+                            <f:facet name="header">
+                                #{dailyReclassCatalogsBean.canalesReclasificados.size()} entries found.
+                            </f:facet>
+                            <p:column headerText="Country">
+                                <h:outputText value="#{reclaChannel.pais}"/>
+                            </p:column>
+                            <p:column headerText="Channel" filterBy="##{reclaChannel.canal}" filterMatchMode="contains">
+                                <h:outputText value="#{reclaChannel.canal}"/>
+                            </p:column>                                                        
+                            <p:column headerText="Reclassified channel">                                
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{reclaChannel.canalR}"/></f:facet>
+                                    <f:facet name="input">
+                                        <h:selectOneMenu id="idReclassChann" value="#{dailyReclassCatalogsBean.catCanalSelected}" converter="channelConverterDaily" label="Reclassified Channel" immediate="true" required="true" style="width: 100%">                                            
+                                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                            <f:selectItems value="#{dailyReclassCatalogsBean.catCanales}"/>                           
+                                        </h:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Reclassified channel(English)">
+                                <h:outputText value="#{reclaChannel.canalEn}"/>
+                            </p:column>                           
+                            <p:column style="width:25px">
+                                <p:rowEditor />
+                            </p:column>                            
+                        </p:dataTable>
+                    </h:panelGrid>
+                    <f:facet name="footer">
+                        <h:panelGrid columns="2" cellspacing="5px">
+                            <p:commandButton value="Save" actionListener="#{dailyReclassCatalogsBean.saveCanalesReclasificados}" update=":formReclaChannel">
+                                <p:confirm header="Save changes" message="Are you Sure?" />
+                            </p:commandButton>
+                            <p:commandButton value="Refresh" update=":formReclaChannel" actionListener="#{dailyReclassCatalogsBean.refreshCanalesReclasificados}">
+                                <p:confirm header="Refresh table" message="Unsaved changes will be lost, are you Sure?" />
+                            </p:commandButton>
+                        </h:panelGrid>                        
+                    </f:facet>
+                </p:panel>
             </h:form>             
 
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">

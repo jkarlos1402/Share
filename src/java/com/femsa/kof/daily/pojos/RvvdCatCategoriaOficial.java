@@ -106,7 +106,7 @@ public class RvvdCatCategoriaOficial implements Serializable {
 
     @Override
     public String toString() {
-        return categoriaOficialEn;
+        return categoriaOficial;
     }
     
 }

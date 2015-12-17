@@ -61,14 +61,18 @@
                                                 <p:menuitem value="CATALOG USERS" icon="ui-icon-person" action="#{mainBean.setPage('adminUsers','','admin')}" update=":panelMain"/>                                                                                     
                                                 <p:menuitem value="SCRIPTS" icon="ui-icon-document"  action="#{mainBean.setPage('scripts','','share')}" update=":panelMain"/>                                       
                                             </p:submenu>
-                                            <p:separator />
-                                            <p:separator />
-                                            <p:submenu label="Catalogs" icon="ui-icon-newwin" rendered="true">
+                                            <p:separator />                                            
+                                            <p:submenu label="Catalogs" icon="ui-icon-newwin" rendered="false">
                                                 <p:menuitem value="OFFICIAL CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','officialCategoryDaily','daily')}" update=":panelMain"/>
                                                 <p:menuitem value="CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','categoryDaily','daily')}" update=":panelMain"/>                                                
+                                                <p:menuitem value="CHANNEL" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','channelDaily','daily')}" update=":panelMain"/>                                                
+                                                <p:menuitem value="TYPE OF CONSUMPTION" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','consumptionDaily','daily')}" update=":panelMain"/>                                                
+                                                <p:menuitem value="PACKING" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','packingDaily','daily')}" update=":panelMain"/>                                                
                                             </p:submenu>
-                                            <p:submenu label="Reclassification" icon="ui-icon-newwin" rendered="true">                                                
+                                            <p:submenu label="Reclassification" icon="ui-icon-newwin" rendered="false">                                                
                                                 <p:menuitem value="CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('reclassification_catalogs','reclassificationCategoryDaily','daily')}" update=":panelMain"/>                                                
+                                                <p:menuitem value="CHANNEL" icon="ui-icon-plus" action="#{mainBean.setPage('reclassification_catalogs','reclassificationChannelDaily','daily')}" update=":panelMain"/>                                                
+                                                <p:menuitem value="PACKING" icon="ui-icon-plus" action="#{mainBean.setPage('reclassification_catalogs','reclassificationPackingDaily','daily')}" update=":panelMain"/>                                                
                                             </p:submenu>
                                         </p:slideMenu>
                                     </h:form>
@@ -92,12 +96,11 @@
         </p:ajaxStatus>
         <p:graphicImage  value="/images/loading.gif" style="position: fixed;display:block;bottom:10px;right: 10px;height:100px; display: none;" id="loadingGIF"/>
         <h:form> 
-            <p:poll oncomplete="showNotifications()" interval="300" />
+            <p:poll oncomplete="showNotifications()" interval="60" listener="#{mainBean.checkCatalogs}"/>
             <p:overlayPanel for=":panelMain" widgetVar="notificationPanel" showEffect="blind" hideEffect="blind" showEvent="off" hideEvent="off" 
                             dismissable="false" showCloseIcon="true" rendered="#{mainBean.notifications.size() > 0 ? true : false}" my="right top" at="right top" style="width: 30%;">
                 <p:outputPanel>
                     <h:panelGrid columns="1" width="100%">                        
-
                         <p:dataList value="#{mainBean.notifications}" var="notification" type="ordered">  
                             <f:facet name="header">
                                 Notifications
