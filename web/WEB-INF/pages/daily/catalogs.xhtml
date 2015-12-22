@@ -194,6 +194,94 @@
                     </h:panelGrid>
                 </p:panel>
             </h:form> 
+            
+            <h:form id="formGec" rendered="#{mainBean.catalog eq 'gecDaily' ? true : false}">
+                <p:growl id="msgsGec" showDetail="true"/>
+                <p:messages showDetail="true" closable="true"/>
+                <p:panel header="Gecs catalog" id="panelGec">                    
+                    <h:panelGrid columns="4" cellpadding="5px" >
+                        <p:outputLabel for="nameGec" value="Gec:" />
+                        <p:inputText id="nameGec" required="true" value="#{dailyCatalogsBean.gecNuevo.gecR}" maxlength="255"/>
+                        
+                        <p:outputLabel for="nameGecEN" value="Gec (English):" />
+                        <p:inputText id="nameGecEN" required="true" value="#{dailyCatalogsBean.gecNuevo.gecEn}" maxlength="255"/>                                                
+                        
+                        <p:outputLabel for="statusGec" value="Status:" />
+                        <p:selectOneRadio id="statusGec" layout="pageDirection" required="true" value="#{dailyCatalogsBean.gecNuevo.status}">
+                            <f:selectItem itemLabel="Enable" itemValue="true" />
+                            <f:selectItem itemLabel="Disable" itemValue="false" />                            
+                        </p:selectOneRadio>
+                       
+                        <f:facet name="footer">
+                            <h:panelGrid columns="2" cellspacing="10px">
+                                <p:commandButton value="Save" update="formGec" actionListener="#{dailyCatalogsBean.saveGec}">
+                                    <p:confirm message="Are you sure?" header="Save Gec"/>
+                                </p:commandButton>
+                                <p:commandButton value="New" update="formGec" actionListener="#{dailyCatalogsBean.newGec}" rendered="#{dailyCatalogsBean.gecSelected.idGec ne null ? true : false}"/>
+                            </h:panelGrid>
+                        </f:facet>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <h:panelGrid columns="1">
+                        <p:dataTable id="tableGec" var="gec" value="#{dailyCatalogsBean.catGecsAll}" rowKey="#{gec.idGec}" selection="#{dailyCatalogsBean.gecSelected}" selectionMode="single" paginator="true" rows="10">
+                            <p:column headerText="Gec">
+                                <h:outputText value="#{gec.gecR}"/>
+                            </p:column>
+                            <p:column headerText="Gec (English)">
+                                <h:outputText value="#{gec.gecEn}"/>
+                            </p:column>                                                                                                                                         
+                            <p:column headerText="Status">
+                                <h:outputText value="#{gec.status ? 'ENABLED' : 'DISABLED'}"/>
+                            </p:column>
+                            <p:ajax event="rowSelect" update=":formGec:panelGec" listener="#{dailyCatalogsBean.selectGec}"/>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </p:panel>
+            </h:form> 
+            
+            <h:form id="formUnidad" rendered="#{mainBean.catalog eq 'bussinessUnitDaily' ? true : false}">
+                <p:growl id="msgsUnidad" showDetail="true"/>
+                <p:messages showDetail="true" closable="true"/>
+                <p:panel header="Bussiness unit catalog" id="panelUnidad">                    
+                    <h:panelGrid columns="4" cellpadding="5px" >
+                        <p:outputLabel for="nameUnidad" value="Bussiness unit:" />
+                        <p:inputText id="nameUnidad" required="true" value="#{dailyCatalogsBean.unidadNueva.unidadNegocioR}" maxlength="255"/>
+                        
+                        <p:outputLabel for="nameUnidadEN" value="Bussiness unit (English):" />
+                        <p:inputText id="nameUnidadEN" required="true" value="#{dailyCatalogsBean.unidadNueva.unidadNegocioEn}" maxlength="255"/>                                                
+                        
+                        <p:outputLabel for="statusUnidad" value="Status:" />
+                        <p:selectOneRadio id="statusUnidad" layout="pageDirection" required="true" value="#{dailyCatalogsBean.unidadNueva.status}">
+                            <f:selectItem itemLabel="Enable" itemValue="true" />
+                            <f:selectItem itemLabel="Disable" itemValue="false" />                            
+                        </p:selectOneRadio>
+                       
+                        <f:facet name="footer">
+                            <h:panelGrid columns="2" cellspacing="10px">
+                                <p:commandButton value="Save" update="formUnidad" actionListener="#{dailyCatalogsBean.saveBussinessUnit}">
+                                    <p:confirm message="Are you sure?" header="Save Bussiness unit"/>
+                                </p:commandButton>
+                                <p:commandButton value="New" update="formUnidad" actionListener="#{dailyCatalogsBean.newBussinessUnit}" rendered="#{dailyCatalogsBean.unidadSelected.idUnidadNegocio ne null ? true : false}"/>
+                            </h:panelGrid>
+                        </f:facet>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <h:panelGrid columns="1">
+                        <p:dataTable id="tableUnidad" var="unidad" value="#{dailyCatalogsBean.catUnidadesAll}" rowKey="#{unidad.idUnidadNegocio}" selection="#{dailyCatalogsBean.unidadSelected}" selectionMode="single" paginator="true" rows="10">
+                            <p:column headerText="Bussiness unit">
+                                <h:outputText value="#{unidad.unidadNegocioR}"/>
+                            </p:column>
+                            <p:column headerText="Bussiness unit (English)">
+                                <h:outputText value="#{unidad.unidadNegocioEn}"/>
+                            </p:column>                                                                                                                                         
+                            <p:column headerText="Status">
+                                <h:outputText value="#{unidad.status ? 'ENABLED' : 'DISABLED'}"/>
+                            </p:column>
+                            <p:ajax event="rowSelect" update=":formUnidad:panelUnidad" listener="#{dailyCatalogsBean.selectBussinessUnit}"/>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </p:panel>
+            </h:form> 
              
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                 <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />

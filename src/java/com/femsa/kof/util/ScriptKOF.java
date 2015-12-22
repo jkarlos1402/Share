@@ -1,4 +1,4 @@
-package com.femsa.kof.share.pojos;
+package com.femsa.kof.util;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -6,8 +6,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ScriptKOF implements Serializable {
 

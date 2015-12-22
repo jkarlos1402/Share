@@ -1,11 +1,11 @@
 package com.femsa.kof.share.dao;
 
 import com.femsa.kof.share.pojos.ShareCatGrupoCategorias;
+import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
-import com.femsa.kof.util.JPAUtil;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 public class ShareCatGrupoCategoriasDAO {
 
@@ -20,59 +20,56 @@ public class ShareCatGrupoCategoriasDAO {
     }
 
     public List<ShareCatGrupoCategorias> getCategoryGroups() {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        Query query = em.createQuery("SELECT gc FROM ShareCatGrupoCategorias gc WHERE gc.status = 1");
-        List<ShareCatGrupoCategorias> grupos = (List<ShareCatGrupoCategorias>) query.getResultList();
-        jpau.closeJPAUtil();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("SELECT gc FROM ShareCatGrupoCategorias gc WHERE gc.status = 1");
+        List<ShareCatGrupoCategorias> grupos = query.list();
+        session.close();
         return grupos;
     }
 
     public ShareCatGrupoCategorias getCategoryGroup(String name) {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        Query query = em.createQuery("SELECT gc FROM ShareCatGrupoCategorias gc WHERE gc.grupoCategoria = '" + name.toUpperCase() + "'");
-        List<ShareCatGrupoCategorias> grupos = (List<ShareCatGrupoCategorias>) query.getResultList();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("SELECT gc FROM ShareCatGrupoCategorias gc WHERE gc.grupoCategoria = '" + name.toUpperCase() + "'");
+        List<ShareCatGrupoCategorias> grupos = query.list();
         ShareCatGrupoCategorias grupo = null;
         if (grupos.size() > 0) {
             grupo = grupos.get(0);
         }
-        jpau.closeJPAUtil();
+        session.close();
         return grupo;
     }
 
     public List<ShareCatGrupoCategorias> getCategoryGroupsAll() {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        Query query = em.createQuery("SELECT gc FROM ShareCatGrupoCategorias gc");
-        List<ShareCatGrupoCategorias> grupos = (List<ShareCatGrupoCategorias>) query.getResultList();
-        jpau.closeJPAUtil();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("SELECT gc FROM ShareCatGrupoCategorias gc");
+        List<ShareCatGrupoCategorias> grupos = query.list();
+        session.close();
         return grupos;
     }
 
     public boolean saveGroupCategory(ShareCatGrupoCategorias grupoCategorias) {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        EntityTransaction et = em.getTransaction();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
-            et.begin();
-            if (grupoCategorias.getPkGrupoCategoria() != null) {
-                em.merge(grupoCategorias);
-            } else if (getCategoryGroup(grupoCategorias.getGrupoCategoria()) == null) {
-                em.persist(grupoCategorias);
+            session.beginTransaction();
+            if ((grupoCategorias.getPkGrupoCategoria() == null ? getCategoryGroup(grupoCategorias.getGrupoCategoria()) : null) == null) {
+                session.saveOrUpdate(grupoCategorias);
             } else {
                 error = "Group category already exists";
                 flagOk = false;
             }
-            et.commit();
+            session.getTransaction().commit();
         } catch (Exception e) {
-            if (et.isActive()) {
-                et.rollback();
+            if (session.getTransaction().isActive()) {
+                session.getTransaction().rollback();
             }
             flagOk = false;
         } finally {
-            jpau.closeJPAUtil();
+            session.close();
         }
         return flagOk;
     }

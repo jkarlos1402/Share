@@ -1,6 +1,6 @@
 package com.femsa.kof.share.managedbeans;
 
-import com.femsa.kof.share.pojos.ScriptKOF;
+import com.femsa.kof.util.ScriptKOF;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;

@@ -1,6 +1,6 @@
 package com.femsa.kof.daily.dao;
 
-import com.femsa.kof.daily.pojos.RvvdReclasifCategoria;
+import com.femsa.kof.daily.pojos.RvvdReclasifUnGec;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
@@ -8,8 +8,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-public class ReclasifCategoriaDAO {
-
+public class ReclasifGecDAO {
     private String error;
 
     public String getError() {
@@ -20,7 +19,7 @@ public class ReclasifCategoriaDAO {
         this.error = error;
     }
 
-    public List<RvvdReclasifCategoria> getReclasifCategoriasAll(ShareUsuario usuario) {
+    public List<RvvdReclasifUnGec> getReclasifUnGecAll(ShareUsuario usuario) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         String paises = "";
@@ -31,21 +30,21 @@ public class ReclasifCategoriaDAO {
                 paises = "'"+(usuario.getPaises().get(i).getClaveCorta())+"'";
             }           
         }
-        Query query = session.createQuery("SELECT rc FROM RvvdReclasifCategoria rc WHERE rc.pais IN ("+paises+")");        
-        List<RvvdReclasifCategoria> categoriasReclasificadas = query.list();       
+        Query query = session.createQuery("SELECT rug FROM RvvdReclasifUnGec rug WHERE rug.pais IN (" + paises + ")");
+        List<RvvdReclasifUnGec> unGecs = query.list();        
         session.close();
-        return categoriasReclasificadas;
+        return unGecs;
     }
 
-    public boolean saveReclasifCategorias(List<RvvdReclasifCategoria> reclasifCategorias) {
+    public boolean saveReclasifUnGec(List<RvvdReclasifUnGec> unGecs) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if (reclasifCategorias != null) {
-                for (RvvdReclasifCategoria reclasifCategoria : reclasifCategorias) {
-                    session.saveOrUpdate(reclasifCategoria);
+            if (unGecs != null) {
+                for (RvvdReclasifUnGec unGec : unGecs) {
+                    session.update(unGec);
                 }
             }
             session.getTransaction().commit();
@@ -61,7 +60,7 @@ public class ReclasifCategoriaDAO {
         return flagOk;
     }
 
-    public long checkReclasifCategorias(ShareUsuario usuario) {
+    public long checkReclasifUnGec(ShareUsuario usuario) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         String paises = "";
@@ -72,9 +71,9 @@ public class ReclasifCategoriaDAO {
                 paises = "'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
             }
         }
-        Query query = session.createQuery("SELECT count(rc.idReclasifCategoria) FROM RvvdReclasifCategoria rc WHERE rc.pais IN (" + paises + ") AND (rc.categoriaR IS NULL OR rc.categoriaEn IS NULL OR rc.categoriaOficialR IS NULL OR rc.categoriaOficialEn IS NULL)");        
-        long numNotReclass = ((Number) query.getFirstResult()).longValue();       
-        session.close();
+        Query query = session.createQuery("SELECT count(rug.idReclasifUnGec) FROM RvvdReclasifUnGec rug WHERE rug.pais IN (" + paises + ") AND (rug.gecR IS NULL OR rug.gecEn IS NULL OR rug.unidadNegocioR IS NULL OR rug.unidadNegocioEn IS NULL)");        
+        long numNotReclass = ((Number) query.getFirstResult()).longValue();        
+        session.close();       
         return numNotReclass;
     }
 }

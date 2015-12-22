@@ -1,4 +1,4 @@
-package com.femsa.kof.share.managedbeans;
+package com.femsa.kof.daily.managedbeans;
 
 import com.femsa.kof.share.dao.ShareTmpAllInfoCargaDAO;
 import com.femsa.kof.share.pojos.ShareCatPais;
@@ -6,6 +6,7 @@ import com.femsa.kof.share.pojos.ShareTmpAllInfoCarga;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import com.femsa.kof.util.ScriptAnalizer;
 import com.femsa.kof.util.XlsAnalizer;
+import com.femsa.kof.util.XlsAnalizerDaily;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,9 +19,9 @@ import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 import org.primefaces.event.FileUploadEvent;
 
-@ManagedBean(name = "shareLoadBean")
+@ManagedBean(name = "dailyLoadBean")
 @SessionScoped
-public class ShareLoadBean implements Serializable {
+public class DailyLoadBean implements Serializable {
 
     private List<ShareTmpAllInfoCarga> listInfoCarga;
     private ShareCatPais countrySelected;
@@ -35,7 +36,7 @@ public class ShareLoadBean implements Serializable {
     private Date dateExecution;
     private Date dateEndExecution;
 
-    public ShareLoadBean() {
+    public DailyLoadBean() {
         HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         usuario = (ShareUsuario) httpSession.getAttribute("session_user");
         omittedSheets = new ArrayList<String>();
@@ -130,9 +131,10 @@ public class ShareLoadBean implements Serializable {
     }
 
     public void handleFileUpload(FileUploadEvent event) {
-        FacesMessage message = null;       
+        FacesMessage message = null;
+        
         if (countrySelected != null) {
-            XlsAnalizer analizer = new XlsAnalizer();
+            XlsAnalizerDaily analizer = new XlsAnalizerDaily();
             listInfoCarga = analizer.analizeXls(event.getFile(), countrySelected, usuario);
             omittedSheets = analizer.getOmittedSheets();
             loadedSheets = analizer.getLoadedSheets();

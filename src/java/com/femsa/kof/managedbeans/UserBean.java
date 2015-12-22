@@ -120,9 +120,9 @@ public class UserBean implements Serializable {
     }
 
     public String logIn() {
-        ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();        
+        ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();
         EncrypterKOF encrypterKOF = new EncrypterKOF();
-        String passEnc = encrypterKOF.encrypt(password);        
+        String passEnc = encrypterKOF.encrypt(password);
         ShareUsuario usuario = usuarioDAO.getUsuario(user, passEnc);
         if (usuario != null) {
             HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
@@ -141,52 +141,54 @@ public class UserBean implements Serializable {
             httpSession.invalidate();
         }
     }
-    
-    public void saveUser(){
+
+    public void saveUser() {
         FacesMessage message = null;
         ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();
-        if(usuarioNuevo.getPaises() == null){
+        if (usuarioNuevo.getPaises() == null) {
             usuarioNuevo.setPaises(new ArrayList<ShareCatPais>());
-        }else{
+        } else {
             usuarioNuevo.getPaises().clear();
         }
         for (int i = 0; i < paisesAll.getTarget().size(); i++) {
-            usuarioNuevo.getPaises().add(paisesAll.getTarget().get(i));            
-        }                  
+            usuarioNuevo.getPaises().add(paisesAll.getTarget().get(i));
+        }
         usuarioNuevo.setPassword(usuarioNuevo.getPassword());
-        if (usuarioDAO.saveUser(usuarioNuevo)) {            
+        if (usuarioDAO.saveUser(usuarioNuevo)) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "User saved");
         } else {
-            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the user");
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the user, " + usuarioDAO.getError());
             usuarioNuevo.setPkUsuario(null);
-        }        
+        }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
+
     public void newUser() {
         usuarioNuevo = new ShareUsuario();
         usuarioSelected = null;
-        for (int i = 0; i < paisesAll.getTarget().size(); i++) {            
-            paisesAll.getSource().add(paisesAll.getTarget().get(i));            
+        for (int i = 0; i < paisesAll.getTarget().size(); i++) {
+            paisesAll.getSource().add(paisesAll.getTarget().get(i));
         }
         paisesAll.getTarget().clear();
     }
-    
+
     public void selectUser() {
         usuarioNuevo.setPkUsuario(usuarioSelected.getPkUsuario());
         usuarioNuevo.setEstatus(usuarioSelected.getEstatus());
         usuarioNuevo.setMail(usuarioSelected.getMail());
-        usuarioNuevo.setNombre(usuarioSelected.getNombre());               
-        usuarioNuevo.setPassword(usuarioSelected.getPassword());        
+        usuarioNuevo.setNombre(usuarioSelected.getNombre());
+        usuarioNuevo.setPassword(usuarioSelected.getPassword());
         usuarioNuevo.setRol(usuarioSelected.getRol());
         usuarioNuevo.setUsuario(usuarioSelected.getUsuario());
         usuarioNuevo.setPaises(usuarioSelected.getPaises());
         usuarioNuevo.setPais(usuarioSelected.getPais());
-        paisesAll.getTarget().clear();       
-        Object[] paisesT = usuarioSelected.getPaises().toArray();
-        for (int i = 0; i < usuarioSelected.getPaises().size(); i++) {
-            paisesAll.getTarget().add((ShareCatPais)paisesT[i]);
-            paisesAll.getSource().remove((ShareCatPais)paisesT[i]);
+        paisesAll.getTarget().clear();
+        if (usuarioSelected.getPaises() != null && usuarioSelected.getPaises().size() > 0) {
+            Object[] paisesT = usuarioSelected.getPaises().toArray();
+            for (int i = 0; i < usuarioSelected.getPaises().size(); i++) {
+                paisesAll.getTarget().add((ShareCatPais) paisesT[i]);
+                paisesAll.getSource().remove((ShareCatPais) paisesT[i]);
+            }
         }
     }
 }

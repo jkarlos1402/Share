@@ -1,11 +1,11 @@
 package com.femsa.kof.share.dao;
 
 import com.femsa.kof.share.pojos.ShareCatFabricante;
+import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
-import com.femsa.kof.util.JPAUtil;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 public class ShareCatFabricanteDAO {
 
@@ -20,59 +20,56 @@ public class ShareCatFabricanteDAO {
     }
 
     public List<ShareCatFabricante> getFabricantesAll() {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        Query query = em.createQuery("SELECT fab FROM ShareCatFabricante fab");
-        List<ShareCatFabricante> fabricantes = query.getResultList();
-        jpau.closeJPAUtil();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("SELECT fab FROM ShareCatFabricante fab");
+        List<ShareCatFabricante> fabricantes = query.list();
+        session.close();
         return fabricantes;
     }
 
     public List<ShareCatFabricante> getFabricantes() {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        Query query = em.createQuery("SELECT fab FROM ShareCatFabricante fab WHERE fab.status = 1");
-        List<ShareCatFabricante> fabricantes = query.getResultList();
-        jpau.closeJPAUtil();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("SELECT fab FROM ShareCatFabricante fab WHERE fab.status = 1");
+        List<ShareCatFabricante> fabricantes = query.list();
+        session.close();
         return fabricantes;
     }
 
     public ShareCatFabricante getFabricante(String name) {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        Query query = em.createQuery("SELECT fab FROM ShareCatFabricante fab WHERE fab.fabricante = '" + name.toUpperCase() + "'");
-        List<ShareCatFabricante> fabricantes = query.getResultList();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("SELECT fab FROM ShareCatFabricante fab WHERE fab.fabricante = '" + name.toUpperCase() + "'");
+        List<ShareCatFabricante> fabricantes = query.list();
         ShareCatFabricante fabricante = null;
-        if(fabricantes.size() > 0){
+        if (fabricantes.size() > 0) {
             fabricante = fabricantes.get(0);
         }
-        jpau.closeJPAUtil();
+        session.close();
         return fabricante;
     }
 
     public boolean saveFabricante(ShareCatFabricante fabricante) {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        EntityTransaction et = em.getTransaction();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
-            et.begin();
-            if (fabricante.getPkFabricante() != null) {
-                em.merge(fabricante);
-            } else if(getFabricante(fabricante.getFabricante()) == null){
-                em.persist(fabricante);
-            }else{
+            session.beginTransaction();
+            if ((fabricante.getPkFabricante() == null ? getFabricante(fabricante.getFabricante()) : null) == null) {
+                session.saveOrUpdate(fabricante);
+            } else {
                 error = "Manufacturer already exists";
                 flagOk = false;
             }
-            et.commit();
+            session.getTransaction().commit();
         } catch (Exception e) {
-            if (et.isActive()) {
-                et.rollback();
+            if (session.getTransaction().isActive()) {
+                session.getTransaction().rollback();
             }
             flagOk = false;
         } finally {
-            jpau.closeJPAUtil();
+            session.close();
         }
         return flagOk;
     }

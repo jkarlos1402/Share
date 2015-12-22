@@ -8,6 +8,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -55,7 +56,7 @@ public class ShareUsuario implements Serializable {
     @OneToOne(optional = false, cascade = CascadeType.MERGE)
     private ShareCatRol rol;
 
-    @ManyToMany()    
+    @ManyToMany(fetch = FetchType.EAGER)    
     @JoinTable(name = "SHARE_USUARIO_PAIS", joinColumns = {
         @JoinColumn(name = "FK_USUARIO")}, inverseJoinColumns = {
         @JoinColumn(name = "FK_PAIS")})

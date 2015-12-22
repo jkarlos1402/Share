@@ -4,12 +4,16 @@ import com.femsa.kof.daily.dao.CatCanalDAO;
 import com.femsa.kof.daily.dao.CatCategoriaDAO;
 import com.femsa.kof.daily.dao.CatCategoriaOficialDAO;
 import com.femsa.kof.daily.dao.CatEmpaqueDAO;
+import com.femsa.kof.daily.dao.CatGecDAO;
 import com.femsa.kof.daily.dao.CatTipoConsumoDAO;
+import com.femsa.kof.daily.dao.CatUnidadNegocioDAO;
 import com.femsa.kof.daily.pojos.RvvdCatCanal;
 import com.femsa.kof.daily.pojos.RvvdCatCategoria;
 import com.femsa.kof.daily.pojos.RvvdCatCategoriaOficial;
 import com.femsa.kof.daily.pojos.RvvdCatEmpaque;
+import com.femsa.kof.daily.pojos.RvvdCatGec;
 import com.femsa.kof.daily.pojos.RvvdCatTipoConsumo;
+import com.femsa.kof.daily.pojos.RvvdCatUnidadNegocio;
 import com.femsa.kof.util.CatalogLoader;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -44,7 +48,67 @@ public class DailyCatalogsBean implements Serializable {
     private RvvdCatEmpaque empaqueSelected;
     private List<RvvdCatEmpaque> catEmpaquesAll = new ArrayList<RvvdCatEmpaque>();
 
+    private RvvdCatGec gecNuevo = new RvvdCatGec();
+    private RvvdCatGec gecSelected;
+    private List<RvvdCatGec> catGecsAll = new ArrayList<RvvdCatGec>();
+
+    private RvvdCatUnidadNegocio unidadNueva = new RvvdCatUnidadNegocio();
+    private RvvdCatUnidadNegocio unidadSelected;
+    private List<RvvdCatUnidadNegocio> catUnidadesAll = new ArrayList<RvvdCatUnidadNegocio>();
+
     public DailyCatalogsBean() {
+    }
+
+    public RvvdCatGec getGecNuevo() {
+        return gecNuevo;
+    }
+
+    public void setGecNuevo(RvvdCatGec gecNuevo) {
+        this.gecNuevo = gecNuevo;
+    }
+
+    public RvvdCatGec getGecSelected() {
+        return gecSelected;
+    }
+
+    public void setGecSelected(RvvdCatGec gecSelected) {
+        this.gecSelected = gecSelected;
+    }
+
+    public List<RvvdCatGec> getCatGecsAll() {
+        CatGecDAO gecDAO = new CatGecDAO();
+        catGecsAll = gecDAO.getGecAll();
+        return catGecsAll;
+    }
+
+    public void setCatGecsAll(List<RvvdCatGec> catGecsAll) {
+        this.catGecsAll = catGecsAll;
+    }
+
+    public RvvdCatUnidadNegocio getUnidadNueva() {
+        return unidadNueva;
+    }
+
+    public void setUnidadNueva(RvvdCatUnidadNegocio unidadNueva) {
+        this.unidadNueva = unidadNueva;
+    }
+
+    public RvvdCatUnidadNegocio getUnidadSelected() {
+        return unidadSelected;
+    }
+
+    public void setUnidadSelected(RvvdCatUnidadNegocio unidadSelected) {
+        this.unidadSelected = unidadSelected;
+    }
+
+    public List<RvvdCatUnidadNegocio> getCatUnidadesAll() {
+        CatUnidadNegocioDAO unidadNegocioDAO = new CatUnidadNegocioDAO();
+        catUnidadesAll = unidadNegocioDAO.getUnidadesNegAll();
+        return catUnidadesAll;
+    }
+
+    public void setCatUnidadesAll(List<RvvdCatUnidadNegocio> catUnidadesAll) {
+        this.catUnidadesAll = catUnidadesAll;
     }
 
     public RvvdCatTipoConsumo getTipoConsumoNuevo() {
@@ -310,6 +374,56 @@ public class DailyCatalogsBean implements Serializable {
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the packing, " + empaqueDAO.getError());
             empaqueNuevo.setIdEmpaque(null);
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+    
+    public void newGec() {
+        gecNuevo = new RvvdCatGec();
+        gecSelected = null;
+    }
+
+    public void selectGec() {
+        gecNuevo.setIdGec(gecSelected.getIdGec());
+        gecNuevo.setGecEn(gecSelected.getGecEn());
+        gecNuevo.setGecR(gecSelected.getGecR());
+        gecNuevo.setStatus(gecSelected.getStatus());
+    }
+
+    public void saveGec() {
+        FacesMessage message = null;
+        CatGecDAO gecDAO = new CatGecDAO();
+        if (gecDAO.saveGec(gecNuevo)) {
+            CatalogLoader.loadCatalogs("daily");
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Gec saved");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the gec, " + gecDAO.getError());
+            gecNuevo.setIdGec(null);
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+    
+    public void newBussinessUnit() {
+        unidadNueva = new RvvdCatUnidadNegocio();
+        unidadSelected = null;
+    }
+
+    public void selectBussinessUnit() {
+        unidadNueva.setIdUnidadNegocio(unidadSelected.getIdUnidadNegocio());
+        unidadNueva.setStatus(unidadSelected.getStatus());
+        unidadNueva.setUnidadNegocioEn(unidadSelected.getUnidadNegocioEn());
+        unidadNueva.setUnidadNegocioR(unidadSelected.getUnidadNegocioR());
+    }
+
+    public void saveBussinessUnit() {
+        FacesMessage message = null;
+        CatUnidadNegocioDAO unidadNegocioDAO = new CatUnidadNegocioDAO();
+        if (unidadNegocioDAO.saveUnidadNeg(unidadNueva)) {
+            CatalogLoader.loadCatalogs("daily");
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Bussiness unit saved");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the bussiness unit, " + unidadNegocioDAO.getError());
+            unidadNueva.setIdUnidadNegocio(null);
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }

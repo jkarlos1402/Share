@@ -1,13 +1,14 @@
 package com.femsa.kof.daily.dao;
 
 import com.femsa.kof.daily.pojos.RvvdCatCategoria;
-import com.femsa.kof.util.JPAUtil;
+import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 public class CatCategoriaDAO {
+
     private String error;
 
     public String getError() {
@@ -19,68 +20,65 @@ public class CatCategoriaDAO {
     }
 
     public List<RvvdCatCategoria> getCategoriasAll() {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        Query query = em.createQuery("SELECT c FROM RvvdCatCategoria c");
-        List<RvvdCatCategoria> categorias = (List<RvvdCatCategoria>) query.getResultList();
-        jpau.closeJPAUtil();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("SELECT c FROM RvvdCatCategoria c");
+        List<RvvdCatCategoria> categorias = query.list();
+        session.close();
         return categorias;
     }
 
     public List<RvvdCatCategoria> getCategorias() {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        Query query = em.createQuery("SELECT c FROM RvvdCatCategoria c WHERE c.status = 1");
-        List<RvvdCatCategoria> categorias = (List<RvvdCatCategoria>) query.getResultList();
-        jpau.closeJPAUtil();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("SELECT c FROM RvvdCatCategoria c WHERE c.status = 1");
+        List<RvvdCatCategoria> categorias = query.list();
+        session.close();
         return categorias;
     }
 
     public RvvdCatCategoria getCategoria(Integer id) {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        RvvdCatCategoria categ = em.find(RvvdCatCategoria.class, id);
-        jpau.closeJPAUtil();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        RvvdCatCategoria categ = (RvvdCatCategoria) session.get(RvvdCatCategoria.class, id);
+        session.close();
         return categ;
     }
 
     public RvvdCatCategoria getCategoria(String categoria) {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        Query query = em.createQuery("SELECT c FROM RvvdCatCategoria c WHERE c.categoria = '" + categoria.toUpperCase() + "' OR c.categoriaEn = '"+categoria.toUpperCase()+"'");
-        List<RvvdCatCategoria> categorias = (List<RvvdCatCategoria>) query.getResultList();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("SELECT c FROM RvvdCatCategoria c WHERE c.categoria = '" + categoria.toUpperCase() + "' OR c.categoriaEn = '" + categoria.toUpperCase() + "'");
+        List<RvvdCatCategoria> categorias = query.list();
         RvvdCatCategoria categ = null;
-        if(categorias.size() > 0){
+        if (categorias.size() > 0) {
             categ = categorias.get(0);
         }
-        jpau.closeJPAUtil();
+        session.close();
         return categ;
     }
-    
-    public boolean saveCategoria(RvvdCatCategoria catCategoria){
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        EntityTransaction et = em.getTransaction();
+
+    public boolean saveCategoria(RvvdCatCategoria catCategoria) {
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
-            et.begin();
-            if (catCategoria.getIdCategoria()!= null) {
-                em.merge(catCategoria);
-            } else if (getCategoria(catCategoria.getCategoria()) == null) {
-                em.persist(catCategoria);
+            session.beginTransaction();
+            if ((catCategoria.getIdCategoria() == null ? getCategoria(catCategoria.getCategoria()) : null) == null) {
+                session.saveOrUpdate(catCategoria);
             } else {
                 error = "Category already exists";
                 flagOk = false;
             }
-            et.commit();
+            session.getTransaction().commit();
         } catch (Exception e) {
             error = e.getMessage();
-            if (et.isActive()) {
-                et.rollback();
+            if (session.getTransaction().isActive()) {
+                session.getTransaction().rollback();
             }
             flagOk = false;
         } finally {
-            jpau.closeJPAUtil();
+            session.close();
         }
         return flagOk;
     }

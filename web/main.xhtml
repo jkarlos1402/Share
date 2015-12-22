@@ -62,18 +62,23 @@
                                                 <p:menuitem value="SCRIPTS" icon="ui-icon-document"  action="#{mainBean.setPage('scripts','','share')}" update=":panelMain"/>                                       
                                             </p:submenu>
                                             <p:separator />                                            
-                                            <p:submenu label="Catalogs" icon="ui-icon-newwin" rendered="false">
+                                            <p:submenu label="Catalogs" icon="ui-icon-newwin" rendered="true">
                                                 <p:menuitem value="OFFICIAL CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','officialCategoryDaily','daily')}" update=":panelMain"/>
                                                 <p:menuitem value="CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','categoryDaily','daily')}" update=":panelMain"/>                                                
                                                 <p:menuitem value="CHANNEL" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','channelDaily','daily')}" update=":panelMain"/>                                                
                                                 <p:menuitem value="TYPE OF CONSUMPTION" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','consumptionDaily','daily')}" update=":panelMain"/>                                                
                                                 <p:menuitem value="PACKING" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','packingDaily','daily')}" update=":panelMain"/>                                                
+                                                <p:menuitem value="GEC" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','gecDaily','daily')}" update=":panelMain"/>                                                
+                                                <p:menuitem value="BUSSINESS UNIT" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','bussinessUnitDaily','daily')}" update=":panelMain"/>                                                
                                             </p:submenu>
-                                            <p:submenu label="Reclassification" icon="ui-icon-newwin" rendered="false">                                                
+                                            <p:submenu label="Reclassification" icon="ui-icon-newwin" rendered="true">                                                
                                                 <p:menuitem value="CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('reclassification_catalogs','reclassificationCategoryDaily','daily')}" update=":panelMain"/>                                                
                                                 <p:menuitem value="CHANNEL" icon="ui-icon-plus" action="#{mainBean.setPage('reclassification_catalogs','reclassificationChannelDaily','daily')}" update=":panelMain"/>                                                
                                                 <p:menuitem value="PACKING" icon="ui-icon-plus" action="#{mainBean.setPage('reclassification_catalogs','reclassificationPackingDaily','daily')}" update=":panelMain"/>                                                
+                                                <p:menuitem value="GEC" icon="ui-icon-plus" action="#{mainBean.setPage('reclassification_catalogs','reclassificationGecDaily','daily')}" update=":panelMain"/>                                                
+                                                <p:menuitem value="OPERATIVE DAYS" icon="ui-icon-plus" action="#{mainBean.setPage('reclassification_catalogs','reclassificationOperativeDaily','daily')}" update=":panelMain"/>                                                
                                             </p:submenu>
+                                            <p:menuitem value="Information Load" icon="ui-icon-arrowreturnthick-1-n" action="#{mainBean.setPage('loadInformation','','daily')}" update=":panelMain"/>                          
                                         </p:slideMenu>
                                     </h:form>
 
@@ -95,8 +100,8 @@
             </f:facet>
         </p:ajaxStatus>
         <p:graphicImage  value="/images/loading.gif" style="position: fixed;display:block;bottom:10px;right: 10px;height:100px; display: none;" id="loadingGIF"/>
-        <h:form> 
-            <p:poll oncomplete="showNotifications()" interval="60" listener="#{mainBean.checkCatalogs}"/>
+        <!-- <h:form> 
+            <p:poll oncomplete="showNotifications()" interval="60"/>
             <p:overlayPanel for=":panelMain" widgetVar="notificationPanel" showEffect="blind" hideEffect="blind" showEvent="off" hideEvent="off" 
                             dismissable="false" showCloseIcon="true" rendered="#{mainBean.notifications.size() > 0 ? true : false}" my="right top" at="right top" style="width: 30%;">
                 <p:outputPanel>
@@ -110,7 +115,7 @@
                     </h:panelGrid>                    
                 </p:outputPanel>
             </p:overlayPanel>
-        </h:form>        
+        </h:form>  -->      
     </h:body>
 </html>
 

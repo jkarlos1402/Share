@@ -1,57 +1,79 @@
 package com.femsa.kof.share.dao;
 
-
 import com.femsa.kof.share.pojos.ShareUsuario;
+import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
-import com.femsa.kof.util.JPAUtil;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 public class ShareUsuarioDAO {
 
+    private String error;
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
     public ShareUsuario getUsuario(String user, String password) {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        Query query = em.createQuery("SELECT u FROM ShareUsuario u WHERE u.usuario = '" + user.toUpperCase() + "' AND u.password = '" + password + "' AND u.estatus = 1");
-        List<ShareUsuario> usuarios = (List<ShareUsuario>) query.getResultList();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("FROM ShareUsuario u WHERE u.usuario = '" + user.toUpperCase() + "' AND u.password = '" + password + "' AND u.estatus = 1");
+        List<ShareUsuario> usuarios = query.list();
         ShareUsuario usuario = null;
         if (usuarios.size() > 0) {
             return usuarios.get(0);
         }
-        jpau.closeJPAUtil();
+        session.close();
+        return usuario;
+    }
+
+    public ShareUsuario getUsuario(String user) {
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("FROM ShareUsuario u WHERE u.usuario = '" + user.toUpperCase() + "'");
+        List<ShareUsuario> usuarios = query.list();
+        ShareUsuario usuario = null;
+        if (usuarios.size() > 0) {
+            return usuarios.get(0);
+        }
+        session.close();
         return usuario;
     }
 
     public List<ShareUsuario> getAllUsers() {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        Query query = em.createQuery("SELECT u FROM ShareUsuario u");
-        List<ShareUsuario> usuarios = (List<ShareUsuario>) query.getResultList();
-        jpau.closeJPAUtil();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("FROM ShareUsuario u");
+        List<ShareUsuario> usuarios = (List<ShareUsuario>) query.list();
+        session.close();
         return usuarios;
     }
 
     public boolean saveUser(ShareUsuario usuario) {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        EntityTransaction et = em.getTransaction();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
-            et.begin();
-            if (usuario.getPkUsuario() == null) {
-                em.persist(usuario);
-            } else {                
-                em.merge(usuario);
+            session.beginTransaction();
+            if ((usuario.getPkUsuario() == null ? getUsuario(usuario.getUsuario()) : null) == null) {
+                session.saveOrUpdate(usuario);
+            } else {
+                error = "User already exists";
+                flagOk = false;
             }
-            et.commit();
-        } catch (Exception e) {            
-            if (et.isActive()) {
-                et.rollback();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            if (session.getTransaction().isActive()) {
+                session.getTransaction().rollback();
             }
             flagOk = false;
         } finally {
-            jpau.closeJPAUtil();
+            session.close();
         }
         return flagOk;
     }

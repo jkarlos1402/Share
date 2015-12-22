@@ -1,11 +1,11 @@
 package com.femsa.kof.share.dao;
 
 import com.femsa.kof.share.pojos.ShareCatPais;
+import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
-import com.femsa.kof.util.JPAUtil;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 public class ShareCatPaisDAO {
 
@@ -20,65 +20,64 @@ public class ShareCatPaisDAO {
     }
 
     public List<ShareCatPais> getCatPais() {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        Query query = em.createQuery("SELECT pais FROM ShareCatPais pais WHERE pais.idstatus = 1");
-        List<ShareCatPais> countries = query.getResultList();
-        jpau.closeJPAUtil();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("SELECT pais FROM ShareCatPais pais WHERE pais.idstatus = 1");
+        List<ShareCatPais> countries = query.list();        
+        session.close();
         return countries;
     }
 
     public ShareCatPais getCatPais(String nombrePais) {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        Query query = em.createQuery("SELECT pais FROM ShareCatPais pais WHERE pais.nombre = '" + nombrePais.toUpperCase() + "'");
-        List<ShareCatPais> countries = (List<ShareCatPais>) query.getResultList();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("SELECT pais FROM ShareCatPais pais WHERE pais.nombre = '" + nombrePais.toUpperCase() + "'");
+        List<ShareCatPais> countries = query.list();
         ShareCatPais country = null;
         if (countries.size() > 0) {
             country = countries.get(0);
-        }
-        jpau.closeJPAUtil();
+        }        
+        session.close();
         return country;
     }
 
     public List<ShareCatPais> getCatPaisAll() {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        Query query = em.createQuery("SELECT pais FROM ShareCatPais pais");
-        List<ShareCatPais> countries = query.getResultList();
-        jpau.closeJPAUtil();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("SELECT pais FROM ShareCatPais pais");
+        List<ShareCatPais> countries = query.list();        
+        session.close();
         return countries;
     }
 
     public boolean savePais(ShareCatPais pais) {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        EntityTransaction et = em.getTransaction();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
         Query query = null;
         boolean flagOk = true;
         try {
-            et.begin();
+            session.beginTransaction();
             if (pais.getPkPais() != null) {
-                em.merge(pais);
+                session.update(pais);
             } else if (getCatPais(pais.getNombre()) == null) {
-                query = em.createNativeQuery("CREATE TABLE " + pais.getNombreTabla() + " (PAIS VARCHAR2(50 BYTE),CANAL VARCHAR2(50 BYTE), "
+                query = session.createSQLQuery("CREATE TABLE " + pais.getNombreTabla() + " (PAIS VARCHAR2(50 BYTE),CANAL VARCHAR2(50 BYTE), "
                         + "FECHA VARCHAR2(50 BYTE), GRUPO_CATEGORIA VARCHAR2(50 BYTE), CATEGORIA VARCHAR2(50 BYTE), "
                         + "FABRICANTE VARCHAR2(100 BYTE), VOLUMEN_MES NUMBER, VENTA_MES NUMBER)");
                 query.executeUpdate();
-                em.persist(pais);
+                session.save(pais);
             } else {
                 error = "Country already exists";
                 flagOk = false;
             }
-            et.commit();
+            session.getTransaction().commit();
         } catch (Exception e) {
             error = e.getMessage();
-            if (et.isActive()) {
-                et.rollback();
+            if (session.getTransaction().isActive()) {
+                session.getTransaction().rollback();
             }
             flagOk = false;
-        } finally {
-            jpau.closeJPAUtil();
+        } finally {            
+            session.close();
         }
         return flagOk;
     }
