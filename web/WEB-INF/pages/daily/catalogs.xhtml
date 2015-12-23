@@ -193,6 +193,50 @@
                         </p:dataTable>
                     </h:panelGrid>
                 </p:panel>
+            </h:form>              
+            
+            <h:form id="formPacking" rendered="#{mainBean.catalog eq 'packingDaily' ? true : false}">
+                <p:growl id="msgsPacking" showDetail="true"/>
+                <p:messages showDetail="true" closable="true"/>
+                <p:panel header="Packing catalog" id="panelPacking">                    
+                    <h:panelGrid columns="4" cellpadding="5px" >
+                        <p:outputLabel for="namePacking" value="Packing:" />
+                        <p:inputText id="namePacking" required="true" value="#{dailyCatalogsBean.empaqueNuevo.empaqueR}" maxlength="60"/>
+                        
+                        <p:outputLabel for="namePackingEN" value="Packing (English):" />
+                        <p:inputText id="namePackingEN" required="true" value="#{dailyCatalogsBean.empaqueNuevo.empaqueEn}" maxlength="60"/>                                                
+                        
+                        <p:outputLabel for="statusPacking" value="Status:" />
+                        <p:selectOneRadio id="statusPacking" layout="pageDirection" required="true" value="#{dailyCatalogsBean.empaqueNuevo.status}">
+                            <f:selectItem itemLabel="Enable" itemValue="true" />
+                            <f:selectItem itemLabel="Disable" itemValue="false" />                            
+                        </p:selectOneRadio>
+                       
+                        <f:facet name="footer">
+                            <h:panelGrid columns="2" cellspacing="10px">
+                                <p:commandButton value="Save" update="formPacking" actionListener="#{dailyCatalogsBean.savePacking}">
+                                    <p:confirm message="Are you sure?" header="Save Packing"/>
+                                </p:commandButton>
+                                <p:commandButton value="New" update="formPacking" actionListener="#{dailyCatalogsBean.newPacking}" rendered="#{dailyCatalogsBean.empaqueSelected.idEmpaque ne null ? true : false}"/>
+                            </h:panelGrid>
+                        </f:facet>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <h:panelGrid columns="1">
+                        <p:dataTable id="tablePacking" var="packing" value="#{dailyCatalogsBean.catEmpaquesAll}" rowKey="#{packing.idEmpaque}" selection="#{dailyCatalogsBean.empaqueSelected}" selectionMode="single" paginator="true" rows="10">
+                            <p:column headerText="Packing">
+                                <h:outputText value="#{packing.empaqueR}"/>
+                            </p:column>
+                            <p:column headerText="Packing (English)">
+                                <h:outputText value="#{packing.empaqueEn}"/>
+                            </p:column>                                                                                                                                         
+                            <p:column headerText="Status">
+                                <h:outputText value="#{packing.status ? 'ENABLED' : 'DISABLED'}"/>
+                            </p:column>
+                            <p:ajax event="rowSelect" update=":formPacking:panelPacking" listener="#{dailyCatalogsBean.selectPacking}"/>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </p:panel>
             </h:form> 
              
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">

@@ -52,7 +52,7 @@ public class RvvdCatTipoConsumo implements Serializable {
     }
 
     public void setTipoConsumoR(String tipoConsumoR) {
-        this.tipoConsumoR = tipoConsumoR;
+        this.tipoConsumoR = tipoConsumoR.toUpperCase();
     }
 
     public String getTipoConsumoEn() {
@@ -60,7 +60,7 @@ public class RvvdCatTipoConsumo implements Serializable {
     }
 
     public void setTipoConsumoEn(String tipoConsumoEn) {
-        this.tipoConsumoEn = tipoConsumoEn;
+        this.tipoConsumoEn = tipoConsumoEn.toUpperCase();
     }
 
     public boolean getStatus() {

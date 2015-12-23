@@ -52,7 +52,7 @@ public class RvvdCatEmpaque implements Serializable {
     }
 
     public void setEmpaqueR(String empaqueR) {
-        this.empaqueR = empaqueR;
+        this.empaqueR = empaqueR.toUpperCase();
     }
 
     public String getEmpaqueEn() {
@@ -60,7 +60,7 @@ public class RvvdCatEmpaque implements Serializable {
     }
 
     public void setEmpaqueEn(String empaqueEn) {
-        this.empaqueEn = empaqueEn;
+        this.empaqueEn = empaqueEn.toUpperCase();
     }
 
     public boolean getStatus() {

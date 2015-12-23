@@ -1,42 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-    <persistence-unit name="SharePortalPU" transaction-type="RESOURCE_LOCAL">
-        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-        <class>com.femsa.kof.share.pojos.ShareTmpAllInfoCarga</class>
-        <class>com.femsa.kof.share.pojos.ShareUsuario</class>
-        <class>com.femsa.kof.share.pojos.ShareCatCategorias</class>
-        <class>com.femsa.kof.share.pojos.ShareCatGrupoCategorias</class>
-        <class>com.femsa.kof.share.pojos.ShareCatCanales</class>
-        <class>com.femsa.kof.share.pojos.ShareCatRol</class>
-        <class>com.femsa.kof.share.pojos.ShareCatFabricante</class>
-        <class>com.femsa.kof.share.pojos.ShareCatPais</class>
-        <class>com.femsa.kof.share.pojos.ShareCatStatus</class>
-        <class>com.femsa.kof.daily.pojos.RvvdCatCategoria</class>
-        <class>com.femsa.kof.daily.pojos.RvvdReclasifCategoria</class>
-        <class>com.femsa.kof.daily.pojos.RvvdCatCategoriaOficial</class>
-        <class>com.femsa.kof.daily.pojos.RvvdCatCanal</class>
-        <class>com.femsa.kof.daily.pojos.RvvdReclasifCanal</class>
-        <class>com.femsa.kof.daily.pojos.RvvdReclasifEmpaque</class>
-        <class>com.femsa.kof.daily.pojos.RvvdCatEmpaque</class>
-        <class>com.femsa.kof.daily.pojos.RvvdCatTipoConsumo</class>
-        <exclude-unlisted-classes>false</exclude-unlisted-classes>
-        <!-- <properties>
-          <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
-          <property name="javax.persistence.jdbc.password" value="kofuser"/>
-          <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
-          <property name="javax.persistence.jdbc.user" value="kofuser"/>
-        </properties> -->
-        <properties>
+  <persistence-unit name="SharePortalPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.femsa.kof.share.pojos.ShareTmpAllInfoCarga</class>
+    <class>com.femsa.kof.share.pojos.ShareUsuario</class>
+    <class>com.femsa.kof.share.pojos.ShareCatCategorias</class>
+    <class>com.femsa.kof.share.pojos.ShareCatGrupoCategorias</class>
+    <class>com.femsa.kof.share.pojos.ShareCatCanales</class>
+    <class>com.femsa.kof.share.pojos.ShareCatRol</class>
+    <class>com.femsa.kof.share.pojos.ShareCatFabricante</class>
+    <class>com.femsa.kof.share.pojos.ShareCatPais</class>
+    <class>com.femsa.kof.share.pojos.ShareCatStatus</class>
+    <class>com.femsa.kof.daily.pojos.RvvdCatCategoria</class>
+    <class>com.femsa.kof.daily.pojos.RvvdReclasifCategoria</class>
+    <class>com.femsa.kof.daily.pojos.RvvdCatCategoriaOficial</class>
+    <class>com.femsa.kof.daily.pojos.RvvdCatCanal</class>
+    <class>com.femsa.kof.daily.pojos.RvvdReclasifCanal</class>
+    <class>com.femsa.kof.daily.pojos.RvvdReclasifEmpaque</class>
+    <class>com.femsa.kof.daily.pojos.RvvdCatEmpaque</class>
+    <class>com.femsa.kof.daily.pojos.RvvdCatTipoConsumo</class>
+    <class>com.femsa.kof.daily.pojos.RvvdReclasifMarca</class>
+    <class>com.femsa.kof.daily.pojos.RvvdCatContenidoCalorico</class>
+    <class>com.femsa.kof.daily.pojos.RvvdCatMarca</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <!-- <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
+      <property name="javax.persistence.jdbc.password" value="kofuser"/>
+      <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
+      <property name="javax.persistence.jdbc.user" value="kofuser"/>
+    </properties> -->
+    <!--  <properties>
             <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@10.138.3.32:1527:DSE"/>
             <property name="javax.persistence.jdbc.password" value="temporal"/>
             <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
             <property name="javax.persistence.jdbc.user" value="BOE14DEVHA"/>
-        </properties> 
-        <!--  <properties>
+        </properties> -->
+          <properties>
           <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@10.138.3.239:1527:QSE"/>
           <property name="javax.persistence.jdbc.password" value="B0EI4#QA5AH"/>
           <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
           <property name="javax.persistence.jdbc.user" value="BOE14QASHA"/>
-        </properties> -->
-    </persistence-unit>
+        </properties>
+  </persistence-unit>
 </persistence>
