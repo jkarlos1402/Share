@@ -1,13 +1,15 @@
 package com.femsa.kof.daily.managedbeans;
 
+import com.femsa.kof.daily.pojos.RollingDaily;
+import com.femsa.kof.daily.pojos.RvvdDistribucionMx;
 import com.femsa.kof.share.dao.ShareTmpAllInfoCargaDAO;
 import com.femsa.kof.share.pojos.ShareCatPais;
-import com.femsa.kof.share.pojos.ShareTmpAllInfoCarga;
 import com.femsa.kof.share.pojos.ShareUsuario;
+import com.femsa.kof.util.Record;
 import com.femsa.kof.util.ScriptAnalizer;
-import com.femsa.kof.util.XlsAnalizer;
 import com.femsa.kof.util.XlsAnalizerDaily;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,18 +25,17 @@ import org.primefaces.event.FileUploadEvent;
 @SessionScoped
 public class DailyLoadBean implements Serializable {
 
-    private List<ShareTmpAllInfoCarga> listInfoCarga;
+    private List<RollingDaily> listInfoCargaRolling;
+    private List<RvvdDistribucionMx> listInfoCargaDistribucion;
     private ShareCatPais countrySelected;
     private List<SelectItem> catCountriesUser;
     private List<String> omittedSheets;
     private List<String> loadedSheets;
     private List<String> errors;
-    private List<String> errorsScript;
-    private ShareUsuario usuario;
-
-    private Integer numEntriesSaved = 0;
-    private Date dateExecution;
-    private Date dateEndExecution;
+    private ShareUsuario usuario;    
+    private List<Record> cargas;
+    
+    private SimpleDateFormat formatDay = new SimpleDateFormat("dd/MM/yy");
 
     public DailyLoadBean() {
         HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
@@ -42,31 +43,39 @@ public class DailyLoadBean implements Serializable {
         omittedSheets = new ArrayList<String>();
         loadedSheets = new ArrayList<String>();
         errors = new ArrayList<String>();
-        errorsScript = new ArrayList<String>();
+        cargas = new ArrayList<Record>();
+    }    
+
+    public SimpleDateFormat getFormatDay() {
+        return formatDay;
     }
 
-    public Date getDateExecution() {
-        return dateExecution;
+    public void setFormatDay(SimpleDateFormat formatDay) {
+        this.formatDay = formatDay;
     }
 
-    public void setDateExecution(Date dateExecution) {
-        this.dateExecution = dateExecution;
+    public List<RollingDaily> getListInfoCargaRolling() {
+        return listInfoCargaRolling;
     }
 
-    public Date getDateEndExecution() {
-        return dateEndExecution;
+    public void setListInfoCargaRolling(List<RollingDaily> listInfoCargaRolling) {
+        this.listInfoCargaRolling = listInfoCargaRolling;
     }
 
-    public void setDateEndExecution(Date dateEndExecution) {
-        this.dateEndExecution = dateEndExecution;
+    public List<RvvdDistribucionMx> getListInfoCargaDistribucion() {
+        return listInfoCargaDistribucion;
     }
 
-    public Integer getNumEntriesSaved() {
-        return numEntriesSaved;
+    public void setListInfoCargaDistribucion(List<RvvdDistribucionMx> listInfoCargaDistribucion) {
+        this.listInfoCargaDistribucion = listInfoCargaDistribucion;
     }
 
-    public void setNumEntriesSaved(Integer numEntriesSaved) {
-        this.numEntriesSaved = numEntriesSaved;
+    public List<Record> getCargas() {
+        return cargas;
+    }
+
+    public void setCargas(List<Record> cargas) {
+        this.cargas = cargas;
     }
 
     public List<String> getErrors() {
@@ -120,26 +129,19 @@ public class DailyLoadBean implements Serializable {
 
     public void setCountrySelected(ShareCatPais countrySelected) {
         this.countrySelected = countrySelected;
-    }
-
-    public List<ShareTmpAllInfoCarga> getListInfoCarga() {
-        return listInfoCarga;
-    }
-
-    public void setListInfoCarga(List<ShareTmpAllInfoCarga> listInfoCarga) {
-        this.listInfoCarga = listInfoCarga;
-    }
+    }    
 
     public void handleFileUpload(FileUploadEvent event) {
         FacesMessage message = null;
         
         if (countrySelected != null) {
             XlsAnalizerDaily analizer = new XlsAnalizerDaily();
-            listInfoCarga = analizer.analizeXls(event.getFile(), countrySelected, usuario);
+            analizer.analizeXls(event.getFile(), countrySelected, usuario,"rolling");
+            listInfoCargaRolling = analizer.getCargasRolling();
             omittedSheets = analizer.getOmittedSheets();
             loadedSheets = analizer.getLoadedSheets();
             errors = analizer.getErrors();
-            if (listInfoCarga.size() > 0) {
+            if (listInfoCargaRolling.size() > 0) {
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", event.getFile().getFileName() + " is uploaded.");
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", event.getFile().getFileName() + " is empity or corrupt.");
@@ -151,41 +153,41 @@ public class DailyLoadBean implements Serializable {
     }
 
     public void saveInfoCarga() {
-        dateExecution = new Date();
-        FacesMessage message = null;
-        if (countrySelected.getNombre().toUpperCase().equals(listInfoCarga.get(0).getPais().toUpperCase())) {
-            ShareTmpAllInfoCargaDAO cargaDAO = new ShareTmpAllInfoCargaDAO();
-            if (cargaDAO.saveInfoCarga(listInfoCarga, countrySelected, usuario)) {                
-                numEntriesSaved += listInfoCarga.size();
-                if (ScriptAnalizer.executeScritsShare(errorsScript, countrySelected)) {
-                    message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Records saved.");
-                    errorsScript.clear();
-                } else {
-                    String cadenaError = "";
-                    for (String error : errorsScript) {
-                        cadenaError += error + ", ";
-                    }
-//                    cadenaError = cadenaError.substring(0, cadenaError.length() - 3);
-                    message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", "Records saved, but post-process FAILED, please contact whith the page administrator, [ERROR: " + cadenaError + "]");
-                }
-            } else {
-                String cadenaError = "";
-                for (String error : errors) {
-                    cadenaError += error + ", ";
-                }
-                //cadenaError = cadenaError.substring(0, cadenaError.length() - 3);
-                message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "An error ocurred while saving records [" + cadenaError + "]");
-            }
-            listInfoCarga.clear();
-            listInfoCarga = null;
-            omittedSheets.clear();
-            loadedSheets.clear();
-            errors.clear();
-            countrySelected = null;
-        } else {
-            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "Wrong country selected");
-        }
-        FacesContext.getCurrentInstance().addMessage(null, message);
-        dateEndExecution = new Date();
+//        dateExecution = new Date();
+//        FacesMessage message = null;
+//        if (countrySelected.getNombre().toUpperCase().equals(listInfoCarga.get(0).getPais().toUpperCase())) {
+//            ShareTmpAllInfoCargaDAO cargaDAO = new ShareTmpAllInfoCargaDAO();
+//            if (cargaDAO.saveInfoCarga(listInfoCarga, countrySelected, usuario)) {                
+//                numEntriesSaved += listInfoCarga.size();
+//                if (ScriptAnalizer.executeScritsShare(errorsScript, countrySelected)) {
+//                    message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Records saved.");
+//                    errorsScript.clear();
+//                } else {
+//                    String cadenaError = "";
+//                    for (String error : errorsScript) {
+//                        cadenaError += error + ", ";
+//                    }
+////                    cadenaError = cadenaError.substring(0, cadenaError.length() - 3);
+//                    message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", "Records saved, but post-process FAILED, please contact whith the page administrator, [ERROR: " + cadenaError + "]");
+//                }
+//            } else {
+//                String cadenaError = "";
+//                for (String error : errors) {
+//                    cadenaError += error + ", ";
+//                }
+//                //cadenaError = cadenaError.substring(0, cadenaError.length() - 3);
+//                message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "An error ocurred while saving records [" + cadenaError + "]");
+//            }
+//            listInfoCarga.clear();
+//            listInfoCarga = null;
+//            omittedSheets.clear();
+//            loadedSheets.clear();
+//            errors.clear();
+//            countrySelected = null;
+//        } else {
+//            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "Wrong country selected");
+//        }
+//        FacesContext.getCurrentInstance().addMessage(null, message);
+//        dateEndExecution = new Date();
     }
 }

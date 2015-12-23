@@ -1,6 +1,8 @@
 package com.femsa.kof.daily.pojos;
 
-public class RollingDaily {
+import java.io.Serializable;
+
+public class RollingDaily implements Serializable{
     
     private RvvdReclasifDiasOp diasOperativos;
     

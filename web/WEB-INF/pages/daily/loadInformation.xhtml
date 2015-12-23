@@ -33,36 +33,36 @@
                                       onstart="handleResponse(1)" oncomplete="handleResponse(2)"/>
                         <p:separator />
                         <h3>Preview</h3>
-                        <p:dataTable var="infoCarga" value="#{dailyLoadBean.listInfoCarga}" id="tableInfo" reflow="true" rows="20" paginator="true" widgetVar="tableInfCarga">                    
+                        <p:dataTable var="infoCargaRolling" value="#{dailyLoadBean.listInfoCargaRolling}" id="tableInfoRolling" reflow="true" rows="20" paginator="true" widgetVar="tableInfCargaRolling">                    
                             <f:facet name="header">
-                                <p:outputLabel value="#{dailyLoadBean.listInfoCarga.size()} records found." rendered="#{dailyLoadBean.listInfoCarga != null ? true : false}" styleClass="imgLoad"/>                                
+                                <p:outputLabel value="#{dailyLoadBean.listInfoCargaRolling.size()} records found." rendered="#{dailyLoadBean.listInfoCargaRolling != null ? true : false}" />                                
                             </f:facet>
                             <p:column headerText="Country">
-                                <h:outputText value="#{infoCarga.pais}" />
+                                <h:outputText value="#{infoCargaRolling.diasOperativos.pais}" />
                             </p:column>
 
                             <p:column headerText="Date current year">
-                                <h:outputText value="#{infoCarga.canal}" />
+                                <h:outputText value="#{infoCargaRolling.diasOperativos.fecha != null ? dailyLoadBean.formatDay.format(infoCargaRolling.diasOperativos.fecha) : ''}" />
                             </p:column>
 
-                            <p:column headerText="Date PY" filterBy="#{infoCarga.fecha}" filterMatchMode="contains" id="columDate">
-                                <h:outputText value="#{infoCarga.fecha}" />
+                            <p:column headerText="Date PY" id="columDate">
+                                <h:outputText value="#{infoCargaRolling.diasOperativos.fechaR    != null ? dailyLoadBean.formatDay.format(infoCargaRolling.diasOperativos.fechaR) : ''}" />
                             </p:column>
 
                             <p:column headerText="CSDs">
-                                <h:outputText value="#{infoCarga.grupoCategoria}" />
+                                <h:outputText />
                             </p:column>
 
-                            <p:column headerText="NCBs" filterBy="#{infoCarga.categoria}" filterMatchMode="contains" id="columCategory">
-                                <h:outputText value="#{infoCarga.categoria}" />
+                            <p:column headerText="NCBs" id="columCategory">
+                                <h:outputText  />
                             </p:column>
 
-                            <p:column headerText="Water" filterBy="#{infoCarga.fabricante}" filterMatchMode="contains">
-                                <h:outputText value="#{infoCarga.fabricante}" />
+                            <p:column headerText="Water" >
+                                <h:outputText  />
                             </p:column>
 
                             <p:column headerText="Others">
-                                <h:outputText value="#{infoCarga.volumenMes}" />
+                                <h:outputText  />
                             </p:column>
 
                                                  
@@ -79,7 +79,7 @@
                                     <f:facet name="header">
                                         Loaded Sheets
                                     </f:facet>
-                                    <p:commandLink value="#{loadedSheet}" onclick="setFilter('#{loadedSheet}')" update=":formLoad:tableInfo"/>
+                                    <h:outputText value="#{loadedSheet}"/>
                                 </p:dataList>
                                 <p:dataList value="#{dailyLoadBean.errors}" var="errorSheet" type="ordered">
                                     <f:facet name="header">
@@ -90,7 +90,7 @@
                             </h:panelGrid>
                         </p:panel>
                         <f:facet name="footer">
-                            <p:commandButton value="Save" actionListener="#{dailyLoadBean.saveInfoCarga}" update=":formLoad" rendered="#{dailyLoadBean.listInfoCarga.size() > 0 ? true : false}">
+                            <p:commandButton value="Save" actionListener="#{dailyLoadBean.saveInfoCarga}" update=":formLoad" rendered="#{dailyLoadBean.listInfoCargaRolling.size() > 0 ? true : false}">
                                 <p:confirm message="Are you sure?" header="Save records"/>
                             </p:commandButton>                        
                         </f:facet>

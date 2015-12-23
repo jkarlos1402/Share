@@ -1,14 +1,23 @@
 package com.femsa.kof.util;
 
+import com.femsa.kof.daily.pojos.RollingDaily;
+import com.femsa.kof.daily.pojos.RvvdCatCategoriaOficial;
+import com.femsa.kof.daily.pojos.RvvdDistribucionMx;
+import com.femsa.kof.daily.pojos.RvvdReclasifDiasOp;
 import com.femsa.kof.share.pojos.ShareCatCategorias;
 import com.femsa.kof.share.pojos.ShareCatPais;
 import com.femsa.kof.share.pojos.ShareCatCanales;
 import com.femsa.kof.share.pojos.ShareTmpAllInfoCarga;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -24,6 +33,8 @@ public class XlsAnalizerDaily {
     private List<String> omittedSheets;
     private List<String> loadedSheets;
     private List<String> errors;
+    private List<RollingDaily> cargasRolling = new ArrayList<RollingDaily>();
+    private List<RvvdDistribucionMx> cargasDistribucion = new ArrayList<RvvdDistribucionMx>();
 
     private final String[] mesesEsp = {"ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"};
     private final String[] mesesIng = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
@@ -33,6 +44,22 @@ public class XlsAnalizerDaily {
         omittedSheets = new ArrayList<String>();
         loadedSheets = new ArrayList<String>();
         errors = new ArrayList<String>();
+    }
+
+    public List<RollingDaily> getCargasRolling() {
+        return cargasRolling;
+    }
+
+    public void setCargasRolling(List<RollingDaily> cargasRolling) {
+        this.cargasRolling = cargasRolling;
+    }
+
+    public List<RvvdDistribucionMx> getCargasDistribucion() {
+        return cargasDistribucion;
+    }
+
+    public void setCargasDistribucion(List<RvvdDistribucionMx> cargasDistribucion) {
+        this.cargasDistribucion = cargasDistribucion;
     }
 
     public List<String> getLoadedSheets() {
@@ -59,8 +86,7 @@ public class XlsAnalizerDaily {
         this.omittedSheets = omittedSheets;
     }
 
-    public List<ShareTmpAllInfoCarga> analizeXls(UploadedFile file, ShareCatPais catPais, ShareUsuario usuario) {
-        List<ShareTmpAllInfoCarga> cargas = new ArrayList<ShareTmpAllInfoCarga>();
+    public void analizeXls(UploadedFile file, ShareCatPais catPais, ShareUsuario usuario, String tipo) {
         Workbook excelXLS = null;
         try {
             String extension = getExtension(file.getFileName());
@@ -77,31 +103,16 @@ public class XlsAnalizerDaily {
             for (int i = 0; i < numberOfSheets; i++) {
                 Sheet sheet = excelXLS.getSheetAt(i);
                 rowIterator = sheet.iterator();
-
-                List<ShareCatCategorias> catCategorias = (List<ShareCatCategorias>) session.getAttribute("categories_catalog");
-                ShareCatCategorias categoria = null;
-                ShareCatCategorias categoriaTmp = new ShareCatCategorias();
-                categoriaTmp.setCategoria(sheet.getSheetName().trim());
-                for (ShareCatCategorias catCategoria : catCategorias) {
-                    if (catCategoria.equals(categoriaTmp)) {
-                        categoria = catCategoria;
-                    }
-                }
-                List<ShareTmpAllInfoCarga> objsToAdd = null;
-                if (categoria != null) {
-                    objsToAdd = this.analizeSheet(rowIterator, categoria, catPais, usuario, sheet.getSheetName());
-                    if (objsToAdd != null) {
-                        for (ShareTmpAllInfoCarga obj : objsToAdd) {
-                            cargas.add(obj);
-                        }
+                if (tipo.trim().equalsIgnoreCase("rolling") && sheet.getSheetName().trim().equalsIgnoreCase("ROLLING")) {
+                    cargasRolling = this.analizeSheetRolling(rowIterator, catPais, usuario, sheet.getSheetName());
+                    if (cargasRolling != null) {
                         loadedSheets.add(sheet.getSheetName().trim().toUpperCase());
                     } else {
                         omittedSheets.add(sheet.getSheetName().trim().toUpperCase() + ", One or more cells are incorrect");
                     }
                 } else {
-                    omittedSheets.add(sheet.getSheetName().trim().toUpperCase() + ", Category not found");
+                    omittedSheets.add(sheet.getSheetName().trim().toUpperCase() + ", not valid.");
                 }
-
             }
         } catch (IOException ex) {
         } finally {
@@ -111,172 +122,65 @@ public class XlsAnalizerDaily {
             } catch (IOException ex) {
             }
         }
-        return cargas;
     }
 
-    public List<ShareTmpAllInfoCarga> analizeSheet(Iterator<Row> rowIterator, ShareCatCategorias categoria, ShareCatPais catPais, ShareUsuario usuario, String sheetName) {
+    public List<RollingDaily> analizeSheetRolling(Iterator<Row> rowIterator, ShareCatPais catPais, ShareUsuario usuario, String sheetName) {
         int numRow = 0;
         int numCell = 0;
-        int indexFecha = 0;
-        double valueCargaTmp;
-        double valueCargaTmp2;
-        double valueCellDef;
-        boolean flagVolume = false;
-        boolean flagValue = false;
-        String[] fechasTmp;
-        String year = "";
-        List<ShareTmpAllInfoCarga> cargas = new ArrayList<ShareTmpAllInfoCarga>();
-        List<String> fechas = new ArrayList<String>();
-        List<Integer> indexCellBimestral = new ArrayList<Integer>();
+        List<Columnas> cabeceras = new ArrayList<Columnas>();
+        List<RollingDaily> cargas = new ArrayList<RollingDaily>();
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        List<ShareCatCanales> canales = (List<ShareCatCanales>) session.getAttribute("canales_catalog");
-        String canal = "";
-        String fabricante = "";
+        List<RvvdCatCategoriaOficial> categoriasOficiales = (List<RvvdCatCategoriaOficial>) session.getAttribute("categoria_oficial_catalog");       
         end:
         while (rowIterator != null && rowIterator.hasNext()) {
             numCell = 0;
-            indexFecha = 0;
             Row row = rowIterator.next();
             Iterator<Cell> cellIterator = row.cellIterator();
+            RvvdReclasifDiasOp diaOp = null;
+            RollingDaily rolling = null;
             while (cellIterator.hasNext()) {
                 Cell cell = cellIterator.next();
-                int finAnho = 0;
                 switch (cell.getCellType()) {
-                    case Cell.CELL_TYPE_STRING:
-                        if (!cell.getStringCellValue().trim().equals("") && numRow == 0 || (numRow == 1 && numCell > 2)) {
-                            year = cell.getStringCellValue().trim().substring(cell.getStringCellValue().trim().length() - 5, cell.getStringCellValue().trim().length());
-                            fechasTmp = cell.getStringCellValue().trim().split("/");
-                            for (int i = 0; i < fechasTmp.length; i++) {
-                                String mes = fechasTmp[i].trim().substring(0, 3);
-                                String mesReplace = fechasTmp[i].trim().substring(0, 3);
-                                for (int j = 0; j < mesesEsp.length; j++) {
-                                    String mesEsp = mesesEsp[j];
-                                    if (mesEsp.equalsIgnoreCase(mes)) {
-                                        mes = mesesIng[j];
-                                    }
-                                }
-                                for (int j = 0; j < mesesPort.length; j++) {
-                                    String mesPort = mesesPort[j];
-                                    if (mesPort.equalsIgnoreCase(mes)) {
-                                        mes = mesesIng[j];
-                                    }
-                                }
-                                if (mes.equalsIgnoreCase(mesesIng[11])) {
-                                    finAnho = 1;
-                                } else {
-                                    finAnho = 0;
-                                }
-                                String fechaObtenida = i == 0 && fechasTmp.length > 1 ? mes + " " + (Integer.parseInt(year.trim()) - finAnho) : fechasTmp[i].replaceFirst(mesReplace, mes);
-                                fechas.add(fechaObtenida.toUpperCase());
-                            }
-                            if (fechasTmp.length > 1) {
-                                indexCellBimestral.add(numCell);
-                            }
-                        } else if (!cell.getStringCellValue().trim().equals("") && numRow > 0 && numCell == 0) {
-                            if (cell.getStringCellValue().trim().equalsIgnoreCase("volume")) {
-                                flagVolume = true;
-                                flagValue = false;
-                            } else if (cell.getStringCellValue().trim().equalsIgnoreCase("value")) {
-                                flagVolume = false;
-                                flagValue = true;
-                            }
-                        } else if (numRow > 0 && numCell == 1) {
-                            if (!cell.getStringCellValue().trim().equals("")) {
-                                canal = cell.getStringCellValue().trim().toUpperCase();
-                                ShareCatCanales canalTemp = new ShareCatCanales();
-                                canalTemp.setGvCanal(canal);
-                                if (!canales.contains(canalTemp)) {
-                                    cargas = null;
-                                    errors.add(canal + " channel in " + sheetName + " sheet not found");
-                                    break end;
-                                }
-                            }
-                        } else if (numRow > 0 && numCell == 2) {
-                            if (!cell.getStringCellValue().trim().equals("")) {                                  
-                                fabricante = cell.getStringCellValue().toUpperCase().replaceAll("INDUSTRY", "TOTAL")
-                                        .replaceAll(categoria.getCategoria(), "")                                        
-                                        .replaceAll("KO ", "KOF ")
-                                        .replaceAll(" KO", " KOF")
-                                        .replaceAll("RTD", "")
-                                        .replaceAll("SPORTS", "")
-                                        .replaceAll("SPORT", "")
-                                        .replaceAll(categoria.getCategoriaEsp() != null && !categoria.getCategoriaEsp().trim().equals("") ? categoria.getCategoriaEsp().trim() : categoria.getCategoria(), "")
-                                        .replaceAll(categoria.getCategoria().substring(0, categoria.getCategoria().length() - 1), "")                                        
-                                        .replaceAll(catPais.getNombre().toUpperCase(), "")                                                                                                                   
-                                        .trim().toUpperCase(); 
-                                fabricante = fabricante.replaceAll(!fabricante.trim().endsWith("TOTAL") && fabricante.contains("TOTAL") ? "TOTAL" : "OTHERTHING", "");
-                            }
-                        } else if (numRow > 0 && numCell > 2) {
-                            if (cell.getStringCellValue().trim().equalsIgnoreCase("NA")) {
-                                if (indexCellBimestral.contains(numCell)) {
-                                    for (int i = 0; i < 2; i++) {
-                                        addRecordCarga(canal, categoria, fabricante, fechas, indexFecha, catPais, 0, cargas, flagValue, flagVolume, usuario);
-                                        indexFecha++;
-                                    }
-                                } else {
-                                    addRecordCarga(canal, categoria, fabricante, fechas, indexFecha, catPais, 0, cargas, flagValue, flagVolume, usuario);
-                                    indexFecha++;
-                                }
-                            } else {
-                                cargas = null;
-                                errors.add("Approximately " + Character.toString((char) (65 + cell.getColumnIndex())) + "" + (cell.getRowIndex() + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell.getStringCellValue() + "], the sheet has been omitted.");
-                                break end;
+                    case Cell.CELL_TYPE_STRING:                        
+                        if (!cell.getStringCellValue().trim().equals("") && numRow == 0) {
+                            cabeceras.add(new Columnas(cell.getStringCellValue().trim(), numCell));
+                        } else if (!cell.getStringCellValue().trim().equals("") && numRow > 0) {
+                            if (cabeceras.get(numCell).getNameColumn().equalsIgnoreCase("country") && !cell.getStringCellValue().trim().equals("")) {
+                                diaOp = new RvvdReclasifDiasOp();
+                                rolling = new RollingDaily();
+                                rolling.setDiasOperativos(diaOp);
+                                diaOp.setPais(cell.getStringCellValue().trim().toUpperCase());
+                                cargas.add(rolling);
                             }
                         }
                         break;
                     case Cell.CELL_TYPE_FORMULA:
                         switch (cell.getCachedFormulaResultType()) {
-                            case Cell.CELL_TYPE_NUMERIC:
-                                if (numCell == 0 || numCell == 1 || numCell == 2) {
-                                    cargas = null;
-                                    break end;
-                                } else if (indexCellBimestral.contains(numCell)) {
-                                    valueCargaTmp = cell.getNumericCellValue() / 2;
-                                    valueCargaTmp2 = cell.getNumericCellValue() - valueCargaTmp;
-                                    for (int i = 0; i < 2; i++) {
-                                        valueCellDef = i == 0 ? valueCargaTmp : valueCargaTmp2;
-                                        addRecordCarga(canal, categoria, fabricante, fechas, indexFecha, catPais, valueCellDef, cargas, flagValue, flagVolume, usuario);
-                                        indexFecha++;
+                            case Cell.CELL_TYPE_STRING:
+                                if (!cell.getStringCellValue().trim().equals("") && numRow == 0) {
+                                    cabeceras.add(new Columnas(cell.getStringCellValue().trim(), numCell));
+                                } else if (!cell.getStringCellValue().trim().equals("") && numRow > 0) {
+                                    if (cabeceras.get(numCell).getNameColumn().equalsIgnoreCase("country") && !cell.getStringCellValue().trim().equals("")) {
+                                        diaOp = new RvvdReclasifDiasOp();
+                                        diaOp.setPais(cell.getStringCellValue().trim().toUpperCase());
+                                        cargas.add(rolling);
                                     }
-                                } else {
-                                    addRecordCarga(canal, categoria, fabricante, fechas, indexFecha, catPais, cell.getNumericCellValue(), cargas, flagValue, flagVolume, usuario);
-                                    indexFecha++;
                                 }
                                 break;
-                            case Cell.CELL_TYPE_STRING:
-                                if (cell.getStringCellValue().trim().equalsIgnoreCase("NA")) {
-                                    if (indexCellBimestral.contains(numCell)) {
-                                        for (int i = 0; i < 2; i++) {
-                                            addRecordCarga(canal, categoria, fabricante, fechas, indexFecha, catPais, 0, cargas, flagValue, flagVolume, usuario);
-                                            indexFecha++;
-                                        }
-                                    } else {
-                                        addRecordCarga(canal, categoria, fabricante, fechas, indexFecha, catPais, 0, cargas, flagValue, flagVolume, usuario);
-                                        indexFecha++;
-                                    }
-                                } else {
-                                    cargas = null;
-                                    errors.add("Approximately " + Character.toString((char) (65 + cell.getColumnIndex())) + "" + (cell.getRowIndex() + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell.getStringCellValue() + "], the sheet has been omitted.");
-                                    break end;
+                            case Cell.CELL_TYPE_NUMERIC:
+                                if (diaOp != null && cabeceras.get(numCell).getNameColumn().equalsIgnoreCase("Date current year") && numRow > 0 && numCell > 0) {
+                                    diaOp.setFecha(cell.getDateCellValue());
+                                } else if (diaOp != null && cabeceras.get(numCell).getNameColumn().equalsIgnoreCase("Date PY") && numRow > 0 && numCell > 0) {
+                                    diaOp.setFechaR(cell.getDateCellValue());
                                 }
                                 break;
                         }
                         break;
                     case Cell.CELL_TYPE_NUMERIC:
-                        if (numCell == 0 || numCell == 1 || numCell == 2) {
-                            cargas = null;
-                            break end;
-                        } else if (indexCellBimestral.contains(numCell)) {
-                            valueCargaTmp = cell.getNumericCellValue() / 2;
-                            valueCargaTmp2 = cell.getNumericCellValue() - valueCargaTmp;
-                            for (int i = 0; i < 2; i++) {
-                                valueCellDef = i == 0 ? valueCargaTmp : valueCargaTmp2;
-                                addRecordCarga(canal, categoria, fabricante, fechas, indexFecha, catPais, valueCellDef, cargas, flagValue, flagVolume, usuario);
-                                indexFecha++;
-                            }
-                        } else {
-                            addRecordCarga(canal, categoria, fabricante, fechas, indexFecha, catPais, cell.getNumericCellValue(), cargas, flagValue, flagVolume, usuario);
-                            indexFecha++;
+                        if (diaOp != null && cabeceras.get(numCell).getNameColumn().equalsIgnoreCase("Date current year") && numRow > 0 && numCell > 0) {
+                            diaOp.setFecha(cell.getDateCellValue());
+                        } else if (diaOp != null && cabeceras.get(numCell).getNameColumn().equalsIgnoreCase("Date PY") && numRow > 0 && numCell > 0) {
+                            diaOp.setFechaR(cell.getDateCellValue());
                         }
                         break;
                 }
@@ -295,22 +199,5 @@ public class XlsAnalizerDaily {
         } else {
             return filename.substring(index + 1);
         }
-    }
-
-    private static void addRecordCarga(String canal, ShareCatCategorias categoria, String fabricante, List<String> fechas, int indexFecha, ShareCatPais catPais, double cellValue, List<ShareTmpAllInfoCarga> cargas, boolean flagValue, boolean flagVolume, ShareUsuario usuario) {
-        ShareTmpAllInfoCarga carga = new ShareTmpAllInfoCarga();
-        carga.setCanal(canal);
-        carga.setCategoria(categoria.getCategoria());
-        carga.setFabricante(fabricante);
-        carga.setFecha(fechas.get(indexFecha));
-        carga.setGrupoCategoria(categoria.getFkGrupoCategoria().getGrupoCategoria());
-        carga.setPais(catPais.getNombre());
-        carga.setFkUsuario(usuario.getPkUsuario());
-        if (flagValue) {
-            carga.setVentaMes(cellValue);
-        } else if (flagVolume) {
-            carga.setVolumenMes(cellValue);
-        }
-        cargas.add(carga);
-    }
+    }   
 }
