@@ -20,33 +20,43 @@ public class CatEmpaqueDAO {
     }
 
     public List<RvvdCatEmpaque> getEmpaquesAll() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT e FROM RvvdCatEmpaque e");
         List<RvvdCatEmpaque> empaques = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return empaques;
     }
 
     public List<RvvdCatEmpaque> getEmpaques() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT e FROM RvvdCatEmpaque e WHERE e.status = 1");
         List<RvvdCatEmpaque> empaques = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return empaques;
     }
 
     public RvvdCatEmpaque getEmpaque(Integer id) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         RvvdCatEmpaque empaque = (RvvdCatEmpaque) session.get(RvvdCatEmpaque.class, id);
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return empaque;
     }
 
     public RvvdCatEmpaque getEmpaque(String empaque) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT e FROM RvvdCatEmpaque e WHERE e.empaqueR = '" + empaque.toUpperCase() + "' OR e.empaqueEn = '" + empaque.toUpperCase() + "'");
         List<RvvdCatEmpaque> empaques = query.list();
@@ -54,12 +64,15 @@ public class CatEmpaqueDAO {
         if (empaques.size() > 0) {
             empaqueT = empaques.get(0);
         }
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return empaqueT;
     }
 
     public boolean saveEmpaque(RvvdCatEmpaque empaque) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
@@ -78,7 +91,9 @@ public class CatEmpaqueDAO {
             }
             flagOk = false;
         } finally {
+            session.clear();
             session.close();
+            hibernateUtil.closeSessionFactory();
         }
         return flagOk;
     }

@@ -21,7 +21,8 @@ public class ReclasifCanalDAO {
     }
 
     public List<RvvdReclasifCanal> getReclasifCanalesAll(ShareUsuario usuario) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         String paises = "";
         for (int i = 0; i < usuario.getPaises().size(); i++) {
@@ -32,13 +33,16 @@ public class ReclasifCanalDAO {
             }
         }
         Query query = session.createQuery("SELECT rc FROM RvvdReclasifCanal rc WHERE rc.pais IN (" + paises + ")");
-        List<RvvdReclasifCanal> canalesReclasificados = query.list();        
+        List<RvvdReclasifCanal> canalesReclasificados = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return canalesReclasificados;
     }
 
     public boolean saveReclasifCanales(List<RvvdReclasifCanal> reclasifCanales) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
@@ -55,26 +59,31 @@ public class ReclasifCanalDAO {
                 session.getTransaction().rollback();
             }
             flagOk = false;
-        } finally {            
+        } finally {
+            session.clear();
             session.close();
+            hibernateUtil.closeSessionFactory();
         }
         return flagOk;
     }
 
     public long checkReclasifCanales(ShareUsuario usuario) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         String paises = "";
         for (int i = 0; i < usuario.getPaises().size(); i++) {
-            if(i > 0){
-                paises+=",'"+(usuario.getPaises().get(i).getClaveCorta())+"'";
-            } else{
-                paises = "'"+(usuario.getPaises().get(i).getClaveCorta())+"'";
-            }           
+            if (i > 0) {
+                paises += ",'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
+            } else {
+                paises = "'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
+            }
         }
-        Query query = session.createQuery("SELECT count(rc.idReclasifCanal) FROM RvvdReclasifCanal rc WHERE rc.pais IN ("+paises+") AND (rc.canalR IS NULL OR rc.canalEn IS NULL)");       
-        long numNotReclass = ((Number) query.getFirstResult()).longValue();       
+        Query query = session.createQuery("SELECT count(rc.idReclasifCanal) FROM RvvdReclasifCanal rc WHERE rc.pais IN (" + paises + ") AND (rc.canalR IS NULL OR rc.canalEn IS NULL)");
+        long numNotReclass = ((Number) query.getFirstResult()).longValue();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return numNotReclass;
     }
 }

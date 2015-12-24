@@ -10,11 +10,14 @@ import org.hibernate.SessionFactory;
 public class ShareCatCanalesDAO {
 
     public List<ShareCatCanales> getCanales() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT canales FROM ShareCatCanales canales");
         List<ShareCatCanales> canales = query.list();     
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return canales;
     }
 }

@@ -20,33 +20,43 @@ public class CatTipoConsumoDAO {
     }
 
     public List<RvvdCatTipoConsumo> getTiposConsumoAll() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT tc FROM RvvdCatTipoConsumo tc");
         List<RvvdCatTipoConsumo> tiposConsumo = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return tiposConsumo;
     }
 
     public List<RvvdCatTipoConsumo> getTiposConsumo() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT tc FROM RvvdCatTipoConsumo tc WHERE tc.status = 1");
         List<RvvdCatTipoConsumo> tiposConsumo = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return tiposConsumo;
     }
 
     public RvvdCatTipoConsumo getTipoConsumo(Integer id) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         RvvdCatTipoConsumo tipoConsumo = (RvvdCatTipoConsumo) session.get(RvvdCatTipoConsumo.class, id);
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return tipoConsumo;
     }
 
     public RvvdCatTipoConsumo getTipoConsumo(String tipoConsumo) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT tc FROM RvvdCatTipoConsumo tc WHERE tc.tipoConsumoR = '" + tipoConsumo.toUpperCase() + "' OR tc.tipoConsumoEn = '" + tipoConsumo.toUpperCase() + "'");
         List<RvvdCatTipoConsumo> tiposConsumo = query.list();
@@ -54,12 +64,15 @@ public class CatTipoConsumoDAO {
         if (tiposConsumo.size() > 0) {
             tipoConsumoT = tiposConsumo.get(0);
         }
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return tipoConsumoT;
     }
 
     public boolean saveTipoConsumo(RvvdCatTipoConsumo tipoConsumo) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
@@ -78,7 +91,9 @@ public class CatTipoConsumoDAO {
             }
             flagOk = false;
         } finally {
+            session.clear();
             session.close();
+            hibernateUtil.closeSessionFactory();
         }
         return flagOk;
     }

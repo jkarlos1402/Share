@@ -20,16 +20,20 @@ public class ShareCatCategoriasDAO {
     }
 
     public List<ShareCatCategorias> getCategorias() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT categ FROM ShareCatCategorias categ WHERE categ.status = 1");
         List<ShareCatCategorias> categories = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return categories;
     }
 
     public ShareCatCategorias getCategoria(String name) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT categ FROM ShareCatCategorias categ WHERE categ.categoria = '" + name.toUpperCase() + "'");
         List<ShareCatCategorias> categories = query.list();
@@ -37,21 +41,27 @@ public class ShareCatCategoriasDAO {
         if (categories.size() > 0) {
             category = categories.get(0);
         }
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return category;
     }
 
     public List<ShareCatCategorias> getCategoriasAll() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT categ FROM ShareCatCategorias categ");
         List<ShareCatCategorias> categories = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return categories;
     }
 
     public boolean saveCategoria(ShareCatCategorias categoria) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
@@ -69,7 +79,9 @@ public class ShareCatCategoriasDAO {
             }
             flagOk = false;
         } finally {
+            session.clear();
             session.close();
+            hibernateUtil.closeSessionFactory();
         }
         return flagOk;
     }

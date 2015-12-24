@@ -20,7 +20,8 @@ public class ShareUsuarioDAO {
     }
 
     public ShareUsuario getUsuario(String user, String password) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("FROM ShareUsuario u WHERE u.usuario = '" + user.toUpperCase() + "' AND u.password = '" + password + "' AND u.estatus = 1");
         List<ShareUsuario> usuarios = query.list();
@@ -28,12 +29,15 @@ public class ShareUsuarioDAO {
         if (usuarios.size() > 0) {
             return usuarios.get(0);
         }
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return usuario;
     }
 
     public ShareUsuario getUsuario(String user) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("FROM ShareUsuario u WHERE u.usuario = '" + user.toUpperCase() + "'");
         List<ShareUsuario> usuarios = query.list();
@@ -41,21 +45,27 @@ public class ShareUsuarioDAO {
         if (usuarios.size() > 0) {
             return usuarios.get(0);
         }
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return usuario;
     }
 
     public List<ShareUsuario> getAllUsers() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("FROM ShareUsuario u");
         List<ShareUsuario> usuarios = (List<ShareUsuario>) query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return usuarios;
     }
 
     public boolean saveUser(ShareUsuario usuario) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
@@ -73,7 +83,9 @@ public class ShareUsuarioDAO {
             }
             flagOk = false;
         } finally {
+            session.clear();
             session.close();
+            hibernateUtil.closeSessionFactory();
         }
         return flagOk;
     }

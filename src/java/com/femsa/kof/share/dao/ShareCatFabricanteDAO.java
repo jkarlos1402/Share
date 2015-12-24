@@ -20,25 +20,32 @@ public class ShareCatFabricanteDAO {
     }
 
     public List<ShareCatFabricante> getFabricantesAll() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT fab FROM ShareCatFabricante fab");
         List<ShareCatFabricante> fabricantes = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return fabricantes;
     }
 
     public List<ShareCatFabricante> getFabricantes() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT fab FROM ShareCatFabricante fab WHERE fab.status = 1");
         List<ShareCatFabricante> fabricantes = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return fabricantes;
     }
 
     public ShareCatFabricante getFabricante(String name) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT fab FROM ShareCatFabricante fab WHERE fab.fabricante = '" + name.toUpperCase() + "'");
         List<ShareCatFabricante> fabricantes = query.list();
@@ -46,12 +53,15 @@ public class ShareCatFabricanteDAO {
         if (fabricantes.size() > 0) {
             fabricante = fabricantes.get(0);
         }
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return fabricante;
     }
 
     public boolean saveFabricante(ShareCatFabricante fabricante) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
@@ -69,7 +79,9 @@ public class ShareCatFabricanteDAO {
             }
             flagOk = false;
         } finally {
+            session.clear();
             session.close();
+            hibernateUtil.closeSessionFactory();
         }
         return flagOk;
     }

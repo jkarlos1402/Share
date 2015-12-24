@@ -10,19 +10,25 @@ import org.hibernate.SessionFactory;
 public class ShareCatRolDAO {
 
     public List<ShareCatRol> getCatRol() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT r FROM ShareCatRol r");
-        List<ShareCatRol> roles = query.list();       
+        List<ShareCatRol> roles = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return roles;
     }
 
     public ShareCatRol getRol(Integer idRol) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        ShareCatRol rol = (ShareCatRol) session.get(ShareCatRol.class, idRol);       
+        ShareCatRol rol = (ShareCatRol) session.get(ShareCatRol.class, idRol);
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return rol;
     }
 }

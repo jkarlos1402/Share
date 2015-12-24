@@ -20,46 +20,59 @@ public class CatCanalDAO {
     }
 
     public List<RvvdCatCanal> getCanalesAll() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT c FROM RvvdCatCanal c");
         List<RvvdCatCanal> canales = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return canales;
     }
 
     public List<RvvdCatCanal> getCanales() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT c FROM RvvdCatCanal c WHERE c.status = 1");
-        List<RvvdCatCanal> canales = query.list();        
+        List<RvvdCatCanal> canales = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return canales;
     }
 
     public RvvdCatCanal getCanal(Integer id) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         RvvdCatCanal canal = (RvvdCatCanal) session.get(RvvdCatCanal.class, id);
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return canal;
     }
 
     public RvvdCatCanal getCanal(String canal) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT c FROM RvvdCatCanal c WHERE c.canalR = '" + canal.toUpperCase() + "' OR c.canalEn = '" + canal.toUpperCase() + "'");
         List<RvvdCatCanal> canales = query.list();
         RvvdCatCanal canalT = null;
         if (canales.size() > 0) {
             canalT = canales.get(0);
-        }       
+        }
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return canalT;
     }
 
     public boolean saveCanal(RvvdCatCanal canal) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
@@ -78,7 +91,9 @@ public class CatCanalDAO {
             }
             flagOk = false;
         } finally {
+            session.clear();
             session.close();
+            hibernateUtil.closeSessionFactory();
         }
         return flagOk;
     }

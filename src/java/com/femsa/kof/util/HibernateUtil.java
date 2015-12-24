@@ -5,9 +5,9 @@ import org.hibernate.SessionFactory;
 
 public class HibernateUtil {
 
-    private static final SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
     
-    static {
+    public HibernateUtil(){
         try {
             // Create the SessionFactory from standard (hibernate.cfg.xml) 
             // config file.
@@ -17,9 +17,14 @@ public class HibernateUtil {
             System.err.println("Initial SessionFactory creation failed." + ex);
             throw new ExceptionInInitializerError(ex);
         }
+    }    
+    
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
     }
     
-    public static SessionFactory getSessionFactory() {
-        return sessionFactory;
+    public void closeSessionFactory(){
+        sessionFactory.close();
+        sessionFactory = null;
     }
 }

@@ -25,4 +25,3 @@ function showNotifications() {
 //        }, 10000);
 //    }, 10000);
 }
-

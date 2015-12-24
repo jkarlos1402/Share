@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author TMXIDSJPINAM
  */
-@WebFilter(filterName = "AccessFilter", urlPatterns = {"/faces/index.xhtml","/faces/main.xhtml"}, dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ERROR, DispatcherType.INCLUDE})
+@WebFilter(filterName = "AccessFilter", urlPatterns = {"/faces/index.xhtml", "/faces/main.xhtml"}, dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ERROR, DispatcherType.INCLUDE})
 public class AccessFilter implements Filter {
 
     public AccessFilter() {
@@ -36,15 +36,14 @@ public class AccessFilter implements Filter {
         if (session != null) {
             usuario = (ShareUsuario) session.getAttribute("session_user");
         }
-        if (usuario != null && usuario.getPkUsuario() != null && !url.contains("main.xhtml") ) {
+        if (usuario != null && usuario.getPkUsuario() != null && !url.contains("main.xhtml")) {
             RequestDispatcher rd = request.getRequestDispatcher("main.xhtml");
             rd.forward(request, response);
-        }else if(usuario == null && url.contains("main.xhtml") && req.getMethod().equalsIgnoreCase("get")) {
+        } else if (usuario == null && url.contains("main.xhtml") && req.getMethod().equalsIgnoreCase("get")) {
             res.sendError(404);
         } else {
             chain.doFilter(request, response);
         }
-
     }
 
     @Override

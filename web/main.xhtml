@@ -9,6 +9,7 @@
         <f:facet name="first">
             <meta http-equiv="X-UA-Compatible" content="IE=9"/>
             <title>Corporate  Market</title>  
+            <link rel="shortcut icon" type="image/x-icon" href="images/logo-cocacola.jpg" />
         </f:facet>             
         <link rel="stylesheet" type="text/css" href="css/estilosGenerales.css"/>
         <script type="text/javascript" src="js/util.js"/>
@@ -17,74 +18,106 @@
         <p:outputPanel id="panelMain">
             <div class="ui-grid ui-grid-responsive">
                 <div class="ui-grid-row">
-                    <div class="ui-grid-col-3">
-                        <div class="ui-grid-row">
-                            <div class="ui-grid-col-12">                                
-                            </div>
-                        </div>
-                        <div class="ui-grid-row" style="margin-top: 0px;">
-                            <div class="ui-grid-col-12">
+                    <div class="ui-grid-col-3">                        
+                        <div>
+                            <div>
                                 <p:panel style="background-color: rgba(0, 0, 0, 0.3); border-style: none; text-align: center;   margin-left: -60px;">
                                     <div class="ui-grid-row">
-                                        <div class="ui-grid-col-12" style="padding-left: 0px;">
+                                        <div class="ui-grid-col-12">
                                             <p:graphicImage  value="/images/femsa.png"/>
                                         </div>
                                     </div>
                                     <div class="ui-grid-row">
-                                        <div class="ui-grid-col-12" style="padding-left: 0px;">
-                                            <h:panelGrid columns="1" cellspacing="3px" style="width: 100%">
-                                                <h:outputText value="WELCOME #{mainBean.usuario.nombre}" style="color: #ffffff; font-size: 15px;"/>
-                                                <p:commandLink value="(Logout)" actionListener="#{userBean.logout}" action="index" style="color: #ffffff; font-size: 15px;"/>
-                                            </h:panelGrid>
+                                        <div class="ui-grid-col-12">
+                                            <h:form>
+                                                <h:panelGrid columns="1" cellspacing="3px" style="width: 100%">
+                                                    <h:outputText value="WELCOME #{mainBean.usuario.nombre}" style="color: #ffffff; font-size: 15px;"/>
+                                                    <p:commandLink value="(Logout)"  action="#{userBean.logout}" style="color: #ffffff; font-size: 15px;"/>
+                                                </h:panelGrid>
+                                            </h:form>                                            
                                         </div>
                                     </div>
 
                                 </p:panel>
                             </div>
                         </div>
-                        <div class="ui-grid-row">
-                            <div class="ui-grid-col-12"  style="padding-top: 0px;">
-                                <p:panel style="background-color: rgba(0, 0, 0, 0.3); border-style: none; text-align: center;   margin-left: -60px;  margin-top: 0px;">                                    
-                                    <h:form>
-                                        <p:slideMenu style="width:auto; margin-left:4px; font-size:14px;">
-                                            <p:menuitem value="Home"  icon="ui-icon-home" action="#{mainBean.setPage('welcome','','')}" update=":panelMain"/>
-                                            <p:menuitem value="Information Load"  icon="ui-icon-arrowreturnthick-1-n" action="#{mainBean.setPage('loadInformation','','share')}" update=":panelMain"/>
-                                            <p:menuitem value="Uploads status"  icon=" ui-icon-clipboard" action="#{mainBean.setPage('uploadStatus','','share')}" update=":panelMain"/>                                            
-                                            <p:submenu label="Catalogs" icon="ui-icon-newwin" rendered="#{mainBean.usuario.rol.pkRol eq '1' ? true : false}">
-                                                <p:menuitem value="COUNTRY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','country','share')}" update=":panelMain"/>
-                                                <p:menuitem value="CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','category','share')}" update=":panelMain"/>
-                                                <p:menuitem value="GROUP CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','group','share')}" update=":panelMain"/>
-                                                <p:menuitem value="MANUFACTURER" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','manufacturer','share')}" update=":panelMain"/>
-                                            </p:submenu>
-                                            <p:separator />
-                                            <p:submenu label="Administrator" icon="ui-icon-person" rendered="#{mainBean.usuario.rol.pkRol eq '1' ? true : false}" >
-                                                <p:menuitem value="CATALOG USERS" icon="ui-icon-person" action="#{mainBean.setPage('adminUsers','','admin')}" update=":panelMain"/>                                                                                     
-                                                <p:menuitem value="SCRIPTS" icon="ui-icon-document"  action="#{mainBean.setPage('scripts','','share')}" update=":panelMain"/>                                       
-                                            </p:submenu>
-                                            <p:separator />                                            
-                                            <p:submenu label="Catalogs" icon="ui-icon-newwin" rendered="true">
-                                                <p:menuitem value="OFFICIAL CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','officialCategoryDaily','daily')}" update=":panelMain"/>
-                                                <p:menuitem value="CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','categoryDaily','daily')}" update=":panelMain"/>                                                
-                                                <p:menuitem value="CHANNEL" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','channelDaily','daily')}" update=":panelMain"/>                                                
-                                                <p:menuitem value="TYPE OF CONSUMPTION" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','consumptionDaily','daily')}" update=":panelMain"/>                                                
-                                                <p:menuitem value="PACKING" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','packingDaily','daily')}" update=":panelMain"/>                                                
-                                                <p:menuitem value="GEC" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','gecDaily','daily')}" update=":panelMain"/>                                                
-                                                <p:menuitem value="BUSSINESS UNIT" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','bussinessUnitDaily','daily')}" update=":panelMain"/>                                                
-                                            </p:submenu>
-                                            <p:submenu label="Reclassification" icon="ui-icon-newwin" rendered="true">                                                
-                                                <p:menuitem value="CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('reclassification_catalogs','reclassificationCategoryDaily','daily')}" update=":panelMain"/>                                                
-                                                <p:menuitem value="CHANNEL" icon="ui-icon-plus" action="#{mainBean.setPage('reclassification_catalogs','reclassificationChannelDaily','daily')}" update=":panelMain"/>                                                
-                                                <p:menuitem value="PACKING" icon="ui-icon-plus" action="#{mainBean.setPage('reclassification_catalogs','reclassificationPackingDaily','daily')}" update=":panelMain"/>                                                
-                                                <p:menuitem value="GEC" icon="ui-icon-plus" action="#{mainBean.setPage('reclassification_catalogs','reclassificationGecDaily','daily')}" update=":panelMain"/>                                                
-                                                <p:menuitem value="OPERATIVE DAYS" icon="ui-icon-plus" action="#{mainBean.setPage('reclassification_catalogs','reclassificationOperativeDaily','daily')}" update=":panelMain"/>                                                
-                                            </p:submenu>
-                                            <p:menuitem value="Information Load" icon="ui-icon-arrowreturnthick-1-n" action="#{mainBean.setPage('loadInformation','','daily')}" update=":panelMain"/>                          
-                                        </p:slideMenu>
-                                    </h:form>
-
-                                </p:panel>
+                        <!-- MENU -->
+                        <h:form>
+                            <div style="text-align: center;   margin-left: -60px; " id="menuPrincipal">
+                                <ul class="main-nav">
+                                    <li>
+                                        <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('welcome','','')}" update=":panelMain">
+                                            Home
+                                        </p:commandLink>                                                                                                            
+                                    </li>                                       
+                                    <li>
+                                        <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('loadInformation','','share')}" update=":panelMain">
+                                            <img src="images/BG9-05.png"/>Information Load
+                                        </p:commandLink>                                                                                                                                                                                                                                                            
+                                    </li>                                       
+                                    <li>
+                                        <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('uploadStatus','','share')}" update=":panelMain">
+                                            <img src="images/BG9-06.png"/>
+                                            Upload Status
+                                        </p:commandLink>                                                                                                  
+                                    </li>                                
+                                    <h:panelGroup rendered="#{mainBean.usuario.rol.pkRol eq '1' ? true : false}">
+                                        <li class="main-nav--collapsible">
+                                            <a class="main-nav__link" href="#" onclick="return false;">
+                                                <img src="images/BG9-08.png"/>
+                                                Catalogs
+                                            </a>
+                                            <ul class="main-nav__submenu">
+                                                <li>
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','country','share')}" update=":panelMain">
+                                                        <span><img src="images/BG9-12.png"/>Country</span>
+                                                    </p:commandLink> 
+                                                </li>                                                
+                                                <li>
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','category','share')}" update=":panelMain">
+                                                        <span><img src="images/BG9-17.png"/>Category</span>
+                                                    </p:commandLink> 
+                                                </li>                                                
+                                                <li>
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','group','share')}" update=":panelMain">
+                                                        <span><img src="images/BG9-11.png"/>Group Category</span>
+                                                    </p:commandLink> 
+                                                </li>                                                
+                                                <li>
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','manufacturer','share')}" update=":panelMain">
+                                                        <span><img src="images/BG9-12.png"/>Manufacturer</span>
+                                                    </p:commandLink> 
+                                                </li>                                                                                            
+                                            </ul>
+                                        </li>
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{mainBean.usuario.rol.pkRol eq '1' ? true : false}">
+                                        <li class="main-nav--collapsible">
+                                            <a class="main-nav__link" href="#" onclick="return false;">
+                                                <img src="images/BG9-09.png"/>
+                                                Administrator
+                                            </a>
+                                            <ul class="main-nav__submenu">
+                                                <li>
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('adminUsers','','admin')}" update=":panelMain">
+                                                        <span><img src="images/BG9-10.png"/>Catalog Users</span>
+                                                    </p:commandLink>
+                                                </li>
+                                                <li>
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('scripts','','share')}" update=":panelMain">
+                                                        <span><img src="images/BG9-15.png"/>Scripts</span>
+                                                    </p:commandLink>
+                                                </li>                                            
+                                            </ul>
+                                        </li>
+                                    </h:panelGroup>                                	
+                                    <footer class="logosit"><img src="images/footer_kof.png" />
+                                    </footer>						
+                                </ul>
                             </div>
-                        </div>
+                        </h:form>                        
+                        <!-- MENU fin -->
+
                     </div>
                     <div class="ui-grid-col-9" >
                         <ui:include src="#{mainBean.page}" id="workSpace"/>
@@ -110,12 +143,12 @@
                             <f:facet name="header">
                                 Notifications
                             </f:facet>
-                            #{notification}
-                        </p:dataList>
-                    </h:panelGrid>                    
-                </p:outputPanel>
-            </p:overlayPanel>
-        </h:form>  -->      
+        #{notification}
+    </p:dataList>
+</h:panelGrid>                    
+</p:outputPanel>
+</p:overlayPanel>
+</h:form>  -->      
     </h:body>
 </html>
 

@@ -15,7 +15,8 @@ public class ShareTmpAllInfoCargaDAO {
     List<String> errors = new ArrayList<String>();
 
     public boolean saveInfoCarga(List<ShareTmpAllInfoCarga> listCarga, ShareCatPais pais, ShareUsuario usuario) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query queryNativo = null;
         boolean flagOk = true;
@@ -31,11 +32,11 @@ public class ShareTmpAllInfoCargaDAO {
             session.getTransaction().commit();
             session.beginTransaction();
             queryNativo = session.createSQLQuery("INSERT INTO " + pais.getNombreTabla() + " SELECT PAIS,CANAL,FECHA,GRUPO_CATEGORIA,CATEGORIA,FABRICANTE,VOLUMEN_MES,VENTA_MES FROM SHARE_TMP_ALL_INFO_CARGA");
-            queryNativo.executeUpdate();  
+            queryNativo.executeUpdate();
             session.getTransaction().commit();
             session.beginTransaction();
             queryNativo = session.createSQLQuery("DELETE FROM SHARE_TMP_ALL_INFO_CARGA WHERE FK_USUARIO = " + usuario.getPkUsuario() + " AND PAIS = '" + pais.getNombre().toUpperCase() + "'");
-            queryNativo.executeUpdate();            
+            queryNativo.executeUpdate();
             session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -44,8 +45,10 @@ public class ShareTmpAllInfoCargaDAO {
                 session.getTransaction().rollback();
             }
             flagOk = false;
-        } finally {           
+        } finally {
+            session.clear();
             session.close();
+            hibernateUtil.closeSessionFactory();
         }
         return flagOk;
     }

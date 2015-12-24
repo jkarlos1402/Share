@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 public class ReclasifGecDAO {
+
     private String error;
 
     public String getError() {
@@ -20,24 +21,28 @@ public class ReclasifGecDAO {
     }
 
     public List<RvvdReclasifUnGec> getReclasifUnGecAll(ShareUsuario usuario) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         String paises = "";
         for (int i = 0; i < usuario.getPaises().size(); i++) {
-            if(i > 0){
-                paises+=",'"+(usuario.getPaises().get(i).getClaveCorta())+"'";
-            } else{
-                paises = "'"+(usuario.getPaises().get(i).getClaveCorta())+"'";
-            }           
+            if (i > 0) {
+                paises += ",'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
+            } else {
+                paises = "'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
+            }
         }
         Query query = session.createQuery("SELECT rug FROM RvvdReclasifUnGec rug WHERE rug.pais IN (" + paises + ")");
-        List<RvvdReclasifUnGec> unGecs = query.list();        
+        List<RvvdReclasifUnGec> unGecs = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return unGecs;
     }
 
     public boolean saveReclasifUnGec(List<RvvdReclasifUnGec> unGecs) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
@@ -54,14 +59,17 @@ public class ReclasifGecDAO {
                 session.getTransaction().rollback();
             }
             flagOk = false;
-        } finally {            
+        } finally {
+            session.clear();
             session.close();
+            hibernateUtil.closeSessionFactory();
         }
         return flagOk;
     }
 
     public long checkReclasifUnGec(ShareUsuario usuario) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         String paises = "";
         for (int i = 0; i < usuario.getPaises().size(); i++) {
@@ -71,9 +79,11 @@ public class ReclasifGecDAO {
                 paises = "'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
             }
         }
-        Query query = session.createQuery("SELECT count(rug.idReclasifUnGec) FROM RvvdReclasifUnGec rug WHERE rug.pais IN (" + paises + ") AND (rug.gecR IS NULL OR rug.gecEn IS NULL OR rug.unidadNegocioR IS NULL OR rug.unidadNegocioEn IS NULL)");        
-        long numNotReclass = ((Number) query.getFirstResult()).longValue();        
-        session.close();       
+        Query query = session.createQuery("SELECT count(rug.idReclasifUnGec) FROM RvvdReclasifUnGec rug WHERE rug.pais IN (" + paises + ") AND (rug.gecR IS NULL OR rug.gecEn IS NULL OR rug.unidadNegocioR IS NULL OR rug.unidadNegocioEn IS NULL)");
+        long numNotReclass = ((Number) query.getFirstResult()).longValue();
+        session.clear();
+        session.close();
+        hibernateUtil.closeSessionFactory();
         return numNotReclass;
     }
 }

@@ -20,33 +20,43 @@ public class CatUnidadNegocioDAO {
     }
 
     public List<RvvdCatUnidadNegocio> getUnidadesNegAll() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT un FROM RvvdCatUnidadNegocio un");
         List<RvvdCatUnidadNegocio> unidades = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return unidades;
     }
 
     public List<RvvdCatUnidadNegocio> getUnidadesNeg() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT un FROM RvvdCatUnidadNegocio un WHERE un.status = 1");
         List<RvvdCatUnidadNegocio> unidades = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return unidades;
     }
 
     public RvvdCatUnidadNegocio getUnidadNeg(Integer id) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         RvvdCatUnidadNegocio unidad = (RvvdCatUnidadNegocio) session.get(RvvdCatUnidadNegocio.class, id);
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return unidad;
     }
 
     public RvvdCatUnidadNegocio getUnidadNeg(String unidad) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT un FROM RvvdCatUnidadNegocio un WHERE un.unidadNegocioR = '" + unidad.toUpperCase() + "' OR un.unidadNegocioEn = '" + unidad.toUpperCase() + "'");
         List<RvvdCatUnidadNegocio> unidades = query.list();
@@ -54,12 +64,15 @@ public class CatUnidadNegocioDAO {
         if (unidades.size() > 0) {
             unidadT = unidades.get(0);
         }
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return unidadT;
     }
 
     public boolean saveUnidadNeg(RvvdCatUnidadNegocio unidad) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
@@ -78,7 +91,9 @@ public class CatUnidadNegocioDAO {
             }
             flagOk = false;
         } finally {
+            session.clear();
             session.close();
+            hibernateUtil.closeSessionFactory();
         }
         return flagOk;
     }

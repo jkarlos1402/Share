@@ -20,33 +20,43 @@ public class CatCategoriaDAO {
     }
 
     public List<RvvdCatCategoria> getCategoriasAll() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT c FROM RvvdCatCategoria c");
         List<RvvdCatCategoria> categorias = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return categorias;
     }
 
     public List<RvvdCatCategoria> getCategorias() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT c FROM RvvdCatCategoria c WHERE c.status = 1");
         List<RvvdCatCategoria> categorias = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return categorias;
     }
 
     public RvvdCatCategoria getCategoria(Integer id) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         RvvdCatCategoria categ = (RvvdCatCategoria) session.get(RvvdCatCategoria.class, id);
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return categ;
     }
 
     public RvvdCatCategoria getCategoria(String categoria) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT c FROM RvvdCatCategoria c WHERE c.categoria = '" + categoria.toUpperCase() + "' OR c.categoriaEn = '" + categoria.toUpperCase() + "'");
         List<RvvdCatCategoria> categorias = query.list();
@@ -54,12 +64,15 @@ public class CatCategoriaDAO {
         if (categorias.size() > 0) {
             categ = categorias.get(0);
         }
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return categ;
     }
 
     public boolean saveCategoria(RvvdCatCategoria catCategoria) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
@@ -78,7 +91,9 @@ public class CatCategoriaDAO {
             }
             flagOk = false;
         } finally {
+            session.clear();
             session.close();
+            hibernateUtil.closeSessionFactory();
         }
         return flagOk;
     }

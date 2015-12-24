@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -129,8 +130,8 @@ public class XlsAnalizerDaily {
         int numCell = 0;
         List<Columnas> cabeceras = new ArrayList<Columnas>();
         List<RollingDaily> cargas = new ArrayList<RollingDaily>();
-        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        List<RvvdCatCategoriaOficial> categoriasOficiales = (List<RvvdCatCategoriaOficial>) session.getAttribute("categoria_oficial_catalog");       
+        ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        List<RvvdCatCategoriaOficial> categoriasOficiales = (List<RvvdCatCategoriaOficial>) context.getAttribute("categoria_oficial_catalog");       
         end:
         while (rowIterator != null && rowIterator.hasNext()) {
             numCell = 0;

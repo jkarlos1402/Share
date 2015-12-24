@@ -20,16 +20,20 @@ public class ShareCatGrupoCategoriasDAO {
     }
 
     public List<ShareCatGrupoCategorias> getCategoryGroups() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT gc FROM ShareCatGrupoCategorias gc WHERE gc.status = 1");
         List<ShareCatGrupoCategorias> grupos = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return grupos;
     }
 
     public ShareCatGrupoCategorias getCategoryGroup(String name) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT gc FROM ShareCatGrupoCategorias gc WHERE gc.grupoCategoria = '" + name.toUpperCase() + "'");
         List<ShareCatGrupoCategorias> grupos = query.list();
@@ -37,21 +41,27 @@ public class ShareCatGrupoCategoriasDAO {
         if (grupos.size() > 0) {
             grupo = grupos.get(0);
         }
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return grupo;
     }
 
     public List<ShareCatGrupoCategorias> getCategoryGroupsAll() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT gc FROM ShareCatGrupoCategorias gc");
         List<ShareCatGrupoCategorias> grupos = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return grupos;
     }
 
     public boolean saveGroupCategory(ShareCatGrupoCategorias grupoCategorias) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
@@ -69,7 +79,9 @@ public class ShareCatGrupoCategoriasDAO {
             }
             flagOk = false;
         } finally {
+            session.clear();
             session.close();
+            hibernateUtil.closeSessionFactory();
         }
         return flagOk;
     }

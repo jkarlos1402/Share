@@ -20,38 +20,48 @@ public class ShareCatPaisDAO {
     }
 
     public List<ShareCatPais> getCatPais() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT pais FROM ShareCatPais pais WHERE pais.idstatus = 1");
-        List<ShareCatPais> countries = query.list();        
+        List<ShareCatPais> countries = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return countries;
     }
 
     public ShareCatPais getCatPais(String nombrePais) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT pais FROM ShareCatPais pais WHERE pais.nombre = '" + nombrePais.toUpperCase() + "'");
         List<ShareCatPais> countries = query.list();
         ShareCatPais country = null;
         if (countries.size() > 0) {
             country = countries.get(0);
-        }        
+        }
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return country;
     }
 
     public List<ShareCatPais> getCatPaisAll() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT pais FROM ShareCatPais pais");
-        List<ShareCatPais> countries = query.list();        
+        List<ShareCatPais> countries = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return countries;
     }
 
     public boolean savePais(ShareCatPais pais) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = null;
         boolean flagOk = true;
@@ -76,8 +86,10 @@ public class ShareCatPaisDAO {
                 session.getTransaction().rollback();
             }
             flagOk = false;
-        } finally {            
+        } finally {
+            session.clear();
             session.close();
+            hibernateUtil.closeSessionFactory();
         }
         return flagOk;
     }

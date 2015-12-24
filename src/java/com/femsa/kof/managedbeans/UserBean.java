@@ -119,11 +119,11 @@ public class UserBean implements Serializable {
         this.usuariosAll = usuariosAll;
     }
 
-    public String logIn() {
+    public String logIn() {        
         ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();
         EncrypterKOF encrypterKOF = new EncrypterKOF();
         String passEnc = encrypterKOF.encrypt(password);
-        ShareUsuario usuario = usuarioDAO.getUsuario(user, passEnc);
+        ShareUsuario usuario = usuarioDAO.getUsuario(user, passEnc);              
         if (usuario != null) {
             HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             httpSession.setAttribute("session_user", usuario);
@@ -135,11 +135,12 @@ public class UserBean implements Serializable {
         }
     }
 
-    public void logout() {
+    public String logout() {        
         HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         if (httpSession != null) {
             httpSession.invalidate();
         }
+        return "index";
     }
 
     public void saveUser() {

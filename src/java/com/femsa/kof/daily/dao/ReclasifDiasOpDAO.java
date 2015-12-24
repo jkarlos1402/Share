@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 public class ReclasifDiasOpDAO {
+
     private String error;
 
     public String getError() {
@@ -20,24 +21,28 @@ public class ReclasifDiasOpDAO {
     }
 
     public List<RvvdReclasifDiasOp> getReclasifDiasOpAll(ShareUsuario usuario) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         String paises = "";
         for (int i = 0; i < usuario.getPaises().size(); i++) {
-            if(i > 0){
-                paises+=",'"+(usuario.getPaises().get(i).getClaveCorta())+"'";
-            } else{
-                paises = "'"+(usuario.getPaises().get(i).getClaveCorta())+"'";
-            }           
+            if (i > 0) {
+                paises += ",'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
+            } else {
+                paises = "'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
+            }
         }
         Query query = session.createQuery("SELECT do FROM RvvdReclasifDiasOp do WHERE do.pais IN (" + paises + ")");
-        List<RvvdReclasifDiasOp> diasOpReclasificados = query.list();        
+        List<RvvdReclasifDiasOp> diasOpReclasificados = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return diasOpReclasificados;
     }
 
     public boolean saveReclasifDiasOp(List<RvvdReclasifDiasOp> reclasifDiasOp) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
@@ -54,14 +59,17 @@ public class ReclasifDiasOpDAO {
                 session.getTransaction().rollback();
             }
             flagOk = false;
-        } finally {           
+        } finally {
+            session.clear();
             session.close();
+            hibernateUtil.closeSessionFactory();
         }
         return flagOk;
     }
 
     public long checkReclasifDiasOp(ShareUsuario usuario) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         String paises = "";
         for (int i = 0; i < usuario.getPaises().size(); i++) {
@@ -71,9 +79,11 @@ public class ReclasifDiasOpDAO {
                 paises = "'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
             }
         }
-        Query query = session.createQuery("SELECT count(do.idReclasifDiasOp) FROM RvvdReclasifDiasOp do WHERE do.pais IN (" + paises + ") AND do.fechaR IS NULL");        
-        long numNotReclass = ((Number) query.getFirstResult()).longValue();        
-        session.close();        
+        Query query = session.createQuery("SELECT count(do.idReclasifDiasOp) FROM RvvdReclasifDiasOp do WHERE do.pais IN (" + paises + ") AND do.fechaR IS NULL");
+        long numNotReclass = ((Number) query.getFirstResult()).longValue();
+        session.clear();
+        session.close();
+        hibernateUtil.closeSessionFactory();
         return numNotReclass;
     }
 }

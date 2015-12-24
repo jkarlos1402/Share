@@ -18,7 +18,8 @@ public class ScriptAnalizer {
     public ScriptAnalizer() {
     }
     public static boolean executeScritsShare(List<String> errors, ShareCatPais pais) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         ServletContext sc = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         String contextPathResources = sc.getRealPath("");
@@ -44,10 +45,10 @@ public class ScriptAnalizer {
             e.printStackTrace();
             errors.add("Error running script: " + e.getMessage());            
             flagOk = false;
-        } finally {
-            //session.clear();
+        } finally {            
+            session.clear();
             session.close();
-//            sessionFactory.close();
+            hibernateUtil.closeSessionFactory();
         }
         return flagOk;
     }

@@ -17,7 +17,7 @@
             <h:form id="formScript">
                 <p:growl id="msgsScript" showDetail="true"/>
                 <p:messages showDetail="true" closable="true"/>
-                <p:panel  header="Scripts" id="panelScripts">
+                <p:panel  header="Scripts - #{shareScriptBean.scriptSelected.name}" id="panelScripts">
                     <p:panelGrid columns="2" style="width: 100%; border: none;" columnClasses="topElemsClass column30,topElemsClass column70" layout="grid">
                         <p:dataList value="#{shareScriptBean.scripts}" var="script" type="ordered" itemType="none" paginator="false" rows="10">
                             <f:facet name="header">

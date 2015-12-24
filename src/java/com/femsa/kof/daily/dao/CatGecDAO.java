@@ -20,33 +20,43 @@ public class CatGecDAO {
     }
 
     public List<RvvdCatGec> getGecAll() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT gec FROM RvvdCatGec gec");
         List<RvvdCatGec> gecs = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return gecs;
     }
 
     public List<RvvdCatGec> getGecs() {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT gec FROM RvvdCatGec gec WHERE gec.status = 1");
         List<RvvdCatGec> gecs = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return gecs;
     }
 
     public RvvdCatGec getGec(Integer id) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         RvvdCatGec gec = (RvvdCatGec) session.get(RvvdCatGec.class, id);
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return gec;
     }
 
     public RvvdCatGec getGec(String gec) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT gec FROM RvvdCatGec gec WHERE gec.gecR = '" + gec.toUpperCase() + "' OR gec.gecEn = '" + gec.toUpperCase() + "'");
         List<RvvdCatGec> gecs = query.list();
@@ -54,12 +64,15 @@ public class CatGecDAO {
         if (gecs.size() > 0) {
             gecT = gecs.get(0);
         }
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return gecT;
     }
 
     public boolean saveGec(RvvdCatGec gec) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
@@ -78,7 +91,9 @@ public class CatGecDAO {
             }
             flagOk = false;
         } finally {
+            session.clear();
             session.close();
+            hibernateUtil.closeSessionFactory();
         }
         return flagOk;
     }

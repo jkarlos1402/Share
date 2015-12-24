@@ -21,24 +21,28 @@ public class ReclasifCategoriaDAO {
     }
 
     public List<RvvdReclasifCategoria> getReclasifCategoriasAll(ShareUsuario usuario) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         String paises = "";
         for (int i = 0; i < usuario.getPaises().size(); i++) {
-            if(i > 0){
-                paises+=",'"+(usuario.getPaises().get(i).getClaveCorta())+"'";
-            } else{
-                paises = "'"+(usuario.getPaises().get(i).getClaveCorta())+"'";
-            }           
+            if (i > 0) {
+                paises += ",'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
+            } else {
+                paises = "'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
+            }
         }
-        Query query = session.createQuery("SELECT rc FROM RvvdReclasifCategoria rc WHERE rc.pais IN ("+paises+")");        
-        List<RvvdReclasifCategoria> categoriasReclasificadas = query.list();       
+        Query query = session.createQuery("SELECT rc FROM RvvdReclasifCategoria rc WHERE rc.pais IN (" + paises + ")");
+        List<RvvdReclasifCategoria> categoriasReclasificadas = query.list();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return categoriasReclasificadas;
     }
 
     public boolean saveReclasifCategorias(List<RvvdReclasifCategoria> reclasifCategorias) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
@@ -55,14 +59,17 @@ public class ReclasifCategoriaDAO {
                 session.getTransaction().rollback();
             }
             flagOk = false;
-        } finally {            
+        } finally {
+            session.clear();
             session.close();
+            hibernateUtil.closeSessionFactory();
         }
         return flagOk;
     }
 
     public long checkReclasifCategorias(ShareUsuario usuario) {
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         String paises = "";
         for (int i = 0; i < usuario.getPaises().size(); i++) {
@@ -72,9 +79,11 @@ public class ReclasifCategoriaDAO {
                 paises = "'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
             }
         }
-        Query query = session.createQuery("SELECT count(rc.idReclasifCategoria) FROM RvvdReclasifCategoria rc WHERE rc.pais IN (" + paises + ") AND (rc.categoriaR IS NULL OR rc.categoriaEn IS NULL OR rc.categoriaOficialR IS NULL OR rc.categoriaOficialEn IS NULL)");        
-        long numNotReclass = ((Number) query.getFirstResult()).longValue();       
+        Query query = session.createQuery("SELECT count(rc.idReclasifCategoria) FROM RvvdReclasifCategoria rc WHERE rc.pais IN (" + paises + ") AND (rc.categoriaR IS NULL OR rc.categoriaEn IS NULL OR rc.categoriaOficialR IS NULL OR rc.categoriaOficialEn IS NULL)");
+        long numNotReclass = ((Number) query.getFirstResult()).longValue();
+        session.clear();
         session.close();
+        hibernateUtil.closeSessionFactory();
         return numNotReclass;
     }
 }

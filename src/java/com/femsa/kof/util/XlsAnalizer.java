@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -66,7 +67,7 @@ public class XlsAnalizer {
             String extension = getExtension(file.getFileName());
             Iterator<Row> rowIterator = null;
 
-            HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+            ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
             Iterator<Sheet> sheets = null;
             if (extension.equalsIgnoreCase("xlsx")) {
                 excelXLS = new XSSFWorkbook(file.getInputstream());
@@ -78,13 +79,15 @@ public class XlsAnalizer {
                 Sheet sheet = excelXLS.getSheetAt(i);
                 rowIterator = sheet.iterator();
 
-                List<ShareCatCategorias> catCategorias = (List<ShareCatCategorias>) session.getAttribute("categories_catalog");
+                List<ShareCatCategorias> catCategorias = (List<ShareCatCategorias>) context.getAttribute("categories_catalog");
                 ShareCatCategorias categoria = null;
                 ShareCatCategorias categoriaTmp = new ShareCatCategorias();
                 categoriaTmp.setCategoria(sheet.getSheetName().trim());
-                for (ShareCatCategorias catCategoria : catCategorias) {
-                    if (catCategoria.equals(categoriaTmp)) {
-                        categoria = catCategoria;
+                if (catCategorias != null) {
+                    for (ShareCatCategorias catCategoria : catCategorias) {
+                        if (catCategoria.equals(categoriaTmp)) {
+                            categoria = catCategoria;
+                        }
                     }
                 }
                 List<ShareTmpAllInfoCarga> objsToAdd = null;
@@ -128,8 +131,8 @@ public class XlsAnalizer {
         List<ShareTmpAllInfoCarga> cargas = new ArrayList<ShareTmpAllInfoCarga>();
         List<String> fechas = new ArrayList<String>();
         List<Integer> indexCellBimestral = new ArrayList<Integer>();
-        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        List<ShareCatCanales> canales = (List<ShareCatCanales>) session.getAttribute("canales_catalog");
+        ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        List<ShareCatCanales> canales = (List<ShareCatCanales>) context.getAttribute("canales_catalog");
         String canal = "";
         String fabricante = "";
         end:
@@ -192,18 +195,18 @@ public class XlsAnalizer {
                                 }
                             }
                         } else if (numRow > 0 && numCell == 2) {
-                            if (!cell.getStringCellValue().trim().equals("")) {                                  
+                            if (!cell.getStringCellValue().trim().equals("")) {
                                 fabricante = cell.getStringCellValue().toUpperCase().replaceAll("INDUSTRY", "TOTAL")
-                                        .replaceAll(categoria.getCategoria(), "")                                        
+                                        .replaceAll(categoria.getCategoria(), "")
                                         .replaceAll("KO ", "KOF ")
                                         .replaceAll(" KO", " KOF")
                                         .replaceAll("RTD", "")
                                         .replaceAll("SPORTS", "")
                                         .replaceAll("SPORT", "")
                                         .replaceAll(categoria.getCategoriaEsp() != null && !categoria.getCategoriaEsp().trim().equals("") ? categoria.getCategoriaEsp().trim() : categoria.getCategoria(), "")
-                                        .replaceAll(categoria.getCategoria().substring(0, categoria.getCategoria().length() - 1), "")                                        
-                                        .replaceAll(catPais.getNombre().toUpperCase(), "")                                                                                                                   
-                                        .trim().toUpperCase(); 
+                                        .replaceAll(categoria.getCategoria().substring(0, categoria.getCategoria().length() - 1), "")
+                                        .replaceAll(catPais.getNombre().toUpperCase(), "")
+                                        .trim().toUpperCase();
                                 fabricante = fabricante.replaceAll(!fabricante.trim().endsWith("TOTAL") && fabricante.contains("TOTAL") ? "TOTAL" : "OTHERTHING", "");
                             }
                         } else if (numRow > 0 && numCell > 2) {
