@@ -3,19 +3,28 @@ package com.femsa.kof.daily.managedbeans;
 import com.femsa.kof.daily.dao.CatCanalDAO;
 import com.femsa.kof.daily.dao.CatCategoriaDAO;
 import com.femsa.kof.daily.dao.CatEmpaqueDAO;
+import com.femsa.kof.daily.dao.CatGecDAO;
 import com.femsa.kof.daily.dao.CatTipoConsumoDAO;
+import com.femsa.kof.daily.dao.CatUnidadNegocioDAO;
 import com.femsa.kof.daily.dao.ReclasifCanalDAO;
 import com.femsa.kof.daily.dao.ReclasifCategoriaDAO;
+import com.femsa.kof.daily.dao.ReclasifDiasOpDAO;
 import com.femsa.kof.daily.dao.ReclasifEmpaqueDAO;
+import com.femsa.kof.daily.dao.ReclasifGecDAO;
 import com.femsa.kof.daily.pojos.RvvdCatCanal;
 import com.femsa.kof.daily.pojos.RvvdCatCategoria;
 import com.femsa.kof.daily.pojos.RvvdCatEmpaque;
+import com.femsa.kof.daily.pojos.RvvdCatGec;
 import com.femsa.kof.daily.pojos.RvvdCatTipoConsumo;
+import com.femsa.kof.daily.pojos.RvvdCatUnidadNegocio;
 import com.femsa.kof.daily.pojos.RvvdReclasifCanal;
 import com.femsa.kof.daily.pojos.RvvdReclasifCategoria;
+import com.femsa.kof.daily.pojos.RvvdReclasifDiasOp;
 import com.femsa.kof.daily.pojos.RvvdReclasifEmpaque;
+import com.femsa.kof.daily.pojos.RvvdReclasifUnGec;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.application.FacesMessage;
@@ -42,6 +51,16 @@ public class DailyReclassCatalogsBean implements Serializable {
     private RvvdCatTipoConsumo tipoConsumoSelected;
     private List<RvvdCatEmpaque> catEmpaques;
     private RvvdCatEmpaque empaqueSelected;
+    
+    private SimpleDateFormat formatDay = new SimpleDateFormat("dd/MM/yy");
+
+    private List<RvvdReclasifUnGec> gecsReclasificados = new ArrayList<RvvdReclasifUnGec>();
+    private List<RvvdCatGec> catGecs;
+    private RvvdCatGec gecSelected;
+    private List<RvvdCatUnidadNegocio> catUnidadesNegocio;
+    private RvvdCatUnidadNegocio unidadSelected; 
+    
+    private List<RvvdReclasifDiasOp> diasOpReclasificados = new ArrayList<RvvdReclasifDiasOp>();
 
     public DailyReclassCatalogsBean() {
         HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
@@ -54,6 +73,72 @@ public class DailyReclassCatalogsBean implements Serializable {
         
         ReclasifEmpaqueDAO reclasifEmpaqueDAO = new ReclasifEmpaqueDAO();
         empaquesReclasificados = reclasifEmpaqueDAO.getReclasifEmpaquesAll(usuario);
+        
+        ReclasifGecDAO reclasifGecDAO = new ReclasifGecDAO();
+        gecsReclasificados = reclasifGecDAO.getReclasifUnGecAll(usuario);
+        
+        ReclasifDiasOpDAO diasOpDAO = new ReclasifDiasOpDAO();
+        diasOpReclasificados = diasOpDAO.getReclasifDiasOpAll(usuario);
+    }
+
+    public SimpleDateFormat getFormatDay() {
+        return formatDay;
+    }
+
+    public void setFormatDay(SimpleDateFormat formatDay) {
+        this.formatDay = formatDay;
+    }
+
+    public List<RvvdReclasifDiasOp> getDiasOpReclasificados() {
+        return diasOpReclasificados;
+    }
+
+    public void setDiasOpReclasificados(List<RvvdReclasifDiasOp> diasOpReclasificados) {
+        this.diasOpReclasificados = diasOpReclasificados;
+    }
+
+    public List<RvvdReclasifUnGec> getGecsReclasificados() {
+        return gecsReclasificados;
+    }
+
+    public void setGecsReclasificados(List<RvvdReclasifUnGec> gecsReclasificados) {
+        this.gecsReclasificados = gecsReclasificados;
+    }
+
+    public List<RvvdCatGec> getCatGecs() {
+        CatGecDAO gecDAO = new CatGecDAO();
+        catGecs = gecDAO.getGecs();
+        return catGecs;
+    }
+
+    public void setCatGecs(List<RvvdCatGec> catGecs) {
+        this.catGecs = catGecs;
+    }
+
+    public RvvdCatGec getGecSelected() {
+        return gecSelected;
+    }
+
+    public void setGecSelected(RvvdCatGec gecSelected) {
+        this.gecSelected = gecSelected;
+    }
+
+    public List<RvvdCatUnidadNegocio> getCatUnidadesNegocio() {
+        CatUnidadNegocioDAO unidadNegocioDAO = new CatUnidadNegocioDAO();
+        catUnidadesNegocio = unidadNegocioDAO.getUnidadesNeg();
+        return catUnidadesNegocio;
+    }
+
+    public void setCatUnidadesNegocio(List<RvvdCatUnidadNegocio> catUnidadesNegocio) {
+        this.catUnidadesNegocio = catUnidadesNegocio;
+    }
+
+    public RvvdCatUnidadNegocio getUnidadSelected() {
+        return unidadSelected;
+    }
+
+    public void setUnidadSelected(RvvdCatUnidadNegocio unidadSelected) {
+        this.unidadSelected = unidadSelected;
     }
 
     public List<RvvdReclasifEmpaque> getEmpaquesReclasificados() {
@@ -228,6 +313,58 @@ public class DailyReclassCatalogsBean implements Serializable {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Reclassified packaging saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Reclassified packaging, " + reclasifEmpaqueDAO.getError());
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+    
+    public void onRowEditGec(RowEditEvent event) {
+        RvvdReclasifUnGec gec = (RvvdReclasifUnGec) event.getObject();
+        gec.setGecR(gecSelected.getGecR());
+        gec.setGecEn(gecSelected.getGecEn());
+        gec.setUnidadNegocioR(unidadSelected.getUnidadNegocioR());
+        gec.setUnidadNegocioEn(unidadSelected.getUnidadNegocioEn());
+        gecSelected = null;
+        unidadSelected = null;
+    }
+
+    public void refreshGecsReclasificados() {  
+        HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        ShareUsuario usuario = (ShareUsuario)session.getAttribute("session_user");
+        ReclasifGecDAO reclasifGecDAO = new ReclasifGecDAO();
+        gecsReclasificados = reclasifGecDAO.getReclasifUnGecAll(usuario);
+    }
+
+    public void saveGecsReclasificados() {
+        FacesMessage message = null;
+        ReclasifGecDAO reclasifGecDAO = new ReclasifGecDAO();
+        if (reclasifGecDAO.saveReclasifUnGec(gecsReclasificados)) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Reclassified gecs saved");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Reclassified gecs, " + reclasifGecDAO.getError());
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+    
+    public void onRowEditDias(RowEditEvent event) {
+        System.out.println(event.getObject().toString());
+        System.out.println(((RvvdReclasifDiasOp)event.getObject()).getFecha());
+        System.out.println(((RvvdReclasifDiasOp)event.getObject()).getFechaR());
+    }
+    
+    public void refreshDiasOpReclasificados() {  
+        HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        ShareUsuario usuario = (ShareUsuario)session.getAttribute("session_user");
+        ReclasifDiasOpDAO diasOpDAO = new ReclasifDiasOpDAO();
+        diasOpReclasificados = diasOpDAO.getReclasifDiasOpAll(usuario);
+    }
+
+    public void saveDiasOpReclasificados() {
+        FacesMessage message = null;
+        ReclasifDiasOpDAO diasOpDAO = new ReclasifDiasOpDAO();
+        if (diasOpDAO.saveReclasifDiasOp(diasOpReclasificados)) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Operative days saved");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Reclassified Operative days, " + diasOpDAO.getError());
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }

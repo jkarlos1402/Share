@@ -114,6 +114,115 @@
                     </f:facet>
                 </p:panel>
             </h:form>             
+            
+            <h:form id="formReclaGec" rendered="#{mainBean.catalog eq 'reclassificationGecDaily' ? true : false}">
+                <p:growl id="msgsReclaGec" showDetail="true"/>
+                <p:messages showDetail="true" closable="true"/>
+                <p:panel header="Gec" id="panelReclaGec">                                        
+                    <h:panelGrid columns="1">
+                        <p:dataTable id="tableReclaGec" var="reclaGec" value="#{dailyReclassCatalogsBean.gecsReclasificados}" editable="true" paginator="true" rows="10" 
+                                     rowStyleClass="#{reclaGec.gecR eq null || reclaGec.gecR eq '' || reclaGec.gecEn eq null || reclaGec.gecEn eq '' || reclaGec.unidadNegocioR eq null || reclaGec.unidadNegocioR eq '' || reclaGec.unidadNegocioEn eq null || reclaGec.unidadNegocioEn eq '' ? 'ui-state-error' : null}">
+                            <p:ajax event="rowEdit" listener="#{dailyReclassCatalogsBean.onRowEditGec}" />
+                            <f:facet name="header">
+                                #{dailyReclassCatalogsBean.gecsReclasificados.size()} entries found.
+                            </f:facet>
+                            <p:column headerText="Country">
+                                <h:outputText value="#{reclaGec.pais}"/>
+                            </p:column>
+                            <p:column headerText="Gec" filterBy="##{reclaGec.gec}" filterMatchMode="contains">
+                                <h:outputText value="#{reclaGec.gec}"/>
+                            </p:column>                                                        
+                            <p:column headerText="Reclassified Gec">                                
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{reclaGec.gecR}"/></f:facet>
+                                    <f:facet name="input">
+                                        <h:selectOneMenu id="idReclassGec" value="#{dailyReclassCatalogsBean.gecSelected}" converter="gecConverter" label="Reclassified Gec" immediate="true" required="true" style="width: 100%">                                            
+                                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                            <f:selectItems value="#{dailyReclassCatalogsBean.catGecs}"/>                           
+                                        </h:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Reclassified Gec(English)">
+                                <h:outputText value="#{reclaGec.gecEn}"/>
+                            </p:column>                           
+                            <p:column headerText="Bussiness unit" filterBy="##{reclaGec.unidadNegocio}" filterMatchMode="contains">
+                                <h:outputText value="#{reclaGec.unidadNegocio}"/>
+                            </p:column>                                                        
+                            <p:column headerText="Reclassified Bussiness unit">                                
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{reclaGec.unidadNegocioR}"/></f:facet>
+                                    <f:facet name="input">
+                                        <h:selectOneMenu id="idReclassUnit" value="#{dailyReclassCatalogsBean.unidadSelected}" converter="unidadNegocioConverter" label="Reclassified Bussiness unit" immediate="true" required="true" style="width: 100%">                                            
+                                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                            <f:selectItems value="#{dailyReclassCatalogsBean.catUnidadesNegocio}"/>                           
+                                        </h:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Reclassified Bussiness unit(English)">
+                                <h:outputText value="#{reclaGec.unidadNegocioEn}"/>
+                            </p:column>                           
+                            <p:column style="width:25px">
+                                <p:rowEditor />
+                            </p:column>                            
+                        </p:dataTable>
+                    </h:panelGrid>
+                    <f:facet name="footer">
+                        <h:panelGrid columns="2" cellspacing="5px">
+                            <p:commandButton value="Save" actionListener="#{dailyReclassCatalogsBean.saveGecsReclasificados}" update=":formReclaGec">
+                                <p:confirm header="Save changes" message="Are you Sure?" />
+                            </p:commandButton>
+                            <p:commandButton value="Refresh" update=":formReclaGec" actionListener="#{dailyReclassCatalogsBean.refreshGecsReclasificados}">
+                                <p:confirm header="Refresh table" message="Unsaved changes will be lost, are you Sure?" />
+                            </p:commandButton>
+                        </h:panelGrid>                        
+                    </f:facet>
+                </p:panel>
+            </h:form>             
+            
+            <h:form id="formReclaOperative" rendered="#{mainBean.catalog eq 'reclassificationOperativeDaily' ? true : false}">
+                <p:growl id="msgsReclaOperative" showDetail="true"/>
+                <p:messages showDetail="true" closable="true"/>
+                <p:panel header="Operative days" id="panelReclaOperative">                                        
+                    <h:panelGrid columns="1">
+                        <p:dataTable id="tableReclaOperative" var="operativeDay" value="#{dailyReclassCatalogsBean.diasOpReclasificados}" editable="true" paginator="true" rows="10" 
+                                     rowStyleClass="#{operativeDay.fechaR eq null || operativeDay.fechaR eq '' ? 'ui-state-error' : null}">                            
+                            <f:facet name="header">
+                                #{dailyReclassCatalogsBean.diasOpReclasificados.size()} entries found.
+                            </f:facet>
+                            <p:ajax event="rowEdit" listener="#{dailyReclassCatalogsBean.onRowEditDias}" />
+                            <p:column headerText="Country">
+                                <h:outputText value="#{operativeDay.pais}"/>
+                            </p:column>
+                            <p:column headerText="Date" >
+                                <h:outputText value="#{operativeDay.fecha != null ? dailyReclassCatalogsBean.formatDay.format(operativeDay.fecha) : ''}"/>
+                            </p:column>                                                        
+                            <p:column headerText="Reclassified Date">                                
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{operativeDay.fechaR != null ? dailyReclassCatalogsBean.formatDay.format(operativeDay.fechaR) : ''}"/></f:facet>
+                                    <f:facet name="input">
+                                        <p:calendar value="#{operativeDay.fechaR}" immediate="true" required="true" pattern="dd/MM/yy" />
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>                                                      
+                            <p:column style="width:25px">
+                                <p:rowEditor />
+                            </p:column>                            
+                        </p:dataTable>
+                    </h:panelGrid>
+                    <f:facet name="footer">
+                        <h:panelGrid columns="2" cellspacing="5px">
+                            <p:commandButton value="Save" actionListener="#{dailyReclassCatalogsBean.saveDiasOpReclasificados}" update=":formReclaOperative">
+                                <p:confirm header="Save changes" message="Are you Sure?" />
+                            </p:commandButton>
+                            <p:commandButton value="Refresh" update=":formReclaOperative" actionListener="#{dailyReclassCatalogsBean.refreshDiasOpReclasificados}">
+                                <p:confirm header="Refresh table" message="Unsaved changes will be lost, are you Sure?" />
+                            </p:commandButton>
+                        </h:panelGrid>                        
+                    </f:facet>
+                </p:panel>
+            </h:form>             
 
             <h:form id="formReclaPacking" rendered="#{mainBean.catalog eq 'reclassificationPackingDaily' ? true : false}">
                 <p:growl id="msgsReclaPacking" showDetail="true"/>

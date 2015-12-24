@@ -8,46 +8,46 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.context.FacesContext;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
 import javax.servlet.ServletContext;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 public class ScriptAnalizer {
 
-    public static boolean executeScritsShare(List<String> errors,ShareCatPais pais) {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
+    public ScriptAnalizer() {
+    }
+    public static boolean executeScritsShare(List<String> errors, ShareCatPais pais) {
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
         ServletContext sc = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         String contextPathResources = sc.getRealPath("");
         File directorioBase = new File(contextPathResources + File.separator + "WEB-INF" + File.separator + "scripts" + File.separator);
         File[] ficheros = directorioBase.listFiles();
         List<String> instructions = null;
-        EntityTransaction et = em.getTransaction();
+        session.beginTransaction();
         Query queryNativo = null;
         boolean flagOk = true;
-        try {
-            et.begin();
+        try {            
             for (int i = 0; i < ficheros.length; i++) {
                 File fichero = ficheros[i];
                 instructions = getInstructionsSQL(fichero, errors, pais);
                 if (instructions != null) {
                     for (String instruction : instructions) {
-                        queryNativo = em.createNativeQuery(instruction);
+//                        System.out.println("instruccion: "+instruction);
+                        queryNativo = session.createSQLQuery(instruction);
                         queryNativo.executeUpdate();
                     }
                 }
-            }
-            et.commit();
-        } catch (Exception e) { 
+            }            
+        } catch (Exception e) {
             e.printStackTrace();
-            errors.add("Error running script: " + e.getMessage());
-            if (et.isActive()) {
-                et.rollback();
-            }
+            errors.add("Error running script: " + e.getMessage());            
             flagOk = false;
         } finally {
-            jpau.closeJPAUtil();
+            //session.clear();
+            session.close();
+//            sessionFactory.close();
         }
         return flagOk;
     }
@@ -71,14 +71,14 @@ public class ScriptAnalizer {
                             indexComentario = cadena.indexOf("/*");
                             cadena = cadena.substring(0, indexComentario);
                         }
-                        cadena = cadena.replaceAll("_CLAVECORTAPAIS_", "_"+pais.getClaveCorta().trim()+"_");
-                        cadena = cadena.replaceAll("'NOMBREPAIS'", "'"+pais.getNombre().trim()+"'");
+                        cadena = cadena.replaceAll("_CLAVECORTAPAIS_", "_" + pais.getClaveCorta().trim() + "_");
+                        cadena = cadena.replaceAll("'NOMBREPAIS'", "'" + pais.getNombre().trim() + "'");
                         stringBuilder.append(cadena);
                         stringBuilder.append(" ");
                         if (cadena.endsWith(";")) {
                             if (statements == null) {
                                 statements = new ArrayList<String>();
-                            }                            
+                            }
                             statements.add(stringBuilder.toString().replaceAll(";", "").trim());
                             stringBuilder = new StringBuilder();
                         }
@@ -99,10 +99,7 @@ public class ScriptAnalizer {
 
         }
         return statements;
-    }
-
-    public ScriptAnalizer() {
-    }
+    }    
 
     private static String getExtension(String filename) {
         int index = filename.lastIndexOf('.');

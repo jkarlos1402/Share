@@ -1,13 +1,13 @@
 package com.femsa.kof.daily.dao;
 
-import com.femsa.kof.daily.pojos.RvvdCatTipoConsumo;
+import com.femsa.kof.daily.pojos.RvvdCatUnidadNegocio;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-public class CatTipoConsumoDAO {
+public class CatUnidadNegocioDAO {
 
     private String error;
 
@@ -19,55 +19,55 @@ public class CatTipoConsumoDAO {
         this.error = error;
     }
 
-    public List<RvvdCatTipoConsumo> getTiposConsumoAll() {
+    public List<RvvdCatUnidadNegocio> getUnidadesNegAll() {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT tc FROM RvvdCatTipoConsumo tc");
-        List<RvvdCatTipoConsumo> tiposConsumo = query.list();
+        Query query = session.createQuery("SELECT un FROM RvvdCatUnidadNegocio un");
+        List<RvvdCatUnidadNegocio> unidades = query.list();
         session.close();
-        return tiposConsumo;
+        return unidades;
     }
 
-    public List<RvvdCatTipoConsumo> getTiposConsumo() {
+    public List<RvvdCatUnidadNegocio> getUnidadesNeg() {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT tc FROM RvvdCatTipoConsumo tc WHERE tc.status = 1");
-        List<RvvdCatTipoConsumo> tiposConsumo = query.list();
+        Query query = session.createQuery("SELECT un FROM RvvdCatUnidadNegocio un WHERE un.status = 1");
+        List<RvvdCatUnidadNegocio> unidades = query.list();
         session.close();
-        return tiposConsumo;
+        return unidades;
     }
 
-    public RvvdCatTipoConsumo getTipoConsumo(Integer id) {
+    public RvvdCatUnidadNegocio getUnidadNeg(Integer id) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        RvvdCatTipoConsumo tipoConsumo = (RvvdCatTipoConsumo) session.get(RvvdCatTipoConsumo.class, id);
+        RvvdCatUnidadNegocio unidad = (RvvdCatUnidadNegocio) session.get(RvvdCatUnidadNegocio.class, id);
         session.close();
-        return tipoConsumo;
+        return unidad;
     }
 
-    public RvvdCatTipoConsumo getTipoConsumo(String tipoConsumo) {
+    public RvvdCatUnidadNegocio getUnidadNeg(String unidad) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT tc FROM RvvdCatTipoConsumo tc WHERE tc.tipoConsumoR = '" + tipoConsumo.toUpperCase() + "' OR tc.tipoConsumoEn = '" + tipoConsumo.toUpperCase() + "'");
-        List<RvvdCatTipoConsumo> tiposConsumo = query.list();
-        RvvdCatTipoConsumo tipoConsumoT = null;
-        if (tiposConsumo.size() > 0) {
-            tipoConsumoT = tiposConsumo.get(0);
+        Query query = session.createQuery("SELECT un FROM RvvdCatUnidadNegocio un WHERE un.unidadNegocioR = '" + unidad.toUpperCase() + "' OR un.unidadNegocioEn = '" + unidad.toUpperCase() + "'");
+        List<RvvdCatUnidadNegocio> unidades = query.list();
+        RvvdCatUnidadNegocio unidadT = null;
+        if (unidades.size() > 0) {
+            unidadT = unidades.get(0);
         }
         session.close();
-        return tipoConsumoT;
+        return unidadT;
     }
 
-    public boolean saveTipoConsumo(RvvdCatTipoConsumo tipoConsumo) {
+    public boolean saveUnidadNeg(RvvdCatUnidadNegocio unidad) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if ((tipoConsumo.getIdTipoConsumo() == null ? getTipoConsumo(tipoConsumo.getTipoConsumoR()) : null) == null) {
-                session.saveOrUpdate(tipoConsumo);
+            if ((unidad.getIdUnidadNegocio() == null ? getUnidadNeg(unidad.getUnidadNegocioR()) : null) == null) {
+                session.saveOrUpdate(unidad);
             } else {
-                error = "Type of consumption already exists";
+                error = "Bussiness unit already exists";
                 flagOk = false;
             }
             session.getTransaction().commit();

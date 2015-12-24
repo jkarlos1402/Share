@@ -16,7 +16,7 @@ public class AttrSessionListenerKOF implements HttpSessionAttributeListener {
     public void attributeAdded(HttpSessionBindingEvent event) {
         if (event.getName().equalsIgnoreCase("session_user")) {
             CatalogLoader.loadCatalogs("share");
-            CatalogLoader.loadCatalogs("daily");
+//            CatalogLoader.loadCatalogs("daily");
 //            CheckCatalogs.checkAllCatalogs();            
         }
     }

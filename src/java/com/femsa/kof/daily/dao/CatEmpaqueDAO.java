@@ -1,14 +1,15 @@
 package com.femsa.kof.daily.dao;
 
 import com.femsa.kof.daily.pojos.RvvdCatEmpaque;
-import com.femsa.kof.util.JPAUtil;
+import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 public class CatEmpaqueDAO {
-private String error;
+
+    private String error;
 
     public String getError() {
         return error;
@@ -19,69 +20,66 @@ private String error;
     }
 
     public List<RvvdCatEmpaque> getEmpaquesAll() {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        Query query = em.createQuery("SELECT e FROM RvvdCatEmpaque e");
-        List<RvvdCatEmpaque> empaques = (List<RvvdCatEmpaque>) query.getResultList();
-        jpau.closeJPAUtil();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("SELECT e FROM RvvdCatEmpaque e");
+        List<RvvdCatEmpaque> empaques = query.list();
+        session.close();
         return empaques;
     }
 
     public List<RvvdCatEmpaque> getEmpaques() {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        Query query = em.createQuery("SELECT e FROM RvvdCatEmpaque e WHERE e.status = 1");
-        List<RvvdCatEmpaque> empaques = (List<RvvdCatEmpaque>) query.getResultList();
-        jpau.closeJPAUtil();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("SELECT e FROM RvvdCatEmpaque e WHERE e.status = 1");
+        List<RvvdCatEmpaque> empaques = query.list();
+        session.close();
         return empaques;
     }
 
     public RvvdCatEmpaque getEmpaque(Integer id) {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        RvvdCatEmpaque empaque = em.find(RvvdCatEmpaque.class, id);
-        jpau.closeJPAUtil();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        RvvdCatEmpaque empaque = (RvvdCatEmpaque) session.get(RvvdCatEmpaque.class, id);
+        session.close();
         return empaque;
     }
 
     public RvvdCatEmpaque getEmpaque(String empaque) {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        Query query = em.createQuery("SELECT e FROM RvvdCatEmpaque e WHERE e.empaqueR = '" + empaque.toUpperCase() + "' OR e.empaqueEn = '" + empaque.toUpperCase() + "'");
-        List<RvvdCatEmpaque> empaques = (List<RvvdCatEmpaque>) query.getResultList();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("SELECT e FROM RvvdCatEmpaque e WHERE e.empaqueR = '" + empaque.toUpperCase() + "' OR e.empaqueEn = '" + empaque.toUpperCase() + "'");
+        List<RvvdCatEmpaque> empaques = query.list();
         RvvdCatEmpaque empaqueT = null;
         if (empaques.size() > 0) {
             empaqueT = empaques.get(0);
         }
-        jpau.closeJPAUtil();
+        session.close();
         return empaqueT;
     }
 
     public boolean saveEmpaque(RvvdCatEmpaque empaque) {
-        JPAUtil jpau = new JPAUtil();
-        EntityManager em = jpau.getEntityManager();
-        EntityTransaction et = em.getTransaction();
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
-            et.begin();
-            if (empaque.getIdEmpaque()!= null) {
-                em.merge(empaque);
-            } else if (getEmpaque(empaque.getEmpaqueR()) == null) {
-                em.persist(empaque);
+            session.beginTransaction();
+            if ((empaque.getIdEmpaque() == null ? getEmpaque(empaque.getEmpaqueR()) : null) == null) {
+                session.saveOrUpdate(empaque);
             } else {
                 error = "Packing already exists";
                 flagOk = false;
             }
-            et.commit();
+            session.getTransaction().commit();
         } catch (Exception e) {
             error = e.getMessage();
-            if (et.isActive()) {
-                et.rollback();
+            if (session.getTransaction().isActive()) {
+                session.getTransaction().rollback();
             }
             flagOk = false;
         } finally {
-            jpau.closeJPAUtil();
+            session.close();
         }
         return flagOk;
-    }    
+    }
 }

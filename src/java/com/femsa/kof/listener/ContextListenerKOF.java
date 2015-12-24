@@ -19,6 +19,9 @@ public class ContextListenerKOF implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
 //        CatalogLoader.loadCatalogs();
+        ServletContext context = sce.getServletContext();
+        Boolean flagLoadInfShare = false;
+        context.setAttribute("flag_load_share", flagLoadInfShare);
     }
 
     @Override

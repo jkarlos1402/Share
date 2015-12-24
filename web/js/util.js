@@ -12,17 +12,17 @@ function setFilter(filter) {
 }
 
 $(document).ready(function () {
-    setTimeout(function () {
-        showNotifications();
-    }, 10000);
+//    setTimeout(function () {
+//        showNotifications();
+//    }, 10000);
 });
 
 function showNotifications() {
-    setTimeout(function () {
-        PF('notificationPanel').show();
-        setTimeout(function () {
-            PF('notificationPanel').hide();
-        }, 10000);
-    }, 10000);
+//    setTimeout(function () {
+//        PF('notificationPanel').show();
+//        setTimeout(function () {
+//            PF('notificationPanel').hide();
+//        }, 10000);
+//    }, 10000);
 }
 
