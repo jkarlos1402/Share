@@ -15,6 +15,7 @@ public class ShareCatRolDAO {
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT r FROM ShareCatRol r");
         List<ShareCatRol> roles = query.list();
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -26,6 +27,7 @@ public class ShareCatRolDAO {
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         ShareCatRol rol = (ShareCatRol) session.get(ShareCatRol.class, idRol);
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();

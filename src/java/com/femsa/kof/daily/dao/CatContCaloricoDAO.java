@@ -1,13 +1,13 @@
 package com.femsa.kof.daily.dao;
 
-import com.femsa.kof.daily.pojos.RvvdCatEmpaque;
+import com.femsa.kof.daily.pojos.RvvdCatContenidoCalorico;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-public class CatEmpaqueDAO {
+public class CatContCaloricoDAO {
 
     private String error;
 
@@ -19,72 +19,72 @@ public class CatEmpaqueDAO {
         this.error = error;
     }
 
-    public List<RvvdCatEmpaque> getEmpaquesAll() {
+    public List<RvvdCatContenidoCalorico> getContsCalAll() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT e FROM RvvdCatEmpaque e");
-        List<RvvdCatEmpaque> empaques = query.list();
+        Query query = session.createQuery("SELECT cc FROM RvvdCatContenidoCalorico cc");
+        List<RvvdCatContenidoCalorico> contenidos = query.list();
         session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
-        return empaques;
+        return contenidos;
     }
 
-    public List<RvvdCatEmpaque> getEmpaques() {
+    public List<RvvdCatContenidoCalorico> getContsCal() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT e FROM RvvdCatEmpaque e WHERE e.status = 1");
-        List<RvvdCatEmpaque> empaques = query.list();
+        Query query = session.createQuery("SELECT cc FROM RvvdCatContenidoCalorico cc WHERE cc.status = 1");
+        List<RvvdCatContenidoCalorico> contenidos = query.list();
         session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
-        return empaques;
+        return contenidos;
     }
 
-    public RvvdCatEmpaque getEmpaque(Integer id) {
+    public RvvdCatContenidoCalorico getContCal(Integer id) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        RvvdCatEmpaque empaque = (RvvdCatEmpaque) session.get(RvvdCatEmpaque.class, id);
+        RvvdCatContenidoCalorico contenido = (RvvdCatContenidoCalorico) session.get(RvvdCatContenidoCalorico.class, id);
         session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
-        return empaque;
+        return contenido;
     }
 
-    public RvvdCatEmpaque getEmpaque(String empaque) {
+    public RvvdCatContenidoCalorico getContCal(String contenido) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT e FROM RvvdCatEmpaque e WHERE e.empaqueR = '" + empaque.toUpperCase() + "' OR e.empaqueEn = '" + empaque.toUpperCase() + "'");
-        List<RvvdCatEmpaque> empaques = query.list();
-        RvvdCatEmpaque empaqueT = null;
-        if (empaques.size() > 0) {
-            empaqueT = empaques.get(0);
+        Query query = session.createQuery("SELECT cc FROM RvvdCatContenidoCalorico cc WHERE cc.contenidoCaloricoR = '" + contenido.toUpperCase() + "' OR cc.contenidoCaloricoEn = '" + contenido.toUpperCase() + "'");
+        List<RvvdCatContenidoCalorico> contenidos = query.list();
+        RvvdCatContenidoCalorico contenidoT = null;
+        if (contenidos.size() > 0) {
+            contenidoT = contenidos.get(0);
         }
         session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
-        return empaqueT;
+        return contenidoT;
     }
 
-    public boolean saveEmpaque(RvvdCatEmpaque empaque) {
+    public boolean saveContCal(RvvdCatContenidoCalorico contenido) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if ((empaque.getIdEmpaque() == null ? getEmpaque(empaque.getEmpaqueR()) : null) == null) {
-                session.saveOrUpdate(empaque);
+            if ((contenido.getIdContenidoCalorico() == null ? getContCal(contenido.getContenidoCaloricoR()) : null) == null) {
+                session.saveOrUpdate(contenido);
             } else {
-                error = "Packing already exists";
+                error = "Calorie already exists";
                 flagOk = false;
             }
             session.getTransaction().commit();

@@ -20,10 +20,16 @@ public class ShareTmpAllInfoCargaDAO {
         Session session = sessionFactory.openSession();
         Query queryNativo = null;
         boolean flagOk = true;
+        long cont = 0L;
         try {
             session.beginTransaction();
             for (ShareTmpAllInfoCarga carga : listCarga) {
                 session.save(carga);
+                if(cont % 100 == 0){
+                    session.flush();
+                    session.clear();
+                }
+                cont++;
             }
             session.getTransaction().commit();
             session.beginTransaction();
@@ -46,6 +52,7 @@ public class ShareTmpAllInfoCargaDAO {
             }
             flagOk = false;
         } finally {
+            session.flush();
             session.clear();
             session.close();
             hibernateUtil.closeSessionFactory();

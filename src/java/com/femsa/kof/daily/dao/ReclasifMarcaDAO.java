@@ -1,6 +1,6 @@
 package com.femsa.kof.daily.dao;
 
-import com.femsa.kof.daily.pojos.RvvdReclasifUnGec;
+import com.femsa.kof.daily.pojos.RvvdReclasifMarca;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-public class ReclasifGecDAO {
+public class ReclasifMarcaDAO {
 
     private String error;
 
@@ -20,7 +20,7 @@ public class ReclasifGecDAO {
         this.error = error;
     }
 
-    public List<RvvdReclasifUnGec> getReclasifUnGecAll(ShareUsuario usuario) {
+    public List<RvvdReclasifMarca> getReclasifMarcasAll(ShareUsuario usuario) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
@@ -32,16 +32,16 @@ public class ReclasifGecDAO {
                 paises = "'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
             }
         }
-        Query query = session.createQuery("SELECT rug FROM RvvdReclasifUnGec rug WHERE rug.pais IN (" + paises + ")");
-        List<RvvdReclasifUnGec> unGecs = query.list();
+        Query query = session.createQuery("SELECT rm FROM RvvdReclasifMarca rm WHERE rm.pais IN (" + paises + ")");
+        List<RvvdReclasifMarca> marcas = query.list();
         session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
-        return unGecs;
+        return marcas;
     }
 
-    public boolean saveReclasifUnGec(List<RvvdReclasifUnGec> unGecs) {
+    public boolean saveReclasifMarcas(List<RvvdReclasifMarca> marcas) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
@@ -49,9 +49,9 @@ public class ReclasifGecDAO {
         long cont = 0L;
         try {
             session.beginTransaction();
-            if (unGecs != null) {
-                for (RvvdReclasifUnGec unGec : unGecs) {
-                    session.update(unGec);
+            if (marcas != null) {
+                for (RvvdReclasifMarca marca : marcas) {
+                    session.update(marca);
                     if (cont % 100 == 0) {
                         session.flush();
                         session.clear();
@@ -75,7 +75,7 @@ public class ReclasifGecDAO {
         return flagOk;
     }
 
-    public long checkReclasifUnGec(ShareUsuario usuario) {
+    public long checkReclasifMarcas(ShareUsuario usuario) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
@@ -87,7 +87,7 @@ public class ReclasifGecDAO {
                 paises = "'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
             }
         }
-        Query query = session.createQuery("SELECT count(rug.idReclasifUnGec) FROM RvvdReclasifUnGec rug WHERE rug.pais IN (" + paises + ") AND (rug.gecR IS NULL OR rug.gecEn IS NULL OR rug.unidadNegocioR IS NULL OR rug.unidadNegocioEn IS NULL)");
+        Query query = session.createQuery("SELECT count(rm.idReclasifMarca) FROM RvvdReclasifMarca rm WHERE rm.pais IN (" + paises + ") AND (rm.contenidoCaloricoR IS NULL OR rm.contenidoCaloricoEn IS NULL OR rm.marcaR IS NULL OR rm.marcaEn IS NULL)");
         long numNotReclass = ((Number) query.getFirstResult()).longValue();
         session.flush();
         session.clear();

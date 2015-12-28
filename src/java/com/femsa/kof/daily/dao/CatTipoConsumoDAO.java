@@ -25,6 +25,7 @@ public class CatTipoConsumoDAO {
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT tc FROM RvvdCatTipoConsumo tc");
         List<RvvdCatTipoConsumo> tiposConsumo = query.list();
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -37,6 +38,7 @@ public class CatTipoConsumoDAO {
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT tc FROM RvvdCatTipoConsumo tc WHERE tc.status = 1");
         List<RvvdCatTipoConsumo> tiposConsumo = query.list();
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -48,6 +50,7 @@ public class CatTipoConsumoDAO {
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         RvvdCatTipoConsumo tipoConsumo = (RvvdCatTipoConsumo) session.get(RvvdCatTipoConsumo.class, id);
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -64,6 +67,7 @@ public class CatTipoConsumoDAO {
         if (tiposConsumo.size() > 0) {
             tipoConsumoT = tiposConsumo.get(0);
         }
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -91,6 +95,7 @@ public class CatTipoConsumoDAO {
             }
             flagOk = false;
         } finally {
+            session.flush();
             session.clear();
             session.close();
             hibernateUtil.closeSessionFactory();

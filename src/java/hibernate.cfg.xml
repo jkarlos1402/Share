@@ -8,9 +8,10 @@
     <property name="hibernate.connection.username">kofuser</property>
     <property name="hibernate.connection.password">kofuser</property>
     <!-- Use the C3P0 connection pool. -->
-    <property name="c3p0.min_size">3</property>
-    <property name="c3p0.max_size">5</property>
-    <property name="c3p0.timeout">1800</property>
+    <property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+    <property name="hibernate.c3p0.min_size">3</property>
+    <property name="hibernate.c3p0.max_size">5</property>
+    <property name="hibernate.c3p0.timeout">300</property>
     <!-- Disable second-level cache. -->
     <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
     <property name="cache.use_query_cache">false</property>
@@ -42,5 +43,8 @@
     <mapping class="com.femsa.kof.daily.pojos.RvvdCatUnidadNegocio"/>
     <mapping class="com.femsa.kof.daily.pojos.RvvdReclasifUnGec"/>
     <mapping class="com.femsa.kof.daily.pojos.RvvdReclasifDiasOp"/>
+    <mapping class="com.femsa.kof.daily.pojos.RvvdCatMarca"/>
+    <mapping class="com.femsa.kof.daily.pojos.RvvdCatContenidoCalorico"/>
+    <mapping class="com.femsa.kof.daily.pojos.RvvdReclasifMarca"/>
   </session-factory>
 </hibernate-configuration>

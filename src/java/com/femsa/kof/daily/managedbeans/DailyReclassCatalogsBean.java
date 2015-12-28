@@ -2,8 +2,10 @@ package com.femsa.kof.daily.managedbeans;
 
 import com.femsa.kof.daily.dao.CatCanalDAO;
 import com.femsa.kof.daily.dao.CatCategoriaDAO;
+import com.femsa.kof.daily.dao.CatContCaloricoDAO;
 import com.femsa.kof.daily.dao.CatEmpaqueDAO;
 import com.femsa.kof.daily.dao.CatGecDAO;
+import com.femsa.kof.daily.dao.CatMarcaDAO;
 import com.femsa.kof.daily.dao.CatTipoConsumoDAO;
 import com.femsa.kof.daily.dao.CatUnidadNegocioDAO;
 import com.femsa.kof.daily.dao.ReclasifCanalDAO;
@@ -11,16 +13,20 @@ import com.femsa.kof.daily.dao.ReclasifCategoriaDAO;
 import com.femsa.kof.daily.dao.ReclasifDiasOpDAO;
 import com.femsa.kof.daily.dao.ReclasifEmpaqueDAO;
 import com.femsa.kof.daily.dao.ReclasifGecDAO;
+import com.femsa.kof.daily.dao.ReclasifMarcaDAO;
 import com.femsa.kof.daily.pojos.RvvdCatCanal;
 import com.femsa.kof.daily.pojos.RvvdCatCategoria;
+import com.femsa.kof.daily.pojos.RvvdCatContenidoCalorico;
 import com.femsa.kof.daily.pojos.RvvdCatEmpaque;
 import com.femsa.kof.daily.pojos.RvvdCatGec;
+import com.femsa.kof.daily.pojos.RvvdCatMarca;
 import com.femsa.kof.daily.pojos.RvvdCatTipoConsumo;
 import com.femsa.kof.daily.pojos.RvvdCatUnidadNegocio;
 import com.femsa.kof.daily.pojos.RvvdReclasifCanal;
 import com.femsa.kof.daily.pojos.RvvdReclasifCategoria;
 import com.femsa.kof.daily.pojos.RvvdReclasifDiasOp;
 import com.femsa.kof.daily.pojos.RvvdReclasifEmpaque;
+import com.femsa.kof.daily.pojos.RvvdReclasifMarca;
 import com.femsa.kof.daily.pojos.RvvdReclasifUnGec;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import java.io.Serializable;
@@ -60,6 +66,12 @@ public class DailyReclassCatalogsBean implements Serializable {
     private List<RvvdCatUnidadNegocio> catUnidadesNegocio;
     private RvvdCatUnidadNegocio unidadSelected; 
     
+    private List<RvvdReclasifMarca> marcasReclasificados = new ArrayList<RvvdReclasifMarca>();
+    private List<RvvdCatMarca> catMarcas;
+    private RvvdCatMarca marcaSelected;
+    private List<RvvdCatContenidoCalorico> catContenidosCaloricos;
+    private RvvdCatContenidoCalorico contenidoSelected; 
+    
     private List<RvvdReclasifDiasOp> diasOpReclasificados = new ArrayList<RvvdReclasifDiasOp>();
 
     public DailyReclassCatalogsBean() {
@@ -79,6 +91,53 @@ public class DailyReclassCatalogsBean implements Serializable {
         
         ReclasifDiasOpDAO diasOpDAO = new ReclasifDiasOpDAO();
         diasOpReclasificados = diasOpDAO.getReclasifDiasOpAll(usuario);
+        
+        ReclasifMarcaDAO marcaDAO = new ReclasifMarcaDAO();
+        marcasReclasificados = marcaDAO.getReclasifMarcasAll(usuario);
+    }
+
+    public List<RvvdReclasifMarca> getMarcasReclasificados() {
+        return marcasReclasificados;
+    }
+
+    public void setMarcasReclasificados(List<RvvdReclasifMarca> marcasReclasificados) {
+        this.marcasReclasificados = marcasReclasificados;
+    }
+
+    public List<RvvdCatMarca> getCatMarcas() {
+        CatMarcaDAO marcaDAO = new CatMarcaDAO();
+        catMarcas = marcaDAO.getMarcas();
+        return catMarcas;
+    }
+
+    public void setCatMarcas(List<RvvdCatMarca> catMarcas) {
+        this.catMarcas = catMarcas;
+    }
+
+    public RvvdCatMarca getMarcaSelected() {
+        return marcaSelected;
+    }
+
+    public void setMarcaSelected(RvvdCatMarca marcaSelected) {
+        this.marcaSelected = marcaSelected;
+    }
+
+    public List<RvvdCatContenidoCalorico> getCatContenidosCaloricos() {
+        CatContCaloricoDAO contCaloricoDAO = new CatContCaloricoDAO();
+        catContenidosCaloricos = contCaloricoDAO.getContsCal();
+        return catContenidosCaloricos;
+    }
+
+    public void setCatContenidosCaloricos(List<RvvdCatContenidoCalorico> catContenidosCaloricos) {
+        this.catContenidosCaloricos = catContenidosCaloricos;
+    }
+
+    public RvvdCatContenidoCalorico getContenidoSelected() {
+        return contenidoSelected;
+    }
+
+    public void setContenidoSelected(RvvdCatContenidoCalorico contenidoSelected) {
+        this.contenidoSelected = contenidoSelected;
     }
 
     public SimpleDateFormat getFormatDay() {
@@ -313,6 +372,34 @@ public class DailyReclassCatalogsBean implements Serializable {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Reclassified packaging saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Reclassified packaging, " + reclasifEmpaqueDAO.getError());
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+    
+    public void onRowEditMarca(RowEditEvent event) {
+        RvvdReclasifMarca marca = (RvvdReclasifMarca) event.getObject();
+        marca.setMarcaR(marcaSelected.getMarcaR());
+        marca.setMarcaEn(marcaSelected.getMarcaEn());
+        marca.setContenidoCaloricoR(contenidoSelected.getContenidoCaloricoR());
+        marca.setContenidoCaloricoEn(contenidoSelected.getContenidoCaloricoEn());
+        marcaSelected = null;
+        contenidoSelected = null;
+    }
+
+    public void refreshMarcasReclasificados() {  
+        HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        ShareUsuario usuario = (ShareUsuario)session.getAttribute("session_user");
+        ReclasifMarcaDAO marcaDAO = new ReclasifMarcaDAO();
+        marcasReclasificados = marcaDAO.getReclasifMarcasAll(usuario);
+    }
+
+    public void saveMarcasReclasificados() {
+        FacesMessage message = null;
+        ReclasifMarcaDAO  reclasifMarcaDAO = new ReclasifMarcaDAO();
+        if (reclasifMarcaDAO.saveReclasifMarcas(marcasReclasificados)) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Reclassified Trademarks saved");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Reclassified Trademarks, " + reclasifMarcaDAO.getError());
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }

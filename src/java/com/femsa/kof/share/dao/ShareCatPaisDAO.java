@@ -25,6 +25,7 @@ public class ShareCatPaisDAO {
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT pais FROM ShareCatPais pais WHERE pais.idstatus = 1");
         List<ShareCatPais> countries = query.list();
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -41,6 +42,7 @@ public class ShareCatPaisDAO {
         if (countries.size() > 0) {
             country = countries.get(0);
         }
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -53,6 +55,7 @@ public class ShareCatPaisDAO {
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT pais FROM ShareCatPais pais");
         List<ShareCatPais> countries = query.list();
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -87,6 +90,7 @@ public class ShareCatPaisDAO {
             }
             flagOk = false;
         } finally {
+            session.flush();
             session.clear();
             session.close();
             hibernateUtil.closeSessionFactory();

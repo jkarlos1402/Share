@@ -1,13 +1,13 @@
 package com.femsa.kof.daily.dao;
 
-import com.femsa.kof.daily.pojos.RvvdCatEmpaque;
+import com.femsa.kof.daily.pojos.RvvdCatMarca;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-public class CatEmpaqueDAO {
+public class CatMarcaDAO {
 
     private String error;
 
@@ -19,72 +19,72 @@ public class CatEmpaqueDAO {
         this.error = error;
     }
 
-    public List<RvvdCatEmpaque> getEmpaquesAll() {
+    public List<RvvdCatMarca> getMarcasAll() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT e FROM RvvdCatEmpaque e");
-        List<RvvdCatEmpaque> empaques = query.list();
+        Query query = session.createQuery("SELECT m FROM RvvdCatMarca m");
+        List<RvvdCatMarca> marcas = query.list();
         session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
-        return empaques;
+        return marcas;
     }
 
-    public List<RvvdCatEmpaque> getEmpaques() {
+    public List<RvvdCatMarca> getMarcas() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT e FROM RvvdCatEmpaque e WHERE e.status = 1");
-        List<RvvdCatEmpaque> empaques = query.list();
+        Query query = session.createQuery("SELECT m FROM RvvdCatMarca m WHERE m.status = 1");
+        List<RvvdCatMarca> marcas = query.list();
         session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
-        return empaques;
+        return marcas;
     }
 
-    public RvvdCatEmpaque getEmpaque(Integer id) {
+    public RvvdCatMarca getMarca(Integer id) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        RvvdCatEmpaque empaque = (RvvdCatEmpaque) session.get(RvvdCatEmpaque.class, id);
+        RvvdCatMarca marca = (RvvdCatMarca) session.get(RvvdCatMarca.class, id);
         session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
-        return empaque;
+        return marca;
     }
 
-    public RvvdCatEmpaque getEmpaque(String empaque) {
+    public RvvdCatMarca getMarca(String marca) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT e FROM RvvdCatEmpaque e WHERE e.empaqueR = '" + empaque.toUpperCase() + "' OR e.empaqueEn = '" + empaque.toUpperCase() + "'");
-        List<RvvdCatEmpaque> empaques = query.list();
-        RvvdCatEmpaque empaqueT = null;
-        if (empaques.size() > 0) {
-            empaqueT = empaques.get(0);
+        Query query = session.createQuery("SELECT m FROM RvvdCatMarca m WHERE m.marcaR = '" + marca.toUpperCase() + "' OR m.marcaEn = '" + marca.toUpperCase() + "'");
+        List<RvvdCatMarca> marcas = query.list();
+        RvvdCatMarca marcaT = null;
+        if (marcas.size() > 0) {
+            marcaT = marcas.get(0);
         }
         session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
-        return empaqueT;
+        return marcaT;
     }
 
-    public boolean saveEmpaque(RvvdCatEmpaque empaque) {
+    public boolean saveMarca(RvvdCatMarca marca) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if ((empaque.getIdEmpaque() == null ? getEmpaque(empaque.getEmpaqueR()) : null) == null) {
-                session.saveOrUpdate(empaque);
+            if ((marca.getIdMarca() == null ? getMarca(marca.getMarcaR()) : null) == null) {
+                session.saveOrUpdate(marca);
             } else {
-                error = "Packing already exists";
+                error = "Trademark already exists";
                 flagOk = false;
             }
             session.getTransaction().commit();

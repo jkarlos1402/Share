@@ -46,6 +46,7 @@ public class ScriptAnalizer {
             errors.add("Error running script: " + e.getMessage());            
             flagOk = false;
         } finally {            
+            session.flush();
             session.clear();
             session.close();
             hibernateUtil.closeSessionFactory();

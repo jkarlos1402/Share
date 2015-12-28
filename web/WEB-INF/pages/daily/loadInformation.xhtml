@@ -33,40 +33,47 @@
                                       onstart="handleResponse(1)" oncomplete="handleResponse(2)"/>
                         <p:separator />
                         <h3>Preview</h3>
-                        <p:dataTable var="infoCargaRolling" value="#{dailyLoadBean.listInfoCargaRolling}" id="tableInfoRolling" reflow="true" rows="20" paginator="true" widgetVar="tableInfCargaRolling">                    
-                            <f:facet name="header">
-                                <p:outputLabel value="#{dailyLoadBean.listInfoCargaRolling.size()} records found." rendered="#{dailyLoadBean.listInfoCargaRolling != null ? true : false}" />                                
-                            </f:facet>
-                            <p:column headerText="Country">
-                                <h:outputText value="#{infoCargaRolling.diasOperativos.pais}" />
-                            </p:column>
+                        <p:tabView>
+                            <p:tab title="ROLLING">
+                                <p:dataTable var="infoCargaRolling" value="#{dailyLoadBean.listInfoCargaRolling}" id="tableInfoRolling" reflow="true" rows="20" paginator="true" widgetVar="tableInfCargaRolling">                    
+                                    <f:facet name="header">
+                                        <p:outputLabel value="#{dailyLoadBean.listInfoCargaRolling.size()} records found." rendered="#{dailyLoadBean.listInfoCargaRolling != null ? true : false}" />                                
+                                    </f:facet>
+                                    <p:column headerText="Country">
+                                        <h:outputText value="#{infoCargaRolling.diasOperativos.pais}" />
+                                    </p:column>
 
-                            <p:column headerText="Date current year">
-                                <h:outputText value="#{infoCargaRolling.diasOperativos.fecha != null ? dailyLoadBean.formatDay.format(infoCargaRolling.diasOperativos.fecha) : ''}" />
-                            </p:column>
+                                    <p:column headerText="Date current year">
+                                        <h:outputText value="#{infoCargaRolling.diasOperativos.fecha != null ? dailyLoadBean.formatDay.format(infoCargaRolling.diasOperativos.fecha) : ''}" />
+                                    </p:column>
 
-                            <p:column headerText="Date PY" id="columDate">
-                                <h:outputText value="#{infoCargaRolling.diasOperativos.fechaR    != null ? dailyLoadBean.formatDay.format(infoCargaRolling.diasOperativos.fechaR) : ''}" />
-                            </p:column>
+                                    <p:column headerText="Date PY" id="columDate">
+                                        <h:outputText value="#{infoCargaRolling.diasOperativos.fechaR    != null ? dailyLoadBean.formatDay.format(infoCargaRolling.diasOperativos.fechaR) : ''}" />
+                                    </p:column>
 
-                            <p:column headerText="CSDs">
-                                <h:outputText />
-                            </p:column>
+                                    <p:column headerText="CSDs">
+                                        <h:outputText />
+                                    </p:column>
 
-                            <p:column headerText="NCBs" id="columCategory">
-                                <h:outputText  />
-                            </p:column>
+                                    <p:column headerText="NCBs" id="columCategory">
+                                        <h:outputText  />
+                                    </p:column>
 
-                            <p:column headerText="Water" >
-                                <h:outputText  />
-                            </p:column>
+                                    <p:column headerText="Water" >
+                                        <h:outputText  />
+                                    </p:column>
 
-                            <p:column headerText="Others">
-                                <h:outputText  />
-                            </p:column>
+                                    <p:column headerText="Others">
+                                        <h:outputText  />
+                                    </p:column>
 
-                                                 
-                        </p:dataTable>
+                                </p:dataTable>
+                            </p:tab>
+                            <p:tab title="DISTRIBUTION MX">
+                                ...
+                            </p:tab>
+
+                        </p:tabView>
                         <p:panel>
                             <h:panelGrid columns="3" cellspacing="5px" style="width: 100%;" columnClasses="topElemsClass,topElemsClass,topElemsClass">
                                 <p:dataList value="#{dailyLoadBean.omittedSheets}" var="omittedSheet" type="ordered">

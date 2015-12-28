@@ -55,7 +55,7 @@
                     </h:panelGrid>
                     <f:facet name="footer">
                         <h:panelGrid columns="2" cellspacing="5px">
-                            <p:commandButton value="Save" actionListener="#{dailyReclassCatalogsBean.saveCategoriasReclasificadas}" update=":formReclaCategory">
+                            <p:commandButton value="Save" update=":formReclaCategory" actionListener="#{dailyReclassCatalogsBean.saveCategoriasReclasificadas}">
                                 <p:confirm header="Save changes" message="Are you Sure?" />
                             </p:commandButton>
                             <p:commandButton value="Refresh" update=":formReclaCategory" actionListener="#{dailyReclassCatalogsBean.refreshCategoriasReclasificadas}">
@@ -104,7 +104,7 @@
                     </h:panelGrid>
                     <f:facet name="footer">
                         <h:panelGrid columns="2" cellspacing="5px">
-                            <p:commandButton value="Save" actionListener="#{dailyReclassCatalogsBean.saveCanalesReclasificados}" update=":formReclaChannel">
+                            <p:commandButton value="Save" update=":formReclaChannel" actionListener="#{dailyReclassCatalogsBean.saveCanalesReclasificados}">
                                 <p:confirm header="Save changes" message="Are you Sure?" />
                             </p:commandButton>
                             <p:commandButton value="Refresh" update=":formReclaChannel" actionListener="#{dailyReclassCatalogsBean.refreshCanalesReclasificados}">
@@ -170,7 +170,7 @@
                     </h:panelGrid>
                     <f:facet name="footer">
                         <h:panelGrid columns="2" cellspacing="5px">
-                            <p:commandButton value="Save" actionListener="#{dailyReclassCatalogsBean.saveGecsReclasificados}" update=":formReclaGec">
+                            <p:commandButton value="Save" update=":formReclaGec" actionListener="#{dailyReclassCatalogsBean.saveGecsReclasificados}">
                                 <p:confirm header="Save changes" message="Are you Sure?" />
                             </p:commandButton>
                             <p:commandButton value="Refresh" update=":formReclaGec" actionListener="#{dailyReclassCatalogsBean.refreshGecsReclasificados}">
@@ -213,7 +213,7 @@
                     </h:panelGrid>
                     <f:facet name="footer">
                         <h:panelGrid columns="2" cellspacing="5px">
-                            <p:commandButton value="Save" actionListener="#{dailyReclassCatalogsBean.saveDiasOpReclasificados}" update=":formReclaOperative">
+                            <p:commandButton value="Save" update=":formReclaOperative" actionListener="#{dailyReclassCatalogsBean.saveDiasOpReclasificados}">
                                 <p:confirm header="Save changes" message="Are you Sure?" />
                             </p:commandButton>
                             <p:commandButton value="Refresh" update=":formReclaOperative" actionListener="#{dailyReclassCatalogsBean.refreshDiasOpReclasificados}">
@@ -291,10 +291,73 @@
                     </h:panelGrid>
                     <f:facet name="footer">
                         <h:panelGrid columns="2" cellspacing="5px">
-                            <p:commandButton value="Save" actionListener="#{dailyReclassCatalogsBean.saveEmpaquesReclasificados}" update=":formReclaPacking">
+                            <p:commandButton value="Save" update=":formReclaPacking" actionListener="#{dailyReclassCatalogsBean.saveEmpaquesReclasificados}">
                                 <p:confirm header="Save changes" message="Are you Sure?" />
                             </p:commandButton>
                             <p:commandButton value="Refresh" update=":formReclaPacking" actionListener="#{dailyReclassCatalogsBean.refreshEmpaquesReclasificados}">
+                                <p:confirm header="Refresh table" message="Unsaved changes will be lost, are you Sure?" />
+                            </p:commandButton>
+                        </h:panelGrid>                        
+                    </f:facet>
+                </p:panel>
+            </h:form>             
+
+            <h:form id="formReclaTrademark" rendered="#{mainBean.catalog eq 'reclassificationTrademarkDaily' ? true : false}">
+                <p:growl id="msgsReclaTrademark" showDetail="true"/>
+                <p:messages showDetail="true" closable="true"/>
+                <p:panel header="Trademark" id="panelReclaTrademark">                                        
+                    <h:panelGrid columns="1">
+                        <p:dataTable id="tableReclaTrademark" var="reclaTrademark" value="#{dailyReclassCatalogsBean.marcasReclasificados}" editable="true" paginator="true" rows="10" 
+                                     rowStyleClass="#{reclaTrademark.marcaR eq null || reclaTrademark.marcaR eq '' || reclaTrademark.marcaEn eq null || reclaTrademark.marcaEn eq '' || reclaTrademark.contenidoCaloricoR eq null || reclaTrademark.contenidoCaloricoR eq '' || reclaTrademark.contenidoCaloricoEn eq null || reclaTrademark.contenidoCaloricoEn eq ''? 'ui-state-error' : null}">
+                            <p:ajax event="rowEdit" listener="#{dailyReclassCatalogsBean.onRowEditMarca}" />
+                            <f:facet name="header">
+                                <h:outputText value="#{dailyReclassCatalogsBean.marcasReclasificados.size()} entries found."/>                                                                
+                            </f:facet>
+                            <p:column headerText="Country">
+                                <h:outputText value="#{reclaTrademark.pais}"/>
+                            </p:column>
+                            <p:column headerText="Trademark" filterBy="#{reclaTrademark.marca}" filterMatchMode="contains">
+                                <h:outputText value="#{reclaTrademark.marca}"/>
+                            </p:column>                                                                                                                                
+                            <p:column headerText="Reclassified Trademark">                                
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{reclaTrademark.marcaR}"/></f:facet>
+                                    <f:facet name="input">
+                                        <h:selectOneMenu id="idReclassTrade" value="#{dailyReclassCatalogsBean.marcaSelected}" converter="marcaConverter" label="Reclassified Trademark" immediate="true" required="true" style="width: 100%">                                            
+                                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                            <f:selectItems value="#{dailyReclassCatalogsBean.catMarcas}"/>                           
+                                        </h:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Reclassified Trademark(English)">
+                                <h:outputText value="#{reclaTrademark.marcaEn}"/>
+                            </p:column>                           
+                            <p:column headerText="Reclassified Calorie">                                
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{reclaTrademark.contenidoCaloricoR}"/></f:facet>
+                                    <f:facet name="input">
+                                        <h:selectOneMenu id="idReclassCalorie" value="#{dailyReclassCatalogsBean.contenidoSelected}" converter="contenidoCaloricoConverter" label="Reclassified Calorie" immediate="true" required="true" style="width: 100%">                                            
+                                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                            <f:selectItems value="#{dailyReclassCatalogsBean.catContenidosCaloricos}"/>                           
+                                        </h:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Reclassified Calorie(English)">
+                                <h:outputText value="#{reclaTrademark.contenidoCaloricoEn}"/>
+                            </p:column>                           
+                            <p:column style="width:25px">
+                                <p:rowEditor />
+                            </p:column>                            
+                        </p:dataTable>
+                    </h:panelGrid>
+                    <f:facet name="footer">
+                        <h:panelGrid columns="2" cellspacing="5px">
+                            <p:commandButton value="Save" update=":formReclaTrademark" actionListener="#{dailyReclassCatalogsBean.saveMarcasReclasificados}">
+                                <p:confirm header="Save changes" message="Are you Sure?" />
+                            </p:commandButton>
+                            <p:commandButton value="Refresh" update=":formReclaTrademark" actionListener="#{dailyReclassCatalogsBean.refreshMarcasReclasificados}">
                                 <p:confirm header="Refresh table" message="Unsaved changes will be lost, are you Sure?" />
                             </p:commandButton>
                         </h:panelGrid>                        

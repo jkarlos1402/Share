@@ -15,6 +15,7 @@ public class ShareCatCanalesDAO {
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT canales FROM ShareCatCanales canales");
         List<ShareCatCanales> canales = query.list();     
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();

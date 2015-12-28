@@ -34,6 +34,7 @@ public class ReclasifCategoriaDAO {
         }
         Query query = session.createQuery("SELECT rc FROM RvvdReclasifCategoria rc WHERE rc.pais IN (" + paises + ")");
         List<RvvdReclasifCategoria> categoriasReclasificadas = query.list();
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -45,11 +46,17 @@ public class ReclasifCategoriaDAO {
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         boolean flagOk = true;
+        long cont = 0L;
         try {
             session.beginTransaction();
             if (reclasifCategorias != null) {
                 for (RvvdReclasifCategoria reclasifCategoria : reclasifCategorias) {
                     session.saveOrUpdate(reclasifCategoria);
+                    if (cont % 100 == 0) {
+                        session.flush();
+                        session.clear();
+                    }
+                    cont++;
                 }
             }
             session.getTransaction().commit();
@@ -60,6 +67,7 @@ public class ReclasifCategoriaDAO {
             }
             flagOk = false;
         } finally {
+            session.flush();
             session.clear();
             session.close();
             hibernateUtil.closeSessionFactory();
@@ -81,6 +89,7 @@ public class ReclasifCategoriaDAO {
         }
         Query query = session.createQuery("SELECT count(rc.idReclasifCategoria) FROM RvvdReclasifCategoria rc WHERE rc.pais IN (" + paises + ") AND (rc.categoriaR IS NULL OR rc.categoriaEn IS NULL OR rc.categoriaOficialR IS NULL OR rc.categoriaOficialEn IS NULL)");
         long numNotReclass = ((Number) query.getFirstResult()).longValue();
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();

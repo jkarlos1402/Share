@@ -29,6 +29,7 @@ public class ShareUsuarioDAO {
         if (usuarios.size() > 0) {
             return usuarios.get(0);
         }
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -45,6 +46,7 @@ public class ShareUsuarioDAO {
         if (usuarios.size() > 0) {
             return usuarios.get(0);
         }
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -57,6 +59,7 @@ public class ShareUsuarioDAO {
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("FROM ShareUsuario u");
         List<ShareUsuario> usuarios = (List<ShareUsuario>) query.list();
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -83,6 +86,7 @@ public class ShareUsuarioDAO {
             }
             flagOk = false;
         } finally {
+            session.flush();
             session.clear();
             session.close();
             hibernateUtil.closeSessionFactory();

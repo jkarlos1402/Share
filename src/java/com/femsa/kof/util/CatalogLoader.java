@@ -20,7 +20,7 @@ public class CatalogLoader {
             ShareCatPaisDAO catPaisDAO = new ShareCatPaisDAO();
             sc.setAttribute("countries_catalog", catPaisDAO.getCatPais());
         }else if(proyecto.equalsIgnoreCase("daily")){
-        
+            
         }
     }
 

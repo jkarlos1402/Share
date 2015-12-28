@@ -25,6 +25,7 @@ public class ShareCatGrupoCategoriasDAO {
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT gc FROM ShareCatGrupoCategorias gc WHERE gc.status = 1");
         List<ShareCatGrupoCategorias> grupos = query.list();
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -41,6 +42,7 @@ public class ShareCatGrupoCategoriasDAO {
         if (grupos.size() > 0) {
             grupo = grupos.get(0);
         }
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -53,6 +55,7 @@ public class ShareCatGrupoCategoriasDAO {
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT gc FROM ShareCatGrupoCategorias gc");
         List<ShareCatGrupoCategorias> grupos = query.list();
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -79,6 +82,7 @@ public class ShareCatGrupoCategoriasDAO {
             }
             flagOk = false;
         } finally {
+            session.flush();
             session.clear();
             session.close();
             hibernateUtil.closeSessionFactory();

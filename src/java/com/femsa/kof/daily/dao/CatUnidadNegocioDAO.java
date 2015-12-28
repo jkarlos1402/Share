@@ -25,6 +25,7 @@ public class CatUnidadNegocioDAO {
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT un FROM RvvdCatUnidadNegocio un");
         List<RvvdCatUnidadNegocio> unidades = query.list();
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -37,6 +38,7 @@ public class CatUnidadNegocioDAO {
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT un FROM RvvdCatUnidadNegocio un WHERE un.status = 1");
         List<RvvdCatUnidadNegocio> unidades = query.list();
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -48,6 +50,7 @@ public class CatUnidadNegocioDAO {
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         RvvdCatUnidadNegocio unidad = (RvvdCatUnidadNegocio) session.get(RvvdCatUnidadNegocio.class, id);
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -64,6 +67,7 @@ public class CatUnidadNegocioDAO {
         if (unidades.size() > 0) {
             unidadT = unidades.get(0);
         }
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -91,6 +95,7 @@ public class CatUnidadNegocioDAO {
             }
             flagOk = false;
         } finally {
+            session.flush();
             session.clear();
             session.close();
             hibernateUtil.closeSessionFactory();

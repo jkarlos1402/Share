@@ -3,15 +3,19 @@ package com.femsa.kof.daily.managedbeans;
 import com.femsa.kof.daily.dao.CatCanalDAO;
 import com.femsa.kof.daily.dao.CatCategoriaDAO;
 import com.femsa.kof.daily.dao.CatCategoriaOficialDAO;
+import com.femsa.kof.daily.dao.CatContCaloricoDAO;
 import com.femsa.kof.daily.dao.CatEmpaqueDAO;
 import com.femsa.kof.daily.dao.CatGecDAO;
+import com.femsa.kof.daily.dao.CatMarcaDAO;
 import com.femsa.kof.daily.dao.CatTipoConsumoDAO;
 import com.femsa.kof.daily.dao.CatUnidadNegocioDAO;
 import com.femsa.kof.daily.pojos.RvvdCatCanal;
 import com.femsa.kof.daily.pojos.RvvdCatCategoria;
 import com.femsa.kof.daily.pojos.RvvdCatCategoriaOficial;
+import com.femsa.kof.daily.pojos.RvvdCatContenidoCalorico;
 import com.femsa.kof.daily.pojos.RvvdCatEmpaque;
 import com.femsa.kof.daily.pojos.RvvdCatGec;
+import com.femsa.kof.daily.pojos.RvvdCatMarca;
 import com.femsa.kof.daily.pojos.RvvdCatTipoConsumo;
 import com.femsa.kof.daily.pojos.RvvdCatUnidadNegocio;
 import com.femsa.kof.util.CatalogLoader;
@@ -56,7 +60,67 @@ public class DailyCatalogsBean implements Serializable {
     private RvvdCatUnidadNegocio unidadSelected;
     private List<RvvdCatUnidadNegocio> catUnidadesAll = new ArrayList<RvvdCatUnidadNegocio>();
 
+    private RvvdCatMarca marcaNueva = new RvvdCatMarca();
+    private RvvdCatMarca marcaSelected;
+    private List<RvvdCatMarca> catMarcasAll = new ArrayList<RvvdCatMarca>();
+
+    private RvvdCatContenidoCalorico contenidoNueva = new RvvdCatContenidoCalorico();
+    private RvvdCatContenidoCalorico contenidoSelected;
+    private List<RvvdCatContenidoCalorico> catContenidosAll = new ArrayList<RvvdCatContenidoCalorico>();
+
     public DailyCatalogsBean() {
+    }
+
+    public RvvdCatContenidoCalorico getContenidoNueva() {
+        return contenidoNueva;
+    }
+
+    public void setContenidoNueva(RvvdCatContenidoCalorico contenidoNueva) {
+        this.contenidoNueva = contenidoNueva;
+    }
+
+    public RvvdCatContenidoCalorico getContenidoSelected() {
+        return contenidoSelected;
+    }
+
+    public void setContenidoSelected(RvvdCatContenidoCalorico contenidoSelected) {
+        this.contenidoSelected = contenidoSelected;
+    }
+
+    public List<RvvdCatContenidoCalorico> getCatContenidosAll() {
+        CatContCaloricoDAO contCaloricoDAO = new CatContCaloricoDAO();
+        catContenidosAll = contCaloricoDAO.getContsCalAll();
+        return catContenidosAll;
+    }
+
+    public void setCatContenidosAll(List<RvvdCatContenidoCalorico> catContenidosAll) {        
+        this.catContenidosAll = catContenidosAll;
+    }
+
+    public RvvdCatMarca getMarcaNueva() {
+        return marcaNueva;
+    }
+
+    public void setMarcaNueva(RvvdCatMarca marcaNueva) {
+        this.marcaNueva = marcaNueva;
+    }
+
+    public RvvdCatMarca getMarcaSelected() {
+        return marcaSelected;
+    }
+
+    public void setMarcaSelected(RvvdCatMarca marcaSelected) {
+        this.marcaSelected = marcaSelected;
+    }
+
+    public List<RvvdCatMarca> getCatMarcasAll() {
+        CatMarcaDAO marcaDAO = new CatMarcaDAO();
+        catMarcasAll = marcaDAO.getMarcasAll();
+        return catMarcasAll;
+    }
+
+    public void setCatMarcasAll(List<RvvdCatMarca> catMarcasAll) {
+        this.catMarcasAll = catMarcasAll;
     }
 
     public RvvdCatGec getGecNuevo() {
@@ -424,6 +488,56 @@ public class DailyCatalogsBean implements Serializable {
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the bussiness unit, " + unidadNegocioDAO.getError());
             unidadNueva.setIdUnidadNegocio(null);
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+    
+    public void newTrademark() {
+        marcaNueva = new RvvdCatMarca();
+        marcaSelected = null;
+    }
+
+    public void selectTrademark() {
+        marcaNueva.setIdMarca(marcaSelected.getIdMarca());
+        marcaNueva.setMarcaEn(marcaSelected.getMarcaEn());
+        marcaNueva.setMarcaR(marcaSelected.getMarcaR());
+        marcaNueva.setStatus(marcaSelected.getStatus());
+    }
+
+    public void saveTrademark() {
+        FacesMessage message = null;
+        CatMarcaDAO marcaDAO = new CatMarcaDAO();
+        if (marcaDAO.saveMarca(marcaNueva)) {
+            CatalogLoader.loadCatalogs("daily");
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Trademark saved");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Trademark, " + marcaDAO.getError());
+            marcaNueva.setIdMarca(null);
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+    
+    public void newCalorie() {
+        contenidoNueva = new RvvdCatContenidoCalorico();
+        contenidoSelected = null;
+    }
+
+    public void selectCalorie() {
+        contenidoNueva.setIdContenidoCalorico(contenidoSelected.getIdContenidoCalorico());
+        contenidoNueva.setContenidoCaloricoEn(contenidoSelected.getContenidoCaloricoEn());
+        contenidoNueva.setContenidoCaloricoR(contenidoSelected.getContenidoCaloricoR());
+        contenidoNueva.setStatus(contenidoSelected.getStatus());
+    }
+
+    public void saveCalorie() {
+        FacesMessage message = null;
+        CatContCaloricoDAO contCaloricoDAO = new CatContCaloricoDAO();
+        if (contCaloricoDAO.saveContCal(contenidoNueva)) {
+            CatalogLoader.loadCatalogs("daily");
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Calorie saved");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Calorie, " + contCaloricoDAO.getError());
+            marcaNueva.setIdMarca(null);
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }

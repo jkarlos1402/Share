@@ -25,6 +25,7 @@ public class CatCategoriaOficialDAO {
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT co FROM RvvdCatCategoriaOficial co");
         List<RvvdCatCategoriaOficial> categoriasOficiales = query.list();
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -37,6 +38,7 @@ public class CatCategoriaOficialDAO {
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT co FROM RvvdCatCategoriaOficial co WHERE co.status = 1");
         List<RvvdCatCategoriaOficial> categoriasOficiales = query.list();
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -48,6 +50,7 @@ public class CatCategoriaOficialDAO {
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         RvvdCatCategoriaOficial categOficial = (RvvdCatCategoriaOficial) session.get(RvvdCatCategoriaOficial.class, id);
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -64,6 +67,7 @@ public class CatCategoriaOficialDAO {
         if (categoriasOficiales.size() > 0) {
             categOficial = categoriasOficiales.get(0);
         }
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -91,6 +95,7 @@ public class CatCategoriaOficialDAO {
             }
             flagOk = false;
         } finally {
+            session.flush();
             session.clear();
             session.close();
             hibernateUtil.closeSessionFactory();

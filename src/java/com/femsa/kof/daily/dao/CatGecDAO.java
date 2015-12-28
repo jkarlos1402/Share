@@ -25,6 +25,7 @@ public class CatGecDAO {
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT gec FROM RvvdCatGec gec");
         List<RvvdCatGec> gecs = query.list();
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -37,6 +38,7 @@ public class CatGecDAO {
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT gec FROM RvvdCatGec gec WHERE gec.status = 1");
         List<RvvdCatGec> gecs = query.list();
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -48,6 +50,7 @@ public class CatGecDAO {
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         RvvdCatGec gec = (RvvdCatGec) session.get(RvvdCatGec.class, id);
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -64,6 +67,7 @@ public class CatGecDAO {
         if (gecs.size() > 0) {
             gecT = gecs.get(0);
         }
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -91,6 +95,7 @@ public class CatGecDAO {
             }
             flagOk = false;
         } finally {
+            session.flush();
             session.clear();
             session.close();
             hibernateUtil.closeSessionFactory();

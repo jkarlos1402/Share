@@ -34,6 +34,7 @@ public class ReclasifDiasOpDAO {
         }
         Query query = session.createQuery("SELECT do FROM RvvdReclasifDiasOp do WHERE do.pais IN (" + paises + ")");
         List<RvvdReclasifDiasOp> diasOpReclasificados = query.list();
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -45,11 +46,17 @@ public class ReclasifDiasOpDAO {
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         boolean flagOk = true;
+        long cont = 0L;
         try {
             session.beginTransaction();
             if (reclasifDiasOp != null) {
                 for (RvvdReclasifDiasOp reclasifDiaOp : reclasifDiasOp) {
                     session.update(reclasifDiaOp);
+                    if (cont % 100 == 0) {
+                        session.flush();
+                        session.clear();
+                    }
+                    cont++;
                 }
             }
             session.getTransaction().commit();
@@ -60,6 +67,7 @@ public class ReclasifDiasOpDAO {
             }
             flagOk = false;
         } finally {
+            session.flush();
             session.clear();
             session.close();
             hibernateUtil.closeSessionFactory();
@@ -81,6 +89,7 @@ public class ReclasifDiasOpDAO {
         }
         Query query = session.createQuery("SELECT count(do.idReclasifDiasOp) FROM RvvdReclasifDiasOp do WHERE do.pais IN (" + paises + ") AND do.fechaR IS NULL");
         long numNotReclass = ((Number) query.getFirstResult()).longValue();
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();

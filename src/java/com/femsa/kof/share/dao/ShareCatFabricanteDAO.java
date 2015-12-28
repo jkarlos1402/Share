@@ -25,6 +25,7 @@ public class ShareCatFabricanteDAO {
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT fab FROM ShareCatFabricante fab");
         List<ShareCatFabricante> fabricantes = query.list();
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -37,6 +38,7 @@ public class ShareCatFabricanteDAO {
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT fab FROM ShareCatFabricante fab WHERE fab.status = 1");
         List<ShareCatFabricante> fabricantes = query.list();
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -53,6 +55,7 @@ public class ShareCatFabricanteDAO {
         if (fabricantes.size() > 0) {
             fabricante = fabricantes.get(0);
         }
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -79,6 +82,7 @@ public class ShareCatFabricanteDAO {
             }
             flagOk = false;
         } finally {
+            session.flush();
             session.clear();
             session.close();
             hibernateUtil.closeSessionFactory();

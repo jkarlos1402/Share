@@ -25,6 +25,7 @@ public class CatCanalDAO {
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT c FROM RvvdCatCanal c");
         List<RvvdCatCanal> canales = query.list();
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -37,6 +38,7 @@ public class CatCanalDAO {
         Session session = sessionFactory.openSession();
         Query query = session.createQuery("SELECT c FROM RvvdCatCanal c WHERE c.status = 1");
         List<RvvdCatCanal> canales = query.list();
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -48,6 +50,7 @@ public class CatCanalDAO {
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         RvvdCatCanal canal = (RvvdCatCanal) session.get(RvvdCatCanal.class, id);
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -64,6 +67,7 @@ public class CatCanalDAO {
         if (canales.size() > 0) {
             canalT = canales.get(0);
         }
+        session.flush();
         session.clear();
         session.close();
         hibernateUtil.closeSessionFactory();
@@ -91,6 +95,7 @@ public class CatCanalDAO {
             }
             flagOk = false;
         } finally {
+            session.flush();
             session.clear();
             session.close();
             hibernateUtil.closeSessionFactory();
