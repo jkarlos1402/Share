@@ -215,12 +215,10 @@ public class ShareLoadBean implements Serializable {
                 message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "Wrong country selected");
             }
             record.setDateEndExecution(new Date());
-            if (statusBean != null) {
-                statusBean.getCargasSession().add(record);
-            }else{
+            if (statusBean == null) {
                 statusBean = new ShareUploadStatusBean();
-                statusBean.getCargasSession().add(record);
             }
+            statusBean.getCargasSession().add(record);
             errorsScript.clear();
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Sorry", "Other country is loading, try again later");

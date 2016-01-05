@@ -12,17 +12,19 @@ function setFilter(filter) {
 }
 
 $(document).ready(function () {
-//    setTimeout(function () {
-//        showNotifications();
-//    }, 10000);
+    if ($("#menuPrincipal").length > 0) {        
+        setTimeout(function () {
+            showNotifications();
+        }, 10000);
+    }
     $(".ui-outputlabel-rfi").hide();
 });
 
 function showNotifications() {
-//    setTimeout(function () {
-//        PF('notificationPanel').show();
-//        setTimeout(function () {
-//            PF('notificationPanel').hide();
-//        }, 10000);
-//    }, 10000);
+    setTimeout(function () {
+        PF('notificationPanel').show();
+        setTimeout(function () {
+            PF('notificationPanel').hide();
+        }, 10000);
+    }, 10000);
 }

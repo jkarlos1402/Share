@@ -171,10 +171,10 @@
             </p>
         </p:dialog>
         <p:graphicImage  value="/images/loading.gif" style="position: fixed;display:block;bottom:10px;right: 10px;height:100px; display: none;" id="loadingGIF"/>
-        <h:form> 
+        <h:form id="formNotificaciones"> 
             <p:poll oncomplete="showNotifications()" interval="60"/>
-            <p:overlayPanel for=":panelMain" widgetVar="notificationPanel" showEffect="blind" hideEffect="blind" showEvent="off" hideEvent="off" 
-                            dismissable="false" showCloseIcon="true" rendered="#{mainBean.notifications.size() > 0 ? true : false}" my="right top" at="right top" style="width: 30%;">
+            <p:overlayPanel id="overNotificaciones" for="panelMain" widgetVar="notificationPanel" showEffect="blind" hideEffect="blind" showEvent="off" hideEvent="off" 
+                            dismissable="false" showCloseIcon="true"  my="right top" at="right top" style="width: 30%;">
                 <p:outputPanel>
                     <h:panelGrid columns="1" width="100%">                        
                         <p:dataList value="#{mainBean.notifications}" var="notification" type="ordered">  

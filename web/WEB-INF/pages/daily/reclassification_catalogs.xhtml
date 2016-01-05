@@ -55,10 +55,10 @@
                     </h:panelGrid>
                     <f:facet name="footer">
                         <h:panelGrid columns="2" cellspacing="5px">
-                            <p:commandButton value="Save" update=":formReclaCategory" actionListener="#{dailyReclassCatalogsBean.saveCategoriasReclasificadas}">
+                            <p:commandButton value="Save" update=":formReclaCategory,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.saveCategoriasReclasificadas}">
                                 <p:confirm header="Save changes" message="Are you Sure?" />
                             </p:commandButton>
-                            <p:commandButton value="Refresh" update=":formReclaCategory" actionListener="#{dailyReclassCatalogsBean.refreshCategoriasReclasificadas}">
+                            <p:commandButton value="Refresh" update=":formReclaCategory,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.refreshCategoriasReclasificadas}">
                                 <p:confirm header="Refresh table" message="Unsaved changes will be lost, are you Sure?" />
                             </p:commandButton>
                         </h:panelGrid>                        
@@ -104,10 +104,10 @@
                     </h:panelGrid>
                     <f:facet name="footer">
                         <h:panelGrid columns="2" cellspacing="5px">
-                            <p:commandButton value="Save" update=":formReclaChannel" actionListener="#{dailyReclassCatalogsBean.saveCanalesReclasificados}">
+                            <p:commandButton value="Save" update=":formReclaChannel,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.saveCanalesReclasificados}">
                                 <p:confirm header="Save changes" message="Are you Sure?" />
                             </p:commandButton>
-                            <p:commandButton value="Refresh" update=":formReclaChannel" actionListener="#{dailyReclassCatalogsBean.refreshCanalesReclasificados}">
+                            <p:commandButton value="Refresh" update=":formReclaChannel,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.refreshCanalesReclasificados}">
                                 <p:confirm header="Refresh table" message="Unsaved changes will be lost, are you Sure?" />
                             </p:commandButton>
                         </h:panelGrid>                        
@@ -170,10 +170,10 @@
                     </h:panelGrid>
                     <f:facet name="footer">
                         <h:panelGrid columns="2" cellspacing="5px">
-                            <p:commandButton value="Save" update=":formReclaGec" actionListener="#{dailyReclassCatalogsBean.saveGecsReclasificados}">
+                            <p:commandButton value="Save" update=":formReclaGec,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.saveGecsReclasificados}">
                                 <p:confirm header="Save changes" message="Are you Sure?" />
                             </p:commandButton>
-                            <p:commandButton value="Refresh" update=":formReclaGec" actionListener="#{dailyReclassCatalogsBean.refreshGecsReclasificados}">
+                            <p:commandButton value="Refresh" update=":formReclaGec,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.refreshGecsReclasificados}">
                                 <p:confirm header="Refresh table" message="Unsaved changes will be lost, are you Sure?" />
                             </p:commandButton>
                         </h:panelGrid>                        
@@ -213,10 +213,10 @@
                     </h:panelGrid>
                     <f:facet name="footer">
                         <h:panelGrid columns="2" cellspacing="5px">
-                            <p:commandButton value="Save" update=":formReclaOperative" actionListener="#{dailyReclassCatalogsBean.saveDiasOpReclasificados}">
+                            <p:commandButton value="Save" update=":formReclaOperative,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.saveDiasOpReclasificados}">
                                 <p:confirm header="Save changes" message="Are you Sure?" />
                             </p:commandButton>
-                            <p:commandButton value="Refresh" update=":formReclaOperative" actionListener="#{dailyReclassCatalogsBean.refreshDiasOpReclasificados}">
+                            <p:commandButton value="Refresh" update=":formReclaOperative,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.refreshDiasOpReclasificados}">
                                 <p:confirm header="Refresh table" message="Unsaved changes will be lost, are you Sure?" />
                             </p:commandButton>
                         </h:panelGrid>                        
@@ -291,10 +291,10 @@
                     </h:panelGrid>
                     <f:facet name="footer">
                         <h:panelGrid columns="2" cellspacing="5px">
-                            <p:commandButton value="Save" update=":formReclaPacking" actionListener="#{dailyReclassCatalogsBean.saveEmpaquesReclasificados}">
+                            <p:commandButton value="Save" update=":formReclaPacking,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.saveEmpaquesReclasificados}">
                                 <p:confirm header="Save changes" message="Are you Sure?" />
                             </p:commandButton>
-                            <p:commandButton value="Refresh" update=":formReclaPacking" actionListener="#{dailyReclassCatalogsBean.refreshEmpaquesReclasificados}">
+                            <p:commandButton value="Refresh" update=":formReclaPacking,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.refreshEmpaquesReclasificados}">
                                 <p:confirm header="Refresh table" message="Unsaved changes will be lost, are you Sure?" />
                             </p:commandButton>
                         </h:panelGrid>                        
@@ -354,10 +354,10 @@
                     </h:panelGrid>
                     <f:facet name="footer">
                         <h:panelGrid columns="2" cellspacing="5px">
-                            <p:commandButton value="Save" update=":formReclaTrademark" actionListener="#{dailyReclassCatalogsBean.saveMarcasReclasificados}">
+                            <p:commandButton value="Save" update=":formReclaTrademark,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.saveMarcasReclasificados}">
                                 <p:confirm header="Save changes" message="Are you Sure?" />
                             </p:commandButton>
-                            <p:commandButton value="Refresh" update=":formReclaTrademark" actionListener="#{dailyReclassCatalogsBean.refreshMarcasReclasificados}">
+                            <p:commandButton value="Refresh" update=":formReclaTrademark,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.refreshMarcasReclasificados}">
                                 <p:confirm header="Refresh table" message="Unsaved changes will be lost, are you Sure?" />
                             </p:commandButton>
                         </h:panelGrid>                        

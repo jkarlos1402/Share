@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -41,6 +42,7 @@ public class DailyLoadBean implements Serializable {
     private List<String> errors;
     private ShareUsuario usuario;
     private List<Record> cargas;
+    private String nameFile;
 
     private SimpleDateFormat formatDay = new SimpleDateFormat("dd/MM/yy");
     private SimpleDateFormat formatDayInverse = new SimpleDateFormat("yyyMMdd");
@@ -49,6 +51,9 @@ public class DailyLoadBean implements Serializable {
     private Date dateExecution;
     private Date dateEndExecution;
 
+    @ManagedProperty(value = "#{dailyUploadStatusBean}")
+    DailyUploadStatusBean statusBean;
+
     public DailyLoadBean() {
         HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         usuario = (ShareUsuario) httpSession.getAttribute("session_user");
@@ -56,6 +61,22 @@ public class DailyLoadBean implements Serializable {
         loadedSheets = new ArrayList<String>();
         errors = new ArrayList<String>();
         cargas = new ArrayList<Record>();
+    }
+
+    public String getNameFile() {
+        return nameFile;
+    }
+
+    public void setNameFile(String nameFile) {
+        this.nameFile = nameFile;
+    }
+
+    public DailyUploadStatusBean getStatusBean() {
+        return statusBean;
+    }
+
+    public void setStatusBean(DailyUploadStatusBean statusBean) {
+        this.statusBean = statusBean;
     }
 
     public List<RvvdInfoPh> getListInfoPh() {
@@ -203,6 +224,7 @@ public class DailyLoadBean implements Serializable {
             loadedSheets = analizer.getLoadedSheets();
             errors = analizer.getErrors();
             if (listInfoCargaRolling.size() > 0) {
+                nameFile = event.getFile().getFileName();
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", event.getFile().getFileName() + " is uploaded.");
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", event.getFile().getFileName() + " is empity or corrupt.");
@@ -221,15 +243,15 @@ public class DailyLoadBean implements Serializable {
         omittedSheets = analizer.getOmittedSheets();
         loadedSheets = analizer.getLoadedSheets();
         errors = analizer.getErrors();
-        System.out.println(errors);
         if (listInfoCargaOpDaysPH != null && listInfoCargaOpDaysPH.size() > 0) {
+            nameFile = event.getFile().getFileName();
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", event.getFile().getFileName() + " is uploaded.");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", event.getFile().getFileName() + " is empity or corrupt.");
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
+
     public void handleFileUploadSalesPH(FileUploadEvent event) {
         FacesMessage message = null;
         XlsAnalizerSalesPh analizer = new XlsAnalizerSalesPh();
@@ -237,8 +259,9 @@ public class DailyLoadBean implements Serializable {
         listInfoPh = analizer.getCargasInfoPh();
         omittedSheets = analizer.getOmittedSheets();
         loadedSheets = analizer.getLoadedSheets();
-        errors = analizer.getErrors();        
+        errors = analizer.getErrors();
         if (listInfoPh != null && listInfoPh.size() > 0) {
+            nameFile = event.getFile().getFileName();
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", event.getFile().getFileName() + " is uploaded.");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", event.getFile().getFileName() + " is empity or corrupt.");
@@ -247,12 +270,17 @@ public class DailyLoadBean implements Serializable {
     }
 
     public void saveInfoCarga() {
-        dateExecution = new Date();
+        Record record = new Record();
+        record.setFecha(new Date());
+        record.setNameFile(nameFile);
+        record.setProcess("LOAD ROLLING");
+        record.setDateExecution(new Date());
+        record.setProject("DAILY DASHBOARD");
         FacesMessage message = null;
         if (countrySelected.getClaveCorta().toUpperCase().equals(listInfoCargaRolling.get(0).getDiasOperativos().getPais().toUpperCase())) {
             RollingDAO rollingDAO = new RollingDAO();
             if (rollingDAO.saveDaily(listInfoCargaRolling, listInfoCargaDistribucion)) {
-                numEntriesSaved += listInfoCargaRolling.size() + (listInfoCargaRolling.size() * 4);
+                record.setNumEntriesSaved(listInfoCargaRolling.size() + (listInfoCargaRolling.size() * 4));
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Records saved.");
             } else {
                 String cadenaError = "";
@@ -273,16 +301,26 @@ public class DailyLoadBean implements Serializable {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "Wrong country selected");
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
-        dateEndExecution = new Date();
+        record.setDateEndExecution(new Date());
+        if (statusBean == null) {
+            statusBean = new DailyUploadStatusBean();
+        }
+        statusBean.getCargasSession().add(record);
     }
 
     public void saveInfoDiasOpPh() {
-        dateExecution = new Date();
+        Record record = new Record();
+        record.setFecha(new Date());
+        record.setNameFile(nameFile);
+        record.setProcess("LOAD OPERATIVE DAYS PHILIPPINES");
+        record.setDateExecution(new Date());
+        record.setProject("DAILY DASHBOARD");
         FacesMessage message = null;
         Rvvd445PhDAO rvvd445PhDAO = new Rvvd445PhDAO();
-        if(rvvd445PhDAO.save445Ph(listInfoCargaOpDaysPH)){
+        if (rvvd445PhDAO.save445Ph(listInfoCargaOpDaysPH)) {
+            record.setNumEntriesSaved(listInfoCargaOpDaysPH.size());
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Records saved.");
-        }else {
+        } else {
             String cadenaError = "";
             for (String error : errors) {
                 cadenaError += error + ", ";
@@ -290,22 +328,32 @@ public class DailyLoadBean implements Serializable {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "An error ocurred while saving records [" + cadenaError + "]");
         }
         listInfoCargaOpDaysPH.clear();
-        listInfoCargaOpDaysPH = null;        
+        listInfoCargaOpDaysPH = null;
         omittedSheets.clear();
         loadedSheets.clear();
         errors.clear();
         countrySelected = null;
-        
         FacesContext.getCurrentInstance().addMessage(null, message);
-
+        record.setDateEndExecution(new Date());
+        if (statusBean == null) {
+            statusBean = new DailyUploadStatusBean();
+        }
+        statusBean.getCargasSession().add(record);
     }
+
     public void saveInfoPh() {
-        dateExecution = new Date();
+        Record record = new Record();
+        record.setFecha(new Date());
+        record.setNameFile(nameFile);
+        record.setProcess("LOAD SALES PHILIPPINES");
+        record.setDateExecution(new Date());
+        record.setProject("DAILY DASHBOARD");
         FacesMessage message = null;
         RvvdInfoPhDAO rvvdInfoPhDAO = new RvvdInfoPhDAO();
-        if(rvvdInfoPhDAO.saveInfoPh(listInfoPh)){
+        if (rvvdInfoPhDAO.saveInfoPh(listInfoPh)) {
+            record.setNumEntriesSaved(listInfoPh.size());
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Records saved.");
-        }else {
+        } else {
             String cadenaError = "";
             for (String error : errors) {
                 cadenaError += error + ", ";
@@ -313,13 +361,16 @@ public class DailyLoadBean implements Serializable {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "An error ocurred while saving records [" + cadenaError + "]");
         }
         listInfoPh.clear();
-        listInfoPh = null;        
+        listInfoPh = null;
         omittedSheets.clear();
         loadedSheets.clear();
         errors.clear();
         countrySelected = null;
-        
         FacesContext.getCurrentInstance().addMessage(null, message);
-
+        record.setDateEndExecution(new Date());
+        if (statusBean == null) {
+            statusBean = new DailyUploadStatusBean();
+        }
+        statusBean.getCargasSession().add(record);
     }
 }

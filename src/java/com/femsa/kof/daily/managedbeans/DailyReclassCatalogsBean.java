@@ -28,6 +28,7 @@ import com.femsa.kof.daily.pojos.RvvdReclasifDiasOp;
 import com.femsa.kof.daily.pojos.RvvdReclasifEmpaque;
 import com.femsa.kof.daily.pojos.RvvdReclasifMarca;
 import com.femsa.kof.daily.pojos.RvvdReclasifUnGec;
+import com.femsa.kof.daily.util.CheckCatalogs;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -310,6 +311,7 @@ public class DailyReclassCatalogsBean implements Serializable {
         ShareUsuario usuario = (ShareUsuario)session.getAttribute("session_user");
         ReclasifCategoriaDAO reclasifCategoriaDAO = new ReclasifCategoriaDAO();
         categoriasReclasificadas = reclasifCategoriaDAO.getReclasifCategoriasAll(usuario);
+        CheckCatalogs.checkAllCatalogs();
     }
 
     public void saveCategoriasReclasificadas() {
@@ -335,6 +337,7 @@ public class DailyReclassCatalogsBean implements Serializable {
         ShareUsuario usuario = (ShareUsuario)session.getAttribute("session_user");
         ReclasifCanalDAO reclasifCanalDAO = new ReclasifCanalDAO();
         canalesReclasificados = reclasifCanalDAO.getReclasifCanalesAll(usuario);
+        CheckCatalogs.checkAllCatalogs();
     }
 
     public void saveCanalesReclasificados() {
@@ -363,6 +366,7 @@ public class DailyReclassCatalogsBean implements Serializable {
         ShareUsuario usuario = (ShareUsuario)session.getAttribute("session_user");
         ReclasifEmpaqueDAO reclasifEmpaqueDAO = new ReclasifEmpaqueDAO();
         empaquesReclasificados = reclasifEmpaqueDAO.getReclasifEmpaquesAll(usuario);
+        CheckCatalogs.checkAllCatalogs();
     }
 
     public void saveEmpaquesReclasificados() {
@@ -391,6 +395,7 @@ public class DailyReclassCatalogsBean implements Serializable {
         ShareUsuario usuario = (ShareUsuario)session.getAttribute("session_user");
         ReclasifMarcaDAO marcaDAO = new ReclasifMarcaDAO();
         marcasReclasificados = marcaDAO.getReclasifMarcasAll(usuario);
+        CheckCatalogs.checkAllCatalogs();
     }
 
     public void saveMarcasReclasificados() {
@@ -419,6 +424,7 @@ public class DailyReclassCatalogsBean implements Serializable {
         ShareUsuario usuario = (ShareUsuario)session.getAttribute("session_user");
         ReclasifGecDAO reclasifGecDAO = new ReclasifGecDAO();
         gecsReclasificados = reclasifGecDAO.getReclasifUnGecAll(usuario);
+        CheckCatalogs.checkAllCatalogs();
     }
 
     public void saveGecsReclasificados() {
@@ -443,6 +449,7 @@ public class DailyReclassCatalogsBean implements Serializable {
         ShareUsuario usuario = (ShareUsuario)session.getAttribute("session_user");
         ReclasifDiasOpDAO diasOpDAO = new ReclasifDiasOpDAO();
         diasOpReclasificados = diasOpDAO.getReclasifDiasOpAll(usuario);
+        CheckCatalogs.checkAllCatalogs();
     }
 
     public void saveDiasOpReclasificados() {

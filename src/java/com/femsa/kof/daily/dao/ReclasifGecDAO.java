@@ -1,6 +1,7 @@
 package com.femsa.kof.daily.dao;
 
 import com.femsa.kof.daily.pojos.RvvdReclasifUnGec;
+import com.femsa.kof.daily.util.CheckCatalogs;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
@@ -60,6 +61,7 @@ public class ReclasifGecDAO {
                 }
             }
             session.getTransaction().commit();
+            CheckCatalogs.checkAllCatalogs();
         } catch (Exception e) {
             error = e.getMessage();
             if (session.getTransaction().isActive()) {
@@ -88,7 +90,8 @@ public class ReclasifGecDAO {
             }
         }
         Query query = session.createQuery("SELECT count(rug.idReclasifUnGec) FROM RvvdReclasifUnGec rug WHERE rug.pais IN (" + paises + ") AND (rug.gecR IS NULL OR rug.gecEn IS NULL OR rug.unidadNegocioR IS NULL OR rug.unidadNegocioEn IS NULL)");
-        long numNotReclass = ((Number) query.getFirstResult()).longValue();
+        List<Object> res = query.list();
+        long numNotReclass = (Long)res.get(0);  
         session.flush();
         session.clear();
         session.close();

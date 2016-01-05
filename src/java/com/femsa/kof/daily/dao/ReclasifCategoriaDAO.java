@@ -1,6 +1,7 @@
 package com.femsa.kof.daily.dao;
 
 import com.femsa.kof.daily.pojos.RvvdReclasifCategoria;
+import com.femsa.kof.daily.util.CheckCatalogs;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
@@ -20,7 +21,7 @@ public class ReclasifCategoriaDAO {
         this.error = error;
     }
 
-    public List<RvvdReclasifCategoria> getReclasifCategoriasAll(ShareUsuario usuario) {
+    public List<RvvdReclasifCategoria> getReclasifCategoriasAll(ShareUsuario usuario) {        
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
@@ -60,6 +61,7 @@ public class ReclasifCategoriaDAO {
                 }
             }
             session.getTransaction().commit();
+            CheckCatalogs.checkAllCatalogs();
         } catch (Exception e) {
             error = e.getMessage();
             if (session.getTransaction().isActive()) {
@@ -75,7 +77,7 @@ public class ReclasifCategoriaDAO {
         return flagOk;
     }
 
-    public long checkReclasifCategorias(ShareUsuario usuario) {
+    public long checkReclasifCategorias(ShareUsuario usuario) {        
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
@@ -88,7 +90,8 @@ public class ReclasifCategoriaDAO {
             }
         }
         Query query = session.createQuery("SELECT count(rc.idReclasifCategoria) FROM RvvdReclasifCategoria rc WHERE rc.pais IN (" + paises + ") AND (rc.categoriaR IS NULL OR rc.categoriaEn IS NULL OR rc.categoriaOficialR IS NULL OR rc.categoriaOficialEn IS NULL)");
-        long numNotReclass = ((Number) query.getFirstResult()).longValue();
+        List<Object> res = query.list();
+        long numNotReclass = (Long)res.get(0);        
         session.flush();
         session.clear();
         session.close();

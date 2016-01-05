@@ -8,7 +8,7 @@
     <h:head>
         <f:facet name="first">
             <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-            <title>Corporate  Market Share Portal ::</title>    
+            <title>Corporate Share</title>    
         </f:facet>
     </h:head>
     <h:body>
@@ -17,7 +17,7 @@
                 <h1>Upload Status</h1>                 
                 <p:panel id="panelLoad">   
                     <h:panelGrid columns="1" cellpadding="5px">
-                        <p:dataTable var="carga" value="#{shareUploadStatusBean.cargasSession}">
+                        <p:dataTable var="carga" value="#{dailyUploadStatusBean.cargasSession}">
                             <f:facet name="header">
                                 Uploads status
                             </f:facet>
@@ -28,7 +28,7 @@
                                 <h:outputText value="#{carga.nameFile}" />
                             </p:column>
                             <p:column headerText="Date">
-                                <h:outputText value="#{shareUploadStatusBean.dateFormat.format(carga.fecha)}" />
+                                <h:outputText value="#{dailyUploadStatusBean.dateFormat.format(carga.fecha)}" />
                             </p:column>
 
                             <p:rowExpansion>
@@ -39,7 +39,7 @@
 
                                     <h:outputText value="Project:" />
                                     <h:outputText value="#{carga.project}" />
-                                                                        
+                                    
                                     <h:outputText value="Process:" />
                                     <h:outputText value="#{carga.process}" />
 
@@ -47,16 +47,16 @@
                                     <h:outputText value="#{carga.nameFile}" />
 
                                     <h:outputText value="Execution date:" />
-                                    <h:outputText value="#{shareUploadStatusBean.dateFormat.format(carga.fecha)}"/>
+                                    <h:outputText value="#{dailyUploadStatusBean.dateFormat.format(carga.fecha)}"/>
 
                                     <h:outputText value="Data Entries:" />
                                     <h:outputText value="#{carga.numEntriesSaved}" />
                                     
                                     <h:outputText value="Start:" />
-                                    <h:outputText value="#{shareUploadStatusBean.dateTimeFormat.format(carga.dateExecution)}" />
+                                    <h:outputText value="#{dailyUploadStatusBean.dateTimeFormat.format(carga.dateExecution)}" />
                                     
                                     <h:outputText value="End:" />
-                                    <h:outputText value="#{shareUploadStatusBean.dateTimeFormat.format(carga.dateEndExecution)}" />
+                                    <h:outputText value="#{dailyUploadStatusBean.dateTimeFormat.format(carga.dateEndExecution)}" />
                                 </p:panelGrid>
                             </p:rowExpansion>
                         </p:dataTable>

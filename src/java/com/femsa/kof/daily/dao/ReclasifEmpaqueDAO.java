@@ -1,6 +1,7 @@
 package com.femsa.kof.daily.dao;
 
 import com.femsa.kof.daily.pojos.RvvdReclasifEmpaque;
+import com.femsa.kof.daily.util.CheckCatalogs;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
@@ -60,6 +61,7 @@ public class ReclasifEmpaqueDAO {
                 }
             }
             session.getTransaction().commit();
+            CheckCatalogs.checkAllCatalogs();
         } catch (Exception e) {
             error = e.getMessage();
             if (session.getTransaction().isActive()) {
@@ -88,7 +90,8 @@ public class ReclasifEmpaqueDAO {
             }
         }
         Query query = session.createQuery("SELECT count(re.idReclasifEmpaque) FROM RvvdReclasifEmpaque re WHERE re.pais IN (" + paises + ") AND (re.tipoConsumoR IS NULL OR re.tipoConsumoEn IS NULL OR re.empaqueR IS NULL OR re.empaqueEn IS NULL)");
-        long numNotReclass = ((Number) query.getFirstResult()).longValue();
+        List<Object> res = query.list();
+        long numNotReclass = (Long)res.get(0);  
         session.flush();
         session.clear();
         session.close();
