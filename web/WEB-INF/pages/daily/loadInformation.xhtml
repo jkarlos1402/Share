@@ -14,10 +14,10 @@
     <h:body>
         <ui:composition>
             <h1>Information Load</h1>
-            <h:form id="formLoad">
+            <h:form id="formLoad" rendered="#{mainBean.catalog eq 'rollingDaily' ? true : false}">
                 <p:panel id="panelLoad">  
                     <p:growl id="messagesLoad" showDetail="true"/>
-                    <h:panelGrid columns="1" cellspacing="5px">
+                    <h:panelGrid columns="1" cellspacing="5px" style="width: 100%;">
                         <p:messages showDetail="true" closable="true"/>
                         <h:panelGrid columns="2" cellpadding="5px">
                             <p:outputLabel for="countryLoad" value="Country:" />
@@ -52,27 +52,44 @@
                                     </p:column>
 
                                     <p:column headerText="CSDs">
-                                        <h:outputText />
+                                        <h:outputText value="#{infoCargaRolling.stRollings != null ? infoCargaRolling.stRollings.get(0) : ''}"/>
                                     </p:column>
 
                                     <p:column headerText="NCBs" id="columCategory">
-                                        <h:outputText  />
+                                        <h:outputText value="#{infoCargaRolling.stRollings != null ? infoCargaRolling.stRollings.get(1) : ''}"/>
                                     </p:column>
 
                                     <p:column headerText="Water" >
-                                        <h:outputText  />
+                                        <h:outputText value="#{infoCargaRolling.stRollings != null ? infoCargaRolling.stRollings.get(2) : ''}"/>
                                     </p:column>
 
                                     <p:column headerText="Others">
-                                        <h:outputText  />
+                                        <h:outputText value="#{infoCargaRolling.stRollings != null ? infoCargaRolling.stRollings.get(3) : ''}"/>
                                     </p:column>
-
                                 </p:dataTable>
                             </p:tab>
-                            <p:tab title="DISTRIBUTION MX">
-                                ...
-                            </p:tab>
+                            <p:tab title="DISTRIBUTION MX" rendered="#{dailyLoadBean.listInfoCargaDistribucion != null ? true : false}">
+                                <p:dataTable var="infoCargaDistMx" value="#{dailyLoadBean.listInfoCargaDistribucion}" id="tableInfoDistMx" reflow="true" rows="20" paginator="true" widgetVar="tableInfCargaDistMx">                    
+                                    <f:facet name="header">
+                                        <p:outputLabel value="#{dailyLoadBean.listInfoCargaDistribucion.size()} records found." rendered="#{dailyLoadBean.listInfoCargaDistribucion != null ? true : false}" />                                
+                                    </f:facet>
+                                    <p:column headerText="Country">
+                                        <h:outputText value="#{infoCargaDistMx.pais}" />
+                                    </p:column>
 
+                                    <p:column headerText="Date source">
+                                        <h:outputText value="#{infoCargaDistMx.fechaOrigen != null ? dailyLoadBean.formatDay.format(infoCargaDistMx.fechaOrigen) : ''}" />
+                                    </p:column>
+
+                                    <p:column headerText="Date target">
+                                        <h:outputText value="#{infoCargaDistMx.fechaDestino != null ? dailyLoadBean.formatDay.format(infoCargaDistMx.fechaDestino) : ''}" />
+                                    </p:column>                                    
+
+                                    <p:column headerText="Percentage %">
+                                        <h:outputText value="#{infoCargaDistMx.porcentaje != null ? infoCargaDistMx.porcentaje : ''}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
                         </p:tabView>
                         <p:panel>
                             <h:panelGrid columns="3" cellspacing="5px" style="width: 100%;" columnClasses="topElemsClass,topElemsClass,topElemsClass">
@@ -98,6 +115,110 @@
                         </p:panel>
                         <f:facet name="footer">
                             <p:commandButton value="Save" actionListener="#{dailyLoadBean.saveInfoCarga}" update=":formLoad" rendered="#{dailyLoadBean.listInfoCargaRolling.size() > 0 ? true : false}">
+                                <p:confirm message="Are you sure?" header="Save records"/>
+                            </p:commandButton>                        
+                        </f:facet>
+                    </h:panelGrid>                
+                </p:panel>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+            </h:form>            
+            <h:form id="formLoadOpDaysPhi" rendered="#{mainBean.catalog eq 'opDaysPhiDaily' ? true : false}">
+                <p:panel id="panelLoadOpDaysPhi">  
+                    <p:growl id="messagesLoadOpDaysPhi" showDetail="true"/>
+                    <h:panelGrid columns="1" cellspacing="5px" style="width: 100%;">
+                        <p:messages showDetail="true" closable="true"/>
+
+                        <p:fileUpload fileUploadListener="#{dailyLoadBean.handleFileUploadDaysPH}" mode="advanced" dragDropSupport="true" 
+                                      update="messagesLoadOpDaysPhi,panelLoadOpDaysPhi" sizeLimit="1000000" fileLimit="1" allowTypes="/(\.|\/)(xls|xlsx|XLS|XLSX)$/" 
+                                      onstart="handleResponse(1)" oncomplete="handleResponse(2)"/>
+                        <p:separator />
+                        <h3>Resume</h3>
+                        <p:panel>
+                            <h:panelGrid columns="2">
+                                <h:outputText value="No records found." rendered="#{dailyLoadBean.listInfoCargaOpDaysPH eq null ? true : false}"/>
+                                <h:outputText value="Records found: " rendered="#{dailyLoadBean.listInfoCargaOpDaysPH.size() ge 0 ? true : false}"/>
+                                <h:outputText value="#{dailyLoadBean.listInfoCargaOpDaysPH.size()}" rendered="#{dailyLoadBean.listInfoCargaOpDaysPH.size() ge 0 ? true : false}"/>                                
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:panel>
+                            <h:panelGrid columns="3" cellspacing="5px" style="width: 100%;" columnClasses="topElemsClass,topElemsClass,topElemsClass">
+                                <p:dataList value="#{dailyLoadBean.omittedSheets}" var="omittedSheet" type="ordered">
+                                    <f:facet name="header">
+                                        Omitted Sheets
+                                    </f:facet>
+                                    #{omittedSheet}
+                                </p:dataList>
+                                <p:dataList value="#{dailyLoadBean.loadedSheets}" var="loadedSheet" type="ordered">
+                                    <f:facet name="header">
+                                        Loaded Sheets
+                                    </f:facet>
+                                    <h:outputText value="#{loadedSheet}"/>
+                                </p:dataList>
+                                <p:dataList value="#{dailyLoadBean.errors}" var="errorSheet" type="ordered">
+                                    <f:facet name="header">
+                                        Errors
+                                    </f:facet>
+                                    #{errorSheet}
+                                </p:dataList>
+                            </h:panelGrid>
+                        </p:panel>
+                        <f:facet name="footer">
+                            <p:commandButton value="Save" actionListener="#{dailyLoadBean.saveInfoDiasOpPh}" update=":formLoadOpDaysPhi" rendered="#{dailyLoadBean.listInfoCargaOpDaysPH.size() > 0 ? true : false}">
+                                <p:confirm message="Are you sure?" header="Save records"/>
+                            </p:commandButton>                        
+                        </f:facet>
+                    </h:panelGrid>                
+                </p:panel>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+            </h:form>            
+            <h:form id="formLoadSalesPhi" rendered="#{mainBean.catalog eq 'salesPhiDaily' ? true : false}">
+                <p:panel id="panelLoadSalesPhi">  
+                    <p:growl id="messagesLoadSalesPhi" showDetail="true"/>
+                    <h:panelGrid columns="1" cellspacing="5px" style="width: 100%;">
+                        <p:messages showDetail="true" closable="true"/>
+
+                        <p:fileUpload fileUploadListener="#{dailyLoadBean.handleFileUploadSalesPH}" mode="advanced" dragDropSupport="true" 
+                                      update="messagesLoadSalesPhi,panelLoadSalesPhi" sizeLimit="10000000" fileLimit="1" allowTypes="/(\.|\/)(xls|xlsx|XLS|XLSX)$/" 
+                                      onstart="handleResponse(1)" oncomplete="handleResponse(2)"/>
+                        <p:separator />
+                        <h3>Resume</h3>
+                        <p:panel>
+                            <h:panelGrid columns="2">
+                                <h:outputText value="No records found." rendered="#{dailyLoadBean.listInfoPh eq null ? true : false}"/>
+                                <h:outputText value="Records found: " rendered="#{dailyLoadBean.listInfoPh.size() ge 0 ? true : false}"/>
+                                <h:outputText value="#{dailyLoadBean.listInfoPh.size()}" rendered="#{dailyLoadBean.listInfoPh.size() ge 0 ? true : false}"/>                                
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:panel>
+                            <h:panelGrid columns="3" cellspacing="5px" style="width: 100%;" columnClasses="topElemsClass,topElemsClass,topElemsClass">
+                                <p:dataList value="#{dailyLoadBean.omittedSheets}" var="omittedSheet" type="ordered">
+                                    <f:facet name="header">
+                                        Omitted Sheets
+                                    </f:facet>
+                                    #{omittedSheet}
+                                </p:dataList>
+                                <p:dataList value="#{dailyLoadBean.loadedSheets}" var="loadedSheet" type="ordered">
+                                    <f:facet name="header">
+                                        Loaded Sheets
+                                    </f:facet>
+                                    <h:outputText value="#{loadedSheet}"/>
+                                </p:dataList>
+                                <p:dataList value="#{dailyLoadBean.errors}" var="errorSheet" type="ordered">
+                                    <f:facet name="header">
+                                        Errors
+                                    </f:facet>
+                                    #{errorSheet}
+                                </p:dataList>
+                            </h:panelGrid>
+                        </p:panel>
+                        <f:facet name="footer">
+                            <p:commandButton value="Save" actionListener="#{dailyLoadBean.saveInfoPh}" update=":formLoadSalesPhi" rendered="#{dailyLoadBean.listInfoPh.size() > 0 ? true : false}">
                                 <p:confirm message="Are you sure?" header="Save records"/>
                             </p:commandButton>                        
                         </f:facet>

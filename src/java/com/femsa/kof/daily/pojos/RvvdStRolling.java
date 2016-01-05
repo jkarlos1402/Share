@@ -2,7 +2,6 @@ package com.femsa.kof.daily.pojos;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -22,13 +21,13 @@ public class RvvdStRolling implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Column(name = "ANIO")
-    private Short anio;
+    private Integer anio;
     
     @Column(name = "MES")
-    private Short mes;
+    private Integer mes;
     
     @Column(name = "DIA")
-    private Short dia;
+    private Integer dia;
     
     @Column(name = "FECHA")
     @Temporal(TemporalType.TIMESTAMP)
@@ -53,13 +52,13 @@ public class RvvdStRolling implements Serializable {
     private String gec;
     
     @Column(name = "ROLLING_CU")
-    private BigInteger rollingCu;
+    private double rollingCu;
     
     @Column(name = "ROLLING_INGRESO")
-    private BigInteger rollingIngreso;
+    private Double rollingIngreso;
     
     @Column(name = "ROLLING_TA")
-    private BigInteger rollingTa;
+    private Double rollingTa;
     
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -76,27 +75,27 @@ public class RvvdStRolling implements Serializable {
         this.idStRolling = idStRolling;
     }
 
-    public Short getAnio() {
+    public Integer getAnio() {
         return anio;
     }
 
-    public void setAnio(Short anio) {
+    public void setAnio(Integer anio) {
         this.anio = anio;
     }
 
-    public Short getMes() {
+    public Integer getMes() {
         return mes;
     }
 
-    public void setMes(Short mes) {
+    public void setMes(Integer mes) {
         this.mes = mes;
     }
 
-    public Short getDia() {
+    public Integer getDia() {
         return dia;
     }
 
-    public void setDia(Short dia) {
+    public void setDia(Integer dia) {
         this.dia = dia;
     }
 
@@ -156,27 +155,27 @@ public class RvvdStRolling implements Serializable {
         this.gec = gec;
     }
 
-    public BigInteger getRollingCu() {
+    public double getRollingCu() {
         return rollingCu;
     }
 
-    public void setRollingCu(BigInteger rollingCu) {
+    public void setRollingCu(double rollingCu) {
         this.rollingCu = rollingCu;
     }
 
-    public BigInteger getRollingIngreso() {
+    public Double getRollingIngreso() {
         return rollingIngreso;
     }
 
-    public void setRollingIngreso(BigInteger rollingIngreso) {
+    public void setRollingIngreso(Double rollingIngreso) {
         this.rollingIngreso = rollingIngreso;
     }
 
-    public BigInteger getRollingTa() {
+    public Double getRollingTa() {
         return rollingTa;
     }
 
-    public void setRollingTa(BigInteger rollingTa) {
+    public void setRollingTa(Double rollingTa) {
         this.rollingTa = rollingTa;
     }
 
@@ -210,7 +209,7 @@ public class RvvdStRolling implements Serializable {
 
     @Override
     public String toString() {
-        return "com.femsa.kof.daily.pojos.RvvdStRolling[ idStRolling=" + idStRolling + " ]";
+        return rollingCu+"";
     }
     
 }

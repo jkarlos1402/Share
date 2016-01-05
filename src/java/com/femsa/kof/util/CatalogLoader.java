@@ -1,5 +1,6 @@
 package com.femsa.kof.util;
 
+import com.femsa.kof.daily.dao.CatCategoriaOficialDAO;
 import com.femsa.kof.share.dao.ShareCatCategoriasDAO;
 import com.femsa.kof.share.dao.ShareCatPaisDAO;
 import com.femsa.kof.share.dao.ShareCatCanalesDAO;
@@ -20,7 +21,8 @@ public class CatalogLoader {
             ShareCatPaisDAO catPaisDAO = new ShareCatPaisDAO();
             sc.setAttribute("countries_catalog", catPaisDAO.getCatPais());
         }else if(proyecto.equalsIgnoreCase("daily")){
-            
+            CatCategoriaOficialDAO categoriaOficialDAO = new CatCategoriaOficialDAO();
+            sc.setAttribute("categoria_oficial_catalog", categoriaOficialDAO.getCategoriasOficiales());            
         }
     }
 

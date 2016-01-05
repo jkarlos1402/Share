@@ -2,7 +2,6 @@ package com.femsa.kof.daily.pojos;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -33,7 +32,7 @@ public class RvvdDistribucionMx implements Serializable {
     private Date fechaDestino;
     
     @Column(name = "PORCENTAJE")
-    private BigInteger porcentaje;
+    private double porcentaje;
     
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -74,11 +73,11 @@ public class RvvdDistribucionMx implements Serializable {
         this.fechaDestino = fechaDestino;
     }
 
-    public BigInteger getPorcentaje() {
+    public double getPorcentaje() {
         return porcentaje;
     }
 
-    public void setPorcentaje(BigInteger porcentaje) {
+    public void setPorcentaje(double porcentaje) {
         this.porcentaje = porcentaje;
     }
 

@@ -15,6 +15,7 @@ $(document).ready(function () {
 //    setTimeout(function () {
 //        showNotifications();
 //    }, 10000);
+    $(".ui-outputlabel-rfi").hide();
 });
 
 function showNotifications() {

@@ -1,50 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-  <session-factory>
-    <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
-    <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
-    <property name="hibernate.connection.url">jdbc:oracle:thin:@localhost:1521:XE</property>
-    <property name="hibernate.connection.username">kofuser</property>
-    <property name="hibernate.connection.password">kofuser</property>
-    <!-- Use the C3P0 connection pool. -->
-    <property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
-    <property name="hibernate.c3p0.min_size">3</property>
-    <property name="hibernate.c3p0.max_size">5</property>
-    <property name="hibernate.c3p0.timeout">300</property>
-    <!-- Disable second-level cache. -->
-    <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
-    <property name="cache.use_query_cache">false</property>
-    <property name="cache.use_minimal_puts">false</property>
-    <property name="max_fetch_depth">3</property>
-    <property name="hibernate.jdbc.batch_size">100</property>
-    <!-- Print SQL to stdout. -->
-    <property name="show_sql">false</property>
-    <property name="format_sql">false</property>
-    <property name="current_session_context_class">thread</property>    
-    <mapping class="com.femsa.kof.share.pojos.ShareCatCanales"/>
-    <mapping class="com.femsa.kof.share.pojos.ShareCatCategorias"/>
-    <mapping class="com.femsa.kof.share.pojos.ShareCatFabricante"/>
-    <mapping class="com.femsa.kof.share.pojos.ShareCatGrupoCategorias"/>
-    <mapping class="com.femsa.kof.share.pojos.ShareCatPais"/>
-    <mapping class="com.femsa.kof.share.pojos.ShareCatRol"/>
-    <mapping class="com.femsa.kof.share.pojos.ShareCatStatus"/>
-    <mapping class="com.femsa.kof.share.pojos.ShareUsuario"/>
-    <mapping class="com.femsa.kof.share.pojos.ShareTmpAllInfoCarga"/>
-    <mapping class="com.femsa.kof.daily.pojos.RvvdCatCanal"/>
-    <mapping class="com.femsa.kof.daily.pojos.RvvdCatCategoria"/>
-    <mapping class="com.femsa.kof.daily.pojos.RvvdCatCategoriaOficial"/>
-    <mapping class="com.femsa.kof.daily.pojos.RvvdCatEmpaque"/>
-    <mapping class="com.femsa.kof.daily.pojos.RvvdCatTipoConsumo"/>
-    <mapping class="com.femsa.kof.daily.pojos.RvvdReclasifCanal"/>
-    <mapping class="com.femsa.kof.daily.pojos.RvvdReclasifCategoria"/>
-    <mapping class="com.femsa.kof.daily.pojos.RvvdReclasifEmpaque"/>
-    <mapping class="com.femsa.kof.daily.pojos.RvvdCatGec"/>
-    <mapping class="com.femsa.kof.daily.pojos.RvvdCatUnidadNegocio"/>
-    <mapping class="com.femsa.kof.daily.pojos.RvvdReclasifUnGec"/>
-    <mapping class="com.femsa.kof.daily.pojos.RvvdReclasifDiasOp"/>
-    <mapping class="com.femsa.kof.daily.pojos.RvvdCatMarca"/>
-    <mapping class="com.femsa.kof.daily.pojos.RvvdCatContenidoCalorico"/>
-    <mapping class="com.femsa.kof.daily.pojos.RvvdReclasifMarca"/>
-  </session-factory>
+    <session-factory>
+        
+        <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+        <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
+        <property name="hibernate.connection.url">jdbc:oracle:thin:@localhost:1521:XE</property>
+        <property name="hibernate.connection.username">kofuser</property>
+        <property name="hibernate.connection.password">kofuser</property>   
+    
+        <!-- <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+        <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
+        <property name="hibernate.connection.url">jdbc:oracle:thin:@10.138.3.32:1527:DSE</property>
+        <property name="hibernate.connection.username">BOE14DEVHA</property>
+        <property name="hibernate.connection.password">temporal</property> -->
+    
+        <!-- <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+        <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
+        <property name="hibernate.connection.url">jdbc:oracle:thin:@10.138.3.239:1527:QSE</property>
+        <property name="hibernate.connection.username">BOE14QASHA</property>
+        <property name="hibernate.connection.password">B0EI4#QA5AH</property> -->
+    
+        <!-- <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+        <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
+        <property name="hibernate.connection.url">jdbc:oracle:thin:@10.138.5.209:1527:DMP</property>
+        <property name="hibernate.connection.username">DMPPRD</property>
+        <property name="hibernate.connection.password">pRD#Dm_P</property> -->
+        
+        <!-- Use the C3P0 connection pool. -->
+    
+        <property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+        <property name="hibernate.c3p0.min_size">1</property>
+        <property name="hibernate.c3p0.max_size">5</property>
+        <property name="hibernate.c3p0.initialPoolSize">1</property>
+        <property name="hibernate.c3p0.timeout">300</property>
+        <!-- Disable second-level cache. -->
+        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+        <property name="cache.use_query_cache">false</property>
+        <property name="cache.use_minimal_puts">false</property>
+        <property name="max_fetch_depth">3</property>
+        <property name="hibernate.jdbc.batch_size">100</property>
+        <!-- Print SQL to stdout. -->
+        <property name="show_sql">false</property>
+        <property name="format_sql">false</property>
+        <property name="current_session_context_class">thread</property>    
+        <mapping class="com.femsa.kof.share.pojos.ShareCatCanales"/>
+        <mapping class="com.femsa.kof.share.pojos.ShareCatCategorias"/>
+        <mapping class="com.femsa.kof.share.pojos.ShareCatFabricante"/>
+        <mapping class="com.femsa.kof.share.pojos.ShareCatGrupoCategorias"/>
+        <mapping class="com.femsa.kof.share.pojos.ShareCatPais"/>
+        <mapping class="com.femsa.kof.share.pojos.ShareCatRol"/>
+        <mapping class="com.femsa.kof.share.pojos.ShareCatStatus"/>
+        <mapping class="com.femsa.kof.share.pojos.ShareUsuario"/>
+        <mapping class="com.femsa.kof.share.pojos.ShareTmpAllInfoCarga"/>
+        <mapping class="com.femsa.kof.daily.pojos.RvvdCatCanal"/>
+        <mapping class="com.femsa.kof.daily.pojos.RvvdCatCategoria"/>
+        <mapping class="com.femsa.kof.daily.pojos.RvvdCatCategoriaOficial"/>
+        <mapping class="com.femsa.kof.daily.pojos.RvvdCatEmpaque"/>
+        <mapping class="com.femsa.kof.daily.pojos.RvvdCatTipoConsumo"/>
+        <mapping class="com.femsa.kof.daily.pojos.RvvdReclasifCanal"/>
+        <mapping class="com.femsa.kof.daily.pojos.RvvdReclasifCategoria"/>
+        <mapping class="com.femsa.kof.daily.pojos.RvvdReclasifEmpaque"/>
+        <mapping class="com.femsa.kof.daily.pojos.RvvdCatGec"/>
+        <mapping class="com.femsa.kof.daily.pojos.RvvdCatUnidadNegocio"/>
+        <mapping class="com.femsa.kof.daily.pojos.RvvdReclasifUnGec"/>
+        <mapping class="com.femsa.kof.daily.pojos.RvvdReclasifDiasOp"/>
+        <mapping class="com.femsa.kof.daily.pojos.RvvdCatMarca"/>
+        <mapping class="com.femsa.kof.daily.pojos.RvvdCatContenidoCalorico"/>
+        <mapping class="com.femsa.kof.daily.pojos.RvvdReclasifMarca"/>
+        <mapping class="com.femsa.kof.daily.pojos.RvvdStRolling"/>
+        <mapping class="com.femsa.kof.daily.pojos.RvvdDistribucionMx"/>
+        <mapping class="com.femsa.kof.daily.pojos.Rvvd445Ph"/>
+        <mapping class="com.femsa.kof.daily.pojos.RvvdInfoPh"/>
+    </session-factory>
 </hibernate-configuration>

@@ -46,6 +46,13 @@ public class UserBean implements Serializable {
     }
 
     public DualListModel<ShareCatPais> getPaisesAll() {
+        ShareCatPaisDAO paisDAO = new ShareCatPaisDAO();
+        List<ShareCatPais> sourcePais = paisDAO.getCatPais();
+        List<ShareCatPais> targetPais = paisesAll.getTarget();
+        for (ShareCatPais pais : targetPais) {
+            sourcePais.remove(pais);
+        }
+        paisesAll.setSource(sourcePais);
         return paisesAll;
     }
 

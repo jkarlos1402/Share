@@ -17,14 +17,45 @@
                 <h1>Upload Status</h1>                 
                 <p:panel id="panelLoad">   
                     <h:panelGrid columns="1" cellpadding="5px">
-                        <p:dataTable var="status" value="#{shareUploadStatusBean.status}" reflow="true">
-                            <p:column headerText="DESCRIPTION">
-                                <h:outputText  value="#{status.key}"/>
+                        <p:dataTable var="carga" value="#{shareUploadStatusBean.cargasSession}">
+                            <f:facet name="header">
+                                Uploads status
+                            </f:facet>
+                            <p:column style="width:16px">
+                                <p:rowToggler />
+                            </p:column>
+                            <p:column headerText="File name">
+                                <h:outputText value="#{carga.nameFile}" />
+                            </p:column>
+                            <p:column headerText="Date">
+                                <h:outputText value="#{shareUploadStatusBean.dateFormat.format(carga.fecha)}" />
                             </p:column>
 
-                            <p:column headerText="DETAIL">
-                                <h:outputText  value="#{status.value}"/>
-                            </p:column>                    
+                            <p:rowExpansion>
+                                <p:panelGrid  columns="2" columnClasses="label,value" style="width:100%">
+                                    <f:facet name="header">
+                                        <h:outputText value="Details"/>
+                                    </f:facet>
+
+                                    <h:outputText value="Project:" />
+                                    <h:outputText value="#{carga.project}" />
+
+                                    <h:outputText value="File name:" />
+                                    <h:outputText value="#{carga.nameFile}" />
+
+                                    <h:outputText value="Execution date:" />
+                                    <h:outputText value="#{shareUploadStatusBean.dateFormat.format(carga.fecha)}"/>
+
+                                    <h:outputText value="Data Entries:" />
+                                    <h:outputText value="#{carga.numEntriesSaved}" />
+                                    
+                                    <h:outputText value="Start:" />
+                                    <h:outputText value="#{shareUploadStatusBean.dateTimeFormat.format(carga.dateExecution)}" />
+                                    
+                                    <h:outputText value="End:" />
+                                    <h:outputText value="#{shareUploadStatusBean.dateTimeFormat.format(carga.dateEndExecution)}" />
+                                </p:panelGrid>
+                            </p:rowExpansion>
                         </p:dataTable>
                     </h:panelGrid>                      
                 </p:panel>

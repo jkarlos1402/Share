@@ -7,6 +7,33 @@ public class Record {
     private Date dateExecution;
     private Date dateEndExecution;
     private String nameFile;
+    private String process;
+    private String project;
+    private Date fecha;
+
+    public String getProcess() {
+        return process;
+    }
+
+    public void setProcess(String process) {
+        this.process = process;
+    }
+
+    public String getProject() {
+        return project;
+    }
+
+    public void setProject(String project) {
+        this.project = project;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
 
     public Integer getNumEntriesSaved() {
         return numEntriesSaved;

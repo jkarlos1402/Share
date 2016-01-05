@@ -1,52 +1,50 @@
 package com.femsa.kof.share.managedbeans;
 
+import com.femsa.kof.util.Record;
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
 @ManagedBean
 @SessionScoped
 public class ShareUploadStatusBean implements Serializable {
-
-    Map<String, String> status;
-
-    @ManagedProperty("#{ShareLoadBean}")
-    private ShareLoadBean loadBean;
+    
+    private List<Record> cargasSession = new ArrayList<Record>();
+    private SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
 
     public ShareUploadStatusBean() {
     }
 
-    public ShareLoadBean getLoadBean() {
-        return loadBean;
+    public SimpleDateFormat getDateTimeFormat() {
+        return dateTimeFormat;
     }
 
-    public void setLoadBean(ShareLoadBean loadBean) {
-        this.loadBean = loadBean;
+    public void setDateTimeFormat(SimpleDateFormat dateTimeFormat) {
+        this.dateTimeFormat = dateTimeFormat;
     }
 
-    public List<Map.Entry<String, String>> getStatus() {
-        DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
-        status = new HashMap<String, String>();
-        status.put("Project", "SHARE");
-        status.put("Process", "SHARE CARGA");
-        status.put("Data Entries",loadBean != null && loadBean.getNumEntriesSaved() != null ? loadBean.getNumEntriesSaved() + "" : "N/A");
-        status.put("Execution date",loadBean != null && loadBean.getDateExecution() != null ? loadBean.getDateExecution() + "" : "N/A");
-        status.put("Start",loadBean != null && loadBean.getDateExecution() != null ? hourFormat.format(loadBean.getDateExecution()) : "N/A");
-        status.put("End",loadBean != null && loadBean.getDateEndExecution() != null ? hourFormat.format(loadBean.getDateEndExecution()) : "N/A ");
-        Set<Map.Entry<String, String>> statusSet = status.entrySet();
-        return new ArrayList<Map.Entry<String, String>>(statusSet);
+    public SimpleDateFormat getDateFormat() {
+        return dateFormat;
     }
 
-    public void setStatus(Map<String, String> status) {
-        this.status = status;
+    public void setDateFormat(SimpleDateFormat dateFormat) {
+        this.dateFormat = dateFormat;
+    }
+
+    public List<Record> getCargasSession() {
+        return cargasSession;
+    }
+
+    public void setCargasSession(List<Record> cargasSession) {
+        this.cargasSession = cargasSession;
+    }
+
+    public void addRecord(Record carga){
+        cargasSession.add(carga);
     }
 
 }

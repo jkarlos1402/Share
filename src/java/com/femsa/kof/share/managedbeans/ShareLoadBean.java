@@ -4,6 +4,7 @@ import com.femsa.kof.share.dao.ShareTmpAllInfoCargaDAO;
 import com.femsa.kof.share.pojos.ShareCatPais;
 import com.femsa.kof.share.pojos.ShareTmpAllInfoCarga;
 import com.femsa.kof.share.pojos.ShareUsuario;
+import com.femsa.kof.util.Record;
 import com.femsa.kof.util.ScriptAnalizer;
 import com.femsa.kof.util.XlsAnalizer;
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -31,10 +33,14 @@ public class ShareLoadBean implements Serializable {
     private List<String> errors;
     private List<String> errorsScript;
     private ShareUsuario usuario;
+    private String nameFile;
 
     private Integer numEntriesSaved = 0;
     private Date dateExecution;
     private Date dateEndExecution;
+
+    @ManagedProperty(value = "#{shareUploadStatusBean}")
+    ShareUploadStatusBean statusBean;
 
     public ShareLoadBean() {
         HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
@@ -43,6 +49,22 @@ public class ShareLoadBean implements Serializable {
         loadedSheets = new ArrayList<String>();
         errors = new ArrayList<String>();
         errorsScript = new ArrayList<String>();
+    }
+
+    public List<String> getErrorsScript() {
+        return errorsScript;
+    }
+
+    public void setErrorsScript(List<String> errorsScript) {
+        this.errorsScript = errorsScript;
+    }
+
+    public ShareUploadStatusBean getStatusBean() {
+        return statusBean;
+    }
+
+    public void setStatusBean(ShareUploadStatusBean statusBean) {
+        this.statusBean = statusBean;
     }
 
     public Date getDateExecution() {
@@ -139,6 +161,7 @@ public class ShareLoadBean implements Serializable {
             loadedSheets = analizer.getLoadedSheets();
             errors = analizer.getErrors();
             if (listInfoCarga.size() > 0) {
+                nameFile = event.getFile().getFileName();
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", event.getFile().getFileName() + " is uploaded.");
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", event.getFile().getFileName() + " is empity or corrupt.");
@@ -152,15 +175,20 @@ public class ShareLoadBean implements Serializable {
     public void saveInfoCarga() {
         FacesMessage message = null;
         ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
-        Boolean flagLoadInfShare = (Boolean) context.getAttribute("flag_load_share");        
+        Boolean flagLoadInfShare = (Boolean) context.getAttribute("flag_load_share");
         if (!flagLoadInfShare) {
             flagLoadInfShare = true;
             context.setAttribute("flag_load_share", flagLoadInfShare);
-            dateExecution = new Date();
+            Record record = new Record();
+            record.setFecha(new Date());
+            record.setNameFile(nameFile);
+            record.setProcess("LOAD SHARE");
+            record.setDateExecution(new Date());
+            record.setProject("SHARE");
             if (countrySelected.getNombre().toUpperCase().equals(listInfoCarga.get(0).getPais().toUpperCase())) {
                 ShareTmpAllInfoCargaDAO cargaDAO = new ShareTmpAllInfoCargaDAO();
                 if (cargaDAO.saveInfoCarga(listInfoCarga, countrySelected, usuario)) {
-                    numEntriesSaved += listInfoCarga.size();
+                    record.setNumEntriesSaved(listInfoCarga.size());
                     if (ScriptAnalizer.executeScritsShare(errorsScript, countrySelected)) {
                         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Records saved.");
                     } else {
@@ -168,7 +196,6 @@ public class ShareLoadBean implements Serializable {
                         for (String error : errorsScript) {
                             cadenaError += error + ", ";
                         }
-//                    cadenaError = cadenaError.substring(0, cadenaError.length() - 3);
                         message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", "Records saved, but post-process FAILED, please contact whith the page administrator, [ERROR: " + cadenaError + "]");
                     }
                 } else {
@@ -176,7 +203,6 @@ public class ShareLoadBean implements Serializable {
                     for (String error : errors) {
                         cadenaError += error + ", ";
                     }
-                    //cadenaError = cadenaError.substring(0, cadenaError.length() - 3);
                     message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "An error ocurred while saving records [" + cadenaError + "]");
                 }
                 listInfoCarga.clear();
@@ -188,9 +214,14 @@ public class ShareLoadBean implements Serializable {
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "Wrong country selected");
             }
-            dateEndExecution = new Date();
+            record.setDateEndExecution(new Date());
+            if (statusBean != null) {
+                statusBean.getCargasSession().add(record);
+            }else{
+                statusBean = new ShareUploadStatusBean();
+                statusBean.getCargasSession().add(record);
+            }
             errorsScript.clear();
-
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Sorry", "Other country is loading, try again later");
         }

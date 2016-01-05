@@ -219,7 +219,7 @@ ul {
     display: block !important;
     color: white !important;
     font-size: 16px !important;
-    line-height: 75px !important;
+    line-height: 55px !important; /*75*/
     background-color: rgba(0, 0, 0, 0.3) !important;
     border-style: none !important; 
     border-radius: 3px !important;
@@ -302,7 +302,7 @@ ul {
     /* text-transform: uppercase;*/
     text-align:left;
     font-size: 14px;
-    line-height: 65px;
+    line-height: 45px; /*65*/
     padding-left: 50px;
     text-decoration: none;
     /* -webkit-transition: background .3s, color .3s;

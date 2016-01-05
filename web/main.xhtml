@@ -8,7 +8,7 @@
     <h:head>
         <f:facet name="first">
             <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-            <title>Corporate  Market</title>  
+            <title>Corporate Share</title>  
             <link rel="shortcut icon" type="image/x-icon" href="images/logo-cocacola.jpg" />
         </f:facet>             
         <link rel="stylesheet" type="text/css" href="css/estilosGenerales.css"/>
@@ -46,17 +46,17 @@
                             <div style="text-align: center;   margin-left: -60px; " id="menuPrincipal">
                                 <ul class="main-nav">
                                     <li>
-                                        <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('welcome','','')}" update=":panelMain">
+                                        <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('welcome','','')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
                                             Home
                                         </p:commandLink>                                                                                                            
                                     </li>                                       
                                     <li>
-                                        <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('loadInformation','','share')}" update=":panelMain">
+                                        <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('loadInformation','','share')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
                                             <img src="images/BG9-05.png"/>Information Load
                                         </p:commandLink>                                                                                                                                                                                                                                                            
                                     </li>                                       
                                     <li>
-                                        <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('uploadStatus','','share')}" update=":panelMain">
+                                        <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('uploadStatus','','share')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
                                             <img src="images/BG9-06.png"/>
                                             Upload Status
                                         </p:commandLink>                                                                                                  
@@ -69,22 +69,22 @@
                                             </a>
                                             <ul class="main-nav__submenu">
                                                 <li>
-                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','country','share')}" update=":panelMain">
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','country','share')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
                                                         <span><img src="images/BG9-12.png"/>Country</span>
                                                     </p:commandLink> 
                                                 </li>                                                
                                                 <li>
-                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','category','share')}" update=":panelMain">
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','category','share')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
                                                         <span><img src="images/BG9-17.png"/>Category</span>
                                                     </p:commandLink> 
                                                 </li>                                                
                                                 <li>
-                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','group','share')}" update=":panelMain">
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','group','share')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
                                                         <span><img src="images/BG9-11.png"/>Group Category</span>
                                                     </p:commandLink> 
                                                 </li>                                                
                                                 <li>
-                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','manufacturer','share')}" update=":panelMain">
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','manufacturer','share')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
                                                         <span><img src="images/BG9-12.png"/>Manufacturer</span>
                                                     </p:commandLink> 
                                                 </li>                                                                                            
@@ -99,12 +99,12 @@
                                             </a>
                                             <ul class="main-nav__submenu">
                                                 <li>
-                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('adminUsers','','admin')}" update=":panelMain">
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('adminUsers','','admin')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
                                                         <span><img src="images/BG9-10.png"/>Catalog Users</span>
                                                     </p:commandLink>
                                                 </li>
                                                 <li>
-                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('scripts','','share')}" update=":panelMain">
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('scripts','','share')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
                                                         <span><img src="images/BG9-15.png"/>Scripts</span>
                                                     </p:commandLink>
                                                 </li>                                            
@@ -141,13 +141,18 @@
                                                 <p:menuitem value="OPERATIVE DAYS" icon="ui-icon-plus" action="#{mainBean.setPage('reclassification_catalogs','reclassificationOperativeDaily','daily')}" update=":panelMain"/>                                                
                                                 <p:menuitem value="TRADEMARK" icon="ui-icon-plus" action="#{mainBean.setPage('reclassification_catalogs','reclassificationTrademarkDaily','daily')}" update=":panelMain"/>                                                
                                             </p:submenu>
-                                            <p:menuitem value="Information Load" icon="ui-icon-arrowreturnthick-1-n" action="#{mainBean.setPage('loadInformation','','daily')}" update=":panelMain"/>                          
+                                            <p:submenu label="Information Load" icon="ui-icon-arrowreturnthick-1-n" rendered="true">
+                                                <p:menuitem value="Rolling" icon="ui-icon-arrowreturnthick-1-n" action="#{mainBean.setPage('loadInformation','rollingDaily','daily')}" update=":panelMain"/>
+                                                <p:menuitem value="Operative Days" icon="ui-icon-arrowreturnthick-1-n" action="#{mainBean.setPage('loadInformation','opDaysPhiDaily','daily')}" update=":panelMain"/>
+                                                <p:menuitem value="Sales" icon="ui-icon-arrowreturnthick-1-n" action="#{mainBean.setPage('loadInformation','salesPhiDaily','daily')}" update=":panelMain"/>
+                                            </p:submenu> 
+                                            <p:menuitem value="Upload Status" icon="ui-icon-arrowreturnthick-1-n" action="#{mainBean.setPage('uploadStatus','','daily')}" update=":panelMain"/>
                                         </p:slideMenu>
                                     </h:form>
 
                                 </p:panel>
                             </div>
-                        </div>	
+                        </div>
                     </div>
                     <div class="ui-grid-col-9" >
                         <ui:include src="#{mainBean.page}" id="workSpace"/>
@@ -181,7 +186,7 @@
                     </h:panelGrid>                    
                 </p:outputPanel>
             </p:overlayPanel>
-        </h:form>       
+        </h:form>
     </h:body>
 </html>
 

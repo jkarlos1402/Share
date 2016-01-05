@@ -37,7 +37,7 @@ public class ScriptAnalizer {
                     for (String instruction : instructions) {
 //                        System.out.println("instruccion: "+instruction);
                         queryNativo = session.createSQLQuery(instruction);
-                        queryNativo.executeUpdate();
+                        queryNativo.executeUpdate();                        
                     }
                 }
             }            

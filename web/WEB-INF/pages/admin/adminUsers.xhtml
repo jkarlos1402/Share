@@ -15,12 +15,12 @@
                 <p:growl id="msgsCat" showDetail="true"/>
                 <p:messages showDetail="true" closable="true"/>
                 <p:panel id="panelUsers" header="Users">
-                    <h:panelGrid columns="6" cellpadding="5px" >                        
+                    <h:panelGrid columns="6" cellpadding="5px">                        
                         <p:outputLabel for="userLogin" value="User:" />
                         <p:inputText id="userLogin" required="true" value="#{userBean.usuarioNuevo.usuario}" maxlength="15"/>
 
                         <p:outputLabel for="passLogin" value="Password:" />                                               
-                        <p:inputText id="passLogin" value="#{userBean.usuarioNuevo.password}"  required="true" label="Password" maxlength="80"/>                     
+                        <p:inputText id="passLogin" value="#{userBean.usuarioNuevo.password}" type="password"  required="true" label="Password" maxlength="80"/>                     
 
                         <p:outputLabel for="userName" value="Name:" />
                         <p:inputText id="userName" required="true" value="#{userBean.usuarioNuevo.nombre}" maxlength="60"/>
@@ -41,8 +41,8 @@
                         <p:outputLabel for="userPaises" value="Countries:" />
                         <p:pickList id="userPaises" value="#{userBean.paisesAll}" var="countrieUser" itemLabel="#{countrieUser}" itemValue="#{countrieUser}" converter="countryConverter"/>
 
-                        <p:outputLabel for="userStatus" value="Status:" />
-                        <p:selectOneRadio id="userStatus" layout="pageDirection" required="true" value="#{userBean.usuarioNuevo.estatus}">
+                        <p:outputLabel for="userStatus" value="Status:" rendered="#{userBean.usuarioNuevo ne null and mainBean.usuario.equals(userBean.usuarioNuevo) ? false : true}" />
+                        <p:selectOneRadio id="userStatus" layout="pageDirection" required="true" value="#{userBean.usuarioNuevo.estatus}" rendered="#{userBean.usuarioNuevo ne null and mainBean.usuario.equals(userBean.usuarioNuevo) ? false : true}">
                             <f:selectItem itemLabel="Enable" itemValue="true" />
                             <f:selectItem itemLabel="Disable" itemValue="false" />                            
                         </p:selectOneRadio>
