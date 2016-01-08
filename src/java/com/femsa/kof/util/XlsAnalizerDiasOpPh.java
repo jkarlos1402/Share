@@ -82,8 +82,7 @@ public class XlsAnalizerDiasOpPh {
                 rowIterator = sheet.iterator();
                 if (i == 0) {
                     cargasDiasPh = this.analizeSheetDiasOp(rowIterator, catPais, usuario, sheet.getSheetName());
-                    if (cargasDiasPh != null) {
-                        System.out.println(cargasDiasPh.size());
+                    if (cargasDiasPh != null) {                        
                         loadedSheets.add(sheet.getSheetName().trim().toUpperCase());
                     } else {
                         omittedSheets.add(sheet.getSheetName().trim().toUpperCase() + ", One or more cells are incorrect");

@@ -1,9 +1,10 @@
 package com.femsa.kof.util;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Record {
-    private Integer numEntriesSaved = 0;
+public class Record implements Serializable{
+    private long numEntriesSaved = 0;
     private Date dateExecution;
     private Date dateEndExecution;
     private String nameFile;
@@ -35,11 +36,11 @@ public class Record {
         this.fecha = fecha;
     }
 
-    public Integer getNumEntriesSaved() {
+    public long getNumEntriesSaved() {
         return numEntriesSaved;
     }
 
-    public void setNumEntriesSaved(Integer numEntriesSaved) {
+    public void setNumEntriesSaved(long numEntriesSaved) {
         this.numEntriesSaved = numEntriesSaved;
     }
 

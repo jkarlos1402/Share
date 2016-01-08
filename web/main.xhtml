@@ -160,7 +160,7 @@
                 </div>
             </div>
         </p:outputPanel>
-        <p:ajaxStatus style="position: fixed;display:block;bottom:100px;right: 20px;height:24px;" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()">            
+        <p:ajaxStatus style="position: fixed;display:block;bottom:100px;right: 20px;height:24px;" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide();" oncomplete="hideAsteriscos();">            
         </p:ajaxStatus>
         <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
             <p style="font-size:14px; text-align: center;">

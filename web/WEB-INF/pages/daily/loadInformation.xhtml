@@ -184,15 +184,16 @@
                         <p:messages showDetail="true" closable="true"/>
 
                         <p:fileUpload fileUploadListener="#{dailyLoadBean.handleFileUploadSalesPH}" mode="advanced" dragDropSupport="true" 
-                                      update="messagesLoadSalesPhi,panelLoadSalesPhi" sizeLimit="10000000" fileLimit="1" allowTypes="/(\.|\/)(xls|xlsx|XLS|XLSX)$/" 
-                                      onstart="handleResponse(1)" oncomplete="handleResponse(2)"/>
+                                      update="messagesLoadSalesPhi,panelLoadSalesPhi" sizeLimit="100000000" fileLimit="1" allowTypes="/(\.|\/)(xls|xlsx|XLS|XLSX)$/" 
+                                      onstart="handleResponse(1)" oncomplete="handleResponse(2)"
+                                      value="#{dailyLoadBean.fileUploaded}"/>
                         <p:separator />
                         <h3>Resume</h3>
                         <p:panel>
                             <h:panelGrid columns="2">
-                                <h:outputText value="No records found." rendered="#{dailyLoadBean.listInfoPh eq null ? true : false}"/>
-                                <h:outputText value="Records found: " rendered="#{dailyLoadBean.listInfoPh.size() ge 0 ? true : false}"/>
-                                <h:outputText value="#{dailyLoadBean.listInfoPh.size()}" rendered="#{dailyLoadBean.listInfoPh.size() ge 0 ? true : false}"/>                                
+                                <h:outputText value="No records found." rendered="#{dailyLoadBean.numRegistros == 0 ? true : false}"/>
+                                <h:outputText value="Records found: " rendered="#{dailyLoadBean.numRegistros > 0 ? true : false}"/>
+                                <h:outputText value="#{dailyLoadBean.numRegistros}" rendered="#{dailyLoadBean.numRegistros > 0 ? true : false}"/>                                
                             </h:panelGrid>
                         </p:panel>
                         <p:panel>
@@ -218,7 +219,7 @@
                             </h:panelGrid>
                         </p:panel>
                         <f:facet name="footer">
-                            <p:commandButton value="Save" actionListener="#{dailyLoadBean.saveInfoPh}" update=":formLoadSalesPhi" rendered="#{dailyLoadBean.listInfoPh.size() > 0 ? true : false}">
+                            <p:commandButton value="Save" actionListener="#{dailyLoadBean.saveInfoPh}" update=":formLoadSalesPhi" rendered="#{dailyLoadBean.numRegistros > 0 ? true : false}">
                                 <p:confirm message="Are you sure?" header="Save records"/>
                             </p:commandButton>                        
                         </f:facet>
