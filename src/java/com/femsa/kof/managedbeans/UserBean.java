@@ -1,9 +1,11 @@
 package com.femsa.kof.managedbeans;
 
 import com.femsa.kof.share.dao.ShareCatPaisDAO;
+import com.femsa.kof.share.dao.ShareCatProyectoDAO;
 import com.femsa.kof.share.dao.ShareCatRolDAO;
 import com.femsa.kof.share.dao.ShareUsuarioDAO;
 import com.femsa.kof.share.pojos.ShareCatPais;
+import com.femsa.kof.share.pojos.ShareCatProyecto;
 import com.femsa.kof.share.pojos.ShareCatRol;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import com.femsa.kof.util.EncrypterKOF;
@@ -35,14 +37,34 @@ public class UserBean implements Serializable {
     private List<ShareCatRol> catRoles = new ArrayList<ShareCatRol>();
     private ShareCatRol rolSelected;
 
+    private List<ShareCatProyecto> catProyectos = new ArrayList<ShareCatProyecto>();
+    private ShareCatProyecto proyectoSelected;
+
     public UserBean() {
         ShareCatRolDAO rolDAO = new ShareCatRolDAO();
         ShareCatPaisDAO paisDAO = new ShareCatPaisDAO();
         catRoles = rolDAO.getCatRol();
         List<ShareCatPais> sourcePais = paisDAO.getCatPais();
         List<ShareCatPais> targetPais = new ArrayList<ShareCatPais>();
-
+        ShareCatProyectoDAO proyectoDAO = new ShareCatProyectoDAO();
+        catProyectos = proyectoDAO.getCatProyectos();
         paisesAll = new DualListModel<ShareCatPais>(sourcePais, targetPais);
+    }
+
+    public List<ShareCatProyecto> getCatProyectos() {
+        return catProyectos;
+    }
+
+    public void setCatProyectos(List<ShareCatProyecto> catProyectos) {
+        this.catProyectos = catProyectos;
+    }
+
+    public ShareCatProyecto getProyectoSelected() {
+        return proyectoSelected;
+    }
+
+    public void setProyectoSelected(ShareCatProyecto proyectoSelected) {
+        this.proyectoSelected = proyectoSelected;
     }
 
     public DualListModel<ShareCatPais> getPaisesAll() {
@@ -126,11 +148,11 @@ public class UserBean implements Serializable {
         this.usuariosAll = usuariosAll;
     }
 
-    public String logIn() {        
+    public String logIn() {
         ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();
         EncrypterKOF encrypterKOF = new EncrypterKOF();
         String passEnc = encrypterKOF.encrypt(password);
-        ShareUsuario usuario = usuarioDAO.getUsuario(user, passEnc);              
+        ShareUsuario usuario = usuarioDAO.getUsuario(user, passEnc);
         if (usuario != null) {
             HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             httpSession.setAttribute("session_user", usuario);
@@ -142,7 +164,7 @@ public class UserBean implements Serializable {
         }
     }
 
-    public String logout() {        
+    public String logout() {
         HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         if (httpSession != null) {
             httpSession.invalidate();
@@ -158,10 +180,16 @@ public class UserBean implements Serializable {
         } else {
             usuarioNuevo.getPaises().clear();
         }
+        if (usuarioNuevo.getProyectos() == null) {
+            usuarioNuevo.setProyectos(new ArrayList<ShareCatProyecto>());
+        } else {
+            usuarioNuevo.getProyectos().clear();
+        }
         for (int i = 0; i < paisesAll.getTarget().size(); i++) {
             usuarioNuevo.getPaises().add(paisesAll.getTarget().get(i));
         }
         usuarioNuevo.setPassword(usuarioNuevo.getPassword());
+        usuarioNuevo.getProyectos().add(proyectoSelected);
         if (usuarioDAO.saveUser(usuarioNuevo)) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "User saved");
         } else {
@@ -178,6 +206,7 @@ public class UserBean implements Serializable {
             paisesAll.getSource().add(paisesAll.getTarget().get(i));
         }
         paisesAll.getTarget().clear();
+        proyectoSelected = null;
     }
 
     public void selectUser() {
@@ -190,6 +219,7 @@ public class UserBean implements Serializable {
         usuarioNuevo.setUsuario(usuarioSelected.getUsuario());
         usuarioNuevo.setPaises(usuarioSelected.getPaises());
         usuarioNuevo.setPais(usuarioSelected.getPais());
+        usuarioNuevo.setProyectos(usuarioSelected.getProyectos());
         paisesAll.getTarget().clear();
         if (usuarioSelected.getPaises() != null && usuarioSelected.getPaises().size() > 0) {
             Object[] paisesT = usuarioSelected.getPaises().toArray();
@@ -197,6 +227,9 @@ public class UserBean implements Serializable {
                 paisesAll.getTarget().add((ShareCatPais) paisesT[i]);
                 paisesAll.getSource().remove((ShareCatPais) paisesT[i]);
             }
+        }
+        if (usuarioSelected.getProyectos() != null && usuarioSelected.getProyectos().size() > 0) {
+            proyectoSelected = usuarioSelected.getProyectos().get(0);
         }
     }
 }

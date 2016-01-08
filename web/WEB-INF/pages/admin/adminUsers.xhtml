@@ -14,7 +14,7 @@
             <h:form id="formUsers">
                 <p:growl id="msgsCat" showDetail="true"/>
                 <p:messages showDetail="true" closable="true"/>
-                <p:panel id="panelUsers" header="Users">
+                <p:panel id="panelUsers" header="User Catalog">
                     <h:panelGrid columns="6" cellpadding="5px">                        
                         <p:outputLabel for="userLogin" value="User:" />
                         <p:inputText id="userLogin" required="true" value="#{userBean.usuarioNuevo.usuario}" maxlength="15"/>
@@ -36,6 +36,12 @@
 
                         <p:outputLabel for="userPaisOrigen" value="Country:" />
                         <p:inputText id="userPaisOrigen" required="true" value="#{userBean.usuarioNuevo.pais}" maxlength="20"/>
+                        
+                        <p:outputLabel for="userProy" value="Project:" />
+                        <p:selectOneMenu id="userProy" immediate="true" value="#{userBean.proyectoSelected}" style="width:125px" converter="proyectoConverter" required="true" label="Project">
+                            <f:selectItem itemLabel="Select One" itemValue="" />
+                            <f:selectItems value="#{userBean.catProyectos}" />                             
+                        </p:selectOneMenu>
                     </h:panelGrid>
                     <h:panelGrid columns="4" cellpadding="5px">
                         <p:outputLabel for="userPaises" value="Countries:" />

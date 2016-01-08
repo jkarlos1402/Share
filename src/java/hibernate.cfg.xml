@@ -53,6 +53,7 @@
         <mapping class="com.femsa.kof.share.pojos.ShareCatStatus"/>
         <mapping class="com.femsa.kof.share.pojos.ShareUsuario"/>
         <mapping class="com.femsa.kof.share.pojos.ShareTmpAllInfoCarga"/>
+        <mapping class="com.femsa.kof.share.pojos.ShareCatProyecto"/>
         <mapping class="com.femsa.kof.daily.pojos.RvvdCatCanal"/>
         <mapping class="com.femsa.kof.daily.pojos.RvvdCatCategoria"/>
         <mapping class="com.femsa.kof.daily.pojos.RvvdCatCategoriaOficial"/>

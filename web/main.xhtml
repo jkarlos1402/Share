@@ -49,30 +49,27 @@
                                         <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('welcome','','')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
                                             Home
                                         </p:commandLink>                                                                                                            
-                                    </li>                                       
-                                    <li>
-                                        <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('loadInformation','','share')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                            <img src="images/BG9-05.png"/>Information Load
-                                        </p:commandLink>                                                                                                                                                                                                                                                            
-                                    </li>                                       
-                                    <li>
-                                        <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('uploadStatus','','share')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                            <img src="images/BG9-06.png"/>
-                                            Upload Status
-                                        </p:commandLink>                                                                                                  
-                                    </li>                                
+                                    </li> 
+                                    <h:panelGroup rendered="#{(mainBean.usuario.proyectos ne null and mainBean.usuario.proyectos.size() > 0 and mainBean.usuario.proyectos.get(0).idProyecto eq '1') or mainBean.usuario.rol.pkRol eq '1' ? true : false}">
+                                        <li>
+                                            <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('loadInformation','','share')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
+                                                <img src="images/BG9-05.png"/>Information Load <font size="1">#{mainBean.usuario.rol.pkRol eq '1' ? '(SHARE)' : ''}</font>
+                                            </p:commandLink>                                                                                                                                                                                                                                                            
+                                        </li>                                       
+                                        <li>
+                                            <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('uploadStatus','','share')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
+                                                <img src="images/BG9-06.png"/>
+                                                Upload Status <font size="1">#{mainBean.usuario.rol.pkRol eq '1' ? '(SHARE)' : ''}</font>
+                                            </p:commandLink>                                                                                                  
+                                        </li> 
+                                    </h:panelGroup>                                                                   
                                     <h:panelGroup rendered="#{mainBean.usuario.rol.pkRol eq '1' ? true : false}">
                                         <li class="main-nav--collapsible">
                                             <a class="main-nav__link" href="#" onclick="return false;">
                                                 <img src="images/BG9-08.png"/>
-                                                Catalogs
+                                                Catalogs <font size="1">(SHARE)</font>
                                             </a>
-                                            <ul class="main-nav__submenu">
-                                                <li>
-                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','country','share')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                                        <span><img src="images/BG9-12.png"/>Country</span>
-                                                    </p:commandLink> 
-                                                </li>                                                
+                                            <ul class="main-nav__submenu">                                                                                                
                                                 <li>
                                                     <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','category','share')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
                                                         <span><img src="images/BG9-17.png"/>Category</span>
@@ -90,7 +87,128 @@
                                                 </li>                                                                                            
                                             </ul>
                                         </li>
-                                    </h:panelGroup>
+                                    </h:panelGroup>                                     
+                                    <h:panelGroup rendered="#{(mainBean.usuario.proyectos ne null and mainBean.usuario.proyectos.size() > 0 and mainBean.usuario.proyectos.get(0).idProyecto eq '2') or mainBean.usuario.rol.pkRol eq '1' ? true : false}">
+                                        <li class="main-nav--collapsible">
+                                            <a class="main-nav__link" href="#" onclick="return false;">
+                                                <img src="images/BG9-05.png"/> Information Load <font size="1">#{mainBean.usuario.rol.pkRol eq '1' ? '(DAILY DASHBOARD)' : ''}</font>
+                                            </a>
+                                            <ul class="main-nav__submenu">
+                                                <li>
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('loadInformation','rollingDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
+                                                        <span><img src="images/BG9-05.png"/>Rolling</span>
+                                                    </p:commandLink>
+                                                </li>
+                                                <h:panelGroup rendered="#{mainBean.usuario.haveCountry('PHI') or mainBean.usuario.rol.pkRol eq '1' ? true : false}">
+                                                    <li>
+                                                        <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('loadInformation','opDaysPhiDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
+                                                            <span><img src="images/BG9-05.png"/>Operative Days</span>
+                                                        </p:commandLink>
+                                                    </li>                                            
+                                                    <li>
+                                                        <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('loadInformation','salesPhiDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
+                                                            <span><img src="images/BG9-05.png"/>Sales</span>
+                                                        </p:commandLink>
+                                                    </li> 
+                                                </h:panelGroup>                                                                                           
+                                            </ul>                                                                                                                                                                                                                                                                                                        
+                                        </li>
+                                        <li>
+                                            <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('uploadStatus','','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
+                                                <img src="images/BG9-06.png"/>
+                                                Upload Status <font size="1">#{mainBean.usuario.rol.pkRol eq '1' ? '(DAILY DASHBOARD)' : ''}</font>
+                                            </p:commandLink>                                                                                                  
+                                        </li>
+                                        <li class="main-nav--collapsible">
+                                            <a class="main-nav__link" href="#" onclick="return false;">
+                                                <img src="images/BG9-05.png"/> Reclassification
+                                            </a>
+                                            <ul class="main-nav__submenu">
+                                                <li>
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('reclassification_catalogs','reclassificationCategoryDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
+                                                        <span><img src="images/BG9-17.png"/>Category</span>
+                                                    </p:commandLink>
+                                                </li>
+                                                <li>
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('reclassification_catalogs','reclassificationChannelDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
+                                                        <span><img src="images/BG9-17.png"/>Channel</span>
+                                                    </p:commandLink>
+                                                </li>                                            
+                                                <li>
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('reclassification_catalogs','reclassificationPackingDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
+                                                        <span><img src="images/BG9-17.png"/>Packing</span>
+                                                    </p:commandLink>
+                                                </li>                                            
+                                                <li>
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('reclassification_catalogs','reclassificationGecDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
+                                                        <span><img src="images/BG9-17.png"/>GEC</span>
+                                                    </p:commandLink>
+                                                </li>
+                                                <li>
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('reclassification_catalogs','reclassificationOperativeDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
+                                                        <span><img src="images/BG9-17.png"/>Operative Days</span>
+                                                    </p:commandLink>
+                                                </li>                                            
+                                                <li>
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('reclassification_catalogs','reclassificationTrademarkDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
+                                                        <span><img src="images/BG9-17.png"/>Trademark</span>
+                                                    </p:commandLink>
+                                                </li>                                            
+                                            </ul>                                                                                                                                                                                                                                                                                                        
+                                        </li>                                                                                
+                                        <li class="main-nav--collapsible">
+                                            <a class="main-nav__link" href="#" onclick="return false;">
+                                                <img src="images/BG9-08.png"/> Catalogs <font size="1">#{mainBean.usuario.rol.pkRol eq '1' ? '(DAILY DASHBOARD)' : ''}</font>
+                                            </a>
+                                            <ul class="main-nav__submenu">
+                                                <li>
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','officialCategoryDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
+                                                        <span><img src="images/BG9-17.png"/>Official Category</span>
+                                                    </p:commandLink>
+                                                </li>
+                                                <li>
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','categoryDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
+                                                        <span><img src="images/BG9-17.png"/>Category</span>
+                                                    </p:commandLink>
+                                                </li>                                            
+                                                <li>
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','channelDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
+                                                        <span><img src="images/BG9-17.png"/>Channel</span>
+                                                    </p:commandLink>
+                                                </li>                                            
+                                                <li>
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','consumptionDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
+                                                        <span><img src="images/BG9-17.png"/>Type of Consumption</span>
+                                                    </p:commandLink>
+                                                </li>
+                                                <li>
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','packingDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
+                                                        <span><img src="images/BG9-17.png"/>Packing</span>
+                                                    </p:commandLink>
+                                                </li>                                            
+                                                <li>
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','trademarkDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
+                                                        <span><img src="images/BG9-17.png"/>Trademark</span>
+                                                    </p:commandLink>
+                                                </li>                                            
+                                                <li>
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','calorieDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
+                                                        <span><img src="images/BG9-17.png"/>Calorie</span>
+                                                    </p:commandLink>
+                                                </li>                                            
+                                                <li>
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','gecDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
+                                                        <span><img src="images/BG9-17.png"/>GEC</span>
+                                                    </p:commandLink>
+                                                </li>                                            
+                                                <li>
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','bussinessUnitDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
+                                                        <span><img src="images/BG9-17.png"/>Bussiness unit</span>
+                                                    </p:commandLink>
+                                                </li>                                            
+                                            </ul>                                                                                                                                                                                                                                                                                                        
+                                        </li>                                                                                
+                                    </h:panelGroup> 
                                     <h:panelGroup rendered="#{mainBean.usuario.rol.pkRol eq '1' ? true : false}">
                                         <li class="main-nav--collapsible">
                                             <a class="main-nav__link" href="#" onclick="return false;">
@@ -100,8 +218,13 @@
                                             <ul class="main-nav__submenu">
                                                 <li>
                                                     <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('adminUsers','','admin')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                                        <span><img src="images/BG9-10.png"/>Catalog Users</span>
+                                                        <span><img src="images/BG9-10.png"/>User catalog</span>
                                                     </p:commandLink>
+                                                </li>
+                                                <li>
+                                                    <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','country','share')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
+                                                        <span><img src="images/BG9-12.png"/>Country catalog</span>
+                                                    </p:commandLink> 
                                                 </li>
                                                 <li>
                                                     <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('scripts','','share')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
@@ -110,49 +233,13 @@
                                                 </li>                                            
                                             </ul>
                                         </li>
-                                    </h:panelGroup>                                	
+                                    </h:panelGroup>
                                     <footer class="logosit"><img src="images/footer_kof.png" />
                                     </footer>						
                                 </ul>
                             </div>
                         </h:form>                        
-                        <!-- MENU fin -->
-                        <div class="ui-grid-row">
-                            <div class="ui-grid-col-12"  style="padding-top: 0px;">
-                                <p:panel style="background-color: rgba(0, 0, 0, 0.3); border-style: none; text-align: center;   margin-left: -60px;  margin-top: 0px;">                                    
-                                    <h:form>
-                                        <p:slideMenu style="width:auto; margin-left:4px; font-size:14px;">                                                                                   
-                                            <p:submenu label="Catalogs" icon="ui-icon-newwin" rendered="true">
-                                                <p:menuitem value="OFFICIAL CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','officialCategoryDaily','daily')}" update=":panelMain"/>
-                                                <p:menuitem value="CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','categoryDaily','daily')}" update=":panelMain"/>                                                
-                                                <p:menuitem value="CHANNEL" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','channelDaily','daily')}" update=":panelMain"/>                                                
-                                                <p:menuitem value="TYPE OF CONSUMPTION" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','consumptionDaily','daily')}" update=":panelMain"/>                                                
-                                                <p:menuitem value="PACKING" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','packingDaily','daily')}" update=":panelMain"/>                                                
-                                                <p:menuitem value="TRADEMARK" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','trademarkDaily','daily')}" update=":panelMain"/>                                                
-                                                <p:menuitem value="CALORIE" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','calorieDaily','daily')}" update=":panelMain"/>                                                
-                                                <p:menuitem value="GEC" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','gecDaily','daily')}" update=":panelMain"/>                                                
-                                                <p:menuitem value="BUSSINESS UNIT" icon="ui-icon-plus" action="#{mainBean.setPage('catalogs','bussinessUnitDaily','daily')}" update=":panelMain"/>                                                
-                                            </p:submenu>
-                                            <p:submenu label="Reclassification" icon="ui-icon-newwin" rendered="true">                                                
-                                                <p:menuitem value="CATEGORY" icon="ui-icon-plus" action="#{mainBean.setPage('reclassification_catalogs','reclassificationCategoryDaily','daily')}" update=":panelMain"/>                                                
-                                                <p:menuitem value="CHANNEL" icon="ui-icon-plus" action="#{mainBean.setPage('reclassification_catalogs','reclassificationChannelDaily','daily')}" update=":panelMain"/>                                                
-                                                <p:menuitem value="PACKING" icon="ui-icon-plus" action="#{mainBean.setPage('reclassification_catalogs','reclassificationPackingDaily','daily')}" update=":panelMain"/>                                                
-                                                <p:menuitem value="GEC" icon="ui-icon-plus" action="#{mainBean.setPage('reclassification_catalogs','reclassificationGecDaily','daily')}" update=":panelMain"/>                                                
-                                                <p:menuitem value="OPERATIVE DAYS" icon="ui-icon-plus" action="#{mainBean.setPage('reclassification_catalogs','reclassificationOperativeDaily','daily')}" update=":panelMain"/>                                                
-                                                <p:menuitem value="TRADEMARK" icon="ui-icon-plus" action="#{mainBean.setPage('reclassification_catalogs','reclassificationTrademarkDaily','daily')}" update=":panelMain"/>                                                
-                                            </p:submenu>
-                                            <p:submenu label="Information Load" icon="ui-icon-arrowreturnthick-1-n" rendered="true">
-                                                <p:menuitem value="Rolling" icon="ui-icon-arrowreturnthick-1-n" action="#{mainBean.setPage('loadInformation','rollingDaily','daily')}" update=":panelMain"/>
-                                                <p:menuitem value="Operative Days" icon="ui-icon-arrowreturnthick-1-n" action="#{mainBean.setPage('loadInformation','opDaysPhiDaily','daily')}" update=":panelMain"/>
-                                                <p:menuitem value="Sales" icon="ui-icon-arrowreturnthick-1-n" action="#{mainBean.setPage('loadInformation','salesPhiDaily','daily')}" update=":panelMain"/>
-                                            </p:submenu> 
-                                            <p:menuitem value="Upload Status" icon="ui-icon-arrowreturnthick-1-n" action="#{mainBean.setPage('uploadStatus','','daily')}" update=":panelMain"/>
-                                        </p:slideMenu>
-                                    </h:form>
-
-                                </p:panel>
-                            </div>
-                        </div>
+                        <!-- MENU fin -->                        
                     </div>
                     <div class="ui-grid-col-9" >
                         <ui:include src="#{mainBean.page}" id="workSpace"/>

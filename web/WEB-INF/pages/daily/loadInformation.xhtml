@@ -15,7 +15,7 @@
         <ui:composition>
             <h1>Information Load</h1>
             <h:form id="formLoad" rendered="#{mainBean.catalog eq 'rollingDaily' ? true : false}">
-                <p:panel id="panelLoad">  
+                <p:panel id="panelLoad" header="Rolling">  
                     <p:growl id="messagesLoad" showDetail="true"/>
                     <h:panelGrid columns="1" cellspacing="5px" style="width: 100%;">
                         <p:messages showDetail="true" closable="true"/>
@@ -126,7 +126,7 @@
                 </p:confirmDialog>
             </h:form>            
             <h:form id="formLoadOpDaysPhi" rendered="#{mainBean.catalog eq 'opDaysPhiDaily' ? true : false}">
-                <p:panel id="panelLoadOpDaysPhi">  
+                <p:panel id="panelLoadOpDaysPhi" header="Operative Days">  
                     <p:growl id="messagesLoadOpDaysPhi" showDetail="true"/>
                     <h:panelGrid columns="1" cellspacing="5px" style="width: 100%;">
                         <p:messages showDetail="true" closable="true"/>
@@ -178,7 +178,7 @@
                 </p:confirmDialog>
             </h:form>            
             <h:form id="formLoadSalesPhi" rendered="#{mainBean.catalog eq 'salesPhiDaily' ? true : false}">
-                <p:panel id="panelLoadSalesPhi">  
+                <p:panel id="panelLoadSalesPhi" header="Sales">  
                     <p:growl id="messagesLoadSalesPhi" showDetail="true"/>
                     <h:panelGrid columns="1" cellspacing="5px" style="width: 100%;">
                         <p:messages showDetail="true" closable="true"/>

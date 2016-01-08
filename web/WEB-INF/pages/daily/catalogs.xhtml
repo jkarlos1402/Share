@@ -14,7 +14,7 @@
             <h:form id="formOfficialCategory" rendered="#{mainBean.catalog eq 'officialCategoryDaily' ? true : false}">
                 <p:growl id="msgsOfficialCategory" showDetail="true"/>
                 <p:messages showDetail="true" closable="true"/>
-                <p:panel header="Official categories catalog" id="panelOfficialCategory">                    
+                <p:panel header="Official category Catalog" id="panelOfficialCategory">                    
                     <h:panelGrid columns="4" cellpadding="5px" >
                         <p:outputLabel for="nameOfficialCateg" value="Offcial category:" />
                         <p:inputText id="nameOfficialCateg" required="true" value="#{dailyCatalogsBean.categoriaOficialNueva.categoriaOficial}" maxlength="60"/>
@@ -58,7 +58,7 @@
             <h:form id="formCategory" rendered="#{mainBean.catalog eq 'categoryDaily' ? true : false}">
                 <p:growl id="msgsCategory" showDetail="true"/>
                 <p:messages showDetail="true" closable="true"/>
-                <p:panel header="Categories catalog" id="panelCategory">                    
+                <p:panel header="Category catalog" id="panelCategory">                    
                     <h:panelGrid columns="4" cellpadding="5px" >
                         <p:outputLabel for="nameCateg" value="Category:" />
                         <p:inputText id="nameCateg" required="true" value="#{dailyCatalogsBean.categoriaNueva.categoria}" maxlength="60"/>
@@ -110,7 +110,7 @@
             <h:form id="formChannel" rendered="#{mainBean.catalog eq 'channelDaily' ? true : false}">
                 <p:growl id="msgsChannel" showDetail="true"/>
                 <p:messages showDetail="true" closable="true"/>
-                <p:panel header="Channels catalog" id="panelChannel">                    
+                <p:panel header="Channel catalog" id="panelChannel">                    
                     <h:panelGrid columns="4" cellpadding="5px" >
                         <p:outputLabel for="nameChannel" value="Channel:" />
                         <p:inputText id="nameChannel" required="true" value="#{dailyCatalogsBean.canalNuevo.canalR}" maxlength="60"/>
@@ -154,7 +154,7 @@
             <h:form id="formConsumption" rendered="#{mainBean.catalog eq 'consumptionDaily' ? true : false}">
                 <p:growl id="msgsConsumption" showDetail="true"/>
                 <p:messages showDetail="true" closable="true"/>
-                <p:panel header="Types of Consumption catalog" id="panelConsumption">                    
+                <p:panel header="Type of Consumption catalog" id="panelConsumption">                    
                     <h:panelGrid columns="4" cellpadding="5px" >
                         <p:outputLabel for="nameConsumption" value="Type of Consumption:" />
                         <p:inputText id="nameConsumption" required="true" value="#{dailyCatalogsBean.tipoConsumoNuevo.tipoConsumoR}" maxlength="60"/>
@@ -330,7 +330,7 @@
             <h:form id="formGec" rendered="#{mainBean.catalog eq 'gecDaily' ? true : false}">
                 <p:growl id="msgsGec" showDetail="true"/>
                 <p:messages showDetail="true" closable="true"/>
-                <p:panel header="Gecs catalog" id="panelGec">                    
+                <p:panel header="Gec Catalog" id="panelGec">                    
                     <h:panelGrid columns="4" cellpadding="5px" >
                         <p:outputLabel for="nameGec" value="Gec:" />
                         <p:inputText id="nameGec" required="true" value="#{dailyCatalogsBean.gecNuevo.gecR}" maxlength="255"/>

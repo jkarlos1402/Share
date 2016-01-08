@@ -14,7 +14,7 @@
             <h:form id="formPais" rendered="#{mainBean.catalog eq 'country' ? true : false}">
                 <p:growl id="msgsCat" showDetail="true"/>
                 <p:messages showDetail="true" closable="true"/>
-                <p:panel header="Countries catalog" id="panelPais">                    
+                <p:panel header="Country catalog" id="panelPais">                    
                     <h:panelGrid columns="4" cellpadding="5px" >
                         <p:outputLabel for="nameCountry" value="Name:" />
                         <p:inputText id="nameCountry" required="true" value="#{shareCatalogsBean.paisSelected.nombre}"/>

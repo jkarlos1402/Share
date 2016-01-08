@@ -61,6 +61,12 @@ public class ShareUsuario implements Serializable {
         @JoinColumn(name = "FK_USUARIO")}, inverseJoinColumns = {
         @JoinColumn(name = "FK_PAIS")})
     private List<ShareCatPais> paises = new ArrayList<ShareCatPais>();
+    
+    @ManyToMany(fetch = FetchType.EAGER)    
+    @JoinTable(name = "SHARE_USUARIO_PROYECTO", joinColumns = {
+        @JoinColumn(name = "ID_USER")}, inverseJoinColumns = {
+        @JoinColumn(name = "ID_PROYECTO")})
+    private List<ShareCatProyecto> proyectos = new ArrayList<ShareCatProyecto>();
 
     public ShareUsuario() {
     }
@@ -73,6 +79,14 @@ public class ShareUsuario implements Serializable {
         this.pkUsuario = pkUsuario;
         this.usuario = usuario;
         this.password = password;
+    }
+
+    public List<ShareCatProyecto> getProyectos() {
+        return proyectos;
+    }
+
+    public void setProyectos(List<ShareCatProyecto> proyectos) {
+        this.proyectos = proyectos;
     }
 
     public ShareCatRol getRol() {
@@ -174,4 +188,14 @@ public class ShareUsuario implements Serializable {
         return "ShareUsuario{" + "pkUsuario=" + pkUsuario + ", usuario=" + usuario + ", password=" + password + ", nombre=" + nombre + ", pais=" + pais + ", mail=" + mail + ", estatus=" + estatus + ", rol=" + rol + ", paises=" + paises + '}';
     }
    
+    public boolean haveCountry(String shortNameCountry){
+        if(paises != null){
+            for (ShareCatPais pais : paises) {
+                if(pais.getClaveCorta().equalsIgnoreCase(shortNameCountry)){
+                    return true;
+                }
+            }            
+        }
+        return false;
+    }
 }
