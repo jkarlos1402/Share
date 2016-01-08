@@ -287,8 +287,7 @@ public class DailyLoadBean implements Serializable {
 
     public void handleFileUploadSalesPH(FileUploadEvent event) {        
         FacesMessage message = null;
-        XlsAnalizerSalesPh analizer = new XlsAnalizerSalesPh();
-        System.out.println("aqui vamos");
+        XlsAnalizerSalesPh analizer = new XlsAnalizerSalesPh();        
         analizer.analizeXls(event.getFile(), countrySelected, usuario);
         uploadedFile = event.getFile();
         try {
@@ -382,34 +381,34 @@ public class DailyLoadBean implements Serializable {
     }
 
     public void saveInfoPh() {        
-//        Record record = new Record();
-//        record.setFecha(new Date());
-//        record.setNameFile(nameFile);
-//        record.setProcess("LOAD SALES PHILIPPINES");
-//        record.setDateExecution(new Date());
-//        record.setProject("DAILY DASHBOARD");
-//        FacesMessage message = null;
-//        XlsAnalizerSalesPh salesPh = new XlsAnalizerSalesPh();        
-//        if (salesPh.saveSheetInfoPh(uploadedFile,stream,numRegistros)) {
-//            record.setNumEntriesSaved(salesPh.getNumRegistros());
-//            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Records saved.");
-//        } else {
-//            String cadenaError = "";
-//            for (String error : errors) {
-//                cadenaError += error + ", ";
-//            }
-//            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "An error ocurred while saving records [" + cadenaError + "]");
-//        }
-//        omittedSheets.clear();
-//        loadedSheets.clear();
-//        errors.clear();
-//        countrySelected = null;
-//        numRegistros = 0L;
-//        FacesContext.getCurrentInstance().addMessage(null, message);
-//        record.setDateEndExecution(new Date());
-//        if (statusBean == null) {
-//            statusBean = new DailyUploadStatusBean();
-//        }
-//        statusBean.getCargasSession().add(record);
+        Record record = new Record();
+        record.setFecha(new Date());
+        record.setNameFile(nameFile);
+        record.setProcess("LOAD SALES PHILIPPINES");
+        record.setDateExecution(new Date());
+        record.setProject("DAILY DASHBOARD");
+        FacesMessage message = null;
+        XlsAnalizerSalesPh salesPh = new XlsAnalizerSalesPh();        
+        if (salesPh.saveSheetInfoPh(uploadedFile,stream,numRegistros)) {
+            record.setNumEntriesSaved(numRegistros);
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Records saved.");
+        } else {
+            String cadenaError = "";
+            for (String error : errors) {
+                cadenaError += error + ", ";
+            }
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "An error ocurred while saving records [" + cadenaError + "]");
+        }
+        omittedSheets.clear();
+        loadedSheets.clear();
+        errors.clear();
+        countrySelected = null;
+        numRegistros = 0L;
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        record.setDateEndExecution(new Date());
+        if (statusBean == null) {
+            statusBean = new DailyUploadStatusBean();
+        }
+        statusBean.getCargasSession().add(record);
     }
 }

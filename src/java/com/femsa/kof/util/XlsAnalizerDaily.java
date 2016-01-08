@@ -200,9 +200,13 @@ public class XlsAnalizerDaily {
                                     stRolling.setCategoriaOficialEn(categoriaOficialTemp.getCategoriaOficialEn());
                                     stRolling.setPais(catPais.getClaveCorta());
                                     stRolling.setDescPais(descPais);
-                                    if(catPais.getClaveCorta().trim().equalsIgnoreCase("CAM")){
+                                    if (catPais.getClaveCorta().trim().equalsIgnoreCase("CAM")) {
                                         stRolling.setZona(zona);
+                                    } else {
+                                        stRolling.setZona("ROLLING");
                                     }
+                                    stRolling.setGec("ROLLING");
+                                    stRolling.setCategoria("ROLLING");
                                     stRolling.setRollingCu(cell.getNumericCellValue());
                                     rolling.addRolling(stRolling);
                                 } else if (diaOp != null && cabeceras.get(numCell).getNameColumn().equalsIgnoreCase("Others") && numRow > 0 && numCell > 0) {
@@ -215,9 +219,13 @@ public class XlsAnalizerDaily {
                                     stRolling.setCategoriaOficialEn("OTHERS");
                                     stRolling.setPais(catPais.getClaveCorta());
                                     stRolling.setDescPais(descPais);
-                                    if(catPais.getClaveCorta().trim().equalsIgnoreCase("CAM")){
+                                    if (catPais.getClaveCorta().trim().equalsIgnoreCase("CAM")) {
                                         stRolling.setZona(zona);
+                                    } else {
+                                        stRolling.setZona("ROLLING");
                                     }
+                                    stRolling.setGec("ROLLING");
+                                    stRolling.setCategoria("ROLLING");
                                     stRolling.setRollingCu(cell.getNumericCellValue());
                                     rolling.addRolling(stRolling);
                                 }
@@ -241,9 +249,13 @@ public class XlsAnalizerDaily {
                             stRolling.setCategoriaOficialEn(categoriaOficialTemp.getCategoriaOficialEn());
                             stRolling.setPais(catPais.getClaveCorta());
                             stRolling.setDescPais(descPais);
-                            if(catPais.getClaveCorta().equalsIgnoreCase("CAM")){
+                            if (catPais.getClaveCorta().trim().equalsIgnoreCase("CAM")) {
                                 stRolling.setZona(zona);
+                            } else {
+                                stRolling.setZona("ROLLING");
                             }
+                            stRolling.setGec("ROLLING");
+                            stRolling.setCategoria("ROLLING");
                             stRolling.setRollingCu(cell.getNumericCellValue());
                             rolling.addRolling(stRolling);
                         } else if (diaOp != null && cabeceras.get(numCell).getNameColumn().equalsIgnoreCase("Others") && numRow > 0 && numCell > 0) {
@@ -257,9 +269,13 @@ public class XlsAnalizerDaily {
                             stRolling.setCategoriaOficialEn("OTHERS");
                             stRolling.setPais(catPais.getClaveCorta());
                             stRolling.setDescPais(descPais);
-                            if(catPais.getClaveCorta().equalsIgnoreCase("CAM")){
+                            if (catPais.getClaveCorta().trim().equalsIgnoreCase("CAM")) {
                                 stRolling.setZona(zona);
+                            } else {
+                                stRolling.setZona("ROLLING");
                             }
+                            stRolling.setGec("ROLLING");
+                            stRolling.setCategoria("ROLLING");
                             stRolling.setRollingCu(cell.getNumericCellValue());
                             rolling.addRolling(stRolling);
                         }
@@ -307,7 +323,7 @@ public class XlsAnalizerDaily {
                     fecha = (long) cell.getNumericCellValue() + "";
                     try {
                         distribucionTemp.setFechaDestino(formatoDelTexto.parse(fecha));
-                    } catch (ParseException ex) {                        
+                    } catch (ParseException ex) {
                         cargas = null;
                         errors.add("Approximately " + Character.toString((char) (65 + cell.getColumnIndex())) + "" + (cell.getRowIndex() + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
                         break;

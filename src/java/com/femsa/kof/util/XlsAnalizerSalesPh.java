@@ -11,6 +11,7 @@ import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -23,6 +24,7 @@ import javax.xml.stream.XMLStreamReader;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
@@ -40,6 +42,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.hibernate.Session;
 import org.primefaces.model.UploadedFile;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public class XlsAnalizerSalesPh {
 
@@ -106,7 +109,7 @@ public class XlsAnalizerSalesPh {
             String extension = getExtension(file.getFileName());
             OPCPackage oPCPackage = null;
             oPCPackage = OPCPackage.open(file.getInputstream());
-            this.stringsTable = new ReadOnlySharedStringsTable(oPCPackage);
+            stringsTable = new ReadOnlySharedStringsTable(oPCPackage);
 
             XSSFReader xssfReader = new XSSFReader(oPCPackage);
             XMLInputFactory factory = XMLInputFactory.newInstance();
@@ -121,10 +124,10 @@ public class XlsAnalizerSalesPh {
                         if (xmlReader.isStartElement()) {
                             if (xmlReader.getLocalName().equals("sheetData")) {
                                 int attrs = xmlReader.getAttributeCount();
-                                for (int i = 0; i < attrs; i++) {
-                                    System.out.println(xmlReader.getAttributeName(i));
-                                    System.out.println(xmlReader.getAttributeValue(i));
-                                }
+//                                for (int i = 0; i < attrs; i++) {
+//                                    System.out.println(xmlReader.getAttributeName(i));
+//                                    System.out.println(xmlReader.getAttributeValue(i));
+//                                }
                                 break;
                             }
                         }
@@ -142,7 +145,7 @@ public class XlsAnalizerSalesPh {
                     omittedSheets.clear();
                     omittedSheets.add(sheetName.trim().toUpperCase() + ", not valid.");
                 }
-            }           
+            }
 
             if (oPCPackage != null) {
                 oPCPackage.close();
@@ -154,207 +157,62 @@ public class XlsAnalizerSalesPh {
         }
     }
 
-    public long analizeSheetInfoPh(Iterator<Row> rowIterator, ShareCatPais catPais, ShareUsuario usuario, String sheetName) {
-        long numRow = 0L;
-        Row row = null;
-        Cell cell = null;
-        while (rowIterator != null && rowIterator.hasNext()) {
-            System.out.println(numRow);
-            row = rowIterator.next();
-            cell = row.getCell(0);//primera columna FECHA (STRING O numeric)
-            if (cell == null || (cell.getCellType() != Cell.CELL_TYPE_STRING && cell.getCellType() != Cell.CELL_TYPE_NUMERIC)) {
-                errors.add("Approximately " + Character.toString((char) (65 + 0)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
-                numRow = 0L;
-                break;
-            }
-            cell = row.getCell(1);//segunda columna, string o nulo
-            if (cell != null && cell.getCellType() != Cell.CELL_TYPE_STRING) {
-                errors.add("Approximately " + Character.toString((char) (65 + 1)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
-                numRow = 0L;
-                break;
-            }
-            cell = row.getCell(2);//tercera columna, string
-            if (cell == null || cell.getCellType() != Cell.CELL_TYPE_STRING) {
-                errors.add("Approximately " + Character.toString((char) (65 + 2)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
-                numRow = 0L;
-                break;
-            }
-            cell = row.getCell(3);//cuarta columna, string o numeric
-            if (cell == null || (cell.getCellType() != Cell.CELL_TYPE_STRING && cell.getCellType() != Cell.CELL_TYPE_NUMERIC)) {
-                errors.add("Approximately " + Character.toString((char) (65 + 3)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
-                numRow = 0L;
-                break;
-            }
-            cell = row.getCell(4);//quinta columna, string o nulo
-            if (cell != null && cell.getCellType() != Cell.CELL_TYPE_STRING) {
-                errors.add("Approximately " + Character.toString((char) (65 + 4)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
-                numRow = 0L;
-                break;
-            }
-            cell = row.getCell(5);//sexta columna, string o nulo
-            if (cell != null && cell.getCellType() != Cell.CELL_TYPE_STRING) {
-                errors.add("Approximately " + Character.toString((char) (65 + 5)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
-                numRow = 0L;
-                break;
-            }
-            cell = row.getCell(6);//septima columna, string
-            if (cell == null || cell.getCellType() != Cell.CELL_TYPE_STRING) {
-                errors.add("Approximately " + Character.toString((char) (65 + 6)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
-                numRow = 0L;
-                break;
-            }
-            cell = row.getCell(7);//octaba columna, string
-            if (cell == null || cell.getCellType() != Cell.CELL_TYPE_STRING) {
-                errors.add("Approximately " + Character.toString((char) (65 + 7)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
-                numRow = 0L;
-                break;
-            }
-            cell = row.getCell(8);//novena columna, string o nulo
-            if (cell != null && cell.getCellType() != Cell.CELL_TYPE_STRING) {
-                errors.add("Approximately " + Character.toString((char) (65 + 8)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
-                numRow = 0L;
-                break;
-            }
-            cell = row.getCell(9);//decima columna, string o nulo
-            if (cell != null && cell.getCellType() != Cell.CELL_TYPE_STRING) {
-                errors.add("Approximately " + Character.toString((char) (65 + 9)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
-                numRow = 0L;
-                break;
-            }
-            cell = row.getCell(10);//onceaba columna, numeric
-            if (cell == null || cell.getCellType() != Cell.CELL_TYPE_NUMERIC) {
-                errors.add("Approximately " + Character.toString((char) (65 + 10)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
-                numRow = 0L;
-                break;
-            }
-            cell = row.getCell(11);//doceaba columna, numeric
-            if (cell == null || cell.getCellType() != Cell.CELL_TYPE_NUMERIC) {
-                errors.add("Approximately " + Character.toString((char) (65 + 11)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
-                numRow = 0L;
-                break;
-            }
-            cell = row.getCell(12);//treceaba columna, numeric
-            if (cell == null || cell.getCellType() != Cell.CELL_TYPE_NUMERIC) {
-                errors.add("Approximately " + Character.toString((char) (65 + 12)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
-                numRow = 0L;
-                break;
-            }
-            cell = row.getCell(13);//catorceaba columna, numeric
-            if (cell == null || cell.getCellType() != Cell.CELL_TYPE_NUMERIC) {
-                errors.add("Approximately " + Character.toString((char) (65 + 13)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
-                numRow = 0L;
-                break;
-            }
-            numRow++;
-        }
-        return numRow;
-    }
-
     public boolean saveSheetInfoPh(UploadedFile file, InputStream stream, long numRegistros) {
         boolean flagOk = true;
-        Workbook excelXLS = null;
-        RvvdInfoPhDAO infoPhDAO = new RvvdInfoPhDAO();
-        Session session = infoPhDAO.getSession();
         try {
-            String extension = getExtension(file.getFileName());
-            Iterator<Row> rowIterator = null;
-            if (extension.equalsIgnoreCase("xlsx")) {
-                excelXLS = new XSSFWorkbook(stream);
-            } else if (extension.equalsIgnoreCase("xls")) {
-                excelXLS = new HSSFWorkbook(stream);
-            }
-            int numberOfSheets = excelXLS.getNumberOfSheets();
-            Sheet sheet = excelXLS.getSheetAt(0);
-            rowIterator = sheet.iterator();
-            int numRow = 0;
-            List<RvvdInfoPh> cargas = new ArrayList<RvvdInfoPh>();
-            RvvdInfoPh infoTemp = null;
-            SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd/MM/yyyy");
-            SimpleDateFormat formatoDelTextoInverso = new SimpleDateFormat("yyyyMMdd");
-            String fecha = "";
-            session.beginTransaction();
-            Row row = null;
-            Cell cell = null;
-            while (rowIterator != null && rowIterator.hasNext()) {
-                row = rowIterator.next();
+            int numSheet = 0;
+            OPCPackage oPCPackage = null;
+            oPCPackage = OPCPackage.open(file.getInputstream());
+            stringsTable = new ReadOnlySharedStringsTable(oPCPackage);
 
-                cell = row.getCell(0);//primera columna FECHA (STRING O numeric)
-                infoTemp = new RvvdInfoPh();
-                try {
-                    infoTemp.setFecha(cell.getCellType() == Cell.CELL_TYPE_STRING ? formatoDelTexto.parse(cell.getStringCellValue().trim()) : cell.getDateCellValue());
-                } catch (ParseException ex) {
-                }
-
-                cell = row.getCell(1);//segunda columna, string o nulo
-                infoTemp.setZona(cell != null ? cell.getStringCellValue().trim().toUpperCase() : null);
-
-                cell = row.getCell(2);//tercera columna, string            
-                infoTemp.setCategoria(cell.getStringCellValue().trim().toUpperCase());
-
-                cell = row.getCell(3);//cuarta columna, string o numeric            
-                infoTemp.setUnidadDeNegocio(cell.getCellType() == Cell.CELL_TYPE_STRING ? cell.getStringCellValue().trim().toUpperCase() : cell.getNumericCellValue() + "");
-
-                cell = row.getCell(4);//quinta columna, string o nulo            
-                infoTemp.setGec(cell != null ? cell.getStringCellValue().trim().toUpperCase() : null);
-
-                cell = row.getCell(5);//sexta columna, string o nulo            
-                infoTemp.setCanal(cell != null ? cell.getStringCellValue().trim().toUpperCase() : null);
-
-                cell = row.getCell(6);//septima columna, string
-                infoTemp.setMarca(cell.getStringCellValue().trim().toUpperCase());
-
-                cell = row.getCell(7);//octaba columna, string            
-                infoTemp.setEmpaque(cell.getStringCellValue().trim().toUpperCase());
-
-                cell = row.getCell(8);//novena columna, string o nulo            
-                infoTemp.setRetornabilidad(cell != null ? cell.getStringCellValue().trim().toUpperCase() : null);
-
-                cell = row.getCell(9);//decima columna, string o nulo            
-                infoTemp.setTipoDeConsumo(cell != null ? cell.getStringCellValue().trim().toUpperCase() : null);
-
-                cell = row.getCell(10);//onceaba columna, numeric            
-                infoTemp.setVentaCu(cell.getNumericCellValue());
-
-                cell = row.getCell(11);//doceaba columna, numeric            
-                infoTemp.setIngresoNeto(cell.getNumericCellValue());
-
-                cell = row.getCell(12);//treceaba columna, numeric            
-                infoTemp.setCuota(cell.getNumericCellValue());
-
-                cell = row.getCell(13);//catorceaba columna, numeric            
-                infoTemp.setVentaTa(cell.getNumericCellValue());
-
-                infoTemp.setIdTiempo(new BigInteger(formatoDelTextoInverso.format(infoTemp.getFecha())));
-                cargas.add(infoTemp);
-                if (numRow % 10000 == 0 || numRow == (numRegistros - 1)) {
-                    for (RvvdInfoPh carga : cargas) {
-                        session.save(carga);
-                        if (numRow % 100 == 0) {
-                            session.flush();
-                            session.clear();
+            XSSFReader xssfReader = new XSSFReader(oPCPackage);
+            XMLInputFactory factory = XMLInputFactory.newInstance();
+            XSSFReader.SheetIterator iter = (XSSFReader.SheetIterator) xssfReader.getSheetsData();
+            while (iter.hasNext()) {
+                InputStream inputStream = iter.next();
+                sheetName = iter.getSheetName();
+                if (numSheet == 0) {
+                    xmlReader = factory.createXMLStreamReader(inputStream);
+                    while (xmlReader.hasNext()) {
+                        xmlReader.next();
+                        if (xmlReader.isStartElement()) {
+                            if (xmlReader.getLocalName().equals("sheetData")) {
+                                int attrs = xmlReader.getAttributeCount();
+//                                for (int i = 0; i < attrs; i++) {
+//                                    System.out.println(xmlReader.getAttributeName(i));
+//                                    System.out.println(xmlReader.getAttributeValue(i));
+//                                }
+                                break;
+                            }
                         }
                     }
-                    cargas.clear();
+                    if (saveRows(numRegistros)) {
+                        if (oPCPackage != null) {
+                            oPCPackage.close();
+                        }
+                    } else {
+                        if (oPCPackage != null) {
+                            oPCPackage.close();
+                        }
+                        flagOk = false;
+                    }
                 }
-                numRow++;
             }
-            session.getTransaction().commit();
-        } catch (Exception ex) {
+        } catch (InvalidFormatException ex) {
             ex.printStackTrace();
-            if (session.getTransaction().isActive()) {
-                session.getTransaction().rollback();
-            }
             flagOk = false;
-        } finally {
-            try {
-                file.getInputstream().close();
-                file = null;
-            } catch (IOException ex) {
-            }
-            session.flush();
-            session.clear();
-            session.close();
-            infoPhDAO.getHibernateUtil().closeSessionFactory();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            flagOk = false;
+        } catch (SAXException ex) {
+            ex.printStackTrace();
+            flagOk = false;
+        } catch (OpenXML4JException ex) {
+            ex.printStackTrace();
+            flagOk = false;
+        } catch (XMLStreamException ex) {
+            ex.printStackTrace();
+            flagOk = false;
         }
         return flagOk;
     }
@@ -403,7 +261,106 @@ public class XlsAnalizerSalesPh {
                     /////////////                    
                 }
             }
+        }                    
+    }
+
+    public boolean saveRows(long numRegistros) throws XMLStreamException {
+        errors.clear();       
+        boolean flagOk = true;
+        RvvdInfoPhDAO infoPhDAO = new RvvdInfoPhDAO();
+        Session session = infoPhDAO.getSession();
+        SimpleDateFormat formatoDelTexto = new SimpleDateFormat("MM/dd/yyyy");
+        SimpleDateFormat formatoDelTextoInverso = new SimpleDateFormat("yyyyMMdd");
+        List<RvvdInfoPh> cargas = new ArrayList<RvvdInfoPh>();
+        RvvdInfoPh infoTemp = null;
+        String elementName = "row";
+        String[] data = null;
+        rowNum = 0L;
+        try {
+            session.beginTransaction();
+            while (xmlReader.hasNext()) {
+                xmlReader.next();
+                if (xmlReader.isStartElement()) {
+                    if (xmlReader.getLocalName().equals(elementName)) {
+                        data = getDataRow();
+                        /////////////
+                        //primera columna FECHA (STRING O numeric)
+                        infoTemp = new RvvdInfoPh();
+                        try {
+
+                            infoTemp.setFecha(data[0] != null && data[0].contains("/") ? formatoDelTexto.parse(data[0]) : new Date(Long.parseLong(data[0])));
+                        } catch (ParseException ex) {
+                        }
+
+                        //segunda columna, string o nulo
+                        infoTemp.setZona(data[1] != null ? data[1].trim().toUpperCase() : null);
+
+                        //tercera columna, string            
+                        infoTemp.setCategoria(data[2] != null ? data[2].trim().toUpperCase() : null);
+
+                        //cuarta columna, string o numeric            
+                        infoTemp.setUnidadDeNegocio(data[3] != null ? data[3].trim().toUpperCase() : null);
+
+                        //quinta columna, string o nulo            
+                        infoTemp.setGec(data[4] != null ? data[4].trim().toUpperCase() : null);
+
+                        //sexta columna, string o nulo            
+                        infoTemp.setCanal(data[5] != null ? data[5].trim().toUpperCase() : null);
+
+                        //septima columna, string
+                        infoTemp.setMarca(data[6] != null ? data[6].trim().toUpperCase() : null);
+
+                        //octaba columna, string            
+                        infoTemp.setEmpaque(data[7] != null ? data[7].trim().toUpperCase() : null);
+
+                        //novena columna, string o nulo            
+                        infoTemp.setRetornabilidad(data[8] != null ? data[8].trim().toUpperCase() : null);
+
+                        //decima columna, string o nulo            
+                        infoTemp.setTipoDeConsumo(data[9] != null ? data[9].trim().toUpperCase() : null);
+
+                        //onceaba columna, numeric            
+                        infoTemp.setVentaCu(data[10] != null && !data[10].equals("") ? Double.parseDouble(data[10]) : 0L);
+                        //doceaba columna, numeric        
+                        infoTemp.setIngresoNeto(data[11] != null && !data[10].equals("") ? Double.parseDouble(data[11]) : 0L);
+                        //treceaba columna, numeric      
+                        infoTemp.setCuota(data[12] != null && !data[10].equals("") ? Double.parseDouble(data[12]) : 0L);
+                        //catorceaba columna, numeric         
+                        infoTemp.setVentaTa(data[13] != null && !data[10].equals("") ? Double.parseDouble(data[13]) : 0L);
+
+                        infoTemp.setIdTiempo(new BigInteger(formatoDelTextoInverso.format(infoTemp.getFecha())));
+                        cargas.add(infoTemp);
+                        if (rowNum % 10000 == 0 || rowNum == (numRegistros - 1)) {                            
+                            for (RvvdInfoPh carga : cargas) {
+                                session.save(carga);
+                                if (rowNum % 100 == 0) {
+                                    session.flush();
+                                    session.clear();
+                                }
+                            }
+                            cargas.clear();
+                        }
+
+                    }
+                }
+                rowNum++;
+            }
+            session.getTransaction().commit();
+        } catch (Exception ex) {            
+            ex.printStackTrace();
+
+            if (session.getTransaction().isActive()) {
+                session.getTransaction().rollback();
+            }
+            flagOk = false;
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            infoPhDAO.getHibernateUtil().closeSessionFactory();
         }
+        /////////////
+        return flagOk;        
     }
 
     private String[] getDataRow() throws XMLStreamException {

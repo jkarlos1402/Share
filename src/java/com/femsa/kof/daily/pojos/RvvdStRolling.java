@@ -42,6 +42,9 @@ public class RvvdStRolling implements Serializable {
     @Column(name = "ZONA")
     private String zona;
     
+    @Column(name = "CATEGORIA")
+    private String categoria;
+    
     @Column(name = "CATEGORIA_OFICIAL_R")
     private String categoriaOficialR;
     
@@ -129,6 +132,14 @@ public class RvvdStRolling implements Serializable {
 
     public void setZona(String zona) {
         this.zona = zona;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
     public String getCategoriaOficialR() {

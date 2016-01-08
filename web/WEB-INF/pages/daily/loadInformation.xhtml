@@ -184,9 +184,9 @@
                         <p:messages showDetail="true" closable="true"/>
 
                         <p:fileUpload fileUploadListener="#{dailyLoadBean.handleFileUploadSalesPH}" mode="advanced" dragDropSupport="true" 
-                                      update="messagesLoadSalesPhi,panelLoadSalesPhi" sizeLimit="100000000" fileLimit="1" allowTypes="/(\.|\/)(xls|xlsx|XLS|XLSX)$/" 
+                                      update="messagesLoadSalesPhi,panelLoadSalesPhi" sizeLimit="100000000" fileLimit="1" allowTypes="/(\.|\/)(xlsx|XLSX)$/" 
                                       onstart="handleResponse(1)" oncomplete="handleResponse(2)"
-                                      value="#{dailyLoadBean.fileUploaded}"/>
+                                      value="#{dailyLoadBean.uploadedFile}" invalidFileMessage="For this process please choose a xlsx file."/>
                         <p:separator />
                         <h3>Resume</h3>
                         <p:panel>
