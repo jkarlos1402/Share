@@ -2,7 +2,6 @@ package com.femsa.kof.daily.managedbeans;
 
 import com.femsa.kof.daily.dao.RollingDAO;
 import com.femsa.kof.daily.dao.Rvvd445PhDAO;
-import com.femsa.kof.daily.dao.RvvdInfoPhDAO;
 import com.femsa.kof.daily.pojos.RollingDaily;
 import com.femsa.kof.daily.pojos.Rvvd445Ph;
 import com.femsa.kof.daily.pojos.RvvdDistribucionMx;
@@ -20,14 +19,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
@@ -285,9 +283,9 @@ public class DailyLoadBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
-    public void handleFileUploadSalesPH(FileUploadEvent event) {        
+    public void handleFileUploadSalesPH(FileUploadEvent event) {
         FacesMessage message = null;
-        XlsAnalizerSalesPh analizer = new XlsAnalizerSalesPh();        
+        XlsAnalizerSalesPh analizer = new XlsAnalizerSalesPh();
         analizer.analizeXls(event.getFile(), countrySelected, usuario);
         uploadedFile = event.getFile();
         try {
@@ -309,17 +307,70 @@ public class DailyLoadBean implements Serializable {
     }
 
     public void saveInfoCarga() {
-        Record record = new Record();
-        record.setFecha(new Date());
-        record.setNameFile(nameFile);
-        record.setProcess("LOAD ROLLING");
-        record.setDateExecution(new Date());
-        record.setProject("DAILY DASHBOARD");
         FacesMessage message = null;
-        if (countrySelected.getClaveCorta().toUpperCase().equals(listInfoCargaRolling.get(0).getDiasOperativos().getPais().toUpperCase())) {
-            RollingDAO rollingDAO = new RollingDAO();
-            if (rollingDAO.saveDaily(listInfoCargaRolling, listInfoCargaDistribucion)) {
-                record.setNumEntriesSaved(listInfoCargaRolling.size() + (listInfoCargaRolling.size() * 4));
+        ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        Boolean flagLoadRollingDaily = (Boolean) context.getAttribute("flag_load_rolling_daily");
+        if (!flagLoadRollingDaily) {
+            flagLoadRollingDaily = true;
+            context.setAttribute("flag_load_rolling_daily", flagLoadRollingDaily);
+            Record record = new Record();
+            record.setFecha(new Date());
+            record.setNameFile(nameFile);
+            record.setProcess("LOAD ROLLING");
+            record.setDateExecution(new Date());
+            record.setProject("DAILY DASHBOARD");
+            if (countrySelected.getClaveCorta().toUpperCase().equals(listInfoCargaRolling.get(0).getDiasOperativos().getPais().toUpperCase())) {
+                RollingDAO rollingDAO = new RollingDAO();
+                if (rollingDAO.saveDaily(listInfoCargaRolling, listInfoCargaDistribucion)) {
+                    record.setNumEntriesSaved(listInfoCargaRolling.size() + (listInfoCargaRolling.size() * 4));
+                    message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Records saved.");
+                } else {
+                    String cadenaError = "";
+                    for (String error : errors) {
+                        cadenaError += error + ", ";
+                    }
+                    message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "An error ocurred while saving records [" + cadenaError + "]");
+                }
+                listInfoCargaRolling.clear();
+                listInfoCargaRolling = null;
+                listInfoCargaDistribucion.clear();
+                listInfoCargaDistribucion = null;
+                omittedSheets.clear();
+                loadedSheets.clear();
+                errors.clear();
+                countrySelected = null;
+            } else {
+                message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "Wrong country selected");
+            }
+            record.setDateEndExecution(new Date());
+            if (statusBean == null) {
+                statusBean = new DailyUploadStatusBean();
+            }
+            statusBean.getCargasSession().add(record);
+            flagLoadRollingDaily = false;
+            context.setAttribute("flag_load_rolling_daily", flagLoadRollingDaily);
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Sorry", "Other country is loading, try again later");
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void saveInfoDiasOpPh() {
+        FacesMessage message = null;
+        ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        Boolean flagLoadOpDaysDaily = (Boolean) context.getAttribute("flag_load_opdays_daily");
+        if (!flagLoadOpDaysDaily) {
+            flagLoadOpDaysDaily = true;
+            context.setAttribute("flag_load_opdays_daily", flagLoadOpDaysDaily);
+            Record record = new Record();
+            record.setFecha(new Date());
+            record.setNameFile(nameFile);
+            record.setProcess("LOAD OPERATIVE DAYS PHILIPPINES");
+            record.setDateExecution(new Date());
+            record.setProject("DAILY DASHBOARD");
+            Rvvd445PhDAO rvvd445PhDAO = new Rvvd445PhDAO();
+            if (rvvd445PhDAO.save445Ph(listInfoCargaOpDaysPH)) {
+                record.setNumEntriesSaved(listInfoCargaOpDaysPH.size());
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Records saved.");
             } else {
                 String cadenaError = "";
@@ -328,87 +379,64 @@ public class DailyLoadBean implements Serializable {
                 }
                 message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "An error ocurred while saving records [" + cadenaError + "]");
             }
-            listInfoCargaRolling.clear();
-            listInfoCargaRolling = null;
-            listInfoCargaDistribucion.clear();
-            listInfoCargaDistribucion = null;
+            listInfoCargaOpDaysPH.clear();
+            listInfoCargaOpDaysPH = null;
             omittedSheets.clear();
             loadedSheets.clear();
             errors.clear();
             countrySelected = null;
+            record.setDateEndExecution(new Date());
+            if (statusBean == null) {
+                statusBean = new DailyUploadStatusBean();
+            }
+            statusBean.getCargasSession().add(record);
+            flagLoadOpDaysDaily = false;
+            context.setAttribute("flag_load_opdays_daily", flagLoadOpDaysDaily);
         } else {
-            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "Wrong country selected");
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Sorry", "Other country is loading, try again later");
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
-        record.setDateEndExecution(new Date());
-        if (statusBean == null) {
-            statusBean = new DailyUploadStatusBean();
-        }
-        statusBean.getCargasSession().add(record);
     }
 
-    public void saveInfoDiasOpPh() {
-        Record record = new Record();
-        record.setFecha(new Date());
-        record.setNameFile(nameFile);
-        record.setProcess("LOAD OPERATIVE DAYS PHILIPPINES");
-        record.setDateExecution(new Date());
-        record.setProject("DAILY DASHBOARD");
+    public void saveInfoPh() {
         FacesMessage message = null;
-        Rvvd445PhDAO rvvd445PhDAO = new Rvvd445PhDAO();
-        if (rvvd445PhDAO.save445Ph(listInfoCargaOpDaysPH)) {
-            record.setNumEntriesSaved(listInfoCargaOpDaysPH.size());
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Records saved.");
-        } else {
-            String cadenaError = "";
-            for (String error : errors) {
-                cadenaError += error + ", ";
+        ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        Boolean flagLoadSalesDayly = (Boolean) context.getAttribute("flag_load_sales_daily");
+        if (!flagLoadSalesDayly) {
+            flagLoadSalesDayly = true;
+            context.setAttribute("flag_load_sales_daily", flagLoadSalesDayly);
+            Record record = new Record();
+            record.setFecha(new Date());
+            record.setNameFile(nameFile);
+            record.setProcess("LOAD SALES PHILIPPINES");
+            record.setDateExecution(new Date());
+            record.setProject("DAILY DASHBOARD");
+            XlsAnalizerSalesPh salesPh = new XlsAnalizerSalesPh();
+            if (salesPh.saveSheetInfoPh(uploadedFile, stream, numRegistros)) {
+                record.setNumEntriesSaved(numRegistros);
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Records saved.");
+            } else {
+                String cadenaError = "";
+                for (String error : errors) {
+                    cadenaError += error + ", ";
+                }
+                message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "An error ocurred while saving records [" + cadenaError + "]");
             }
-            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "An error ocurred while saving records [" + cadenaError + "]");
-        }
-        listInfoCargaOpDaysPH.clear();
-        listInfoCargaOpDaysPH = null;
-        omittedSheets.clear();
-        loadedSheets.clear();
-        errors.clear();
-        countrySelected = null;
-        FacesContext.getCurrentInstance().addMessage(null, message);
-        record.setDateEndExecution(new Date());
-        if (statusBean == null) {
-            statusBean = new DailyUploadStatusBean();
-        }
-        statusBean.getCargasSession().add(record);
-    }
-
-    public void saveInfoPh() {        
-        Record record = new Record();
-        record.setFecha(new Date());
-        record.setNameFile(nameFile);
-        record.setProcess("LOAD SALES PHILIPPINES");
-        record.setDateExecution(new Date());
-        record.setProject("DAILY DASHBOARD");
-        FacesMessage message = null;
-        XlsAnalizerSalesPh salesPh = new XlsAnalizerSalesPh();        
-        if (salesPh.saveSheetInfoPh(uploadedFile,stream,numRegistros)) {
-            record.setNumEntriesSaved(numRegistros);
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Records saved.");
-        } else {
-            String cadenaError = "";
-            for (String error : errors) {
-                cadenaError += error + ", ";
+            omittedSheets.clear();
+            loadedSheets.clear();
+            errors.clear();
+            countrySelected = null;
+            numRegistros = 0L;            
+            record.setDateEndExecution(new Date());
+            if (statusBean == null) {
+                statusBean = new DailyUploadStatusBean();
             }
-            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "An error ocurred while saving records [" + cadenaError + "]");
+            statusBean.getCargasSession().add(record);
+            flagLoadSalesDayly = false;
+            context.setAttribute("flag_load_sales_daily", flagLoadSalesDayly);
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Sorry", "Other country is loading, try again later");
         }
-        omittedSheets.clear();
-        loadedSheets.clear();
-        errors.clear();
-        countrySelected = null;
-        numRegistros = 0L;
         FacesContext.getCurrentInstance().addMessage(null, message);
-        record.setDateEndExecution(new Date());
-        if (statusBean == null) {
-            statusBean = new DailyUploadStatusBean();
-        }
-        statusBean.getCargasSession().add(record);
     }
 }

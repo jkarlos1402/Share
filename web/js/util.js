@@ -1,11 +1,8 @@
 function handleResponse(status) {
-    var gifLoad = document.getElementById('loadingGIF');
     if (status === 1) {
         PF('statusDialog').show();
-//        gifLoad.style.display = "block";
     } else if (status === 2) {
         PF('statusDialog').hide();
-//        gifLoad.style.display = "none";
     }
 }
 
@@ -14,7 +11,7 @@ function setFilter(filter) {
 }
 
 $(document).ready(function () {
-    if ($("#menuPrincipal").length > 0) {
+    if ($("#menuPrincipal").length > 0 && ($("#proyectoUser").val() === "2" || $("#rolUser").val() === "1")) {
         setTimeout(function () {
             showNotifications();
         }, 10000);
@@ -27,10 +24,20 @@ function hideAsteriscos() {
 }
 
 function showNotifications() {
-    setTimeout(function () {
-        PF('notificationPanel').show();
+    if ($("#menuPrincipal").length > 0 && ($("#proyectoUser").val() === "2" || $("#rolUser").val() === "1")) {
         setTimeout(function () {
-            PF('notificationPanel').hide();
+            PF('notificationPanel').show();
+            setTimeout(function () {
+                PF('notificationPanel').hide();
+            }, 10000);
         }, 10000);
-    }, 10000);
+    }
+}
+
+function showLoading(status){    
+    if($("#showLoading").val() === "1" && status === "1"){        
+        PF('statusDialog').show();
+    }else if(status === "0"){
+        PF('statusDialog').hide();
+    }    
 }

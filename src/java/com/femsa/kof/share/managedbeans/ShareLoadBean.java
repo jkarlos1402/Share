@@ -220,11 +220,11 @@ public class ShareLoadBean implements Serializable {
             }
             statusBean.getCargasSession().add(record);
             errorsScript.clear();
+            flagLoadInfShare = false;
+            context.setAttribute("flag_load_share", flagLoadInfShare);
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Sorry", "Other country is loading, try again later");
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
-        flagLoadInfShare = false;
-        context.setAttribute("flag_load_share", flagLoadInfShare);
     }
 }

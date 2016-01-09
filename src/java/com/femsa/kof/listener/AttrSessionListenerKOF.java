@@ -12,12 +12,11 @@ public class AttrSessionListenerKOF implements HttpSessionAttributeListener {
     public void attributeAdded(HttpSessionBindingEvent event) {
         if (event.getName().equalsIgnoreCase("session_user")) {           
             CheckCatalogs.checkAllCatalogs();            
-        }
+        }        
     }
 
     @Override
-    public void attributeRemoved(HttpSessionBindingEvent event) {
-
+    public void attributeRemoved(HttpSessionBindingEvent event) {        
     }
 
     @Override

@@ -45,7 +45,7 @@ public class MainBean implements Serializable {
         return page;
     }
 
-    public void setPage(String page, String catalog, String proyecto) {
+    public void setPage(String page, String catalog, String proyecto) {        
         if (!proyecto.equalsIgnoreCase("")) {
             this.page = "/WEB-INF/pages/" + proyecto + "/" + page + ".xhtml";
             this.catalog = catalog;

@@ -247,8 +247,7 @@
                 </div>
             </div>
         </p:outputPanel>
-        <p:ajaxStatus style="position: fixed;display:block;bottom:100px;right: 20px;height:24px;" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide();" oncomplete="hideAsteriscos();">            
-        </p:ajaxStatus>
+        <p:ajaxStatus style="position: fixed;display:block;bottom:100px;right: 20px;height:24px;" onstart="showLoading('1');" onsuccess="showLoading('0');" oncomplete="hideAsteriscos();"/>                   
         <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
             <p style="font-size:14px; text-align: center;">
                 <p:graphicImage value="/images/loading.gif" />
@@ -259,7 +258,7 @@
         </p:dialog>
         <p:graphicImage  value="/images/loading.gif" style="position: fixed;display:block;bottom:10px;right: 10px;height:100px; display: none;" id="loadingGIF"/>
         <h:form id="formNotificaciones"> 
-            <p:poll oncomplete="showNotifications()" interval="60"/>
+            <p:poll oncomplete="showNotifications()" interval="300" onstart="$('#showLoading').val('0');" onsuccess="$('#showLoading').val('1');"/>
             <p:overlayPanel id="overNotificaciones" for="panelMain" widgetVar="notificationPanel" showEffect="blind" hideEffect="blind" showEvent="off" hideEvent="off" 
                             dismissable="false" showCloseIcon="true"  my="right top" at="right top" style="width: 30%;">
                 <p:outputPanel>
@@ -273,6 +272,9 @@
                     </h:panelGrid>                    
                 </p:outputPanel>
             </p:overlayPanel>
+            <input type="hidden" id="proyectoUser" value="#{(mainBean.usuario.proyectos ne null and mainBean.usuario.proyectos.size() > 0) ? mainBean.usuario.proyectos.get(0).idProyecto : '0'}" />
+            <input type="hidden" id="rolUser" value="#{mainBean.usuario.rol.pkRol}" />
+            <input type="hidden" id="showLoading" value="1" />
         </h:form>
     </h:body>
 </html>
