@@ -47,13 +47,13 @@
                                 <ul class="main-nav">
                                     <li>
                                         <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('welcome','','')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                            Home
+                                           <img src="images/BG9-19.png" width="17" height="16" />  Home
                                         </p:commandLink>                                                                                                            
                                     </li> 
                                     <h:panelGroup rendered="#{(mainBean.usuario.proyectos ne null and mainBean.usuario.proyectos.size() > 0 and mainBean.usuario.proyectos.get(0).idProyecto eq '1') or mainBean.usuario.rol.pkRol eq '1' ? true : false}">
                                         <li>
                                             <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('loadInformation','','share')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                                <img src="images/BG9-05.png"/>Information Load <font size="1">#{mainBean.usuario.rol.pkRol eq '1' ? '(SHARE)' : ''}</font>
+                                                <img src="images/BG9-24.png"/>Information Load <font size="1">#{mainBean.usuario.rol.pkRol eq '1' ? '(SHARE)' : ''}</font>
                                             </p:commandLink>                                                                                                                                                                                                                                                            
                                         </li>                                       
                                         <li>
@@ -72,7 +72,7 @@
                                             <ul class="main-nav__submenu">                                                                                                
                                                 <li>
                                                     <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','category','share')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                                        <span><img src="images/BG9-17.png"/>Category</span>
+                                                        <span><img src="images/BG9-21.png"/>Category</span>
                                                     </p:commandLink> 
                                                 </li>                                                
                                                 <li>
@@ -82,7 +82,7 @@
                                                 </li>                                                
                                                 <li>
                                                     <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','manufacturer','share')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                                        <span><img src="images/BG9-12.png"/>Manufacturer</span>
+                                                        <span><img src="images/BG9-31.png"/>Manufacturer</span>
                                                     </p:commandLink> 
                                                 </li>                                                                                            
                                             </ul>
@@ -91,7 +91,7 @@
                                     <h:panelGroup rendered="#{(mainBean.usuario.proyectos ne null and mainBean.usuario.proyectos.size() > 0 and mainBean.usuario.proyectos.get(0).idProyecto eq '2') or mainBean.usuario.rol.pkRol eq '1' ? true : false}">
                                         <li class="main-nav--collapsible">
                                             <a class="main-nav__link" href="#" onclick="return false;">
-                                                <img src="images/BG9-05.png"/> Information Load <font size="1">#{mainBean.usuario.rol.pkRol eq '1' ? '(DAILY DASHBOARD)' : ''}</font>
+                                                <img src="images/BG9-24.png"/> Information Load <font size="1">#{mainBean.usuario.rol.pkRol eq '1' ? '(DAILY DASHBOARD)' : ''}</font>
                                             </a>
                                             <ul class="main-nav__submenu">
                                                 <li>
@@ -102,12 +102,12 @@
                                                 <h:panelGroup rendered="#{mainBean.usuario.haveCountry('PHI') or mainBean.usuario.rol.pkRol eq '1' ? true : false}">
                                                     <li>
                                                         <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('loadInformation','opDaysPhiDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                                            <span><img src="images/BG9-05.png"/>Operative Days</span>
+                                                            <span><img src="images/BG9-29.png"/>Operative Days</span>
                                                         </p:commandLink>
                                                     </li>                                            
                                                     <li>
                                                         <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('loadInformation','salesPhiDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                                            <span><img src="images/BG9-05.png"/>Sales</span>
+                                                            <span><img src="images/BG9-30.png"/>Sales</span>
                                                         </p:commandLink>
                                                     </li> 
                                                 </h:panelGroup>                                                                                           
@@ -121,37 +121,37 @@
                                         </li>
                                         <li class="main-nav--collapsible">
                                             <a class="main-nav__link" href="#" onclick="return false;">
-                                                <img src="images/BG9-05.png"/> Reclassification
+                                                <img src="images/BG9-25.png"/> Reclassification
                                             </a>
                                             <ul class="main-nav__submenu">
                                                 <li>
                                                     <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('reclassification_catalogs','reclassificationCategoryDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                                        <span><img src="images/BG9-17.png"/>Category</span>
+                                                        <span><img src="images/BG9-21.png"/>Category</span>
                                                     </p:commandLink>
                                                 </li>
                                                 <li>
                                                     <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('reclassification_catalogs','reclassificationChannelDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                                        <span><img src="images/BG9-17.png"/>Channel</span>
+                                                        <span><img src="images/BG9-28.png"/>Channel</span>
                                                     </p:commandLink>
                                                 </li>                                            
                                                 <li>
                                                     <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('reclassification_catalogs','reclassificationPackingDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                                        <span><img src="images/BG9-17.png"/>Packing</span>
+                                                        <span><img src="images/BG9-23.png"/>Packing</span>
                                                     </p:commandLink>
                                                 </li>                                            
                                                 <li>
                                                     <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('reclassification_catalogs','reclassificationGecDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                                        <span><img src="images/BG9-17.png"/>GEC</span>
+                                                        <span><img src="images/BG9-20.png"/>GEC</span>
                                                     </p:commandLink>
                                                 </li>
                                                 <li>
                                                     <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('reclassification_catalogs','reclassificationOperativeDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                                        <span><img src="images/BG9-17.png"/>Operative Days</span>
+                                                        <span><img src="images/BG9-29.png"/>Operative Days</span>
                                                     </p:commandLink>
                                                 </li>                                            
                                                 <li>
                                                     <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('reclassification_catalogs','reclassificationTrademarkDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                                        <span><img src="images/BG9-17.png"/>Trademark</span>
+                                                        <span><img src="images/BG9-18.png"/>Trademark</span>
                                                     </p:commandLink>
                                                 </li>                                            
                                             </ul>                                                                                                                                                                                                                                                                                                        
@@ -168,27 +168,27 @@
                                                 </li>
                                                 <li>
                                                     <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','categoryDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                                        <span><img src="images/BG9-17.png"/>Category</span>
+                                                        <span><img src="images/BG9-21.png"/>Category</span>
                                                     </p:commandLink>
                                                 </li>                                            
                                                 <li>
                                                     <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','channelDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                                        <span><img src="images/BG9-17.png"/>Channel</span>
+                                                        <span><img src="images/BG9-28.png"/>Channel</span>
                                                     </p:commandLink>
                                                 </li>                                            
                                                 <li>
                                                     <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','consumptionDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                                        <span><img src="images/BG9-17.png"/>Type of Consumption</span>
+                                                        <span><img src="images/BG9-27.png"/>Type of Consumption</span>
                                                     </p:commandLink>
                                                 </li>
                                                 <li>
                                                     <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','packingDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                                        <span><img src="images/BG9-17.png"/>Packing</span>
+                                                        <span><img src="images/BG9-23.png"/>Packing</span>
                                                     </p:commandLink>
                                                 </li>                                            
                                                 <li>
                                                     <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','trademarkDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                                        <span><img src="images/BG9-17.png"/>Trademark</span>
+                                                        <span><img src="images/BG9-18.png"/>Trademark</span>
                                                     </p:commandLink>
                                                 </li>                                            
                                                 <li>
@@ -198,12 +198,12 @@
                                                 </li>                                            
                                                 <li>
                                                     <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','gecDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                                        <span><img src="images/BG9-17.png"/>GEC</span>
+                                                        <span><img src="images/BG9-20.png"/>GEC</span>
                                                     </p:commandLink>
                                                 </li>                                            
                                                 <li>
                                                     <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('catalogs','bussinessUnitDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                                        <span><img src="images/BG9-17.png"/>Bussiness unit</span>
+                                                        <span><img src="images/BG9-26.png"/>Bussiness unit</span>
                                                     </p:commandLink>
                                                 </li>                                            
                                             </ul>                                                                                                                                                                                                                                                                                                        

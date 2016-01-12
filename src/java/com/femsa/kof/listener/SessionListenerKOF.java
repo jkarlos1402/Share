@@ -23,10 +23,8 @@ public class SessionListenerKOF implements HttpSessionListener {
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
         ServletContext application = se.getSession().getServletContext();
-        if (se.getSession().getAttribute("session_user") != null) {            
-                System.out.println("la session ha caducado con usuario");                            
-        } else {            
-                System.out.println("la session ha caducado sin usuario");                          
+        if (se.getSession().getAttribute("session_user") != null) {                                                     
+        } else {                                             
         }
     }
 }
