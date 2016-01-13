@@ -1,14 +1,7 @@
 package com.femsa.kof.listener;
 
-import com.femsa.kof.share.pojos.ShareUsuario;
-import com.femsa.kof.util.CatalogLoader;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebListener;
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 

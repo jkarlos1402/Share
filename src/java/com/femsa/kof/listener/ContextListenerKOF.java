@@ -1,13 +1,6 @@
 package com.femsa.kof.listener;
 
-import com.femsa.kof.share.dao.ShareCatCategoriasDAO;
-import com.femsa.kof.share.dao.ShareCatPaisDAO;
-import com.femsa.kof.share.dao.ShareCatCanalesDAO;
 import com.femsa.kof.util.CatalogLoader;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Enumeration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
