@@ -33,7 +33,7 @@ public class ReclasifCategoriaDAO {
                 paises = "'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
             }
         }
-        Query query = session.createQuery("SELECT rc FROM RvvdReclasifCategoria rc WHERE rc.pais IN (" + paises + ")");
+        Query query = session.createQuery("SELECT rc FROM RvvdReclasifCategoria rc WHERE rc.pais IN (" + paises + ") ORDER BY rc.categoriaR DESC,rc.categoriaEn DESC,rc.categoriaOficialR DESC,rc.categoriaOficialEn DESC");
         List<RvvdReclasifCategoria> categoriasReclasificadas = query.list();
         session.flush();
         session.clear();

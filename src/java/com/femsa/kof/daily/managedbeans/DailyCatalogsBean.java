@@ -69,6 +69,32 @@ public class DailyCatalogsBean implements Serializable {
     private List<RvvdCatContenidoCalorico> catContenidosAll = new ArrayList<RvvdCatContenidoCalorico>();
 
     public DailyCatalogsBean() {
+        CatContCaloricoDAO contCaloricoDAO = new CatContCaloricoDAO();
+        catContenidosAll = contCaloricoDAO.getContsCalAll();
+
+        CatMarcaDAO marcaDAO = new CatMarcaDAO();
+        catMarcasAll = marcaDAO.getMarcasAll();
+
+        CatGecDAO gecDAO = new CatGecDAO();
+        catGecsAll = gecDAO.getGecAll();
+
+        CatUnidadNegocioDAO unidadNegocioDAO = new CatUnidadNegocioDAO();
+        catUnidadesAll = unidadNegocioDAO.getUnidadesNegAll();
+
+        CatTipoConsumoDAO tipoConsumoDAO = new CatTipoConsumoDAO();
+        catTiposConsumoAll = tipoConsumoDAO.getTiposConsumoAll();
+
+        CatEmpaqueDAO empaqueDAO = new CatEmpaqueDAO();
+        catEmpaquesAll = empaqueDAO.getEmpaquesAll();
+
+        CatCanalDAO canalDAO = new CatCanalDAO();
+        catCanalesAll = canalDAO.getCanalesAll();
+
+        CatCategoriaDAO categoriaDAO = new CatCategoriaDAO();
+        catCategoriaAll = categoriaDAO.getCategoriasAll();
+
+        CatCategoriaOficialDAO categoriaOficialDAO = new CatCategoriaOficialDAO();
+        catCategoriaOficialAll = categoriaOficialDAO.getCategoriasOficialesAll();
     }
 
     public RvvdCatContenidoCalorico getContenidoNueva() {
@@ -88,12 +114,10 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     public List<RvvdCatContenidoCalorico> getCatContenidosAll() {
-        CatContCaloricoDAO contCaloricoDAO = new CatContCaloricoDAO();
-        catContenidosAll = contCaloricoDAO.getContsCalAll();
         return catContenidosAll;
     }
 
-    public void setCatContenidosAll(List<RvvdCatContenidoCalorico> catContenidosAll) {        
+    public void setCatContenidosAll(List<RvvdCatContenidoCalorico> catContenidosAll) {
         this.catContenidosAll = catContenidosAll;
     }
 
@@ -114,8 +138,6 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     public List<RvvdCatMarca> getCatMarcasAll() {
-        CatMarcaDAO marcaDAO = new CatMarcaDAO();
-        catMarcasAll = marcaDAO.getMarcasAll();
         return catMarcasAll;
     }
 
@@ -140,8 +162,6 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     public List<RvvdCatGec> getCatGecsAll() {
-        CatGecDAO gecDAO = new CatGecDAO();
-        catGecsAll = gecDAO.getGecAll();
         return catGecsAll;
     }
 
@@ -166,8 +186,6 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     public List<RvvdCatUnidadNegocio> getCatUnidadesAll() {
-        CatUnidadNegocioDAO unidadNegocioDAO = new CatUnidadNegocioDAO();
-        catUnidadesAll = unidadNegocioDAO.getUnidadesNegAll();
         return catUnidadesAll;
     }
 
@@ -192,8 +210,6 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     public List<RvvdCatTipoConsumo> getCatTiposConsumoAll() {
-        CatTipoConsumoDAO tipoConsumoDAO = new CatTipoConsumoDAO();
-        catTiposConsumoAll = tipoConsumoDAO.getTiposConsumoAll();
         return catTiposConsumoAll;
     }
 
@@ -218,8 +234,6 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     public List<RvvdCatEmpaque> getCatEmpaquesAll() {
-        CatEmpaqueDAO empaqueDAO = new CatEmpaqueDAO();
-        catEmpaquesAll = empaqueDAO.getEmpaquesAll();
         return catEmpaquesAll;
     }
 
@@ -244,8 +258,6 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     public List<RvvdCatCanal> getCatCanalesAll() {
-        CatCanalDAO canalDAO = new CatCanalDAO();
-        catCanalesAll = canalDAO.getCanalesAll();
         return catCanalesAll;
     }
 
@@ -270,8 +282,6 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     public List<RvvdCatCategoria> getCatCategoriaAll() {
-        CatCategoriaDAO categoriaDAO = new CatCategoriaDAO();
-        catCategoriaAll = categoriaDAO.getCategoriasAll();
         return catCategoriaAll;
     }
 
@@ -290,8 +300,6 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     public List<RvvdCatCategoriaOficial> getCatCategoriaOficialAll() {
-        CatCategoriaOficialDAO categoriaOficialDAO = new CatCategoriaOficialDAO();
-        catCategoriaOficialAll = categoriaOficialDAO.getCategoriasOficialesAll();
         return catCategoriaOficialAll;
     }
 
@@ -333,6 +341,7 @@ public class DailyCatalogsBean implements Serializable {
         CatCategoriaOficialDAO categoriaOficialDAO = new CatCategoriaOficialDAO();
         if (categoriaOficialDAO.saveCategoriaOficial(categoriaOficialNueva)) {
             CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("categoriaOficial");
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Official category saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the official category, " + categoriaOficialDAO.getError());
@@ -359,6 +368,7 @@ public class DailyCatalogsBean implements Serializable {
         CatCategoriaDAO categoriaDAO = new CatCategoriaDAO();
         if (categoriaDAO.saveCategoria(categoriaNueva)) {
             CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("categoria");
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Category saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the category, " + categoriaDAO.getError());
@@ -366,7 +376,7 @@ public class DailyCatalogsBean implements Serializable {
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
+
     public void newChannel() {
         canalNuevo = new RvvdCatCanal();
         canalSelected = null;
@@ -384,6 +394,7 @@ public class DailyCatalogsBean implements Serializable {
         CatCanalDAO canalDAO = new CatCanalDAO();
         if (canalDAO.saveCanal(canalNuevo)) {
             CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("canal");
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Channel saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the channel, " + canalDAO.getError());
@@ -391,7 +402,7 @@ public class DailyCatalogsBean implements Serializable {
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
+
     public void newConsumption() {
         tipoConsumoNuevo = new RvvdCatTipoConsumo();
         tipoConsumoSelected = null;
@@ -409,6 +420,7 @@ public class DailyCatalogsBean implements Serializable {
         CatTipoConsumoDAO tipoConsumoDAO = new CatTipoConsumoDAO();
         if (tipoConsumoDAO.saveTipoConsumo(tipoConsumoNuevo)) {
             CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("tipoConsumo");
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Type of Consumption saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the types of Consumption, " + tipoConsumoDAO.getError());
@@ -416,7 +428,7 @@ public class DailyCatalogsBean implements Serializable {
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
+
     public void newPacking() {
         empaqueNuevo = new RvvdCatEmpaque();
         empaqueSelected = null;
@@ -434,6 +446,7 @@ public class DailyCatalogsBean implements Serializable {
         CatEmpaqueDAO empaqueDAO = new CatEmpaqueDAO();
         if (empaqueDAO.saveEmpaque(empaqueNuevo)) {
             CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("empaque");
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Packing saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the packing, " + empaqueDAO.getError());
@@ -441,7 +454,7 @@ public class DailyCatalogsBean implements Serializable {
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
+
     public void newGec() {
         gecNuevo = new RvvdCatGec();
         gecSelected = null;
@@ -459,6 +472,7 @@ public class DailyCatalogsBean implements Serializable {
         CatGecDAO gecDAO = new CatGecDAO();
         if (gecDAO.saveGec(gecNuevo)) {
             CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("gec");
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Gec saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the gec, " + gecDAO.getError());
@@ -466,7 +480,7 @@ public class DailyCatalogsBean implements Serializable {
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
+
     public void newBussinessUnit() {
         unidadNueva = new RvvdCatUnidadNegocio();
         unidadSelected = null;
@@ -484,6 +498,7 @@ public class DailyCatalogsBean implements Serializable {
         CatUnidadNegocioDAO unidadNegocioDAO = new CatUnidadNegocioDAO();
         if (unidadNegocioDAO.saveUnidadNeg(unidadNueva)) {
             CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("unidad");
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Bussiness unit saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the bussiness unit, " + unidadNegocioDAO.getError());
@@ -491,7 +506,7 @@ public class DailyCatalogsBean implements Serializable {
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
+
     public void newTrademark() {
         marcaNueva = new RvvdCatMarca();
         marcaSelected = null;
@@ -509,6 +524,7 @@ public class DailyCatalogsBean implements Serializable {
         CatMarcaDAO marcaDAO = new CatMarcaDAO();
         if (marcaDAO.saveMarca(marcaNueva)) {
             CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("marca");
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Trademark saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Trademark, " + marcaDAO.getError());
@@ -516,7 +532,7 @@ public class DailyCatalogsBean implements Serializable {
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
+
     public void newCalorie() {
         contenidoNueva = new RvvdCatContenidoCalorico();
         contenidoSelected = null;
@@ -534,11 +550,45 @@ public class DailyCatalogsBean implements Serializable {
         CatContCaloricoDAO contCaloricoDAO = new CatContCaloricoDAO();
         if (contCaloricoDAO.saveContCal(contenidoNueva)) {
             CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("calorico");
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Calorie saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Calorie, " + contCaloricoDAO.getError());
             marcaNueva.setIdMarca(null);
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    private void refreshCatalog(String catalog) {
+        if (catalog != null) {
+            if (catalog.equalsIgnoreCase("calorico")) {
+                CatContCaloricoDAO contCaloricoDAO = new CatContCaloricoDAO();
+                catContenidosAll = contCaloricoDAO.getContsCalAll();
+            } else if (catalog.equalsIgnoreCase("marca")) {
+                CatMarcaDAO marcaDAO = new CatMarcaDAO();
+                catMarcasAll = marcaDAO.getMarcasAll();
+            } else if (catalog.equalsIgnoreCase("gec")) {
+                CatGecDAO gecDAO = new CatGecDAO();
+                catGecsAll = gecDAO.getGecAll();
+            } else if (catalog.equalsIgnoreCase("unidad")) {
+                CatUnidadNegocioDAO unidadNegocioDAO = new CatUnidadNegocioDAO();
+                catUnidadesAll = unidadNegocioDAO.getUnidadesNegAll();
+            } else if (catalog.equalsIgnoreCase("tipoConsumo")) {
+                CatTipoConsumoDAO tipoConsumoDAO = new CatTipoConsumoDAO();
+                catTiposConsumoAll = tipoConsumoDAO.getTiposConsumoAll();
+            } else if (catalog.equalsIgnoreCase("empaque")) {
+                CatEmpaqueDAO empaqueDAO = new CatEmpaqueDAO();
+                catEmpaquesAll = empaqueDAO.getEmpaquesAll();
+            } else if (catalog.equalsIgnoreCase("canal")) {
+                CatCanalDAO canalDAO = new CatCanalDAO();
+                catCanalesAll = canalDAO.getCanalesAll();
+            } else if (catalog.equalsIgnoreCase("categoria")) {
+                CatCategoriaDAO categoriaDAO = new CatCategoriaDAO();
+                catCategoriaAll = categoriaDAO.getCategoriasAll();
+            } else if (catalog.equalsIgnoreCase("categoriaOficial")) {
+                CatCategoriaOficialDAO categoriaOficialDAO = new CatCategoriaOficialDAO();
+                catCategoriaOficialAll = categoriaOficialDAO.getCategoriasOficialesAll();
+            }
+        }
     }
 }

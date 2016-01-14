@@ -33,7 +33,7 @@ public class ReclasifDiasOpDAO {
                 paises = "'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
             }
         }
-        Query query = session.createQuery("SELECT do FROM RvvdReclasifDiasOp do WHERE do.pais IN (" + paises + ")");
+        Query query = session.createQuery("SELECT do FROM RvvdReclasifDiasOp do WHERE do.pais IN (" + paises + ") ORDER BY do.fechaR DESC");
         List<RvvdReclasifDiasOp> diasOpReclasificados = query.list();
         session.flush();
         session.clear();

@@ -43,11 +43,21 @@ public class ShareCatalogsBean implements Serializable {
 
     public ShareCatalogsBean() {
         grupoCategoriaSelected = new ShareCatGrupoCategorias();
+
+        ShareCatPaisDAO paisDAO = new ShareCatPaisDAO();
+        catPaises = paisDAO.getCatPaisAll();
+
+        ShareCatCategoriasDAO categoriasDAO = new ShareCatCategoriasDAO();
+        catCategorias = categoriasDAO.getCategoriasAll();
+
+        ShareCatGrupoCategoriasDAO grupoCategoriasDAO = new ShareCatGrupoCategoriasDAO();
+        catGrupoCategoriasAll = grupoCategoriasDAO.getCategoryGroupsAll();
+        
+        ShareCatFabricanteDAO fabricanteDAO = new ShareCatFabricanteDAO();
+        catFabricanteAll = fabricanteDAO.getFabricantesAll();
     }
 
     public List<ShareCatFabricante> getCatFabricanteAll() {
-        ShareCatFabricanteDAO fabricanteDAO = new ShareCatFabricanteDAO();
-        catFabricanteAll = fabricanteDAO.getFabricantesAll();
         return catFabricanteAll;
     }
 
@@ -72,8 +82,6 @@ public class ShareCatalogsBean implements Serializable {
     }
 
     public List<ShareCatGrupoCategorias> getCatGrupoCategoriasAll() {
-        ShareCatGrupoCategoriasDAO grupoCategoriasDAO = new ShareCatGrupoCategoriasDAO();
-        catGrupoCategoriasAll = grupoCategoriasDAO.getCategoryGroupsAll();
         return catGrupoCategoriasAll;
     }
 
@@ -98,8 +106,6 @@ public class ShareCatalogsBean implements Serializable {
     }
 
     public List<ShareCatPais> getCatPaises() {
-        ShareCatPaisDAO paisDAO = new ShareCatPaisDAO();
-        catPaises = paisDAO.getCatPaisAll();
         return catPaises;
     }
 
@@ -140,8 +146,6 @@ public class ShareCatalogsBean implements Serializable {
     }
 
     public List<ShareCatCategorias> getCatCategorias() {
-        ShareCatCategoriasDAO categoriasDAO = new ShareCatCategoriasDAO();
-        catCategorias = categoriasDAO.getCategoriasAll();
         return catCategorias;
     }
 
@@ -201,6 +205,7 @@ public class ShareCatalogsBean implements Serializable {
         ShareCatCategoriasDAO categoriasDAO = new ShareCatCategoriasDAO();
         if (categoriasDAO.saveCategoria(categoriaSelected)) {
             CatalogLoader.loadCatalogs("share");
+            refreshCatalog("categoria");
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Category saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the category, " + categoriasDAO.getError());
@@ -215,6 +220,7 @@ public class ShareCatalogsBean implements Serializable {
         ShareCatPaisDAO paisDAO = new ShareCatPaisDAO();
         if (paisDAO.savePais(paisSelected)) {
             CatalogLoader.loadCatalogs("share");
+            refreshCatalog("pais");
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Country saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the country, " + paisDAO.getError());
@@ -229,6 +235,7 @@ public class ShareCatalogsBean implements Serializable {
         ShareCatGrupoCategoriasDAO grupoCategoriasDAO = new ShareCatGrupoCategoriasDAO();
         if (grupoCategoriasDAO.saveGroupCategory(grupoCategoriaNew)) {
             CatalogLoader.loadCatalogs("share");
+            refreshCatalog("grupoCategoria");
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Group category saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the group category, " + grupoCategoriasDAO.getError());
@@ -243,6 +250,7 @@ public class ShareCatalogsBean implements Serializable {
         ShareCatFabricanteDAO fabricanteDAO = new ShareCatFabricanteDAO();
         if (fabricanteDAO.saveFabricante(fabricanteNew)) {
             CatalogLoader.loadCatalogs("share");
+            refreshCatalog("fabricante");
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Manufacturer saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the manufacturer, " + fabricanteDAO.getError());
@@ -285,6 +293,24 @@ public class ShareCatalogsBean implements Serializable {
     public void genCountryTableName() {
         if (paisSelected.getPkPais() == null) {
             paisSelected.setNombreTabla("SHARE_TMP_" + paisSelected.getClaveCorta() + "_INFO_CARGA");
+        }
+    }
+
+    private void refreshCatalog(String catalog) {
+        if (catalog != null) {
+            if (catalog.equalsIgnoreCase("pais")) {
+                ShareCatPaisDAO paisDAO = new ShareCatPaisDAO();
+                catPaises = paisDAO.getCatPaisAll();
+            } else if (catalog.equalsIgnoreCase("categoria")) {
+                ShareCatCategoriasDAO categoriasDAO = new ShareCatCategoriasDAO();
+                catCategorias = categoriasDAO.getCategoriasAll();
+            } else if (catalog.equalsIgnoreCase("grupoCategoria")) {
+                ShareCatGrupoCategoriasDAO grupoCategoriasDAO = new ShareCatGrupoCategoriasDAO();
+                catGrupoCategoriasAll = grupoCategoriasDAO.getCategoryGroupsAll();
+            } else if (catalog.equalsIgnoreCase("fabricante")) {
+                ShareCatFabricanteDAO fabricanteDAO = new ShareCatFabricanteDAO();
+                catFabricanteAll = fabricanteDAO.getFabricantesAll();
+            }
         }
     }
 

@@ -49,6 +49,9 @@ public class UserBean implements Serializable {
         ShareCatProyectoDAO proyectoDAO = new ShareCatProyectoDAO();
         catProyectos = proyectoDAO.getCatProyectos();
         paisesAll = new DualListModel<ShareCatPais>(sourcePais, targetPais);
+
+        ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();
+        usuariosAll = usuarioDAO.getAllUsers();
     }
 
     public List<ShareCatProyecto> getCatProyectos() {
@@ -139,8 +142,6 @@ public class UserBean implements Serializable {
     }
 
     public List<ShareUsuario> getUsuariosAll() {
-        ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();
-        usuariosAll = usuarioDAO.getAllUsers();
         return usuariosAll;
     }
 
@@ -191,6 +192,7 @@ public class UserBean implements Serializable {
         usuarioNuevo.setPassword(usuarioNuevo.getPassword());
         usuarioNuevo.getProyectos().add(proyectoSelected);
         if (usuarioDAO.saveUser(usuarioNuevo)) {
+            refreshUsers();
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "User saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the user, " + usuarioDAO.getError());
@@ -231,5 +233,10 @@ public class UserBean implements Serializable {
         if (usuarioSelected.getProyectos() != null && usuarioSelected.getProyectos().size() > 0) {
             proyectoSelected = usuarioSelected.getProyectos().get(0);
         }
+    }
+
+    private void refreshUsers() {
+        ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();
+        usuariosAll = usuarioDAO.getAllUsers();
     }
 }

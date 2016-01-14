@@ -28,7 +28,7 @@
                             <p:column headerText="Category" filterBy="##{reclaCategory.categoria}" filterMatchMode="contains">
                                 <h:outputText value="#{reclaCategory.categoria}"/>
                             </p:column>                                                        
-                            <p:column headerText="Reclassified category">                                
+                            <p:column headerText="Reclassified category" sortBy="#{reclaCategory.categoriaR}">                                
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{reclaCategory.categoriaR}"/></f:facet>
                                     <f:facet name="input">
@@ -39,13 +39,13 @@
                                     </f:facet>
                                 </p:cellEditor>
                             </p:column>
-                            <p:column headerText="Reclassified category(English)">
+                            <p:column headerText="Reclassified category (English)" sortBy="#{reclaCategory.categoriaEn}">
                                 <h:outputText value="#{reclaCategory.categoriaEn}"/>
                             </p:column>
-                            <p:column headerText="Reclassified official category">
+                            <p:column headerText="Reclassified official category" sortBy="#{reclaCategory.categoriaOficialR}">
                                 <h:outputText value="#{reclaCategory.categoriaOficialR}"/>
                             </p:column>
-                            <p:column headerText="Reclassified official category(English)">
+                            <p:column headerText="Reclassified official category(English)" sortBy="#{reclaCategory.categoriaOficialEn}">
                                 <h:outputText value="#{reclaCategory.categoriaOficialEn}"/>
                             </p:column>
                             <p:column style="width:25px">
@@ -83,7 +83,7 @@
                             <p:column headerText="Channel" filterBy="##{reclaChannel.canal}" filterMatchMode="contains">
                                 <h:outputText value="#{reclaChannel.canal}"/>
                             </p:column>                                                        
-                            <p:column headerText="Reclassified channel">                                
+                            <p:column headerText="Reclassified channel" sortBy="#{reclaChannel.canalR}">                                
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{reclaChannel.canalR}"/></f:facet>
                                     <f:facet name="input">
@@ -94,7 +94,7 @@
                                     </f:facet>
                                 </p:cellEditor>
                             </p:column>
-                            <p:column headerText="Reclassified channel(English)">
+                            <p:column headerText="Reclassified channel(English)" sortBy="#{reclaChannel.canalEn}">
                                 <h:outputText value="#{reclaChannel.canalEn}"/>
                             </p:column>                           
                             <p:column style="width:25px">
@@ -132,7 +132,7 @@
                             <p:column headerText="Gec" filterBy="##{reclaGec.gec}" filterMatchMode="contains">
                                 <h:outputText value="#{reclaGec.gec}"/>
                             </p:column>                                                        
-                            <p:column headerText="Reclassified Gec">                                
+                            <p:column headerText="Reclassified Gec" sortBy="#{reclaGec.gecR}">                                
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{reclaGec.gecR}"/></f:facet>
                                     <f:facet name="input">
@@ -143,13 +143,13 @@
                                     </f:facet>
                                 </p:cellEditor>
                             </p:column>
-                            <p:column headerText="Reclassified Gec(English)">
+                            <p:column headerText="Reclassified Gec(English)" sortBy="#{reclaGec.gecEn}">
                                 <h:outputText value="#{reclaGec.gecEn}"/>
                             </p:column>                           
-                            <p:column headerText="Bussiness unit" filterBy="##{reclaGec.unidadNegocio}" filterMatchMode="contains">
+                            <p:column headerText="Bussiness unit" filterBy="#{reclaGec.unidadNegocio}" filterMatchMode="contains">
                                 <h:outputText value="#{reclaGec.unidadNegocio}"/>
                             </p:column>                                                        
-                            <p:column headerText="Reclassified Bussiness unit">                                
+                            <p:column headerText="Reclassified Bussiness unit" sortBy="#{reclaGec.unidadNegocioR}">                                
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{reclaGec.unidadNegocioR}"/></f:facet>
                                     <f:facet name="input">
@@ -160,7 +160,7 @@
                                     </f:facet>
                                 </p:cellEditor>
                             </p:column>
-                            <p:column headerText="Reclassified Bussiness unit(English)">
+                            <p:column headerText="Reclassified Bussiness unit(English)" sortBy="#{reclaGec.unidadNegocioEn}">
                                 <h:outputText value="#{reclaGec.unidadNegocioEn}"/>
                             </p:column>                           
                             <p:column style="width:25px">
@@ -198,7 +198,7 @@
                             <p:column headerText="Date" >
                                 <h:outputText value="#{operativeDay.fecha != null ? dailyReclassCatalogsBean.formatDay.format(operativeDay.fecha) : ''}"/>
                             </p:column>                                                        
-                            <p:column headerText="Reclassified Date">                                
+                            <p:column headerText="Reclassified Date" sortBy="#{operativeDay.fechaR}">                                
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{operativeDay.fechaR != null ? dailyReclassCatalogsBean.formatDay.format(operativeDay.fechaR) : ''}"/></f:facet>
                                     <f:facet name="input">
@@ -241,22 +241,22 @@
                             <p:column headerText="Country">
                                 <h:outputText value="#{reclaPacking.pais}"/>
                             </p:column>
-                            <p:column headerText="Packing" filterBy="##{reclaPacking.empaque}" filterMatchMode="contains">
+                            <p:column headerText="Packing" filterBy="#{reclaPacking.empaque}" filterMatchMode="contains">
                                 <h:outputText value="#{reclaPacking.empaque}"/>
                             </p:column>                                                        
-                            <p:column headerText="Returnability" filterBy="##{reclaPacking.retornabilidad}" filterMatchMode="contains">
+                            <p:column headerText="Returnability" filterBy="#{reclaPacking.retornabilidad}" filterMatchMode="contains">
                                 <h:outputText value="#{reclaPacking.retornabilidad}"/>
                             </p:column>                                                        
-                            <p:column headerText="Type of consumption" filterBy="##{reclaPacking.tipoConsumo}" filterMatchMode="contains">
+                            <p:column headerText="Type of consumption" filterBy="#{reclaPacking.tipoConsumo}" filterMatchMode="contains">
                                 <h:outputText value="#{reclaPacking.tipoConsumo}"/>
                             </p:column>                                                        
-                            <p:column headerText="Size" filterBy="##{reclaPacking.tamano}" filterMatchMode="contains">
+                            <p:column headerText="Size" filterBy="#{reclaPacking.tamano}" filterMatchMode="contains">
                                 <h:outputText value="#{reclaPacking.tamano}"/>
                             </p:column>                                                        
-                            <p:column headerText="Category" filterBy="##{reclaPacking.categoria}" filterMatchMode="contains">
+                            <p:column headerText="Category" filterBy="#{reclaPacking.categoria}" filterMatchMode="contains">
                                 <h:outputText value="#{reclaPacking.categoria}"/>
                             </p:column>                                                        
-                            <p:column headerText="Reclassified Type of consumption">                                
+                            <p:column headerText="Reclassified Type of consumption" sortBy="#{reclaPacking.tipoConsumoR}">                                
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{reclaPacking.tipoConsumoR}"/></f:facet>
                                     <f:facet name="input">
@@ -267,10 +267,10 @@
                                     </f:facet>
                                 </p:cellEditor>
                             </p:column>
-                            <p:column headerText="Reclassified Type of consumption(English)">
+                            <p:column headerText="Reclassified Type of consumption (English)" sortBy="#{reclaPacking.tipoConsumoEn}">
                                 <h:outputText value="#{reclaPacking.tipoConsumoEn}"/>
                             </p:column>                           
-                            <p:column headerText="Reclassified Packing">                                
+                            <p:column headerText="Reclassified Packing" sortBy="#{reclaPacking.empaqueR}">                                
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{reclaPacking.empaqueR}"/></f:facet>
                                     <f:facet name="input">
@@ -281,7 +281,7 @@
                                     </f:facet>
                                 </p:cellEditor>
                             </p:column>
-                            <p:column headerText="Reclassified Packing(English)">
+                            <p:column headerText="Reclassified Packing (English)" sortBy="#{reclaPacking.empaqueEn}">
                                 <h:outputText value="#{reclaPacking.empaqueEn}"/>
                             </p:column>                           
                             <p:column style="width:25px">
@@ -319,7 +319,7 @@
                             <p:column headerText="Trademark" filterBy="#{reclaTrademark.marca}" filterMatchMode="contains">
                                 <h:outputText value="#{reclaTrademark.marca}"/>
                             </p:column>                                                                                                                                
-                            <p:column headerText="Reclassified Trademark">                                
+                            <p:column headerText="Reclassified Trademark" sortBy="#{reclaTrademark.marcaR}">                                
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{reclaTrademark.marcaR}"/></f:facet>
                                     <f:facet name="input">
@@ -330,10 +330,10 @@
                                     </f:facet>
                                 </p:cellEditor>
                             </p:column>
-                            <p:column headerText="Reclassified Trademark(English)">
+                            <p:column headerText="Reclassified Trademark(English)" sortBy="#{reclaTrademark.marcaEn}">
                                 <h:outputText value="#{reclaTrademark.marcaEn}"/>
                             </p:column>                           
-                            <p:column headerText="Reclassified Calorie">                                
+                            <p:column headerText="Reclassified Calorie" sortBy="#{reclaTrademark.contenidoCaloricoR}">                                
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{reclaTrademark.contenidoCaloricoR}"/></f:facet>
                                     <f:facet name="input">
@@ -344,7 +344,7 @@
                                     </f:facet>
                                 </p:cellEditor>
                             </p:column>
-                            <p:column headerText="Reclassified Calorie(English)">
+                            <p:column headerText="Reclassified Calorie(English)" sortBy="#{reclaTrademark.contenidoCaloricoEn}">
                                 <h:outputText value="#{reclaTrademark.contenidoCaloricoEn}"/>
                             </p:column>                           
                             <p:column style="width:25px">

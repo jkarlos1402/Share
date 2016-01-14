@@ -33,7 +33,7 @@ public class ReclasifEmpaqueDAO {
                 paises = "'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
             }
         }
-        Query query = session.createQuery("SELECT re FROM RvvdReclasifEmpaque re WHERE re.pais IN (" + paises + ")");
+        Query query = session.createQuery("SELECT re FROM RvvdReclasifEmpaque re WHERE re.pais IN (" + paises + ") ORDER BY re.tipoConsumoR ASC NULLS FIRST,re.tipoConsumoEn ASC NULLS FIRST, re.empaqueR ASC NULLS FIRST, re.empaqueEn ASC NULLS FIRST");
         List<RvvdReclasifEmpaque> empaquesReclasificados = query.list();
         session.flush();
         session.clear();

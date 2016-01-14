@@ -1,6 +1,14 @@
 package com.femsa.kof.util;
 
+import com.femsa.kof.daily.dao.CatCanalDAO;
+import com.femsa.kof.daily.dao.CatCategoriaDAO;
 import com.femsa.kof.daily.dao.CatCategoriaOficialDAO;
+import com.femsa.kof.daily.dao.CatContCaloricoDAO;
+import com.femsa.kof.daily.dao.CatEmpaqueDAO;
+import com.femsa.kof.daily.dao.CatGecDAO;
+import com.femsa.kof.daily.dao.CatMarcaDAO;
+import com.femsa.kof.daily.dao.CatTipoConsumoDAO;
+import com.femsa.kof.daily.dao.CatUnidadNegocioDAO;
 import com.femsa.kof.share.dao.ShareCatCategoriasDAO;
 import com.femsa.kof.share.dao.ShareCatPaisDAO;
 import com.femsa.kof.share.dao.ShareCatCanalesDAO;
@@ -9,7 +17,7 @@ import javax.servlet.ServletContext;
 
 public class CatalogLoader {
 
-    public static void loadCatalogs(String proyecto) {       
+    public static void loadCatalogs(String proyecto) {
         ServletContext sc = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         if (proyecto.equalsIgnoreCase("share")) {
             ShareCatCategoriasDAO catCategoriasDAO = new ShareCatCategoriasDAO();
@@ -20,9 +28,33 @@ public class CatalogLoader {
 
             ShareCatPaisDAO catPaisDAO = new ShareCatPaisDAO();
             sc.setAttribute("countries_catalog", catPaisDAO.getCatPais());
-        }else if(proyecto.equalsIgnoreCase("daily")){
+        } else if (proyecto.equalsIgnoreCase("daily")) {
+            CatCategoriaDAO categoriaDAO = new CatCategoriaDAO();
+            sc.setAttribute("categoria_daily_catalog", categoriaDAO.getCategorias());
+
+            CatMarcaDAO marcaDAO = new CatMarcaDAO();
+            sc.setAttribute("marca_daily_catalog", marcaDAO.getMarcas());
+            
+            CatContCaloricoDAO contCaloricoDAO = new CatContCaloricoDAO();
+            sc.setAttribute("contCalorico_daily_catalog", contCaloricoDAO.getContsCal());
+
             CatCategoriaOficialDAO categoriaOficialDAO = new CatCategoriaOficialDAO();
-            sc.setAttribute("categoria_oficial_catalog", categoriaOficialDAO.getCategoriasOficiales());            
+            sc.setAttribute("categoria_oficial_catalog", categoriaOficialDAO.getCategoriasOficiales());
+            
+            CatGecDAO gecDAO = new CatGecDAO();  
+            sc.setAttribute("gec_daily_catalog", gecDAO.getGecs());
+            
+            CatUnidadNegocioDAO unidadNegocioDAO = new CatUnidadNegocioDAO(); 
+            sc.setAttribute("unidadNegocio_daily_catalog", unidadNegocioDAO.getUnidadesNeg());
+            
+            CatTipoConsumoDAO tipoConsumoDAO = new CatTipoConsumoDAO();  
+            sc.setAttribute("tipoConsumo_daily_catalog", tipoConsumoDAO.getTiposConsumo());
+            
+            CatEmpaqueDAO empaqueDAO = new CatEmpaqueDAO();  
+            sc.setAttribute("empaque_daily_catalog", empaqueDAO.getEmpaques());
+            
+            CatCanalDAO canalDAO = new CatCanalDAO(); 
+            sc.setAttribute("canal_daily_catalog", canalDAO.getCanales());
         }
     }
 

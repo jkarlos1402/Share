@@ -33,7 +33,7 @@ public class ReclasifCanalDAO {
                 paises = "'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
             }
         }
-        Query query = session.createQuery("SELECT rc FROM RvvdReclasifCanal rc WHERE rc.pais IN (" + paises + ")");
+        Query query = session.createQuery("SELECT rc FROM RvvdReclasifCanal rc WHERE rc.pais IN (" + paises + ") ORDER BY rc.canalR DESC,rc.canalEn DESC");
         List<RvvdReclasifCanal> canalesReclasificados = query.list();
         session.flush();
         session.clear();
