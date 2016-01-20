@@ -16,7 +16,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "RVVD_INFO_PH")
+@Table(name = "XTMPINDICOMER_PHI_DIA_CARGA")
+//@Table(name = "RVVD_INFO_PH")
 public class RvvdInfoPh implements Serializable {
 
     private static final long serialVersionUID = 1L;

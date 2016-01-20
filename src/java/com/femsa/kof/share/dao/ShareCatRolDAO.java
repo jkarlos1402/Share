@@ -9,16 +9,33 @@ import org.hibernate.SessionFactory;
 
 public class ShareCatRolDAO {
 
+    private String error = "";
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
     public List<ShareCatRol> getCatRol() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT r FROM ShareCatRol r");
-        List<ShareCatRol> roles = query.list();
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        List<ShareCatRol> roles = null;
+        try {
+            Query query = session.createQuery("SELECT r FROM ShareCatRol r");
+            roles = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return roles;
     }
 
@@ -26,11 +43,18 @@ public class ShareCatRolDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        ShareCatRol rol = (ShareCatRol) session.get(ShareCatRol.class, idRol);
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        ShareCatRol rol = null;
+        try {
+            rol = (ShareCatRol) session.get(ShareCatRol.class, idRol);
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return rol;
     }
 }

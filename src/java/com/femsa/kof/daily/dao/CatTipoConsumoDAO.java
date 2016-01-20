@@ -23,12 +23,19 @@ public class CatTipoConsumoDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT tc FROM RvvdCatTipoConsumo tc");
-        List<RvvdCatTipoConsumo> tiposConsumo = query.list();
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        List<RvvdCatTipoConsumo> tiposConsumo = null;
+        try {
+            Query query = session.createQuery("SELECT tc FROM RvvdCatTipoConsumo tc");
+            tiposConsumo = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return tiposConsumo;
     }
 
@@ -36,12 +43,19 @@ public class CatTipoConsumoDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT tc FROM RvvdCatTipoConsumo tc WHERE tc.status = 1");
-        List<RvvdCatTipoConsumo> tiposConsumo = query.list();
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        List<RvvdCatTipoConsumo> tiposConsumo = null;
+        try {
+            Query query = session.createQuery("SELECT tc FROM RvvdCatTipoConsumo tc WHERE tc.status = 1");
+            tiposConsumo = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return tiposConsumo;
     }
 
@@ -49,11 +63,18 @@ public class CatTipoConsumoDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        RvvdCatTipoConsumo tipoConsumo = (RvvdCatTipoConsumo) session.get(RvvdCatTipoConsumo.class, id);
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        RvvdCatTipoConsumo tipoConsumo = null;
+        try {
+            tipoConsumo = (RvvdCatTipoConsumo) session.get(RvvdCatTipoConsumo.class, id);
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return tipoConsumo;
     }
 
@@ -61,16 +82,22 @@ public class CatTipoConsumoDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT tc FROM RvvdCatTipoConsumo tc WHERE tc.tipoConsumoR = '" + tipoConsumo.toUpperCase() + "' OR tc.tipoConsumoEn = '" + tipoConsumo.toUpperCase() + "'");
-        List<RvvdCatTipoConsumo> tiposConsumo = query.list();
         RvvdCatTipoConsumo tipoConsumoT = null;
-        if (tiposConsumo.size() > 0) {
-            tipoConsumoT = tiposConsumo.get(0);
+        try {
+            Query query = session.createQuery("SELECT tc FROM RvvdCatTipoConsumo tc WHERE tc.tipoConsumoR = '" + tipoConsumo.toUpperCase() + "' OR tc.tipoConsumoEn = '" + tipoConsumo.toUpperCase() + "'");
+            List<RvvdCatTipoConsumo> tiposConsumo = query.list();
+            if (tiposConsumo.size() > 0) {
+                tipoConsumoT = tiposConsumo.get(0);
+            }
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
         }
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
         return tipoConsumoT;
     }
 
@@ -83,6 +110,7 @@ public class CatTipoConsumoDAO {
             session.beginTransaction();
             if ((tipoConsumo.getIdTipoConsumo() == null ? getTipoConsumo(tipoConsumo.getTipoConsumoR()) : null) == null) {
                 session.saveOrUpdate(tipoConsumo);
+                error = null;
             } else {
                 error = "Type of consumption already exists";
                 flagOk = false;

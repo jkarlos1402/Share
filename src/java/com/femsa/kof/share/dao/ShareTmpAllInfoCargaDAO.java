@@ -44,8 +44,8 @@ public class ShareTmpAllInfoCargaDAO {
             queryNativo = session.createSQLQuery("DELETE FROM SHARE_TMP_ALL_INFO_CARGA WHERE FK_USUARIO = " + usuario.getPkUsuario() + " AND PAIS = '" + pais.getNombre().toUpperCase() + "'");
             queryNativo.executeUpdate();
             session.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
+            errors.clear();
+        } catch (Exception e) {            
             errors.add("Error saving records: " + e.getMessage());
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
@@ -59,4 +59,14 @@ public class ShareTmpAllInfoCargaDAO {
         }
         return flagOk;
     }
+
+    public List<String> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(List<String> errors) {
+        this.errors = errors;
+    }
+    
+    
 }

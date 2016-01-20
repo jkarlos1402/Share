@@ -33,12 +33,19 @@ public class ReclasifMarcaDAO {
                 paises = "'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
             }
         }
-        Query query = session.createQuery("SELECT rm FROM RvvdReclasifMarca rm WHERE rm.pais IN (" + paises + ")");
-        List<RvvdReclasifMarca> marcas = query.list();
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        List<RvvdReclasifMarca> marcas = null;
+        try {
+            Query query = session.createQuery("SELECT rm FROM RvvdReclasifMarca rm WHERE rm.pais IN (" + paises + ")");
+            marcas = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return marcas;
     }
 
@@ -59,6 +66,7 @@ public class ReclasifMarcaDAO {
                     }
                     cont++;
                 }
+                error = null;
             }
             session.getTransaction().commit();
             CheckCatalogs.checkAllCatalogs();
@@ -89,13 +97,20 @@ public class ReclasifMarcaDAO {
                 paises = "'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
             }
         }
-        Query query = session.createQuery("SELECT count(rm.idReclasifMarca) FROM RvvdReclasifMarca rm WHERE rm.pais IN (" + paises + ") AND (rm.contenidoCaloricoR IS NULL OR rm.contenidoCaloricoEn IS NULL OR rm.marcaR IS NULL OR rm.marcaEn IS NULL)");
-        List<Object> res = query.list();
-        long numNotReclass = (Long)res.get(0);  
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        long numNotReclass = 0L;
+        try {
+            Query query = session.createQuery("SELECT count(rm.idReclasifMarca) FROM RvvdReclasifMarca rm WHERE rm.pais IN (" + paises + ") AND (rm.contenidoCaloricoR IS NULL OR rm.contenidoCaloricoEn IS NULL OR rm.marcaR IS NULL OR rm.marcaEn IS NULL)");
+            List<Object> res = query.list();
+            numNotReclass = (Long) res.get(0);
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return numNotReclass;
     }
 }

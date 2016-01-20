@@ -20,45 +20,65 @@ public class ShareCatGrupoCategoriasDAO {
     }
 
     public List<ShareCatGrupoCategorias> getCategoryGroups() {
+        List<ShareCatGrupoCategorias> grupos = null;
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT gc FROM ShareCatGrupoCategorias gc WHERE gc.status = 1");
-        List<ShareCatGrupoCategorias> grupos = query.list();
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        try {
+            Query query = session.createQuery("SELECT gc FROM ShareCatGrupoCategorias gc WHERE gc.status = 1");
+            grupos = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return grupos;
     }
 
     public ShareCatGrupoCategorias getCategoryGroup(String name) {
+        ShareCatGrupoCategorias grupo = null;
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT gc FROM ShareCatGrupoCategorias gc WHERE gc.grupoCategoria = '" + name.toUpperCase() + "'");
-        List<ShareCatGrupoCategorias> grupos = query.list();
-        ShareCatGrupoCategorias grupo = null;
-        if (grupos.size() > 0) {
-            grupo = grupos.get(0);
+        try {
+            Query query = session.createQuery("SELECT gc FROM ShareCatGrupoCategorias gc WHERE gc.grupoCategoria = '" + name.toUpperCase() + "'");
+            List<ShareCatGrupoCategorias> grupos = query.list();
+            if (grupos.size() > 0) {
+                grupo = grupos.get(0);
+            }
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
         }
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
         return grupo;
     }
 
     public List<ShareCatGrupoCategorias> getCategoryGroupsAll() {
+        List<ShareCatGrupoCategorias> grupos = null;
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT gc FROM ShareCatGrupoCategorias gc");
-        List<ShareCatGrupoCategorias> grupos = query.list();
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        try {
+            Query query = session.createQuery("SELECT gc FROM ShareCatGrupoCategorias gc");
+            grupos = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getClass().getName() + " - " + e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return grupos;
     }
 
@@ -71,12 +91,14 @@ public class ShareCatGrupoCategoriasDAO {
             session.beginTransaction();
             if ((grupoCategorias.getPkGrupoCategoria() == null ? getCategoryGroup(grupoCategorias.getGrupoCategoria()) : null) == null) {
                 session.saveOrUpdate(grupoCategorias);
+                error = null;
             } else {
                 error = "Group category already exists";
                 flagOk = false;
             }
             session.getTransaction().commit();
         } catch (Exception e) {
+            error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

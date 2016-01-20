@@ -4,7 +4,6 @@ import com.femsa.kof.daily.dao.RvvdInfoPhDAO;
 import com.femsa.kof.daily.pojos.RvvdInfoPh;
 import com.femsa.kof.share.pojos.ShareCatPais;
 import com.femsa.kof.share.pojos.ShareUsuario;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
@@ -12,36 +11,20 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.eventusermodel.ReadOnlySharedStringsTable;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFChartSheet;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.hibernate.Session;
 import org.primefaces.model.UploadedFile;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 public class XlsAnalizerSalesPh {
@@ -102,11 +85,9 @@ public class XlsAnalizerSalesPh {
         this.cargasInfoPh = cargasInfoPh;
     }
 
-    public void analizeXls(UploadedFile file, ShareCatPais catPais, ShareUsuario usuario) {
-        Workbook excelXLS = null;
+    public void analizeXls(UploadedFile file, ShareCatPais catPais, ShareUsuario usuario) {        
         int numSheet = 0;
-        try {
-            String extension = getExtension(file.getFileName());
+        try {           
             OPCPackage oPCPackage = null;
             oPCPackage = OPCPackage.open(file.getInputstream());
             stringsTable = new ReadOnlySharedStringsTable(oPCPackage);
@@ -124,10 +105,6 @@ public class XlsAnalizerSalesPh {
                         if (xmlReader.isStartElement()) {
                             if (xmlReader.getLocalName().equals("sheetData")) {
                                 int attrs = xmlReader.getAttributeCount();
-//                                for (int i = 0; i < attrs; i++) {
-//                                    System.out.println(xmlReader.getAttributeName(i));
-//                                    System.out.println(xmlReader.getAttributeValue(i));
-//                                }
                                 break;
                             }
                         }
@@ -150,10 +127,11 @@ public class XlsAnalizerSalesPh {
             if (oPCPackage != null) {
                 oPCPackage.close();
             }
+            errors.clear();
         } catch (IOException ex) {
-            ex.printStackTrace();
+           errors.add(ex.getMessage());
         } catch (Exception ex) {
-            ex.printStackTrace();
+           errors.add(ex.getMessage());
         }
     }
 
@@ -178,10 +156,6 @@ public class XlsAnalizerSalesPh {
                         if (xmlReader.isStartElement()) {
                             if (xmlReader.getLocalName().equals("sheetData")) {
                                 int attrs = xmlReader.getAttributeCount();
-//                                for (int i = 0; i < attrs; i++) {
-//                                    System.out.println(xmlReader.getAttributeName(i));
-//                                    System.out.println(xmlReader.getAttributeValue(i));
-//                                }
                                 break;
                             }
                         }
@@ -190,6 +164,7 @@ public class XlsAnalizerSalesPh {
                         if (oPCPackage != null) {
                             oPCPackage.close();
                         }
+                        errors.clear();
                     } else {
                         if (oPCPackage != null) {
                             oPCPackage.close();
@@ -199,32 +174,23 @@ public class XlsAnalizerSalesPh {
                 }
             }
         } catch (InvalidFormatException ex) {
-            ex.printStackTrace();
+            errors.add(ex.getMessage());
             flagOk = false;
         } catch (IOException ex) {
-            ex.printStackTrace();
+            errors.add(ex.getMessage());
             flagOk = false;
         } catch (SAXException ex) {
-            ex.printStackTrace();
+            errors.add(ex.getMessage());
             flagOk = false;
         } catch (OpenXML4JException ex) {
-            ex.printStackTrace();
+            errors.add(ex.getMessage());
             flagOk = false;
         } catch (XMLStreamException ex) {
-            ex.printStackTrace();
+            errors.add(ex.getMessage());
             flagOk = false;
         }
         return flagOk;
-    }
-
-    private static String getExtension(String filename) {
-        int index = filename.lastIndexOf('.');
-        if (index == -1) {
-            return "";
-        } else {
-            return filename.substring(index + 1);
-        }
-    }
+    }   
 
     public void readRows() throws XMLStreamException {
         errors.clear();
@@ -237,7 +203,6 @@ public class XlsAnalizerSalesPh {
                 if (xmlReader.getLocalName().equals(elementName)) {
                     rowNum++;
                     data = getDataRow();
-                    /////////////
                     if (data.length < 14) {
                         errors.add("Approximately " + (rowNum) + " row in " + sheetName + " sheet have a invalid number of columns, the sheet has been omitted.");
                         rowNum = 0L;
@@ -256,9 +221,7 @@ public class XlsAnalizerSalesPh {
                                 }
                             }
                         }
-                    }
-
-                    /////////////                    
+                    }                   
                 }
             }
         }                    
@@ -276,6 +239,7 @@ public class XlsAnalizerSalesPh {
         String elementName = "row";
         String[] data = null;
         rowNum = 0L;
+        long cont = 0L;
         try {
             session.beginTransaction();
             while (xmlReader.hasNext()) {
@@ -287,9 +251,9 @@ public class XlsAnalizerSalesPh {
                         //primera columna FECHA (STRING O numeric)
                         infoTemp = new RvvdInfoPh();
                         try {
-
                             infoTemp.setFecha(data[0] != null && data[0].contains("/") ? formatoDelTexto.parse(data[0]) : new Date(Long.parseLong(data[0])));
                         } catch (ParseException ex) {
+                            errors.add(ex.getMessage());
                         }
 
                         //segunda columna, string o nulo
@@ -322,21 +286,23 @@ public class XlsAnalizerSalesPh {
                         //onceaba columna, numeric            
                         infoTemp.setVentaCu(data[10] != null && !data[10].equals("") ? Double.parseDouble(data[10]) : 0L);
                         //doceaba columna, numeric        
-                        infoTemp.setIngresoNeto(data[11] != null && !data[10].equals("") ? Double.parseDouble(data[11]) : 0L);
+                        infoTemp.setIngresoNeto(data[11] != null && !data[11].equals("") ? Double.parseDouble(data[11]) : 0L);
                         //treceaba columna, numeric      
-                        infoTemp.setCuota(data[12] != null && !data[10].equals("") ? Double.parseDouble(data[12]) : 0L);
+                        infoTemp.setCuota(data[12] != null && !data[12].equals("") ? Double.parseDouble(data[12]) : 0L);
                         //catorceaba columna, numeric         
-                        infoTemp.setVentaTa(data[13] != null && !data[10].equals("") ? Double.parseDouble(data[13]) : 0L);
+                        infoTemp.setVentaTa(data[13] != null && !data[13].equals("") ? Double.parseDouble(data[13]) : 0L);
 
                         infoTemp.setIdTiempo(new BigInteger(formatoDelTextoInverso.format(infoTemp.getFecha())));
                         cargas.add(infoTemp);
-                        if (rowNum % 10000 == 0 || rowNum == (numRegistros - 1)) {                            
+                        if (rowNum % 10000 == 0 || rowNum == (numRegistros - 1)) {   
+                            System.out.println("entro a guardar en: "+rowNum);
                             for (RvvdInfoPh carga : cargas) {
                                 session.save(carga);
-                                if (rowNum % 100 == 0) {
+                                if (cont % 100 == 0) {
                                     session.flush();
                                     session.clear();
                                 }
+                                cont++;
                             }
                             cargas.clear();
                         }
@@ -346,9 +312,9 @@ public class XlsAnalizerSalesPh {
                 rowNum++;
             }
             session.getTransaction().commit();
+            errors.clear();
         } catch (Exception ex) {            
-            ex.printStackTrace();
-
+            errors.add(ex.getMessage());
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }
@@ -358,9 +324,8 @@ public class XlsAnalizerSalesPh {
             session.clear();
             session.close();
             infoPhDAO.getHibernateUtil().closeSessionFactory();
-        }
-        /////////////
-        return flagOk;        
+        }   
+        return flagOk;         
     }
 
     private String[] getDataRow() throws XMLStreamException {

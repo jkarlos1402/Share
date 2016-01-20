@@ -23,12 +23,19 @@ public class CatContCaloricoDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT cc FROM RvvdCatContenidoCalorico cc");
-        List<RvvdCatContenidoCalorico> contenidos = query.list();
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        List<RvvdCatContenidoCalorico> contenidos = null;
+        try {
+            Query query = session.createQuery("SELECT cc FROM RvvdCatContenidoCalorico cc");
+            contenidos = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return contenidos;
     }
 
@@ -36,12 +43,19 @@ public class CatContCaloricoDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT cc FROM RvvdCatContenidoCalorico cc WHERE cc.status = 1");
-        List<RvvdCatContenidoCalorico> contenidos = query.list();
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        List<RvvdCatContenidoCalorico> contenidos = null;
+        try {
+            Query query = session.createQuery("SELECT cc FROM RvvdCatContenidoCalorico cc WHERE cc.status = 1");
+            contenidos = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return contenidos;
     }
 
@@ -49,7 +63,18 @@ public class CatContCaloricoDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        RvvdCatContenidoCalorico contenido = (RvvdCatContenidoCalorico) session.get(RvvdCatContenidoCalorico.class, id);
+        RvvdCatContenidoCalorico contenido = null;
+        try {
+            contenido = (RvvdCatContenidoCalorico) session.get(RvvdCatContenidoCalorico.class, id);
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         session.flush();
         session.clear();
         session.close();
@@ -61,16 +86,23 @@ public class CatContCaloricoDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT cc FROM RvvdCatContenidoCalorico cc WHERE cc.contenidoCaloricoR = '" + contenido.toUpperCase() + "' OR cc.contenidoCaloricoEn = '" + contenido.toUpperCase() + "'");
-        List<RvvdCatContenidoCalorico> contenidos = query.list();
         RvvdCatContenidoCalorico contenidoT = null;
-        if (contenidos.size() > 0) {
-            contenidoT = contenidos.get(0);
+        try {
+            Query query = session.createQuery("SELECT cc FROM RvvdCatContenidoCalorico cc WHERE cc.contenidoCaloricoR = '" + contenido.toUpperCase() + "' OR cc.contenidoCaloricoEn = '" + contenido.toUpperCase() + "'");
+            List<RvvdCatContenidoCalorico> contenidos = query.list();
+
+            if (contenidos.size() > 0) {
+                contenidoT = contenidos.get(0);
+            }
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
         }
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
         return contenidoT;
     }
 
@@ -83,6 +115,7 @@ public class CatContCaloricoDAO {
             session.beginTransaction();
             if ((contenido.getIdContenidoCalorico() == null ? getContCal(contenido.getContenidoCaloricoR()) : null) == null) {
                 session.saveOrUpdate(contenido);
+                error = null;
             } else {
                 error = "Calorie already exists";
                 flagOk = false;

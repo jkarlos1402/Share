@@ -33,12 +33,19 @@ public class ReclasifEmpaqueDAO {
                 paises = "'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
             }
         }
-        Query query = session.createQuery("SELECT re FROM RvvdReclasifEmpaque re WHERE re.pais IN (" + paises + ") ORDER BY re.tipoConsumoR ASC NULLS FIRST,re.tipoConsumoEn ASC NULLS FIRST, re.empaqueR ASC NULLS FIRST, re.empaqueEn ASC NULLS FIRST");
-        List<RvvdReclasifEmpaque> empaquesReclasificados = query.list();
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        List<RvvdReclasifEmpaque> empaquesReclasificados = null;
+        try {
+            Query query = session.createQuery("SELECT re FROM RvvdReclasifEmpaque re WHERE re.pais IN (" + paises + ") ORDER BY re.tipoConsumoR ASC NULLS FIRST,re.tipoConsumoEn ASC NULLS FIRST, re.empaqueR ASC NULLS FIRST, re.empaqueEn ASC NULLS FIRST");
+            empaquesReclasificados = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return empaquesReclasificados;
     }
 
@@ -59,6 +66,7 @@ public class ReclasifEmpaqueDAO {
                     }
                     cont++;
                 }
+                error = null;
             }
             session.getTransaction().commit();
             CheckCatalogs.checkAllCatalogs();
@@ -89,13 +97,20 @@ public class ReclasifEmpaqueDAO {
                 paises = "'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
             }
         }
-        Query query = session.createQuery("SELECT count(re.idReclasifEmpaque) FROM RvvdReclasifEmpaque re WHERE re.pais IN (" + paises + ") AND (re.tipoConsumoR IS NULL OR re.tipoConsumoEn IS NULL OR re.empaqueR IS NULL OR re.empaqueEn IS NULL)");
-        List<Object> res = query.list();
-        long numNotReclass = (Long)res.get(0);  
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        long numNotReclass = 0L;
+        try {
+            Query query = session.createQuery("SELECT count(re.idReclasifEmpaque) FROM RvvdReclasifEmpaque re WHERE re.pais IN (" + paises + ") AND (re.tipoConsumoR IS NULL OR re.tipoConsumoEn IS NULL OR re.empaqueR IS NULL OR re.empaqueEn IS NULL)");
+            List<Object> res = query.list();
+            numNotReclass = (Long) res.get(0);
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return numNotReclass;
     }
 }

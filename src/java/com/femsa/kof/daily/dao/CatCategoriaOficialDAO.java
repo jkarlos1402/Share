@@ -23,12 +23,19 @@ public class CatCategoriaOficialDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT co FROM RvvdCatCategoriaOficial co");
-        List<RvvdCatCategoriaOficial> categoriasOficiales = query.list();
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        List<RvvdCatCategoriaOficial> categoriasOficiales = null;
+        try {
+            Query query = session.createQuery("SELECT co FROM RvvdCatCategoriaOficial co");
+            categoriasOficiales = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return categoriasOficiales;
     }
 
@@ -36,12 +43,19 @@ public class CatCategoriaOficialDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT co FROM RvvdCatCategoriaOficial co WHERE co.status = 1");
-        List<RvvdCatCategoriaOficial> categoriasOficiales = query.list();
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        List<RvvdCatCategoriaOficial> categoriasOficiales = null;
+        try {
+            Query query = session.createQuery("SELECT co FROM RvvdCatCategoriaOficial co WHERE co.status = 1");
+            categoriasOficiales = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return categoriasOficiales;
     }
 
@@ -49,11 +63,18 @@ public class CatCategoriaOficialDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        RvvdCatCategoriaOficial categOficial = (RvvdCatCategoriaOficial) session.get(RvvdCatCategoriaOficial.class, id);
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        RvvdCatCategoriaOficial categOficial = null;
+        try {
+            categOficial = (RvvdCatCategoriaOficial) session.get(RvvdCatCategoriaOficial.class, id);
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return categOficial;
     }
 
@@ -61,16 +82,22 @@ public class CatCategoriaOficialDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT co FROM RvvdCatCategoriaOficial co WHERE co.categoriaOficial = '" + categoria.toUpperCase() + "' OR co.categoriaOficialEn = '" + categoria.toUpperCase() + "'");
-        List<RvvdCatCategoriaOficial> categoriasOficiales = query.list();
         RvvdCatCategoriaOficial categOficial = null;
-        if (categoriasOficiales.size() > 0) {
-            categOficial = categoriasOficiales.get(0);
+        try {
+            Query query = session.createQuery("SELECT co FROM RvvdCatCategoriaOficial co WHERE co.categoriaOficial = '" + categoria.toUpperCase() + "' OR co.categoriaOficialEn = '" + categoria.toUpperCase() + "'");
+            List<RvvdCatCategoriaOficial> categoriasOficiales = query.list();
+            if (categoriasOficiales.size() > 0) {
+                categOficial = categoriasOficiales.get(0);
+            }
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
         }
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
         return categOficial;
     }
 
@@ -83,6 +110,7 @@ public class CatCategoriaOficialDAO {
             session.beginTransaction();
             if ((catCategoriaOficial.getIdCategoriaOficial() == null ? getCategoriaOficial(catCategoriaOficial.getCategoriaOficial()) : null) == null) {
                 session.saveOrUpdate(catCategoriaOficial);
+                error = null;
             } else {
                 error = "Official category already exists";
                 flagOk = false;

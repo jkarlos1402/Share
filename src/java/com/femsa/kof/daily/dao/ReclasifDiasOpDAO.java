@@ -33,12 +33,19 @@ public class ReclasifDiasOpDAO {
                 paises = "'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
             }
         }
-        Query query = session.createQuery("SELECT do FROM RvvdReclasifDiasOp do WHERE do.pais IN (" + paises + ") ORDER BY do.fechaR DESC");
-        List<RvvdReclasifDiasOp> diasOpReclasificados = query.list();
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        List<RvvdReclasifDiasOp> diasOpReclasificados = null;
+        try {
+            Query query = session.createQuery("SELECT do FROM RvvdReclasifDiasOp do WHERE do.pais IN (" + paises + ") ORDER BY do.fechaR DESC");
+            diasOpReclasificados = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return diasOpReclasificados;
     }
 
@@ -59,6 +66,7 @@ public class ReclasifDiasOpDAO {
                     }
                     cont++;
                 }
+                error = null;
             }
             session.getTransaction().commit();
             CheckCatalogs.checkAllCatalogs();
@@ -89,13 +97,20 @@ public class ReclasifDiasOpDAO {
                 paises = "'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
             }
         }
-        Query query = session.createQuery("SELECT count(do.idReclasifDiasOp) FROM RvvdReclasifDiasOp do WHERE do.pais IN (" + paises + ") AND do.fechaR IS NULL");
-        List<Object> res = query.list();
-        long numNotReclass = (Long)res.get(0);  
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        long numNotReclass = 0L;
+        try {
+            Query query = session.createQuery("SELECT count(do.idReclasifDiasOp) FROM RvvdReclasifDiasOp do WHERE do.pais IN (" + paises + ") AND do.fechaR IS NULL");
+            List<Object> res = query.list();
+            numNotReclass = (Long) res.get(0);
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return numNotReclass;
     }
 }

@@ -23,12 +23,19 @@ public class CatUnidadNegocioDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT un FROM RvvdCatUnidadNegocio un");
-        List<RvvdCatUnidadNegocio> unidades = query.list();
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        List<RvvdCatUnidadNegocio> unidades = null;
+        try {
+            Query query = session.createQuery("SELECT un FROM RvvdCatUnidadNegocio un");
+            unidades = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return unidades;
     }
 
@@ -36,12 +43,19 @@ public class CatUnidadNegocioDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT un FROM RvvdCatUnidadNegocio un WHERE un.status = 1");
-        List<RvvdCatUnidadNegocio> unidades = query.list();
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        List<RvvdCatUnidadNegocio> unidades = null;
+        try {
+            Query query = session.createQuery("SELECT un FROM RvvdCatUnidadNegocio un WHERE un.status = 1");
+            unidades = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return unidades;
     }
 
@@ -49,11 +63,18 @@ public class CatUnidadNegocioDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        RvvdCatUnidadNegocio unidad = (RvvdCatUnidadNegocio) session.get(RvvdCatUnidadNegocio.class, id);
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        RvvdCatUnidadNegocio unidad = null;
+        try {
+            unidad = (RvvdCatUnidadNegocio) session.get(RvvdCatUnidadNegocio.class, id);
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return unidad;
     }
 
@@ -61,16 +82,22 @@ public class CatUnidadNegocioDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT un FROM RvvdCatUnidadNegocio un WHERE un.unidadNegocioR = '" + unidad.toUpperCase() + "' OR un.unidadNegocioEn = '" + unidad.toUpperCase() + "'");
-        List<RvvdCatUnidadNegocio> unidades = query.list();
         RvvdCatUnidadNegocio unidadT = null;
-        if (unidades.size() > 0) {
-            unidadT = unidades.get(0);
+        try {
+            Query query = session.createQuery("SELECT un FROM RvvdCatUnidadNegocio un WHERE un.unidadNegocioR = '" + unidad.toUpperCase() + "' OR un.unidadNegocioEn = '" + unidad.toUpperCase() + "'");
+            List<RvvdCatUnidadNegocio> unidades = query.list();
+            if (unidades.size() > 0) {
+                unidadT = unidades.get(0);
+            }
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
         }
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
         return unidadT;
     }
 
@@ -83,6 +110,7 @@ public class CatUnidadNegocioDAO {
             session.beginTransaction();
             if ((unidad.getIdUnidadNegocio() == null ? getUnidadNeg(unidad.getUnidadNegocioR()) : null) == null) {
                 session.saveOrUpdate(unidad);
+                error = null;
             } else {
                 error = "Bussiness unit already exists";
                 flagOk = false;

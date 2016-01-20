@@ -9,16 +9,33 @@ import org.hibernate.SessionFactory;
 
 public class ShareCatCanalesDAO {
 
+    private String error;
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
     public List<ShareCatCanales> getCanales() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT canales FROM ShareCatCanales canales");
-        List<ShareCatCanales> canales = query.list();     
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        List<ShareCatCanales> canales = null;
+        try {
+            Query query = session.createQuery("SELECT canales FROM ShareCatCanales canales");
+            canales = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return canales;
     }
 }

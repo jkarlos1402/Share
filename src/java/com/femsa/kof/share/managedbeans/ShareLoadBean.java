@@ -199,6 +199,7 @@ public class ShareLoadBean implements Serializable {
                         message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", "Records saved, but post-process FAILED, please contact whith the page administrator, [ERROR: " + cadenaError + "]");
                     }
                 } else {
+                    errors = cargaDAO.getErrors();
                     String cadenaError = "";
                     for (String error : errors) {
                         cadenaError += error + ", ";

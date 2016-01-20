@@ -20,8 +20,11 @@ public class ContextListenerKOF implements ServletContextListener {
         context.setAttribute("flag_load_rolling_daily", flagLoadRollingDaily);        
         context.setAttribute("flag_load_opdays_daily", flagLoadOpDaysDaily);        
         context.setAttribute("flag_load_sales_daily", flagLoadSalesDayly);        
-        CatalogLoader.loadCatalogs("share");
-        CatalogLoader.loadCatalogs("daily");
+        if(CatalogLoader.loadCatalogs("share")){            
+            CatalogLoader.loadCatalogs("daily");
+        }else{
+            context.setAttribute("error_database", CatalogLoader.error);
+        }        
     }
 
     @Override

@@ -23,12 +23,19 @@ public class ShareCatPaisDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT pais FROM ShareCatPais pais WHERE pais.idstatus = 1");
-        List<ShareCatPais> countries = query.list();
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        List<ShareCatPais> countries = null;
+        try {
+            Query query = session.createQuery("SELECT pais FROM ShareCatPais pais WHERE pais.idstatus = 1");
+            countries = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return countries;
     }
 
@@ -36,16 +43,23 @@ public class ShareCatPaisDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT pais FROM ShareCatPais pais WHERE pais.nombre = '" + nombrePais.toUpperCase() + "'");
-        List<ShareCatPais> countries = query.list();
+        List<ShareCatPais> countries = null;
         ShareCatPais country = null;
-        if (countries.size() > 0) {
-            country = countries.get(0);
+        try {
+            Query query = session.createQuery("SELECT pais FROM ShareCatPais pais WHERE pais.nombre = '" + nombrePais.toUpperCase() + "'");
+            countries = query.list();
+            if (countries.size() > 0) {
+                country = countries.get(0);
+            }
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
         }
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
         return country;
     }
 
@@ -53,12 +67,19 @@ public class ShareCatPaisDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT pais FROM ShareCatPais pais");
-        List<ShareCatPais> countries = query.list();
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        List<ShareCatPais> countries = null;
+        try {
+            Query query = session.createQuery("SELECT pais FROM ShareCatPais pais");
+            countries = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return countries;
     }
 
@@ -72,12 +93,14 @@ public class ShareCatPaisDAO {
             session.beginTransaction();
             if (pais.getPkPais() != null) {
                 session.update(pais);
+                error = null;
             } else if (getCatPais(pais.getNombre()) == null) {
                 query = session.createSQLQuery("CREATE TABLE " + pais.getNombreTabla() + " (PAIS VARCHAR2(50 BYTE),CANAL VARCHAR2(50 BYTE), "
                         + "FECHA VARCHAR2(50 BYTE), GRUPO_CATEGORIA VARCHAR2(50 BYTE), CATEGORIA VARCHAR2(50 BYTE), "
                         + "FABRICANTE VARCHAR2(100 BYTE), VOLUMEN_MES NUMBER, VENTA_MES NUMBER)");
                 query.executeUpdate();
                 session.save(pais);
+                error = null;
             } else {
                 error = "Country already exists";
                 flagOk = false;

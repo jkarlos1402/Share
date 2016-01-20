@@ -42,19 +42,7 @@ public class ShareCatalogsBean implements Serializable {
     private ShareCatFabricante fabricanteSelectedTable;
 
     public ShareCatalogsBean() {
-        grupoCategoriaSelected = new ShareCatGrupoCategorias();
-
-        ShareCatPaisDAO paisDAO = new ShareCatPaisDAO();
-        catPaises = paisDAO.getCatPaisAll();
-
-        ShareCatCategoriasDAO categoriasDAO = new ShareCatCategoriasDAO();
-        catCategorias = categoriasDAO.getCategoriasAll();
-
-        ShareCatGrupoCategoriasDAO grupoCategoriasDAO = new ShareCatGrupoCategoriasDAO();
-        catGrupoCategoriasAll = grupoCategoriasDAO.getCategoryGroupsAll();
-        
-        ShareCatFabricanteDAO fabricanteDAO = new ShareCatFabricanteDAO();
-        catFabricanteAll = fabricanteDAO.getFabricantesAll();
+        initBean();
     }
 
     public List<ShareCatFabricante> getCatFabricanteAll() {
@@ -172,12 +160,36 @@ public class ShareCatalogsBean implements Serializable {
         for (ShareCatGrupoCategorias grupo : grupos) {
             catGrupoCategorias.add(new SelectItem(grupo, grupo.getGrupoCategoria()));
         }
-
         return catGrupoCategorias;
     }
 
     public void setCatGrupoCategorias(List<SelectItem> catGrupoCategorias) {
         this.catGrupoCategorias = catGrupoCategorias;
+    }
+
+    private void initBean() {
+        FacesMessage message = null;
+        grupoCategoriaSelected = new ShareCatGrupoCategorias();
+
+        ShareCatCategoriasDAO categoriasDAO = new ShareCatCategoriasDAO();
+        catCategorias = categoriasDAO.getCategoriasAll();
+
+        if (categoriasDAO.getError() != null && !categoriasDAO.getError().equalsIgnoreCase("")) {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", categoriasDAO.getError());
+        } else {
+            ShareCatPaisDAO paisDAO = new ShareCatPaisDAO();
+            catPaises = paisDAO.getCatPaisAll();
+
+            ShareCatGrupoCategoriasDAO grupoCategoriasDAO = new ShareCatGrupoCategoriasDAO();
+            catGrupoCategoriasAll = grupoCategoriasDAO.getCategoryGroupsAll();
+
+            ShareCatFabricanteDAO fabricanteDAO = new ShareCatFabricanteDAO();
+            catFabricanteAll = fabricanteDAO.getFabricantesAll();
+        }
+        if (message != null) {
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+
     }
 
     public void newCategory() {

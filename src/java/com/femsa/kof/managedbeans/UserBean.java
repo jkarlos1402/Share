@@ -8,6 +8,7 @@ import com.femsa.kof.share.pojos.ShareCatPais;
 import com.femsa.kof.share.pojos.ShareCatProyecto;
 import com.femsa.kof.share.pojos.ShareCatRol;
 import com.femsa.kof.share.pojos.ShareUsuario;
+import com.femsa.kof.util.CatalogLoader;
 import com.femsa.kof.util.EncrypterKOF;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import org.primefaces.model.DualListModel;
 
@@ -25,7 +27,6 @@ public class UserBean implements Serializable {
 
     private String user;
     private String password;
-    private String passwordConfirm;
 
     private ShareUsuario usuarioNuevo = new ShareUsuario();
     private ShareUsuario usuarioSelected;
@@ -40,18 +41,38 @@ public class UserBean implements Serializable {
     private List<ShareCatProyecto> catProyectos = new ArrayList<ShareCatProyecto>();
     private ShareCatProyecto proyectoSelected;
 
-    public UserBean() {
-        ShareCatRolDAO rolDAO = new ShareCatRolDAO();
-        ShareCatPaisDAO paisDAO = new ShareCatPaisDAO();
-        catRoles = rolDAO.getCatRol();
-        List<ShareCatPais> sourcePais = paisDAO.getCatPais();
-        List<ShareCatPais> targetPais = new ArrayList<ShareCatPais>();
-        ShareCatProyectoDAO proyectoDAO = new ShareCatProyectoDAO();
-        catProyectos = proyectoDAO.getCatProyectos();
-        paisesAll = new DualListModel<ShareCatPais>(sourcePais, targetPais);
+    private String error;
 
-        ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();
-        usuariosAll = usuarioDAO.getAllUsers();
+    public UserBean() {
+        startBean();
+    }
+
+    private void startBean() {
+        ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        String errorDatabase = (String) context.getAttribute("error_database");
+        if (errorDatabase == null || (errorDatabase.trim().equalsIgnoreCase(""))) {
+            ShareCatRolDAO rolDAO = new ShareCatRolDAO();
+            ShareCatPaisDAO paisDAO = new ShareCatPaisDAO();
+            catRoles = rolDAO.getCatRol();
+            List<ShareCatPais> sourcePais = paisDAO.getCatPais();
+            List<ShareCatPais> targetPais = new ArrayList<ShareCatPais>();
+            ShareCatProyectoDAO proyectoDAO = new ShareCatProyectoDAO();
+            catProyectos = proyectoDAO.getCatProyectos();
+            paisesAll = new DualListModel<ShareCatPais>(sourcePais, targetPais);
+
+            ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();
+            usuariosAll = usuarioDAO.getAllUsers();
+        } else {
+            error = "No database connection - " + errorDatabase;
+        }
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
 
     public List<ShareCatProyecto> getCatProyectos() {
@@ -117,14 +138,6 @@ public class UserBean implements Serializable {
         this.password = password;
     }
 
-    public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
-
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
-    }
-
     public ShareUsuario getUsuarioNuevo() {
         return usuarioNuevo;
     }
@@ -150,17 +163,34 @@ public class UserBean implements Serializable {
     }
 
     public String logIn() {
-        ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();
-        EncrypterKOF encrypterKOF = new EncrypterKOF();
-        String passEnc = encrypterKOF.encrypt(password);
-        ShareUsuario usuario = usuarioDAO.getUsuario(user, passEnc);
-        if (usuario != null) {
-            HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-            httpSession.setAttribute("session_user", usuario);
-            return "correct";
-        } else {
-            FacesContext context = FacesContext.getCurrentInstance();
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: User or password incorrect", ""));
+        FacesContext context = FacesContext.getCurrentInstance();
+        ServletContext servletContext = (ServletContext) context.getExternalContext().getContext();
+        try {
+            if (error == null) {
+                ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();
+                EncrypterKOF encrypterKOF = new EncrypterKOF();
+                String passEnc = encrypterKOF.encrypt(password);
+                ShareUsuario usuario = usuarioDAO.getUsuario(user, passEnc);
+                if (usuario != null) {
+                    HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+                    httpSession.setAttribute("session_user", usuario);
+                    return "correct";
+                } else {
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: User or password incorrect", ""));
+                    return "index";
+                }
+            } else {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: " + error, ""));
+                if (CatalogLoader.loadCatalogs("share")) {
+                    servletContext.setAttribute("error_database", CatalogLoader.error);
+                    CatalogLoader.loadCatalogs("daily");
+                    error = null;
+                    startBean();
+                }
+                return "index";
+            }
+        } catch (Exception e) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: " + e.getMessage(), ""));
             return "index";
         }
     }

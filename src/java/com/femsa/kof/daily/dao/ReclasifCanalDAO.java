@@ -33,12 +33,19 @@ public class ReclasifCanalDAO {
                 paises = "'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
             }
         }
-        Query query = session.createQuery("SELECT rc FROM RvvdReclasifCanal rc WHERE rc.pais IN (" + paises + ") ORDER BY rc.canalR DESC,rc.canalEn DESC");
-        List<RvvdReclasifCanal> canalesReclasificados = query.list();
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        List<RvvdReclasifCanal> canalesReclasificados = null;
+        try {
+            Query query = session.createQuery("SELECT rc FROM RvvdReclasifCanal rc WHERE rc.pais IN (" + paises + ") ORDER BY rc.canalR DESC,rc.canalEn DESC");
+            canalesReclasificados = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return canalesReclasificados;
     }
 
@@ -59,6 +66,7 @@ public class ReclasifCanalDAO {
                     }
                     cont++;
                 }
+                error = null;
             }
             session.getTransaction().commit();
             CheckCatalogs.checkAllCatalogs();
@@ -89,13 +97,20 @@ public class ReclasifCanalDAO {
                 paises = "'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
             }
         }
-        Query query = session.createQuery("SELECT count(rc.idReclasifCanal) FROM RvvdReclasifCanal rc WHERE rc.pais IN (" + paises + ") AND (rc.canalR IS NULL OR rc.canalEn IS NULL)");
-        List<Object> res = query.list();
-        long numNotReclass = (Long)res.get(0);  
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        long numNotReclass = 0L;
+        try {
+            Query query = session.createQuery("SELECT count(rc.idReclasifCanal) FROM RvvdReclasifCanal rc WHERE rc.pais IN (" + paises + ") AND (rc.canalR IS NULL OR rc.canalEn IS NULL)");
+            List<Object> res = query.list();
+            numNotReclass = (Long) res.get(0);
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }        
         return numNotReclass;
     }
 }

@@ -53,9 +53,9 @@ public class RollingDAO {
                     cont++;
                 }
             }
+            errors.clear();
             session.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) {            
             errors.add("Error saving records: " + e.getMessage());
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();

@@ -23,12 +23,19 @@ public class CatMarcaDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT m FROM RvvdCatMarca m");
-        List<RvvdCatMarca> marcas = query.list();
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        List<RvvdCatMarca> marcas = null;
+        try {
+            Query query = session.createQuery("SELECT m FROM RvvdCatMarca m");
+            marcas = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return marcas;
     }
 
@@ -36,12 +43,19 @@ public class CatMarcaDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT m FROM RvvdCatMarca m WHERE m.status = 1");
-        List<RvvdCatMarca> marcas = query.list();
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        List<RvvdCatMarca> marcas = null;
+        try {
+            Query query = session.createQuery("SELECT m FROM RvvdCatMarca m WHERE m.status = 1");
+            marcas = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return marcas;
     }
 
@@ -49,11 +63,18 @@ public class CatMarcaDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        RvvdCatMarca marca = (RvvdCatMarca) session.get(RvvdCatMarca.class, id);
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        RvvdCatMarca marca = null;
+        try {
+            marca = (RvvdCatMarca) session.get(RvvdCatMarca.class, id);
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return marca;
     }
 
@@ -61,16 +82,22 @@ public class CatMarcaDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT m FROM RvvdCatMarca m WHERE m.marcaR = '" + marca.toUpperCase() + "' OR m.marcaEn = '" + marca.toUpperCase() + "'");
-        List<RvvdCatMarca> marcas = query.list();
         RvvdCatMarca marcaT = null;
-        if (marcas.size() > 0) {
-            marcaT = marcas.get(0);
+        try {
+            Query query = session.createQuery("SELECT m FROM RvvdCatMarca m WHERE m.marcaR = '" + marca.toUpperCase() + "' OR m.marcaEn = '" + marca.toUpperCase() + "'");
+            List<RvvdCatMarca> marcas = query.list();
+            if (marcas.size() > 0) {
+                marcaT = marcas.get(0);
+            }
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
         }
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
         return marcaT;
     }
 
@@ -83,6 +110,7 @@ public class CatMarcaDAO {
             session.beginTransaction();
             if ((marca.getIdMarca() == null ? getMarca(marca.getMarcaR()) : null) == null) {
                 session.saveOrUpdate(marca);
+                error = null;
             } else {
                 error = "Trademark already exists";
                 flagOk = false;

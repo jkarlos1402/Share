@@ -23,12 +23,19 @@ public class ShareCatFabricanteDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT fab FROM ShareCatFabricante fab");
-        List<ShareCatFabricante> fabricantes = query.list();
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        List<ShareCatFabricante> fabricantes = null;
+        try {
+            Query query = session.createQuery("SELECT fab FROM ShareCatFabricante fab");
+            fabricantes = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return fabricantes;
     }
 
@@ -36,12 +43,19 @@ public class ShareCatFabricanteDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT fab FROM ShareCatFabricante fab WHERE fab.status = 1");
-        List<ShareCatFabricante> fabricantes = query.list();
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        List<ShareCatFabricante> fabricantes = null;
+        try {
+            Query query = session.createQuery("SELECT fab FROM ShareCatFabricante fab WHERE fab.status = 1");
+            fabricantes = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return fabricantes;
     }
 
@@ -49,16 +63,23 @@ public class ShareCatFabricanteDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT fab FROM ShareCatFabricante fab WHERE fab.fabricante = '" + name.toUpperCase() + "'");
-        List<ShareCatFabricante> fabricantes = query.list();
+        List<ShareCatFabricante> fabricantes = null;
         ShareCatFabricante fabricante = null;
-        if (fabricantes.size() > 0) {
-            fabricante = fabricantes.get(0);
+        try {
+            Query query = session.createQuery("SELECT fab FROM ShareCatFabricante fab WHERE fab.fabricante = '" + name.toUpperCase() + "'");
+            fabricantes = query.list();
+            if (fabricantes.size() > 0) {
+                fabricante = fabricantes.get(0);
+            }
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
         }
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
         return fabricante;
     }
 
@@ -71,12 +92,14 @@ public class ShareCatFabricanteDAO {
             session.beginTransaction();
             if ((fabricante.getPkFabricante() == null ? getFabricante(fabricante.getFabricante()) : null) == null) {
                 session.saveOrUpdate(fabricante);
+                error = null;
             } else {
                 error = "Manufacturer already exists";
                 flagOk = false;
             }
             session.getTransaction().commit();
         } catch (Exception e) {
+            error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

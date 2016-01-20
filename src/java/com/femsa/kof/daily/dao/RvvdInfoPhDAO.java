@@ -1,6 +1,5 @@
 package com.femsa.kof.daily.dao;
 
-import com.femsa.kof.daily.pojos.RvvdInfoPh;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,18 +44,4 @@ public class RvvdInfoPhDAO {
     public void setSession(Session session) {
         this.session = session;
     }
-
-//    public boolean saveInfoPh(List<RvvdInfoPh> infoPh) {               
-//        boolean flagOk = true;
-//        long cont = 0L;
-//        for (RvvdInfoPh carga : infoPh) {
-//            session.save(carga);
-//            if (cont % 100 == 0) {
-//                session.flush();
-//                session.clear();
-//            }
-//            cont++;
-//        }
-//        return flagOk;
-//    }
 }

@@ -23,12 +23,19 @@ public class CatEmpaqueDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT e FROM RvvdCatEmpaque e");
-        List<RvvdCatEmpaque> empaques = query.list();
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        List<RvvdCatEmpaque> empaques = null;
+        try {
+            Query query = session.createQuery("SELECT e FROM RvvdCatEmpaque e");
+            empaques = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return empaques;
     }
 
@@ -36,12 +43,19 @@ public class CatEmpaqueDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT e FROM RvvdCatEmpaque e WHERE e.status = 1");
-        List<RvvdCatEmpaque> empaques = query.list();
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        List<RvvdCatEmpaque> empaques = null;
+        try {
+            Query query = session.createQuery("SELECT e FROM RvvdCatEmpaque e WHERE e.status = 1");
+            empaques = query.list();
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return empaques;
     }
 
@@ -49,11 +63,18 @@ public class CatEmpaqueDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        RvvdCatEmpaque empaque = (RvvdCatEmpaque) session.get(RvvdCatEmpaque.class, id);
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
+        RvvdCatEmpaque empaque = null;
+        try {
+            empaque = (RvvdCatEmpaque) session.get(RvvdCatEmpaque.class, id);
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
         return empaque;
     }
 
@@ -61,16 +82,22 @@ public class CatEmpaqueDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = session.createQuery("SELECT e FROM RvvdCatEmpaque e WHERE e.empaqueR = '" + empaque.toUpperCase() + "' OR e.empaqueEn = '" + empaque.toUpperCase() + "'");
-        List<RvvdCatEmpaque> empaques = query.list();
         RvvdCatEmpaque empaqueT = null;
-        if (empaques.size() > 0) {
-            empaqueT = empaques.get(0);
+        try {
+            Query query = session.createQuery("SELECT e FROM RvvdCatEmpaque e WHERE e.empaqueR = '" + empaque.toUpperCase() + "' OR e.empaqueEn = '" + empaque.toUpperCase() + "'");
+            List<RvvdCatEmpaque> empaques = query.list();
+            if (empaques.size() > 0) {
+                empaqueT = empaques.get(0);
+            }
+            error = null;
+        } catch (Exception e) {
+            error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
         }
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
         return empaqueT;
     }
 
@@ -83,6 +110,7 @@ public class CatEmpaqueDAO {
             session.beginTransaction();
             if ((empaque.getIdEmpaque() == null ? getEmpaque(empaque.getEmpaqueR()) : null) == null) {
                 session.saveOrUpdate(empaque);
+                error = null;
             } else {
                 error = "Packing already exists";
                 flagOk = false;
