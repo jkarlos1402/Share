@@ -41,17 +41,21 @@ public class ShareUsuarioDAO {
             hibernateUtil.closeSessionFactory();
         }
         return usuario;
-    }
+    }   
 
-    public ShareUsuario getUsuario(String user) {
+    public ShareUsuario getUsuario(String user, boolean filtrado) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         ShareUsuario usuario = null;
+        Query query = null;
         try {
-            Query query = session.createQuery("FROM ShareUsuario u WHERE u.usuario = '" + user.toUpperCase() + "'");
+            if (filtrado) {                  
+                query = session.createQuery("FROM ShareUsuario u WHERE u.usuario = '" + user.toUpperCase() + "' AND u.estatus = 1");
+            } else {
+                query = session.createQuery("FROM ShareUsuario u WHERE u.usuario = '" + user.toUpperCase() + "'");
+            }
             List<ShareUsuario> usuarios = query.list();
-
             if (usuarios.size() > 0) {
                 return usuarios.get(0);
             }
@@ -94,7 +98,7 @@ public class ShareUsuarioDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if ((usuario.getPkUsuario() == null ? getUsuario(usuario.getUsuario()) : null) == null) {
+            if ((usuario.getPkUsuario() == null ? getUsuario(usuario.getUsuario(),false) : null) == null) {
                 session.saveOrUpdate(usuario);
                 error = null;
             } else {

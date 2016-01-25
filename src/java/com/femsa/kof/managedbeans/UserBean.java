@@ -9,9 +9,9 @@ import com.femsa.kof.share.pojos.ShareCatProyecto;
 import com.femsa.kof.share.pojos.ShareCatRol;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import com.femsa.kof.util.CatalogLoader;
-import com.femsa.kof.util.EncrypterKOF;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -167,14 +167,33 @@ public class UserBean implements Serializable {
         ServletContext servletContext = (ServletContext) context.getExternalContext().getContext();
         try {
             if (error == null) {
-                ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();
-                EncrypterKOF encrypterKOF = new EncrypterKOF();
-                String passEnc = encrypterKOF.encrypt(password);
-                ShareUsuario usuario = usuarioDAO.getUsuario(user, passEnc);
+                ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();                
+//                ShareUsuario usuario = usuarioDAO.getUsuario(user, passEnc);
+                ShareUsuario usuario = usuarioDAO.getUsuario(user,true);                
                 if (usuario != null) {
-                    HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-                    httpSession.setAttribute("session_user", usuario);
-                    return "correct";
+                    if (usuario.getPassword().equalsIgnoreCase(password)) {
+                        HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+                        if(usuario.getLastLogin() == null){
+                            httpSession.setAttribute("first_session_user", true);
+                        }else{
+                            httpSession.setAttribute("first_session_user", false);
+                        }
+                        usuario.setIntentos(0);
+                        usuario.setLastLogin(new Date());
+                        usuarioDAO.saveUser(usuario);
+                        httpSession.setAttribute("session_user", usuario);
+                        return "correct";
+                    } else {
+                        usuario.setIntentos(usuario.getIntentos() + 1);
+                        if (usuario.getIntentos() == 3) {
+                            usuario.setEstatus(false);
+                            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Attention: The user has been blocked, number of attempts exceeded, Contact the administrator", ""));
+                        } else {
+                            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: User or password incorrect", ""));
+                        }
+                        usuarioDAO.saveUser(usuario);
+                        return "index";
+                    }
                 } else {
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: User or password incorrect", ""));
                     return "index";
@@ -220,7 +239,11 @@ public class UserBean implements Serializable {
             usuarioNuevo.getPaises().add(paisesAll.getTarget().get(i));
         }
         usuarioNuevo.setPassword(usuarioNuevo.getPassword());
-        usuarioNuevo.getProyectos().add(proyectoSelected);
+        usuarioNuevo.getProyectos().add(proyectoSelected);  
+        if(usuarioNuevo.getIntentos() != null && usuarioNuevo.getIntentos() == 3){
+            usuarioNuevo.setPassReset(true);
+        }
+        usuarioNuevo.setIntentos(0);
         if (usuarioDAO.saveUser(usuarioNuevo)) {
             refreshUsers();
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "User saved");
@@ -252,6 +275,8 @@ public class UserBean implements Serializable {
         usuarioNuevo.setPaises(usuarioSelected.getPaises());
         usuarioNuevo.setPais(usuarioSelected.getPais());
         usuarioNuevo.setProyectos(usuarioSelected.getProyectos());
+        usuarioNuevo.setIntentos(usuarioSelected.getIntentos());
+        usuarioNuevo.setLastLogin(usuarioSelected.getLastLogin());
         paisesAll.getTarget().clear();
         if (usuarioSelected.getPaises() != null && usuarioSelected.getPaises().size() > 0) {
             Object[] paisesT = usuarioSelected.getPaises().toArray();
@@ -265,7 +290,7 @@ public class UserBean implements Serializable {
         }
     }
 
-    private void refreshUsers() {
+    public void refreshUsers() {        
         ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();
         usuariosAll = usuarioDAO.getAllUsers();
     }

@@ -29,12 +29,23 @@
                                     </div>
                                     <div class="ui-grid-row">
                                         <div class="ui-grid-col-12">
-                                            <h:form>
-                                                <h:panelGrid columns="1" cellspacing="3px" style="width: 100%">
-                                                    <h:outputText value="WELCOME #{mainBean.usuario.nombre}" style="color: #ffffff; font-size: 15px;"/>
+                                            <h:form id="formUserLoged">
+                                                <h:panelGrid columns="1" cellspacing="3px" style="width: 100%;">
+                                                    <h:panelGrid columns="2" cellspacing="0px" style="margin: auto;">
+                                                        <h:outputText value="WELCOME " style="color: #ffffff; font-size: 15px;"/>
+                                                        <p:commandLink value="#{mainBean.usuario.nombre}" action="#" oncomplete="PF('dialogSetUser').show();" style="color: #ffffff; font-size: 15px;" title="Set user information"/>
+                                                    </h:panelGrid>
                                                     <p:commandLink value="(Logout)"  action="#{userBean.logout}" style="color: #ffffff; font-size: 15px;"/>
                                                 </h:panelGrid>
-                                            </h:form>                                            
+                                                <p:overlayPanel for="formUserLoged" showEvent="mouseover" hideEvent="off" widgetVar="toolChangePass" styleClass="toolClass" rendered="#{mainBean.firstSession ? true : false}" >
+                                                    <h:outputText value="It´s your first visit, please change your password "/>
+                                                    <p:commandLink value="here" action="#" onclick="PF('dialogSetPassUser').show();"/>
+                                                </p:overlayPanel>
+                                                <p:overlayPanel for="formUserLoged" showEvent="mouseover" hideEvent="off" showEffect="fade" hideEffect="fade" styleClass="toolClass" rendered="#{mainBean.usuario.passReset ? true : false}" >
+                                                    <h:outputText value="Your password has been restored, please change it "/>
+                                                    <p:commandLink value="here" action="#" onclick="PF('dialogSetPassUser').show();"/>
+                                                </p:overlayPanel>
+                                            </h:form>                                              
                                         </div>
                                     </div>
 
@@ -47,7 +58,7 @@
                                 <ul class="main-nav">
                                     <li>
                                         <p:commandLink styleClass="main-nav__link" action="#{mainBean.setPage('welcome','','')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();">
-                                           <img src="images/BG9-19.png" width="17" height="16" />  Home
+                                            <img src="images/BG9-19.png" width="17" height="16" />  Home
                                         </p:commandLink>                                                                                                            
                                     </li> 
                                     <h:panelGroup rendered="#{(mainBean.usuario.proyectos ne null and mainBean.usuario.proyectos.size() > 0 and mainBean.usuario.proyectos.get(0).idProyecto eq '1') or mainBean.usuario.rol.pkRol eq '1' ? true : false}">
@@ -276,6 +287,26 @@
             <input type="hidden" id="rolUser" value="#{mainBean.usuario.rol.pkRol}" />
             <input type="hidden" id="showLoading" value="1" />
         </h:form>
+        <p:dialog modal="true" header="User information" widgetVar="dialogSetUser" minHeight="40">
+            <ui:include src="WEB-INF/pages/admin/informationUser.xhtml"/>
+        </p:dialog>
+        <p:dialog modal="true" header="Change password" widgetVar="dialogSetPassUser" minHeight="40">
+            <h:form id="formPassUser">
+                <p:messages id="messages" showDetail="true" autoUpdate="true" />
+
+                <h:panelGrid columns="2" id="matchGrid" cellpadding="5">                                       
+                    <h:outputLabel for="pwd1" value="New Password: " />
+                    <p:password id="pwd1" value="#{mainBean.password}" match="pwd2" label="New Password" required="true" feedback="true" />
+
+                    <h:outputLabel for="pwd2" value="Confirm Password: " />
+                    <p:password id="pwd2" label="Confirm Password" required="true" />
+
+                    <f:facet name="footer">
+                        <p:commandButton update="matchGrid,:formUserLoged" value="Save" actionListener="#{mainBean.changeUserPassword}"/>
+                    </f:facet>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
     </h:body>
 </html>
 

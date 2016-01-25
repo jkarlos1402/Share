@@ -3,6 +3,7 @@ package com.femsa.kof.share.pojos;
 import com.femsa.kof.util.EncrypterKOF;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -18,6 +19,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "SHARE_USUARIO")
@@ -55,6 +58,16 @@ public class ShareUsuario implements Serializable {
     @JoinColumn(name = "FK_ID_ROL")
     @OneToOne(optional = false, cascade = CascadeType.MERGE)
     private ShareCatRol rol;
+    
+    @Column(name = "INTENTOS")
+    private Integer intentos;
+    
+    @Column(name = "LASTLOGIN")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastLogin;
+    
+    @Column(name = "PASSRESET")
+    private boolean passReset;
 
     @ManyToMany(fetch = FetchType.EAGER)    
     @JoinTable(name = "SHARE_USUARIO_PAIS", joinColumns = {
@@ -79,6 +92,30 @@ public class ShareUsuario implements Serializable {
         this.pkUsuario = pkUsuario;
         this.usuario = usuario;
         this.password = password;
+    }
+
+    public boolean isPassReset() {
+        return passReset;
+    }
+
+    public void setPassReset(boolean passReset) {
+        this.passReset = passReset;
+    }
+
+    public Integer getIntentos() {
+        return intentos;
+    }
+
+    public void setIntentos(Integer intentos) {
+        this.intentos = intentos;
+    }
+
+    public Date getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(Date lastLogin) {
+        this.lastLogin = lastLogin;
     }
 
     public List<ShareCatProyecto> getProyectos() {

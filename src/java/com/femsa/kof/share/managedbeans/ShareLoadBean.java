@@ -126,7 +126,9 @@ public class ShareLoadBean implements Serializable {
         catCountriesUser = new ArrayList<SelectItem>();
         if (catCountriesUserT != null) {
             for (ShareCatPais shareCatPais : catCountriesUserT) {
-                catCountriesUser.add(new SelectItem(shareCatPais, shareCatPais.getNombre()));
+                if (shareCatPais.getIdstatus()) {
+                    catCountriesUser.add(new SelectItem(shareCatPais, shareCatPais.getNombre()));
+                }
             }
         }
         return catCountriesUser;

@@ -456,3 +456,8 @@ span.ui-radiobutton-icon.ui-icon.ui-c.ui-icon-bullet{
     background: rgb(175,79,79);
 
 }
+
+.toolClass{
+    margin-left: 10px;
+    left: 0px !important;
+} 

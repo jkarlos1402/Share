@@ -44,6 +44,14 @@ public class ShareTmpAllInfoCargaDAO {
             queryNativo = session.createSQLQuery("DELETE FROM SHARE_TMP_ALL_INFO_CARGA WHERE FK_USUARIO = " + usuario.getPkUsuario() + " AND PAIS = '" + pais.getNombre().toUpperCase() + "'");
             queryNativo.executeUpdate();
             session.getTransaction().commit();
+            session.beginTransaction();
+            queryNativo = session.createSQLQuery("DROP SEQUENCE SHARE_SEQ_ALL_INFO_CARGA");
+            queryNativo.executeUpdate();
+            session.getTransaction().commit();
+            session.beginTransaction();
+            queryNativo = session.createSQLQuery("CREATE SEQUENCE SHARE_SEQ_ALL_INFO_CARGA INCREMENT BY 1 START WITH 1");
+            queryNativo.executeUpdate();
+            session.getTransaction().commit();
             errors.clear();
         } catch (Exception e) {            
             errors.add("Error saving records: " + e.getMessage());
