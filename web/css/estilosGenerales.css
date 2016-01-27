@@ -47,6 +47,14 @@ img {
     font-size:14px;
 }
 
+.toolClass{
+    margin-left: 10px;
+    left: 0px !important;
+} 
+
+.ui-datatable .ui-datatable-header, .ui-datatable .ui-datatable-footer{
+    text-align: left;
+}
 
 
 /**** ***/
@@ -457,7 +465,3 @@ span.ui-radiobutton-icon.ui-icon.ui-c.ui-icon-bullet{
 
 }
 
-.toolClass{
-    margin-left: 10px;
-    left: 0px !important;
-} 

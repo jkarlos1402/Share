@@ -17,8 +17,10 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -36,6 +38,7 @@ public class DailyLoadBean implements Serializable {
 
     private List<RollingDaily> listInfoCargaRolling;
     private List<Rvvd445Ph> listInfoCargaOpDaysPH;
+    private List<Rvvd445Ph> listInfoOpDaysPH;
     private List<RvvdDistribucionMx> listInfoCargaDistribucion;
     private List<RvvdInfoPh> listInfoPh;
     private ShareCatPais countrySelected;
@@ -68,6 +71,21 @@ public class DailyLoadBean implements Serializable {
         loadedSheets = new ArrayList<String>();
         errors = new ArrayList<String>();
         cargas = new ArrayList<Record>();
+        Rvvd445PhDAO rvvd445PhDAO = new Rvvd445PhDAO();
+        listInfoOpDaysPH = rvvd445PhDAO.get445Ph();
+    }
+
+    public void refreshDiasOpPh() {
+        Rvvd445PhDAO rvvd445PhDAO = new Rvvd445PhDAO();
+        listInfoOpDaysPH = rvvd445PhDAO.get445Ph();
+    }
+
+    public List<Rvvd445Ph> getListInfoOpDaysPH() {
+        return listInfoOpDaysPH;
+    }
+
+    public void setListInfoOpDaysPH(List<Rvvd445Ph> listInfoOpDaysPH) {
+        this.listInfoOpDaysPH = listInfoOpDaysPH;
     }
 
     public InputStream getStream() {
@@ -372,6 +390,7 @@ public class DailyLoadBean implements Serializable {
             if (rvvd445PhDAO.save445Ph(listInfoCargaOpDaysPH)) {
                 record.setNumEntriesSaved(listInfoCargaOpDaysPH.size());
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Records saved.");
+                refreshDiasOpPh();
             } else {
                 String cadenaError = "";
                 for (String error : errors) {
@@ -426,7 +445,7 @@ public class DailyLoadBean implements Serializable {
             loadedSheets.clear();
             errors.clear();
             countrySelected = null;
-            numRegistros = 0L;            
+            numRegistros = 0L;
             record.setDateEndExecution(new Date());
             if (statusBean == null) {
                 statusBean = new DailyUploadStatusBean();
@@ -438,5 +457,5 @@ public class DailyLoadBean implements Serializable {
             message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Sorry", "Other country is loading, try again later");
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
-    }
+    }    
 }

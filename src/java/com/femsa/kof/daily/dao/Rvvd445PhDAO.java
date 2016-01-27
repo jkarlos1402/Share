@@ -20,6 +20,26 @@ public class Rvvd445PhDAO {
         this.errors = errors;
     }
 
+    public List<Rvvd445Ph> get445Ph() {
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        List<Rvvd445Ph> diasOpPh = null;
+        try {
+            Query query = session.createQuery("SELECT do FROM Rvvd445Ph do");
+            diasOpPh = query.list();
+            errors.clear();
+        } catch (Exception e) {
+            errors.add(e.getMessage());
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
+        return diasOpPh;
+    }
+
     public boolean save445Ph(List<Rvvd445Ph> diasOpPh) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -56,7 +76,7 @@ public class Rvvd445PhDAO {
             }
             errors.clear();
             session.getTransaction().commit();
-        } catch (Exception e) {            
+        } catch (Exception e) {
             errors.add("Error saving records: " + e.getMessage());
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();

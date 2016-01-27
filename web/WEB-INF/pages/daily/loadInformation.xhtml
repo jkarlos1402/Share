@@ -132,11 +132,59 @@
                         <p:messages showDetail="true" closable="true"/>
 
                         <p:fileUpload fileUploadListener="#{dailyLoadBean.handleFileUploadDaysPH}" mode="advanced" dragDropSupport="true" 
-                                      update="messagesLoadOpDaysPhi,panelLoadOpDaysPhi" sizeLimit="1000000" fileLimit="1" allowTypes="/(\.|\/)(xls|xlsx|XLS|XLSX)$/" 
+                                      update="messagesLoadOpDaysPhi,panelLoadOpDaysPhi,tableInfoCargaDiasPH" sizeLimit="1000000" fileLimit="1" allowTypes="/(\.|\/)(xls|xlsx|XLS|XLSX)$/" 
                                       onstart="handleResponse(1)" oncomplete="handleResponse(2)"/>
                         <p:separator />
                         <h3>Resume</h3>
                         <p:panel>
+                            <h:panelGrid columns="2" columnClasses="topElemsClass,topElemsClass">
+                                <p:outputLabel value="Existing records"/>
+                                <p:outputLabel value="New records"/>
+                                <p:dataTable  var="infoDiasPH" value="#{dailyLoadBean.listInfoOpDaysPH}" id="tableInfoDiasPH" reflow="true" rows="20" paginator="true" widgetVar="tableInfoDiasPH">                    
+                                    <f:facet name="header">
+                                        <p:outputLabel value="#{dailyLoadBean.listInfoOpDaysPH.size()} records found." rendered="#{dailyLoadBean.listInfoOpDaysPH != null ? true : false}" />                                
+                                    </f:facet>
+                                    <p:column headerText="Country">
+                                        <h:outputText value="#{infoDiasPH.pais}" />
+                                    </p:column>
+
+                                    <p:column headerText="Date" sortBy="#{infoDiasPH.fecha}">
+                                        <h:outputText value="#{infoDiasPH.fecha != null ? dailyLoadBean.formatDay.format(infoDiasPH.fecha) : ''}" />
+                                    </p:column>
+
+                                    <p:column headerText="Date reallocation">
+                                        <h:outputText value="#{infoDiasPH.fechaReasignacion != null ? infoDiasPH.fechaReasignacion : ''}" />
+                                    </p:column>                                    
+
+                                    <p:column headerText="Date AA">
+                                        <h:outputText value="#{infoDiasPH.fechaAa != null ? dailyLoadBean.formatDay.format(infoDiasPH.fechaAa) : ''}"/>
+                                    </p:column>
+                                    
+                                    <f:facet name="footer">
+                                        <p:commandButton value="Refresh" actionListener="#{dailyLoadBean.refreshDiasOpPh}" update="tableInfoDiasPH" />
+                                    </f:facet>
+                                </p:dataTable>
+                                <p:dataTable var="infoCargaDiasPH" value="#{dailyLoadBean.listInfoCargaOpDaysPH}" id="tableInfoCargaDiasPH" reflow="true" rows="20" paginator="true" widgetVar="tableInfCargaDiasPH">                    
+                                    <f:facet name="header">
+                                        <p:outputLabel value="#{dailyLoadBean.listInfoCargaOpDaysPH.size()} records found." rendered="#{dailyLoadBean.listInfoCargaOpDaysPH != null ? true : false}" />                                
+                                    </f:facet>
+                                    <p:column headerText="Country">
+                                        <h:outputText value="#{infoCargaDiasPH.pais}" />
+                                    </p:column>
+
+                                    <p:column headerText="Date" sortBy="#{infoCargaDiasPH.fecha}">
+                                        <h:outputText value="#{infoCargaDiasPH.fecha != null ? dailyLoadBean.formatDay.format(infoCargaDiasPH.fecha) : ''}" />
+                                    </p:column>
+
+                                    <p:column headerText="Date reallocation">
+                                        <h:outputText value="#{infoCargaDiasPH.fechaReasignacion != null ? infoCargaDiasPH.fechaReasignacion : ''}" />
+                                    </p:column>                                    
+
+                                    <p:column headerText="Date AA">
+                                        <h:outputText value="#{infoCargaDiasPH.fechaAa != null ? dailyLoadBean.formatDay.format(infoCargaDiasPH.fechaAa) : ''}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:panelGrid>
                             <h:panelGrid columns="2">
                                 <h:outputText value="No records found." rendered="#{dailyLoadBean.listInfoCargaOpDaysPH eq null ? true : false}"/>
                                 <h:outputText value="Records found: " rendered="#{dailyLoadBean.listInfoCargaOpDaysPH.size() ge 0 ? true : false}"/>
