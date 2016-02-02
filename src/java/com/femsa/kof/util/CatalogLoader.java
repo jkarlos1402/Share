@@ -17,10 +17,22 @@ import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class CatalogLoader {
 
+    /**
+     *
+     */
     public static String error = "";
 
+    /**
+     *
+     * @param proyecto
+     * @return
+     */
     public static boolean loadCatalogs(String proyecto) {
         boolean bndOk = true;
         ServletContext sc = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();

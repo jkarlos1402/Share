@@ -19,8 +19,8 @@ import javax.persistence.TemporalType;
  * @author TMXIDSJPINAM
  */
 @Entity
-@Table(name = "RVVD_DISTRIBUCION_MX")
-public class RvvdDistribucionMx implements Serializable {
+@Table(name = "RVVD_DISTRIBUCION_MX_TMP")
+public class RvvdDistribucionMxTmp implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -49,14 +49,14 @@ public class RvvdDistribucionMx implements Serializable {
     /**
      *
      */
-    public RvvdDistribucionMx() {
+    public RvvdDistribucionMxTmp() {
     }
 
     /**
      *
      * @param idDistribucionMx
      */
-    public RvvdDistribucionMx(BigDecimal idDistribucionMx) {
+    public RvvdDistribucionMxTmp(BigDecimal idDistribucionMx) {
         this.idDistribucionMx = idDistribucionMx;
     }
 
@@ -150,10 +150,10 @@ public class RvvdDistribucionMx implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof RvvdDistribucionMx)) {
+        if (!(object instanceof RvvdDistribucionMxTmp)) {
             return false;
         }
-        RvvdDistribucionMx other = (RvvdDistribucionMx) object;
+        RvvdDistribucionMxTmp other = (RvvdDistribucionMxTmp) object;
         if ((this.idDistribucionMx == null && other.idDistribucionMx != null) || (this.idDistribucionMx != null && !this.idDistribucionMx.equals(other.idDistribucionMx))) {
             return false;
         }

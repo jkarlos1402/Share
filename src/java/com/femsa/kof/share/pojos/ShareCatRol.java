@@ -7,6 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "SHARE_CAT_ROL")
 public class ShareCatRol implements Serializable {
@@ -21,25 +25,48 @@ public class ShareCatRol implements Serializable {
     @Column(name = "ROL")
     private String rol;
 
+    /**
+     *
+     */
     public ShareCatRol() {
     }
 
+    /**
+     *
+     * @param pkRol
+     */
     public ShareCatRol(Integer pkRol) {
         this.pkRol = pkRol;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getPkRol() {
         return pkRol;
     }
 
+    /**
+     *
+     * @param pkRol
+     */
     public void setPkRol(Integer pkRol) {
         this.pkRol = pkRol;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getRol() {
         return rol;
     }
 
+    /**
+     *
+     * @param rol
+     */
     public void setRol(String rol) {
         this.rol = rol;
     }

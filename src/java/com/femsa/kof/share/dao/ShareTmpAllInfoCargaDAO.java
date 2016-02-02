@@ -10,10 +10,21 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class ShareTmpAllInfoCargaDAO {
 
     List<String> errors = new ArrayList<String>();
 
+    /**
+     *
+     * @param listCarga
+     * @param pais
+     * @param usuario
+     * @return
+     */
     public boolean saveInfoCarga(List<ShareTmpAllInfoCarga> listCarga, ShareCatPais pais, ShareUsuario usuario) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -68,10 +79,18 @@ public class ShareTmpAllInfoCargaDAO {
         return flagOk;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<String> getErrors() {
         return errors;
     }
 
+    /**
+     *
+     * @param errors
+     */
     public void setErrors(List<String> errors) {
         this.errors = errors;
     }

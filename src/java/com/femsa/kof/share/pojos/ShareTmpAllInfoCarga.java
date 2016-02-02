@@ -50,89 +50,176 @@ public class ShareTmpAllInfoCarga implements Serializable {
     @Column(name = "FK_USUARIO")
     private Integer fkUsuario;
 
+    /**
+     *
+     */
     public ShareTmpAllInfoCarga() {
     }
 
+    /**
+     *
+     * @param pkInfoCarga
+     */
     public ShareTmpAllInfoCarga(BigInteger pkInfoCarga) {
         this.pkInfoCarga = pkInfoCarga;
     }
 
+    /**
+     *
+     * @return
+     */
     public double getFkUsuario() {
         return fkUsuario;
     }
 
+    /**
+     *
+     * @param fkUsuario
+     */
     public void setFkUsuario(Integer fkUsuario) {
         this.fkUsuario = fkUsuario;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPais() {
         return pais;
     }
 
+    /**
+     *
+     * @param pais
+     */
     public void setPais(String pais) {
         this.pais = pais;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCanal() {
         return canal;
     }
 
+    /**
+     *
+     * @param canal
+     */
     public void setCanal(String canal) {
         this.canal = canal;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getFecha() {
         return fecha;
     }
 
+    /**
+     *
+     * @param fecha
+     */
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getGrupoCategoria() {
         return grupoCategoria;
     }
 
+    /**
+     *
+     * @param grupoCategoria
+     */
     public void setGrupoCategoria(String grupoCategoria) {
         this.grupoCategoria = grupoCategoria;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCategoria() {
         return categoria;
     }
 
+    /**
+     *
+     * @param categoria
+     */
     public void setCategoria(String categoria) {
         this.categoria = categoria;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getFabricante() {
         return fabricante;
     }
 
+    /**
+     *
+     * @param fabricante
+     */
     public void setFabricante(String fabricante) {
         this.fabricante = fabricante;
     }
 
+    /**
+     *
+     * @return
+     */
     public double getVolumenMes() {
         return volumenMes;
     }
 
+    /**
+     *
+     * @param volumenMes
+     */
     public void setVolumenMes(double volumenMes) {
         this.volumenMes = volumenMes;
     }
 
+    /**
+     *
+     * @return
+     */
     public double getVentaMes() {
         return ventaMes;
     }
 
+    /**
+     *
+     * @param ventaMes
+     */
     public void setVentaMes(double ventaMes) {
         this.ventaMes = ventaMes;
     }
 
+    /**
+     *
+     * @return
+     */
     public BigInteger getPkInfoCarga() {
         return pkInfoCarga;
     }
 
+    /**
+     *
+     * @param pkInfoCarga
+     */
     public void setPkInfoCarga(BigInteger pkInfoCarga) {
         this.pkInfoCarga = pkInfoCarga;
     }

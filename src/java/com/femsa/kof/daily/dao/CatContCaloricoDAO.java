@@ -7,18 +7,34 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class CatContCaloricoDAO {
 
     private String error;
 
+    /**
+     *
+     * @return
+     */
     public String getError() {
         return error;
     }
 
+    /**
+     *
+     * @param error
+     */
     public void setError(String error) {
         this.error = error;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatContenidoCalorico> getContsCalAll() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -39,6 +55,10 @@ public class CatContCaloricoDAO {
         return contenidos;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatContenidoCalorico> getContsCal() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -59,6 +79,11 @@ public class CatContCaloricoDAO {
         return contenidos;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public RvvdCatContenidoCalorico getContCal(Integer id) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -82,6 +107,11 @@ public class CatContCaloricoDAO {
         return contenido;
     }
 
+    /**
+     *
+     * @param contenido
+     * @return
+     */
     public RvvdCatContenidoCalorico getContCal(String contenido) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -106,6 +136,11 @@ public class CatContCaloricoDAO {
         return contenidoT;
     }
 
+    /**
+     *
+     * @param contenido
+     * @return
+     */
     public boolean saveContCal(RvvdCatContenidoCalorico contenido) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();

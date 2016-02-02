@@ -7,18 +7,34 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class ShareCatCanalesDAO {
 
     private String error;
 
+    /**
+     *
+     * @return
+     */
     public String getError() {
         return error;
     }
 
+    /**
+     *
+     * @param error
+     */
     public void setError(String error) {
         this.error = error;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ShareCatCanales> getCanales() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();

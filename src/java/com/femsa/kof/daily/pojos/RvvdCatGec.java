@@ -11,6 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "RVVD_CAT_GEC")
 public class RvvdCatGec implements Serializable {
@@ -34,41 +38,80 @@ public class RvvdCatGec implements Serializable {
     @Column(name = "STATUS")
     private boolean status;
 
+    /**
+     *
+     */
     public RvvdCatGec() {
     }
 
+    /**
+     *
+     * @param idGec
+     */
     public RvvdCatGec(Integer idGec) {
         this.idGec = idGec;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getIdGec() {
         return idGec;
     }
 
+    /**
+     *
+     * @param idGec
+     */
     public void setIdGec(Integer idGec) {
         this.idGec = idGec;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getGecR() {
         return gecR;
     }
 
+    /**
+     *
+     * @param gecR
+     */
     public void setGecR(String gecR) {
         this.gecR = gecR.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getGecEn() {
         return gecEn;
     }
 
+    /**
+     *
+     * @param gecEn
+     */
     public void setGecEn(String gecEn) {
         this.gecEn = gecEn.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean getStatus() {
         return status;
     }
 
+    /**
+     *
+     * @param status
+     */
     public void setStatus(boolean status) {
         this.status = status;
     }

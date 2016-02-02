@@ -4,30 +4,54 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class RollingDaily implements Serializable{
     
-    private RvvdReclasifDiasOp diasOperativos;
-    private List<RvvdStRolling> stRollings;
+    private RvvdReclasifDiasOpTmp diasOperativos;
+    private List<RvvdStRollingTmp> stRollings;
 
-    public List<RvvdStRolling> getStRollings() {
+    /**
+     *
+     * @return
+     */
+    public List<RvvdStRollingTmp> getStRollings() {
         return stRollings;
     }
 
-    public void setStRollings(List<RvvdStRolling> stRollings) {
+    /**
+     *
+     * @param stRollings
+     */
+    public void setStRollings(List<RvvdStRollingTmp> stRollings) {
         this.stRollings = stRollings;
     }
     
-    public RvvdReclasifDiasOp getDiasOperativos() {
+    /**
+     *
+     * @return
+     */
+    public RvvdReclasifDiasOpTmp getDiasOperativos() {
         return diasOperativos;
     }
 
-    public void setDiasOperativos(RvvdReclasifDiasOp diasOperativos) {
+    /**
+     *
+     * @param diasOperativos
+     */
+    public void setDiasOperativos(RvvdReclasifDiasOpTmp diasOperativos) {
         this.diasOperativos = diasOperativos;
     }    
         
-    public void addRolling(RvvdStRolling rolling){
+    /**
+     *
+     * @param rolling
+     */
+    public void addRolling(RvvdStRollingTmp rolling){
         if(stRollings == null){
-            stRollings = new ArrayList<RvvdStRolling>();
+            stRollings = new ArrayList<RvvdStRollingTmp>();
         }
         stRollings.add(rolling);
     }

@@ -7,18 +7,34 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class CatCategoriaDAO {
 
     private String error;
 
+    /**
+     *
+     * @return
+     */
     public String getError() {
         return error;
     }
 
+    /**
+     *
+     * @param error
+     */
     public void setError(String error) {
         this.error = error;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatCategoria> getCategoriasAll() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -39,6 +55,10 @@ public class CatCategoriaDAO {
         return categorias;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatCategoria> getCategorias() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -59,6 +79,11 @@ public class CatCategoriaDAO {
         return categorias;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public RvvdCatCategoria getCategoria(Integer id) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -78,6 +103,11 @@ public class CatCategoriaDAO {
         return categ;
     }
 
+    /**
+     *
+     * @param categoria
+     * @return
+     */
     public RvvdCatCategoria getCategoria(String categoria) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -101,6 +131,11 @@ public class CatCategoriaDAO {
         return categ;
     }
 
+    /**
+     *
+     * @param catCategoria
+     * @return
+     */
     public boolean saveCategoria(RvvdCatCategoria catCategoria) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();

@@ -19,8 +19,8 @@ import javax.persistence.TemporalType;
  * @author TMXIDSJPINAM
  */
 @Entity
-@Table(name = "RVVD_ST_ROLLING")
-public class RvvdStRolling implements Serializable {
+@Table(name = "RVVD_ST_ROLLING_TMP")
+public class RvvdStRollingTmp implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -70,22 +70,22 @@ public class RvvdStRolling implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_ST_ROLLING")
-    @SequenceGenerator(name = "RVVD_SEQ_ST_ROLLING", sequenceName = "RVVD_SEQ_ST_ROLLING", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_ST_ROLLING_TMP")
+    @SequenceGenerator(name = "RVVD_SEQ_ST_ROLLING_TMP", sequenceName = "RVVD_SEQ_ST_ROLLING_TMP", allocationSize = 1)
     @Column(name = "ID_ST_ROLLING")
     private BigDecimal idStRolling;
 
     /**
      *
      */
-    public RvvdStRolling() {
+    public RvvdStRollingTmp() {
     }
 
     /**
      *
      * @param idStRolling
      */
-    public RvvdStRolling(BigDecimal idStRolling) {
+    public RvvdStRollingTmp(BigDecimal idStRolling) {
         this.idStRolling = idStRolling;
     }
 
@@ -339,10 +339,10 @@ public class RvvdStRolling implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof RvvdStRolling)) {
+        if (!(object instanceof RvvdStRollingTmp)) {
             return false;
         }
-        RvvdStRolling other = (RvvdStRolling) object;
+        RvvdStRollingTmp other = (RvvdStRollingTmp) object;
         if ((this.idStRolling == null && other.idStRolling != null) || (this.idStRolling != null && !this.idStRolling.equals(other.idStRolling))) {
             return false;
         }

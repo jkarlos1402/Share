@@ -9,8 +9,20 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @FacesConverter("channelConverterDaily")
 public class ChannelConverterDaily implements Converter{
+
+    /**
+     *
+     * @param context
+     * @param component
+     * @param value
+     * @return
+     */
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         if (value != null && value.trim().length() > 0) {
@@ -29,6 +41,13 @@ public class ChannelConverterDaily implements Converter{
         }
     }
 
+    /**
+     *
+     * @param context
+     * @param component
+     * @param value
+     * @return
+     */
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
         if (value != null) {

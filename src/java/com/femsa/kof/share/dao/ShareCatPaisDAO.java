@@ -7,18 +7,34 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class ShareCatPaisDAO {
 
     private String error = "";
 
+    /**
+     *
+     * @return
+     */
     public String getError() {
         return error;
     }
 
+    /**
+     *
+     * @param error
+     */
     public void setError(String error) {
         this.error = error;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ShareCatPais> getCatPais() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -39,6 +55,11 @@ public class ShareCatPaisDAO {
         return countries;
     }
 
+    /**
+     *
+     * @param nombrePais
+     * @return
+     */
     public ShareCatPais getCatPais(String nombrePais) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -63,6 +84,10 @@ public class ShareCatPaisDAO {
         return country;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ShareCatPais> getCatPaisAll() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -83,6 +108,11 @@ public class ShareCatPaisDAO {
         return countries;
     }
 
+    /**
+     *
+     * @param pais
+     * @return
+     */
     public boolean savePais(ShareCatPais pais) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();

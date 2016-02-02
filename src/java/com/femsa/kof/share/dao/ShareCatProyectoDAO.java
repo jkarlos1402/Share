@@ -7,18 +7,35 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class ShareCatProyectoDAO {
 
     private String error = "";
 
+    /**
+     *
+     * @return
+     */
     public String getError() {
         return error;
     }
 
+    /**
+     *
+     * @param error
+     */
     public void setError(String error) {
         this.error = error;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public ShareCatProyecto getProyecto(Integer id) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -38,6 +55,10 @@ public class ShareCatProyectoDAO {
         return proyecto;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ShareCatProyecto> getCatProyectos() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -58,6 +79,11 @@ public class ShareCatProyectoDAO {
         return proyectos;
     }
 
+    /**
+     *
+     * @param nombrProyecto
+     * @return
+     */
     public ShareCatProyecto getProyecto(String nombrProyecto) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -81,6 +107,10 @@ public class ShareCatProyectoDAO {
         return proyecto;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ShareCatProyecto> getCatProyectosAll() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -101,6 +131,11 @@ public class ShareCatProyectoDAO {
         return proyectos;
     }
 
+    /**
+     *
+     * @param proyecto
+     * @return
+     */
     public boolean saveProyecto(ShareCatProyecto proyecto) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();

@@ -10,6 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "RVVD_CAT_CANAL")
 public class RvvdCatCanal implements Serializable {
@@ -32,41 +36,80 @@ public class RvvdCatCanal implements Serializable {
     @Column(name = "STATUS")
     private boolean status;
 
+    /**
+     *
+     */
     public RvvdCatCanal() {
     }
 
+    /**
+     *
+     * @param idCanal
+     */
     public RvvdCatCanal(Integer idCanal) {
         this.idCanal = idCanal;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getIdCanal() {
         return idCanal;
     }
 
+    /**
+     *
+     * @param idCanal
+     */
     public void setIdCanal(Integer idCanal) {
         this.idCanal = idCanal;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCanalR() {
         return canalR;
     }
 
+    /**
+     *
+     * @param canalR
+     */
     public void setCanalR(String canalR) {
         this.canalR = canalR.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCanalEn() {
         return canalEn;
     }
 
+    /**
+     *
+     * @param canalEn
+     */
     public void setCanalEn(String canalEn) {
         this.canalEn = canalEn.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean getStatus() {
         return status;
     }
 
+    /**
+     *
+     * @param status
+     */
     public void setStatus(boolean status) {
         this.status = status;
     }

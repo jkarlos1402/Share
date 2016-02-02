@@ -7,18 +7,34 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class ShareCatFabricanteDAO {
 
     private String error;
 
+    /**
+     *
+     * @return
+     */
     public String getError() {
         return error;
     }
 
+    /**
+     *
+     * @param error
+     */
     public void setError(String error) {
         this.error = error;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ShareCatFabricante> getFabricantesAll() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -39,6 +55,10 @@ public class ShareCatFabricanteDAO {
         return fabricantes;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ShareCatFabricante> getFabricantes() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -59,6 +79,11 @@ public class ShareCatFabricanteDAO {
         return fabricantes;
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public ShareCatFabricante getFabricante(String name) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -83,6 +108,11 @@ public class ShareCatFabricanteDAO {
         return fabricante;
     }
 
+    /**
+     *
+     * @param fabricante
+     * @return
+     */
     public boolean saveFabricante(ShareCatFabricante fabricante) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();

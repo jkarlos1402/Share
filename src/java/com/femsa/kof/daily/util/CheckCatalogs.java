@@ -12,38 +12,75 @@ import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class CheckCatalogs {
 
+    /**
+     *
+     * @param usuario
+     * @return
+     */
     public static long checkCategoryDaily(ShareUsuario usuario) {
         ReclasifCategoriaDAO reclasifCategoriaDAO = new ReclasifCategoriaDAO();
         return reclasifCategoriaDAO.checkReclasifCategorias(usuario);
     }
 
+    /**
+     *
+     * @param usuario
+     * @return
+     */
     public static long checkChannelDaily(ShareUsuario usuario) {
         ReclasifCanalDAO reclasifCanalDAO = new ReclasifCanalDAO();
         return reclasifCanalDAO.checkReclasifCanales(usuario);
     }
     
+    /**
+     *
+     * @param usuario
+     * @return
+     */
     public static long checkTrademarkDaily(ShareUsuario usuario) {
         ReclasifMarcaDAO reclasifMarcaDAO = new ReclasifMarcaDAO();
         return reclasifMarcaDAO.checkReclasifMarcas(usuario);
     }
     
+    /**
+     *
+     * @param usuario
+     * @return
+     */
     public static long checkGECDaily(ShareUsuario usuario) {
         ReclasifGecDAO reclasifGecDAO = new ReclasifGecDAO();
         return reclasifGecDAO.checkReclasifUnGec(usuario);
     }
     
+    /**
+     *
+     * @param usuario
+     * @return
+     */
     public static long checkPackingDaily(ShareUsuario usuario) {
         ReclasifEmpaqueDAO reclasifEmpaqueDAO = new ReclasifEmpaqueDAO();
         return reclasifEmpaqueDAO.checkReclasifEmpaques(usuario);
     }
     
+    /**
+     *
+     * @param usuario
+     * @return
+     */
     public static long checkOperativeDaysDaily(ShareUsuario usuario) {
         ReclasifDiasOpDAO reclasifDiasOpDAO = new ReclasifDiasOpDAO();
         return reclasifDiasOpDAO.checkReclasifDiasOp(usuario);
     }
 
+    /**
+     *
+     */
     public static void checkAllCatalogs() {
         HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         ShareUsuario usuario = (ShareUsuario)session.getAttribute("session_user");

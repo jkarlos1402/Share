@@ -27,6 +27,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @ManagedBean
 @SessionScoped
 public class DailyCatalogsBean implements Serializable {
@@ -68,6 +72,9 @@ public class DailyCatalogsBean implements Serializable {
     private RvvdCatContenidoCalorico contenidoSelected;
     private List<RvvdCatContenidoCalorico> catContenidosAll = new ArrayList<RvvdCatContenidoCalorico>();
 
+    /**
+     *
+     */
     public DailyCatalogsBean() {
         CatContCaloricoDAO contCaloricoDAO = new CatContCaloricoDAO();
         catContenidosAll = contCaloricoDAO.getContsCalAll();
@@ -97,237 +104,467 @@ public class DailyCatalogsBean implements Serializable {
         catCategoriaOficialAll = categoriaOficialDAO.getCategoriasOficialesAll();
     }
 
+    /**
+     *
+     * @return
+     */
     public RvvdCatContenidoCalorico getContenidoNueva() {
         return contenidoNueva;
     }
 
+    /**
+     *
+     * @param contenidoNueva
+     */
     public void setContenidoNueva(RvvdCatContenidoCalorico contenidoNueva) {
         this.contenidoNueva = contenidoNueva;
     }
 
+    /**
+     *
+     * @return
+     */
     public RvvdCatContenidoCalorico getContenidoSelected() {
         return contenidoSelected;
     }
 
+    /**
+     *
+     * @param contenidoSelected
+     */
     public void setContenidoSelected(RvvdCatContenidoCalorico contenidoSelected) {
         this.contenidoSelected = contenidoSelected;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatContenidoCalorico> getCatContenidosAll() {
         return catContenidosAll;
     }
 
+    /**
+     *
+     * @param catContenidosAll
+     */
     public void setCatContenidosAll(List<RvvdCatContenidoCalorico> catContenidosAll) {
         this.catContenidosAll = catContenidosAll;
     }
 
+    /**
+     *
+     * @return
+     */
     public RvvdCatMarca getMarcaNueva() {
         return marcaNueva;
     }
 
+    /**
+     *
+     * @param marcaNueva
+     */
     public void setMarcaNueva(RvvdCatMarca marcaNueva) {
         this.marcaNueva = marcaNueva;
     }
 
+    /**
+     *
+     * @return
+     */
     public RvvdCatMarca getMarcaSelected() {
         return marcaSelected;
     }
 
+    /**
+     *
+     * @param marcaSelected
+     */
     public void setMarcaSelected(RvvdCatMarca marcaSelected) {
         this.marcaSelected = marcaSelected;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatMarca> getCatMarcasAll() {
         return catMarcasAll;
     }
 
+    /**
+     *
+     * @param catMarcasAll
+     */
     public void setCatMarcasAll(List<RvvdCatMarca> catMarcasAll) {
         this.catMarcasAll = catMarcasAll;
     }
 
+    /**
+     *
+     * @return
+     */
     public RvvdCatGec getGecNuevo() {
         return gecNuevo;
     }
 
+    /**
+     *
+     * @param gecNuevo
+     */
     public void setGecNuevo(RvvdCatGec gecNuevo) {
         this.gecNuevo = gecNuevo;
     }
 
+    /**
+     *
+     * @return
+     */
     public RvvdCatGec getGecSelected() {
         return gecSelected;
     }
 
+    /**
+     *
+     * @param gecSelected
+     */
     public void setGecSelected(RvvdCatGec gecSelected) {
         this.gecSelected = gecSelected;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatGec> getCatGecsAll() {
         return catGecsAll;
     }
 
+    /**
+     *
+     * @param catGecsAll
+     */
     public void setCatGecsAll(List<RvvdCatGec> catGecsAll) {
         this.catGecsAll = catGecsAll;
     }
 
+    /**
+     *
+     * @return
+     */
     public RvvdCatUnidadNegocio getUnidadNueva() {
         return unidadNueva;
     }
 
+    /**
+     *
+     * @param unidadNueva
+     */
     public void setUnidadNueva(RvvdCatUnidadNegocio unidadNueva) {
         this.unidadNueva = unidadNueva;
     }
 
+    /**
+     *
+     * @return
+     */
     public RvvdCatUnidadNegocio getUnidadSelected() {
         return unidadSelected;
     }
 
+    /**
+     *
+     * @param unidadSelected
+     */
     public void setUnidadSelected(RvvdCatUnidadNegocio unidadSelected) {
         this.unidadSelected = unidadSelected;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatUnidadNegocio> getCatUnidadesAll() {
         return catUnidadesAll;
     }
 
+    /**
+     *
+     * @param catUnidadesAll
+     */
     public void setCatUnidadesAll(List<RvvdCatUnidadNegocio> catUnidadesAll) {
         this.catUnidadesAll = catUnidadesAll;
     }
 
+    /**
+     *
+     * @return
+     */
     public RvvdCatTipoConsumo getTipoConsumoNuevo() {
         return tipoConsumoNuevo;
     }
 
+    /**
+     *
+     * @param tipoConsumoNuevo
+     */
     public void setTipoConsumoNuevo(RvvdCatTipoConsumo tipoConsumoNuevo) {
         this.tipoConsumoNuevo = tipoConsumoNuevo;
     }
 
+    /**
+     *
+     * @return
+     */
     public RvvdCatTipoConsumo getTipoConsumoSelected() {
         return tipoConsumoSelected;
     }
 
+    /**
+     *
+     * @param tipoConsumoSelected
+     */
     public void setTipoConsumoSelected(RvvdCatTipoConsumo tipoConsumoSelected) {
         this.tipoConsumoSelected = tipoConsumoSelected;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatTipoConsumo> getCatTiposConsumoAll() {
         return catTiposConsumoAll;
     }
 
+    /**
+     *
+     * @param catTiposConsumoAll
+     */
     public void setCatTiposConsumoAll(List<RvvdCatTipoConsumo> catTiposConsumoAll) {
         this.catTiposConsumoAll = catTiposConsumoAll;
     }
 
+    /**
+     *
+     * @return
+     */
     public RvvdCatEmpaque getEmpaqueNuevo() {
         return empaqueNuevo;
     }
 
+    /**
+     *
+     * @param empaqueNuevo
+     */
     public void setEmpaqueNuevo(RvvdCatEmpaque empaqueNuevo) {
         this.empaqueNuevo = empaqueNuevo;
     }
 
+    /**
+     *
+     * @return
+     */
     public RvvdCatEmpaque getEmpaqueSelected() {
         return empaqueSelected;
     }
 
+    /**
+     *
+     * @param empaqueSelected
+     */
     public void setEmpaqueSelected(RvvdCatEmpaque empaqueSelected) {
         this.empaqueSelected = empaqueSelected;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatEmpaque> getCatEmpaquesAll() {
         return catEmpaquesAll;
     }
 
+    /**
+     *
+     * @param catEmpaquesAll
+     */
     public void setCatEmpaquesAll(List<RvvdCatEmpaque> catEmpaquesAll) {
         this.catEmpaquesAll = catEmpaquesAll;
     }
 
+    /**
+     *
+     * @return
+     */
     public RvvdCatCanal getCanalNuevo() {
         return canalNuevo;
     }
 
+    /**
+     *
+     * @param canalNuevo
+     */
     public void setCanalNuevo(RvvdCatCanal canalNuevo) {
         this.canalNuevo = canalNuevo;
     }
 
+    /**
+     *
+     * @return
+     */
     public RvvdCatCanal getCanalSelected() {
         return canalSelected;
     }
 
+    /**
+     *
+     * @param canalSelected
+     */
     public void setCanalSelected(RvvdCatCanal canalSelected) {
         this.canalSelected = canalSelected;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatCanal> getCatCanalesAll() {
         return catCanalesAll;
     }
 
+    /**
+     *
+     * @param catCanalesAll
+     */
     public void setCatCanalesAll(List<RvvdCatCanal> catCanalesAll) {
         this.catCanalesAll = catCanalesAll;
     }
 
+    /**
+     *
+     * @return
+     */
     public RvvdCatCategoria getCategoriaNueva() {
         return categoriaNueva;
     }
 
+    /**
+     *
+     * @param categoriaNueva
+     */
     public void setCategoriaNueva(RvvdCatCategoria categoriaNueva) {
         this.categoriaNueva = categoriaNueva;
     }
 
+    /**
+     *
+     * @return
+     */
     public RvvdCatCategoria getCategoriaSelected() {
         return categoriaSelected;
     }
 
+    /**
+     *
+     * @param categoriaSelected
+     */
     public void setCategoriaSelected(RvvdCatCategoria categoriaSelected) {
         this.categoriaSelected = categoriaSelected;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatCategoria> getCatCategoriaAll() {
         return catCategoriaAll;
     }
 
+    /**
+     *
+     * @param catCategoriaAll
+     */
     public void setCatCategoriaAll(List<RvvdCatCategoria> catCategoriaAll) {
         this.catCategoriaAll = catCategoriaAll;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatCategoriaOficial> getCatCategoriaOficial() {
         CatCategoriaOficialDAO categoriaOficialDAO = new CatCategoriaOficialDAO();
         catCategoriaOficial = categoriaOficialDAO.getCategoriasOficiales();
         return catCategoriaOficial;
     }
 
+    /**
+     *
+     * @param catCategoriaOficial
+     */
     public void setCatCategoriaOficial(List<RvvdCatCategoriaOficial> catCategoriaOficial) {
         this.catCategoriaOficial = catCategoriaOficial;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatCategoriaOficial> getCatCategoriaOficialAll() {
         return catCategoriaOficialAll;
     }
 
+    /**
+     *
+     * @param catCategoriaOficialAll
+     */
     public void setCatCategoriaOficialAll(List<RvvdCatCategoriaOficial> catCategoriaOficialAll) {
         this.catCategoriaOficialAll = catCategoriaOficialAll;
     }
 
+    /**
+     *
+     * @return
+     */
     public RvvdCatCategoriaOficial getCategoriaOficialSelected() {
         return categoriaOficialSelected;
     }
 
+    /**
+     *
+     * @param categoriaOficialSelected
+     */
     public void setCategoriaOficialSelected(RvvdCatCategoriaOficial categoriaOficialSelected) {
         this.categoriaOficialSelected = categoriaOficialSelected;
     }
 
+    /**
+     *
+     * @return
+     */
     public RvvdCatCategoriaOficial getCategoriaOficialNueva() {
         return categoriaOficialNueva;
     }
 
+    /**
+     *
+     * @param categoriaOficialNueva
+     */
     public void setCategoriaOficialNueva(RvvdCatCategoriaOficial categoriaOficialNueva) {
         this.categoriaOficialNueva = categoriaOficialNueva;
     }
 
+    /**
+     *
+     */
     public void newOfficialCategory() {
         categoriaOficialNueva = new RvvdCatCategoriaOficial();
         categoriaOficialSelected = null;
     }
 
+    /**
+     *
+     */
     public void selectOfficialCategory() {
         categoriaOficialNueva.setIdCategoriaOficial(categoriaOficialSelected.getIdCategoriaOficial());
         categoriaOficialNueva.setCategoriaOficial(categoriaOficialSelected.getCategoriaOficial());
@@ -336,6 +573,9 @@ public class DailyCatalogsBean implements Serializable {
         categoriaOficialNueva.setStatus(categoriaOficialSelected.isStatus());
     }
 
+    /**
+     *
+     */
     public void saveOfficialCategory() {
         FacesMessage message = null;
         CatCategoriaOficialDAO categoriaOficialDAO = new CatCategoriaOficialDAO();
@@ -350,11 +590,17 @@ public class DailyCatalogsBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
+    /**
+     *
+     */
     public void newCategory() {
         categoriaNueva = new RvvdCatCategoria();
         categoriaSelected = null;
     }
 
+    /**
+     *
+     */
     public void selectCategory() {
         categoriaNueva.setIdCategoria(categoriaSelected.getIdCategoria());
         categoriaNueva.setCategoriaEn(categoriaSelected.getCategoriaEn());
@@ -363,6 +609,9 @@ public class DailyCatalogsBean implements Serializable {
         categoriaNueva.setStatus(categoriaSelected.isStatus());
     }
 
+    /**
+     *
+     */
     public void saveCategory() {
         FacesMessage message = null;
         CatCategoriaDAO categoriaDAO = new CatCategoriaDAO();
@@ -377,11 +626,17 @@ public class DailyCatalogsBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
+    /**
+     *
+     */
     public void newChannel() {
         canalNuevo = new RvvdCatCanal();
         canalSelected = null;
     }
 
+    /**
+     *
+     */
     public void selectChannel() {
         canalNuevo.setIdCanal(canalSelected.getIdCanal());
         canalNuevo.setCanalR(canalSelected.getCanalR());
@@ -389,6 +644,9 @@ public class DailyCatalogsBean implements Serializable {
         canalNuevo.setStatus(canalSelected.getStatus());
     }
 
+    /**
+     *
+     */
     public void saveChannel() {
         FacesMessage message = null;
         CatCanalDAO canalDAO = new CatCanalDAO();
@@ -403,11 +661,17 @@ public class DailyCatalogsBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
+    /**
+     *
+     */
     public void newConsumption() {
         tipoConsumoNuevo = new RvvdCatTipoConsumo();
         tipoConsumoSelected = null;
     }
 
+    /**
+     *
+     */
     public void selectConsumption() {
         tipoConsumoNuevo.setIdTipoConsumo(tipoConsumoSelected.getIdTipoConsumo());
         tipoConsumoNuevo.setStatus(tipoConsumoSelected.getStatus());
@@ -415,6 +679,9 @@ public class DailyCatalogsBean implements Serializable {
         tipoConsumoNuevo.setTipoConsumoR(tipoConsumoSelected.getTipoConsumoR());
     }
 
+    /**
+     *
+     */
     public void saveConsumption() {
         FacesMessage message = null;
         CatTipoConsumoDAO tipoConsumoDAO = new CatTipoConsumoDAO();
@@ -429,11 +696,17 @@ public class DailyCatalogsBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
+    /**
+     *
+     */
     public void newPacking() {
         empaqueNuevo = new RvvdCatEmpaque();
         empaqueSelected = null;
     }
 
+    /**
+     *
+     */
     public void selectPacking() {
         empaqueNuevo.setIdEmpaque(empaqueSelected.getIdEmpaque());
         empaqueNuevo.setEmpaqueEn(empaqueSelected.getEmpaqueEn());
@@ -441,6 +714,9 @@ public class DailyCatalogsBean implements Serializable {
         empaqueNuevo.setStatus(empaqueSelected.getStatus());
     }
 
+    /**
+     *
+     */
     public void savePacking() {
         FacesMessage message = null;
         CatEmpaqueDAO empaqueDAO = new CatEmpaqueDAO();
@@ -455,11 +731,17 @@ public class DailyCatalogsBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
+    /**
+     *
+     */
     public void newGec() {
         gecNuevo = new RvvdCatGec();
         gecSelected = null;
     }
 
+    /**
+     *
+     */
     public void selectGec() {
         gecNuevo.setIdGec(gecSelected.getIdGec());
         gecNuevo.setGecEn(gecSelected.getGecEn());
@@ -467,6 +749,9 @@ public class DailyCatalogsBean implements Serializable {
         gecNuevo.setStatus(gecSelected.getStatus());
     }
 
+    /**
+     *
+     */
     public void saveGec() {
         FacesMessage message = null;
         CatGecDAO gecDAO = new CatGecDAO();
@@ -481,11 +766,17 @@ public class DailyCatalogsBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
+    /**
+     *
+     */
     public void newBussinessUnit() {
         unidadNueva = new RvvdCatUnidadNegocio();
         unidadSelected = null;
     }
 
+    /**
+     *
+     */
     public void selectBussinessUnit() {
         unidadNueva.setIdUnidadNegocio(unidadSelected.getIdUnidadNegocio());
         unidadNueva.setStatus(unidadSelected.getStatus());
@@ -493,6 +784,9 @@ public class DailyCatalogsBean implements Serializable {
         unidadNueva.setUnidadNegocioR(unidadSelected.getUnidadNegocioR());
     }
 
+    /**
+     *
+     */
     public void saveBussinessUnit() {
         FacesMessage message = null;
         CatUnidadNegocioDAO unidadNegocioDAO = new CatUnidadNegocioDAO();
@@ -507,11 +801,17 @@ public class DailyCatalogsBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
+    /**
+     *
+     */
     public void newTrademark() {
         marcaNueva = new RvvdCatMarca();
         marcaSelected = null;
     }
 
+    /**
+     *
+     */
     public void selectTrademark() {
         marcaNueva.setIdMarca(marcaSelected.getIdMarca());
         marcaNueva.setMarcaEn(marcaSelected.getMarcaEn());
@@ -519,6 +819,9 @@ public class DailyCatalogsBean implements Serializable {
         marcaNueva.setStatus(marcaSelected.getStatus());
     }
 
+    /**
+     *
+     */
     public void saveTrademark() {
         FacesMessage message = null;
         CatMarcaDAO marcaDAO = new CatMarcaDAO();
@@ -533,11 +836,17 @@ public class DailyCatalogsBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
+    /**
+     *
+     */
     public void newCalorie() {
         contenidoNueva = new RvvdCatContenidoCalorico();
         contenidoSelected = null;
     }
 
+    /**
+     *
+     */
     public void selectCalorie() {
         contenidoNueva.setIdContenidoCalorico(contenidoSelected.getIdContenidoCalorico());
         contenidoNueva.setContenidoCaloricoEn(contenidoSelected.getContenidoCaloricoEn());
@@ -545,6 +854,9 @@ public class DailyCatalogsBean implements Serializable {
         contenidoNueva.setStatus(contenidoSelected.getStatus());
     }
 
+    /**
+     *
+     */
     public void saveCalorie() {
         FacesMessage message = null;
         CatContCaloricoDAO contCaloricoDAO = new CatContCaloricoDAO();

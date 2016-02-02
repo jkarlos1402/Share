@@ -192,13 +192,13 @@
                                 #{dailyReclassCatalogsBean.diasOpReclasificados.size()} entries found.
                             </f:facet>
                             <p:ajax event="rowEdit" listener="#{dailyReclassCatalogsBean.onRowEditDias}" />
-                            <p:column headerText="Country">
+                            <p:column headerText="Country" filterBy="#{operativeDay.pais}" sortBy="#{operativeDay.pais}">
                                 <h:outputText value="#{operativeDay.pais}"/>
                             </p:column>
-                            <p:column headerText="Date" >
+                            <p:column headerText="Date" sortBy="#{operativeDay.fecha}" >
                                 <h:outputText value="#{operativeDay.fecha != null ? dailyReclassCatalogsBean.formatDay.format(operativeDay.fecha) : ''}"/>
                             </p:column>                                                        
-                            <p:column headerText="Reclassified Date" sortBy="#{operativeDay.fechaR}">                                
+                            <p:column headerText="Reclassified Date">                                
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{operativeDay.fechaR != null ? dailyReclassCatalogsBean.formatDay.format(operativeDay.fechaR) : ''}"/></f:facet>
                                     <f:facet name="input">

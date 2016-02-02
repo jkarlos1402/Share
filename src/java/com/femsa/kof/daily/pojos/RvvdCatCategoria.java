@@ -12,6 +12,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "RVVD_CAT_CATEGORIA")
 public class RvvdCatCategoria implements Serializable {
@@ -38,49 +42,96 @@ public class RvvdCatCategoria implements Serializable {
     @Column(name = "STATUS")
     private boolean status;
 
+    /**
+     *
+     */
     public RvvdCatCategoria() {
     }
 
+    /**
+     *
+     * @param idCategoria
+     */
     public RvvdCatCategoria(Integer idCategoria) {
         this.idCategoria = idCategoria;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isStatus() {
         return status;
     }
 
+    /**
+     *
+     * @param status
+     */
     public void setStatus(boolean status) {
         this.status = status;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getIdCategoria() {
         return idCategoria;
     }
 
+    /**
+     *
+     * @param idCategoria
+     */
     public void setIdCategoria(Integer idCategoria) {
         this.idCategoria = idCategoria;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCategoria() {
         return categoria;
     }
 
+    /**
+     *
+     * @param categoria
+     */
     public void setCategoria(String categoria) {
         this.categoria = categoria.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCategoriaEn() {
         return categoriaEn;
     }
 
+    /**
+     *
+     * @param categoriaEn
+     */
     public void setCategoriaEn(String categoriaEn) {
         this.categoriaEn = categoriaEn.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public RvvdCatCategoriaOficial getIdCategoriaOficial() {
         return idCategoriaOficial;
     }
 
+    /**
+     *
+     * @param idCategoriaOficial
+     */
     public void setIdCategoriaOficial(RvvdCatCategoriaOficial idCategoriaOficial) {
         this.idCategoriaOficial = idCategoriaOficial;
     }

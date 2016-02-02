@@ -19,8 +19,8 @@ import javax.persistence.TemporalType;
  * @author TMXIDSJPINAM
  */
 @Entity
-@Table(name = "RVVD_RECLASIF_DIAS_OP")
-public class RvvdReclasifDiasOp implements Serializable {
+@Table(name = "RVVD_RECLASIF_DIAS_OP_TMP")
+public class RvvdReclasifDiasOpTmp implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
@@ -38,22 +38,22 @@ public class RvvdReclasifDiasOp implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_RECLASIF_DIAS_OP")
-    @SequenceGenerator(name = "RVVD_SEQ_RECLASIF_DIAS_OP", sequenceName = "RVVD_SEQ_RECLASIF_DIAS_OP", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_RECLASIF_DIAS_OP_TMP")
+    @SequenceGenerator(name = "RVVD_SEQ_RECLASIF_DIAS_OP_TMP", sequenceName = "RVVD_SEQ_RECLASIF_DIAS_OP_TMP", allocationSize = 1)
     @Column(name = "ID_RECLASIF_DIAS_OP")
     private BigDecimal idReclasifDiasOp;
 
     /**
      *
      */
-    public RvvdReclasifDiasOp() {
+    public RvvdReclasifDiasOpTmp() {
     }
 
     /**
      *
      * @param idReclasifDiasOp
      */
-    public RvvdReclasifDiasOp(BigDecimal idReclasifDiasOp) {
+    public RvvdReclasifDiasOpTmp(BigDecimal idReclasifDiasOp) {
         this.idReclasifDiasOp = idReclasifDiasOp;
     }
 
@@ -131,10 +131,10 @@ public class RvvdReclasifDiasOp implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof RvvdReclasifDiasOp)) {
+        if (!(object instanceof RvvdReclasifDiasOpTmp)) {
             return false;
         }
-        RvvdReclasifDiasOp other = (RvvdReclasifDiasOp) object;
+        RvvdReclasifDiasOpTmp other = (RvvdReclasifDiasOpTmp) object;
         if ((this.idReclasifDiasOp == null && other.idReclasifDiasOp != null) || (this.idReclasifDiasOp != null && !this.idReclasifDiasOp.equals(other.idReclasifDiasOp))) {
             return false;
         }

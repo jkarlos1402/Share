@@ -2,9 +2,9 @@ package com.femsa.kof.util;
 
 import com.femsa.kof.daily.pojos.RollingDaily;
 import com.femsa.kof.daily.pojos.RvvdCatCategoriaOficial;
-import com.femsa.kof.daily.pojos.RvvdDistribucionMx;
-import com.femsa.kof.daily.pojos.RvvdReclasifDiasOp;
-import com.femsa.kof.daily.pojos.RvvdStRolling;
+import com.femsa.kof.daily.pojos.RvvdDistribucionMxTmp;
+import com.femsa.kof.daily.pojos.RvvdReclasifDiasOpTmp;
+import com.femsa.kof.daily.pojos.RvvdStRollingTmp;
 import com.femsa.kof.share.pojos.ShareCatPais;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import java.io.IOException;
@@ -12,7 +12,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import javax.faces.context.FacesContext;
@@ -26,60 +25,115 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.primefaces.model.UploadedFile;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class XlsAnalizerDaily {
 
     private List<String> omittedSheets;
     private List<String> loadedSheets;
     private List<String> errors;
     private List<RollingDaily> cargasRolling = new ArrayList<RollingDaily>();
-    private List<RvvdDistribucionMx> cargasDistribucion = new ArrayList<RvvdDistribucionMx>();
+    private List<RvvdDistribucionMxTmp> cargasDistribucion = new ArrayList<RvvdDistribucionMxTmp>();
 
+    /**
+     *
+     */
     public XlsAnalizerDaily() {
         omittedSheets = new ArrayList<String>();
         loadedSheets = new ArrayList<String>();
         errors = new ArrayList<String>();
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RollingDaily> getCargasRolling() {
         return cargasRolling;
     }
 
+    /**
+     *
+     * @param cargasRolling
+     */
     public void setCargasRolling(List<RollingDaily> cargasRolling) {
         this.cargasRolling = cargasRolling;
     }
 
-    public List<RvvdDistribucionMx> getCargasDistribucion() {
+    /**
+     *
+     * @return
+     */
+    public List<RvvdDistribucionMxTmp> getCargasDistribucion() {
         return cargasDistribucion;
     }
 
-    public void setCargasDistribucion(List<RvvdDistribucionMx> cargasDistribucion) {
+    /**
+     *
+     * @param cargasDistribucion
+     */
+    public void setCargasDistribucion(List<RvvdDistribucionMxTmp> cargasDistribucion) {
         this.cargasDistribucion = cargasDistribucion;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<String> getLoadedSheets() {
         return loadedSheets;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<String> getErrors() {
         return errors;
     }
 
+    /**
+     *
+     * @param errors
+     */
     public void setErrors(List<String> errors) {
         this.errors = errors;
     }
 
+    /**
+     *
+     * @param loadedSheets
+     */
     public void setLoadedSheets(List<String> loadedSheets) {
         this.loadedSheets = loadedSheets;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<String> getOmittedSheets() {
         return omittedSheets;
     }
 
+    /**
+     *
+     * @param omittedSheets
+     */
     public void setOmittedSheets(List<String> omittedSheets) {
         this.omittedSheets = omittedSheets;
     }
 
+    /**
+     * Se encarga de la llamada a los métodos correspondientes para el análisis
+     * de todas las hojas de excel
+     *
+     * @param file archivo cargado de la interfaz gráfica
+     * @param catPais pais que realiza el análisis
+     * @param usuario usuario que realiza el análisis
+     */
     public void analizeXls(UploadedFile file, ShareCatPais catPais, ShareUsuario usuario) {
         Workbook excelXLS = null;
         try {
@@ -125,6 +179,18 @@ public class XlsAnalizerDaily {
         }
     }
 
+    /**
+     * Método encargado de la lectura y análisis de una hoja del archivo excel
+     * cargado en la interfaz gráfica correspondiente a Rolling
+     *
+     *
+     * @param rowIterator lista de renglones contenidos en la hoja de excel
+     * @param catPais pais que realiza el análisis
+     * @param usuario usuario que realiza el análisis
+     * @param sheetName nombre de la hoja de excel
+     * @return Regresa una lista con los registros a ser almacenados en base de
+     * datos
+     */
     public List<RollingDaily> analizeSheetRolling(Iterator<Row> rowIterator, ShareCatPais catPais, ShareUsuario usuario, String sheetName) {
         int numRow = 0;
         int numCell = 0;
@@ -147,9 +213,9 @@ public class XlsAnalizerDaily {
             numCell = 0;
             Row row = rowIterator.next();
             Iterator<Cell> cellIterator = row.cellIterator();
-            RvvdReclasifDiasOp diaOp = null;
+            RvvdReclasifDiasOpTmp diaOp = null;
             RollingDaily rolling = null;
-            RvvdStRolling stRolling = null;
+            RvvdStRollingTmp stRolling = null;
             while (cellIterator.hasNext()) {
                 Cell cell = cellIterator.next();
                 switch (cell.getCellType()) {
@@ -158,7 +224,7 @@ public class XlsAnalizerDaily {
                             cabeceras.add(new Columnas(cell.getStringCellValue().trim(), numCell));
                         } else if (!cell.getStringCellValue().trim().equals("") && numRow > 0) {
                             if (cabeceras.get(numCell).getNameColumn().equalsIgnoreCase("country") && !cell.getStringCellValue().trim().equals("")) {
-                                diaOp = new RvvdReclasifDiasOp();
+                                diaOp = new RvvdReclasifDiasOpTmp();
                                 rolling = new RollingDaily();
                                 rolling.setDiasOperativos(diaOp);
                                 descPais = catPais.getNombre();
@@ -175,7 +241,7 @@ public class XlsAnalizerDaily {
                                     cabeceras.add(new Columnas(cell.getStringCellValue().trim(), numCell));
                                 } else if (!cell.getStringCellValue().trim().equals("") && numRow > 0) {
                                     if (cabeceras.get(numCell).getNameColumn().equalsIgnoreCase("country") && !cell.getStringCellValue().trim().equals("")) {
-                                        diaOp = new RvvdReclasifDiasOp();
+                                        diaOp = new RvvdReclasifDiasOpTmp();
                                         descPais = catPais.getNombre();
                                         zona = cell.getStringCellValue().trim().toUpperCase();
                                         diaOp.setPais(catPais.getClaveCorta());
@@ -189,7 +255,7 @@ public class XlsAnalizerDaily {
                                 } else if (diaOp != null && cabeceras.get(numCell).getNameColumn().equalsIgnoreCase("Date PY") && numRow > 0 && numCell > 0) {
                                     diaOp.setFechaR(cell.getDateCellValue());
                                 } else if (diaOp != null && nombreCatOficiales.indexOf(cabeceras.get(numCell).getNameColumn().toUpperCase()) != -1 && numRow > 0 && numCell > 0) {
-                                    stRolling = new RvvdStRolling();
+                                    stRolling = new RvvdStRollingTmp();
                                     fechaTemp.setTime(diaOp.getFecha());
                                     stRolling.setAnio(fechaTemp.get(Calendar.YEAR));
                                     stRolling.setMes(fechaTemp.get(Calendar.MONTH) + 1);
@@ -210,7 +276,7 @@ public class XlsAnalizerDaily {
                                     stRolling.setRollingCu(cell.getNumericCellValue());
                                     rolling.addRolling(stRolling);
                                 } else if (diaOp != null && cabeceras.get(numCell).getNameColumn().equalsIgnoreCase("Others") && numRow > 0 && numCell > 0) {
-                                    stRolling = new RvvdStRolling();
+                                    stRolling = new RvvdStRollingTmp();
                                     fechaTemp.setTime(diaOp.getFecha());
                                     stRolling.setAnio(fechaTemp.get(Calendar.YEAR));
                                     stRolling.setMes(fechaTemp.get(Calendar.MONTH) + 1);
@@ -238,7 +304,7 @@ public class XlsAnalizerDaily {
                         } else if (diaOp != null && cabeceras.get(numCell).getNameColumn().equalsIgnoreCase("Date PY") && numRow > 0 && numCell > 0) {
                             diaOp.setFechaR(cell.getDateCellValue());
                         } else if (diaOp != null && nombreCatOficiales.indexOf(cabeceras.get(numCell).getNameColumn().toUpperCase()) != -1 && numRow > 0 && numCell > 0) {
-                            stRolling = new RvvdStRolling();
+                            stRolling = new RvvdStRollingTmp();
                             fechaTemp.setTime(diaOp.getFecha());
                             stRolling.setAnio(fechaTemp.get(Calendar.YEAR));
                             stRolling.setMes(fechaTemp.get(Calendar.MONTH) + 1);
@@ -259,7 +325,7 @@ public class XlsAnalizerDaily {
                             stRolling.setRollingCu(cell.getNumericCellValue());
                             rolling.addRolling(stRolling);
                         } else if (diaOp != null && cabeceras.get(numCell).getNameColumn().equalsIgnoreCase("Others") && numRow > 0 && numCell > 0) {
-                            stRolling = new RvvdStRolling();
+                            stRolling = new RvvdStRollingTmp();
                             fechaTemp.setTime(diaOp.getFecha());
                             stRolling.setAnio(fechaTemp.get(Calendar.YEAR));
                             stRolling.setMes(fechaTemp.get(Calendar.MONTH) + 1);
@@ -289,10 +355,22 @@ public class XlsAnalizerDaily {
         return cargas;
     }
 
-    public List<RvvdDistribucionMx> analizeSheetDistribucionMx(Iterator<Row> rowIterator, ShareCatPais catPais, ShareUsuario usuario, String sheetName) {
+    /**
+     * Método encargado de la lectura y análisis de una hoja del archivo excel
+     * cargado en la interfaz gráfica correspondiente a la distribución de
+     * México
+     *
+     * @param rowIterator lista de renglones contenidos en la hoja de excel
+     * @param catPais pais que realiza el análisis
+     * @param usuario usuario que realiza el análisis
+     * @param sheetName nombre de la hoja de excel
+     * @return Regresa una lista con los registros a ser almacenados en base de
+     * datos
+     */
+    public List<RvvdDistribucionMxTmp> analizeSheetDistribucionMx(Iterator<Row> rowIterator, ShareCatPais catPais, ShareUsuario usuario, String sheetName) {
         int numRow = 0;
-        List<RvvdDistribucionMx> cargas = new ArrayList<RvvdDistribucionMx>();
-        RvvdDistribucionMx distribucionTemp = null;
+        List<RvvdDistribucionMxTmp> cargas = new ArrayList<RvvdDistribucionMxTmp>();
+        RvvdDistribucionMxTmp distribucionTemp = null;
         SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyyMMdd");
         String fecha = "";
         double porcentaje = 0.00;
@@ -301,7 +379,7 @@ public class XlsAnalizerDaily {
             Iterator<Cell> cellIterator = row.iterator();
             Cell cell = null;
             if (numRow > 0) {
-                distribucionTemp = new RvvdDistribucionMx();
+                distribucionTemp = new RvvdDistribucionMxTmp();
                 distribucionTemp.setPais("MEX");
                 cell = row.getCell(3);
                 if (cell != null && cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
@@ -350,6 +428,12 @@ public class XlsAnalizerDaily {
         return cargas;
     }
 
+    /**
+     * Método estático encargado de obtener la extensión del archivo cargado
+     *
+     * @param filename nombre del archivo
+     * @return Regresa la extensión del archivo
+     */
     private static String getExtension(String filename) {
         int index = filename.lastIndexOf('.');
         if (index == -1) {

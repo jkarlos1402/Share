@@ -7,18 +7,34 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class ShareCatGrupoCategoriasDAO {
 
     private String error;
 
+    /**
+     *
+     * @return
+     */
     public String getError() {
         return error;
     }
 
+    /**
+     *
+     * @param error
+     */
     public void setError(String error) {
         this.error = error;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ShareCatGrupoCategorias> getCategoryGroups() {
         List<ShareCatGrupoCategorias> grupos = null;
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -39,6 +55,11 @@ public class ShareCatGrupoCategoriasDAO {
         return grupos;
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public ShareCatGrupoCategorias getCategoryGroup(String name) {
         ShareCatGrupoCategorias grupo = null;
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -62,6 +83,10 @@ public class ShareCatGrupoCategoriasDAO {
         return grupo;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ShareCatGrupoCategorias> getCategoryGroupsAll() {
         List<ShareCatGrupoCategorias> grupos = null;
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -82,6 +107,11 @@ public class ShareCatGrupoCategoriasDAO {
         return grupos;
     }
 
+    /**
+     *
+     * @param grupoCategorias
+     * @return
+     */
     public boolean saveGroupCategory(ShareCatGrupoCategorias grupoCategorias) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();

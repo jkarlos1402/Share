@@ -10,6 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "RVVD_CAT_TIPO_CONSUMO")
 public class RvvdCatTipoConsumo implements Serializable {
@@ -32,41 +36,80 @@ public class RvvdCatTipoConsumo implements Serializable {
     @Column(name = "STATUS")
     private boolean status;
 
+    /**
+     *
+     */
     public RvvdCatTipoConsumo() {
     }
 
+    /**
+     *
+     * @param idTipoConsumo
+     */
     public RvvdCatTipoConsumo(Integer idTipoConsumo) {
         this.idTipoConsumo = idTipoConsumo;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getIdTipoConsumo() {
         return idTipoConsumo;
     }
 
+    /**
+     *
+     * @param idTipoConsumo
+     */
     public void setIdTipoConsumo(Integer idTipoConsumo) {
         this.idTipoConsumo = idTipoConsumo;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getTipoConsumoR() {
         return tipoConsumoR;
     }
 
+    /**
+     *
+     * @param tipoConsumoR
+     */
     public void setTipoConsumoR(String tipoConsumoR) {
         this.tipoConsumoR = tipoConsumoR.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getTipoConsumoEn() {
         return tipoConsumoEn;
     }
 
+    /**
+     *
+     * @param tipoConsumoEn
+     */
     public void setTipoConsumoEn(String tipoConsumoEn) {
         this.tipoConsumoEn = tipoConsumoEn.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean getStatus() {
         return status;
     }
 
+    /**
+     *
+     * @param status
+     */
     public void setStatus(boolean status) {
         this.status = status;
     }

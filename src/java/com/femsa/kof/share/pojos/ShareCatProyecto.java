@@ -11,6 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "SHARE_CAT_PROYECTO")
 public class ShareCatProyecto implements Serializable {
@@ -35,49 +39,96 @@ public class ShareCatProyecto implements Serializable {
     @ManyToMany(mappedBy = "paises",fetch = FetchType.EAGER)
     private List<ShareUsuario> usuarios = new ArrayList<ShareUsuario>();
 
+    /**
+     *
+     */
     public ShareCatProyecto() {
     }
 
+    /**
+     *
+     * @param idProyecto
+     */
     public ShareCatProyecto(Integer idProyecto) {
         this.idProyecto = idProyecto;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ShareUsuario> getUsuarios() {
         return usuarios;
     }
 
+    /**
+     *
+     * @param usuarios
+     */
     public void setUsuarios(List<ShareUsuario> usuarios) {
         this.usuarios = usuarios;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getIdProyecto() {
         return idProyecto;
     }
 
+    /**
+     *
+     * @param idProyecto
+     */
     public void setIdProyecto(Integer idProyecto) {
         this.idProyecto = idProyecto;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getNombreProyecto() {
         return nombreProyecto;
     }
 
+    /**
+     *
+     * @param nombreProyecto
+     */
     public void setNombreProyecto(String nombreProyecto) {
         this.nombreProyecto = nombreProyecto;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getDescripcionProyecto() {
         return descripcionProyecto;
     }
 
+    /**
+     *
+     * @param descripcionProyecto
+     */
     public void setDescripcionProyecto(String descripcionProyecto) {
         this.descripcionProyecto = descripcionProyecto;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean getStatus() {
         return status;
     }
 
+    /**
+     *
+     * @param status
+     */
     public void setStatus(boolean status) {
         this.status = status;
     }

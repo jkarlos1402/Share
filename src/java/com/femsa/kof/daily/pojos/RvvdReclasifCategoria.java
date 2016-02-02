@@ -10,6 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "RVVD_RECLASIF_CATEGORIA")
 public class RvvdReclasifCategoria implements Serializable {
@@ -35,65 +39,128 @@ public class RvvdReclasifCategoria implements Serializable {
     @Column(name = "ID_RECLASIF_CATEGORIA")
     private Integer idReclasifCategoria;
 
+    /**
+     *
+     */
     public RvvdReclasifCategoria() {
     }
 
+    /**
+     *
+     * @param idReclasifCategoria
+     */
     public RvvdReclasifCategoria(Integer idReclasifCategoria) {
         this.idReclasifCategoria = idReclasifCategoria;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPais() {
         return pais;
     }
 
+    /**
+     *
+     * @param pais
+     */
     public void setPais(String pais) {
         this.pais = pais.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCategoria() {
         return categoria;
     }
 
+    /**
+     *
+     * @param categoria
+     */
     public void setCategoria(String categoria) {
         this.categoria = categoria.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCategoriaR() {
         return categoriaR;
     }
 
+    /**
+     *
+     * @param categoriaR
+     */
     public void setCategoriaR(String categoriaR) {
         this.categoriaR = categoriaR.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCategoriaEn() {
         return categoriaEn;
     }
 
+    /**
+     *
+     * @param categoriaEn
+     */
     public void setCategoriaEn(String categoriaEn) {
         this.categoriaEn = categoriaEn.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCategoriaOficialR() {
         return categoriaOficialR;
     }
 
+    /**
+     *
+     * @param categoriaOficialR
+     */
     public void setCategoriaOficialR(String categoriaOficialR) {
         this.categoriaOficialR = categoriaOficialR.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCategoriaOficialEn() {
         return categoriaOficialEn;
     }
 
+    /**
+     *
+     * @param categoriaOficialEn
+     */
     public void setCategoriaOficialEn(String categoriaOficialEn) {
         this.categoriaOficialEn = categoriaOficialEn.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getIdReclasifCategoria() {
         return idReclasifCategoria;
     }
 
+    /**
+     *
+     * @param idReclasifCategoria
+     */
     public void setIdReclasifCategoria(Integer idReclasifCategoria) {
         this.idReclasifCategoria = idReclasifCategoria;
     }

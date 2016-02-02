@@ -7,18 +7,34 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class CatCategoriaOficialDAO {
 
     private String error;
 
+    /**
+     *
+     * @return
+     */
     public String getError() {
         return error;
     }
 
+    /**
+     *
+     * @param error
+     */
     public void setError(String error) {
         this.error = error;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatCategoriaOficial> getCategoriasOficialesAll() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -39,6 +55,10 @@ public class CatCategoriaOficialDAO {
         return categoriasOficiales;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatCategoriaOficial> getCategoriasOficiales() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -59,6 +79,11 @@ public class CatCategoriaOficialDAO {
         return categoriasOficiales;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public RvvdCatCategoriaOficial getCategoriaOficial(Integer id) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -78,6 +103,11 @@ public class CatCategoriaOficialDAO {
         return categOficial;
     }
 
+    /**
+     *
+     * @param categoria
+     * @return
+     */
     public RvvdCatCategoriaOficial getCategoriaOficial(String categoria) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -101,6 +131,11 @@ public class CatCategoriaOficialDAO {
         return categOficial;
     }
 
+    /**
+     *
+     * @param catCategoriaOficial
+     * @return
+     */
     public boolean saveCategoriaOficial(RvvdCatCategoriaOficial catCategoriaOficial) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();

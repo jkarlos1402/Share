@@ -5,9 +5,17 @@ import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionBindingEvent;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @WebListener()
 public class AttrSessionListenerKOF implements HttpSessionAttributeListener {
 
+    /**
+     *
+     * @param event
+     */
     @Override
     public void attributeAdded(HttpSessionBindingEvent event) {
         if (event.getName().equalsIgnoreCase("session_user")) {           
@@ -15,10 +23,18 @@ public class AttrSessionListenerKOF implements HttpSessionAttributeListener {
         }        
     }
 
+    /**
+     *
+     * @param event
+     */
     @Override
     public void attributeRemoved(HttpSessionBindingEvent event) {        
     }
 
+    /**
+     *
+     * @param event
+     */
     @Override
     public void attributeReplaced(HttpSessionBindingEvent event) {
 

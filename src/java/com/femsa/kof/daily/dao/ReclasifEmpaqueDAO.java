@@ -9,18 +9,35 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class ReclasifEmpaqueDAO {
 
     private String error;
 
+    /**
+     *
+     * @return
+     */
     public String getError() {
         return error;
     }
 
+    /**
+     *
+     * @param error
+     */
     public void setError(String error) {
         this.error = error;
     }
 
+    /**
+     *
+     * @param usuario
+     * @return
+     */
     public List<RvvdReclasifEmpaque> getReclasifEmpaquesAll(ShareUsuario usuario) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -49,6 +66,11 @@ public class ReclasifEmpaqueDAO {
         return empaquesReclasificados;
     }
 
+    /**
+     *
+     * @param reclasifEmpaques
+     * @return
+     */
     public boolean saveReclasifEmpaques(List<RvvdReclasifEmpaque> reclasifEmpaques) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -85,6 +107,11 @@ public class ReclasifEmpaqueDAO {
         return flagOk;
     }
 
+    /**
+     *
+     * @param usuario
+     * @return
+     */
     public long checkReclasifEmpaques(ShareUsuario usuario) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();

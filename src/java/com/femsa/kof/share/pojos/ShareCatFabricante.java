@@ -10,6 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "SHARE_CAT_FABRICANTE")
 public class ShareCatFabricante implements Serializable {
@@ -28,33 +32,64 @@ public class ShareCatFabricante implements Serializable {
     @Column(name = "ID_STATUS")
     private boolean status;
 
+    /**
+     *
+     */
     public ShareCatFabricante() {
     }
 
+    /**
+     *
+     * @param pkFabricante
+     */
     public ShareCatFabricante(Integer pkFabricante) {
         this.pkFabricante = pkFabricante;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isStatus() {
         return status;
     }
 
+    /**
+     *
+     * @param status
+     */
     public void setStatus(boolean status) {
         this.status = status;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getPkFabricante() {
         return pkFabricante;
     }
 
+    /**
+     *
+     * @param pkFabricante
+     */
     public void setPkFabricante(Integer pkFabricante) {
         this.pkFabricante = pkFabricante;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getFabricante() {
         return fabricante;
     }
 
+    /**
+     *
+     * @param fabricante
+     */
     public void setFabricante(String fabricante) {
         this.fabricante = fabricante.toUpperCase();
     }

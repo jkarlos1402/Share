@@ -7,18 +7,34 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class CatMarcaDAO {
 
     private String error;
 
+    /**
+     *
+     * @return
+     */
     public String getError() {
         return error;
     }
 
+    /**
+     *
+     * @param error
+     */
     public void setError(String error) {
         this.error = error;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatMarca> getMarcasAll() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -39,6 +55,10 @@ public class CatMarcaDAO {
         return marcas;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatMarca> getMarcas() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -59,6 +79,11 @@ public class CatMarcaDAO {
         return marcas;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public RvvdCatMarca getMarca(Integer id) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -78,6 +103,11 @@ public class CatMarcaDAO {
         return marca;
     }
 
+    /**
+     *
+     * @param marca
+     * @return
+     */
     public RvvdCatMarca getMarca(String marca) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -101,6 +131,11 @@ public class CatMarcaDAO {
         return marcaT;
     }
 
+    /**
+     *
+     * @param marca
+     * @return
+     */
     public boolean saveMarca(RvvdCatMarca marca) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();

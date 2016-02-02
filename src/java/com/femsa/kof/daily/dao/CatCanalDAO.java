@@ -7,18 +7,34 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class CatCanalDAO {
 
     private String error;
 
+    /**
+     *
+     * @return
+     */
     public String getError() {
         return error;
     }
 
+    /**
+     *
+     * @param error
+     */
     public void setError(String error) {
         this.error = error;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatCanal> getCanalesAll() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -39,6 +55,10 @@ public class CatCanalDAO {
         return canales;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatCanal> getCanales() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -59,6 +79,11 @@ public class CatCanalDAO {
         return canales;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public RvvdCatCanal getCanal(Integer id) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -78,6 +103,11 @@ public class CatCanalDAO {
         return canal;
     }
 
+    /**
+     *
+     * @param canal
+     * @return
+     */
     public RvvdCatCanal getCanal(String canal) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -102,6 +132,11 @@ public class CatCanalDAO {
         return canalT;
     }
 
+    /**
+     *
+     * @param canal
+     * @return
+     */
     public boolean saveCanal(RvvdCatCanal canal) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();

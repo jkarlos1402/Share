@@ -21,6 +21,10 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import org.primefaces.event.FileUploadEvent;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @ManagedBean(name = "shareLoadBean")
 @SessionScoped
 public class ShareLoadBean implements Serializable {
@@ -42,6 +46,9 @@ public class ShareLoadBean implements Serializable {
     @ManagedProperty(value = "#{shareUploadStatusBean}")
     ShareUploadStatusBean statusBean;
 
+    /**
+     *
+     */
     public ShareLoadBean() {
         HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         usuario = (ShareUsuario) httpSession.getAttribute("session_user");
@@ -51,74 +58,146 @@ public class ShareLoadBean implements Serializable {
         errorsScript = new ArrayList<String>();
     }
 
+    /**
+     *
+     * @return
+     */
     public List<String> getErrorsScript() {
         return errorsScript;
     }
 
+    /**
+     *
+     * @param errorsScript
+     */
     public void setErrorsScript(List<String> errorsScript) {
         this.errorsScript = errorsScript;
     }
 
+    /**
+     *
+     * @return
+     */
     public ShareUploadStatusBean getStatusBean() {
         return statusBean;
     }
 
+    /**
+     *
+     * @param statusBean
+     */
     public void setStatusBean(ShareUploadStatusBean statusBean) {
         this.statusBean = statusBean;
     }
 
+    /**
+     *
+     * @return
+     */
     public Date getDateExecution() {
         return dateExecution;
     }
 
+    /**
+     *
+     * @param dateExecution
+     */
     public void setDateExecution(Date dateExecution) {
         this.dateExecution = dateExecution;
     }
 
+    /**
+     *
+     * @return
+     */
     public Date getDateEndExecution() {
         return dateEndExecution;
     }
 
+    /**
+     *
+     * @param dateEndExecution
+     */
     public void setDateEndExecution(Date dateEndExecution) {
         this.dateEndExecution = dateEndExecution;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getNumEntriesSaved() {
         return numEntriesSaved;
     }
 
+    /**
+     *
+     * @param numEntriesSaved
+     */
     public void setNumEntriesSaved(Integer numEntriesSaved) {
         this.numEntriesSaved = numEntriesSaved;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<String> getErrors() {
         return errors;
     }
 
+    /**
+     *
+     * @param errors
+     */
     public void setErrors(List<String> errors) {
         this.errors = errors;
     }
 
+    /**
+     *
+     * @return
+     */
     public ShareUsuario getUsuario() {
         return usuario;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<String> getLoadedSheets() {
         return loadedSheets;
     }
 
+    /**
+     *
+     * @param loadedSheets
+     */
     public void setLoadedSheets(List<String> loadedSheets) {
         this.loadedSheets = loadedSheets;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<String> getOmittedSheets() {
         return omittedSheets;
     }
 
+    /**
+     *
+     * @param omittedSheets
+     */
     public void setOmittedSheets(List<String> omittedSheets) {
         this.omittedSheets = omittedSheets;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<SelectItem> getCatCountriesUser() {
         HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         usuario = (ShareUsuario) httpSession.getAttribute("session_user");
@@ -134,26 +213,50 @@ public class ShareLoadBean implements Serializable {
         return catCountriesUser;
     }
 
+    /**
+     *
+     * @param catCountriesUser
+     */
     public void setCatCountriesUser(List<SelectItem> catCountriesUser) {
         this.catCountriesUser = catCountriesUser;
     }
 
+    /**
+     *
+     * @return
+     */
     public ShareCatPais getCountrySelected() {
         return countrySelected;
     }
 
+    /**
+     *
+     * @param countrySelected
+     */
     public void setCountrySelected(ShareCatPais countrySelected) {
         this.countrySelected = countrySelected;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ShareTmpAllInfoCarga> getListInfoCarga() {
         return listInfoCarga;
     }
 
+    /**
+     *
+     * @param listInfoCarga
+     */
     public void setListInfoCarga(List<ShareTmpAllInfoCarga> listInfoCarga) {
         this.listInfoCarga = listInfoCarga;
     }
 
+    /**
+     *
+     * @param event
+     */
     public void handleFileUpload(FileUploadEvent event) {
         FacesMessage message = null;
         if (countrySelected != null) {
@@ -174,6 +277,9 @@ public class ShareLoadBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
+    /**
+     *
+     */
     public void saveInfoCarga() {
         FacesMessage message = null;
         ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();

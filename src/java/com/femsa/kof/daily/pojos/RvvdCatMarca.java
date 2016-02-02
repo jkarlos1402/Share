@@ -10,6 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "RVVD_CAT_MARCA")
 public class RvvdCatMarca implements Serializable {
@@ -32,41 +36,80 @@ public class RvvdCatMarca implements Serializable {
     @Column(name = "STATUS")
     private boolean status;
 
+    /**
+     *
+     */
     public RvvdCatMarca() {
     }
 
+    /**
+     *
+     * @param idMarca
+     */
     public RvvdCatMarca(Integer idMarca) {
         this.idMarca = idMarca;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getIdMarca() {
         return idMarca;
     }
 
+    /**
+     *
+     * @param idMarca
+     */
     public void setIdMarca(Integer idMarca) {
         this.idMarca = idMarca;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getMarcaR() {
         return marcaR;
     }
 
+    /**
+     *
+     * @param marcaR
+     */
     public void setMarcaR(String marcaR) {
         this.marcaR = marcaR.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getMarcaEn() {
         return marcaEn;
     }
 
+    /**
+     *
+     * @param marcaEn
+     */
     public void setMarcaEn(String marcaEn) {
         this.marcaEn = marcaEn.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean getStatus() {
         return status;
     }
 
+    /**
+     *
+     * @param status
+     */
     public void setStatus(boolean status) {
         this.status = status;
     }

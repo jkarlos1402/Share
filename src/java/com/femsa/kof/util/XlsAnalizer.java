@@ -19,6 +19,10 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.primefaces.model.UploadedFile;
 
+/**
+ * Clase que analiza el archivo de excel correspondiente a la carga de
+ * informacion de Share
+ */
 public class XlsAnalizer {
 
     private List<String> omittedSheets;
@@ -29,36 +33,74 @@ public class XlsAnalizer {
     private final String[] mesesIng = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
     private final String[] mesesPort = {"JAN", "FEV", "MAR", "APR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"};
 
+    /**
+     * Constructor sin parámetros que inicializa los atributos necesarios para
+     * el manejo de un archivo de excel correspondiente a Share
+     */
     public XlsAnalizer() {
         omittedSheets = new ArrayList<String>();
         loadedSheets = new ArrayList<String>();
         errors = new ArrayList<String>();
     }
 
+    /**
+     *
+     * @return
+     */
     public List<String> getLoadedSheets() {
         return loadedSheets;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<String> getErrors() {
         return errors;
     }
 
+    /**
+     *
+     * @param errors
+     */
     public void setErrors(List<String> errors) {
         this.errors = errors;
     }
 
+    /**
+     *
+     * @param loadedSheets
+     */
     public void setLoadedSheets(List<String> loadedSheets) {
         this.loadedSheets = loadedSheets;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<String> getOmittedSheets() {
         return omittedSheets;
     }
 
+    /**
+     *
+     * @param omittedSheets
+     */
     public void setOmittedSheets(List<String> omittedSheets) {
         this.omittedSheets = omittedSheets;
     }
 
+    /**
+     * Se encarga de la llamada a los métodos correspondientes para el análisis
+     * de todas las hojas de excel
+     *
+     * @param file archivo cargado de la interfaz gráfica
+     * @param catPais pais que realiza el análisis
+     * @param usuario usuario que realiza el análisis
+     * @return Regresa una lista con los registros a ser almacenados en base de
+     * datos
+     */
     public List<ShareTmpAllInfoCarga> analizeXls(UploadedFile file, ShareCatPais catPais, ShareUsuario usuario) {
         List<ShareTmpAllInfoCarga> cargas = new ArrayList<ShareTmpAllInfoCarga>();
         Workbook excelXLS = null;
@@ -116,6 +158,19 @@ public class XlsAnalizer {
         return cargas;
     }
 
+    /**
+     * Analiza la estructura de una hoja de excel verificando que sea la
+     * adecuada para que los registros sean almacenados en base de datos
+     *
+     * @param rowIterator Renglones de la hoja de excel
+     * @param categoria Categoria analizada
+     * @param catPais Pais que realiza el análisis
+     * @param usuario Usuario que realiza el análisis.
+     * @param sheetName Nombre de la hoja analizada
+     * @return Regresa una lista con los registros analizados y listos para ser
+     * almacenados en base de datos, si existe un error se regresa nulo y el
+     * error es almacenado en el atributo errors
+     */
     public List<ShareTmpAllInfoCarga> analizeSheet(Iterator<Row> rowIterator, ShareCatCategorias categoria, ShareCatPais catPais, ShareUsuario usuario, String sheetName) {
         int numRow = 0;
         int numCell = 0;
@@ -290,6 +345,12 @@ public class XlsAnalizer {
         return cargas;
     }
 
+    /**
+     * Método estático encargado de obtener la extensión del archivo cargado
+     *
+     * @param filename nombre del archivo
+     * @return Regresa la extensión del archivo
+     */
     private static String getExtension(String filename) {
         int index = filename.lastIndexOf('.');
         if (index == -1) {
@@ -298,7 +359,21 @@ public class XlsAnalizer {
             return filename.substring(index + 1);
         }
     }
-
+    
+    /**
+     * 
+     * @param canal
+     * @param categoria
+     * @param fabricante
+     * @param fechas
+     * @param indexFecha
+     * @param catPais
+     * @param cellValue
+     * @param cargas
+     * @param flagValue
+     * @param flagVolume
+     * @param usuario 
+     */
     private static void addRecordCarga(String canal, ShareCatCategorias categoria, String fabricante, List<String> fechas, int indexFecha, ShareCatPais catPais, double cellValue, List<ShareTmpAllInfoCarga> cargas, boolean flagValue, boolean flagVolume, ShareUsuario usuario) {
         ShareTmpAllInfoCarga carga = new ShareTmpAllInfoCarga();
         carga.setCanal(canal);

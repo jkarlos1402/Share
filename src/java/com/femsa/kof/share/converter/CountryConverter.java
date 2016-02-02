@@ -8,9 +8,20 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.servlet.ServletContext;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @FacesConverter("countryConverter")
 public class CountryConverter implements Converter {
 
+    /**
+     *
+     * @param context
+     * @param component
+     * @param value
+     * @return
+     */
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {        
         if (value != null && value.trim().length() > 0) {
@@ -33,6 +44,13 @@ public class CountryConverter implements Converter {
         }
     }
 
+    /**
+     *
+     * @param context
+     * @param component
+     * @param value
+     * @return
+     */
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
         if (value != null) {

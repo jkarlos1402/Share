@@ -9,18 +9,35 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class ReclasifGecDAO {
 
     private String error;
 
+    /**
+     *
+     * @return
+     */
     public String getError() {
         return error;
     }
 
+    /**
+     *
+     * @param error
+     */
     public void setError(String error) {
         this.error = error;
     }
 
+    /**
+     *
+     * @param usuario
+     * @return
+     */
     public List<RvvdReclasifUnGec> getReclasifUnGecAll(ShareUsuario usuario) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -49,6 +66,11 @@ public class ReclasifGecDAO {
         return unGecs;
     }
 
+    /**
+     *
+     * @param unGecs
+     * @return
+     */
     public boolean saveReclasifUnGec(List<RvvdReclasifUnGec> unGecs) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -85,6 +107,11 @@ public class ReclasifGecDAO {
         return flagOk;
     }
 
+    /**
+     *
+     * @param usuario
+     * @return
+     */
     public long checkReclasifUnGec(ShareUsuario usuario) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();

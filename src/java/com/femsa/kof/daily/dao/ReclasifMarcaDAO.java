@@ -9,18 +9,35 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class ReclasifMarcaDAO {
 
     private String error;
 
+    /**
+     *
+     * @return
+     */
     public String getError() {
         return error;
     }
 
+    /**
+     *
+     * @param error
+     */
     public void setError(String error) {
         this.error = error;
     }
 
+    /**
+     *
+     * @param usuario
+     * @return
+     */
     public List<RvvdReclasifMarca> getReclasifMarcasAll(ShareUsuario usuario) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -49,6 +66,11 @@ public class ReclasifMarcaDAO {
         return marcas;
     }
 
+    /**
+     *
+     * @param marcas
+     * @return
+     */
     public boolean saveReclasifMarcas(List<RvvdReclasifMarca> marcas) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -85,6 +107,11 @@ public class ReclasifMarcaDAO {
         return flagOk;
     }
 
+    /**
+     *
+     * @param usuario
+     * @return
+     */
     public long checkReclasifMarcas(ShareUsuario usuario) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();

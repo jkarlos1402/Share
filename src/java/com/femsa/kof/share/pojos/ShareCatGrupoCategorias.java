@@ -13,6 +13,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "SHARE_CAT_GRUPO_CATEGORIAS")
 public class ShareCatGrupoCategorias implements Serializable {
@@ -35,41 +39,80 @@ public class ShareCatGrupoCategorias implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkGrupoCategoria")
     private List<ShareCatCategorias> categoriasList;
 
+    /**
+     *
+     */
     public ShareCatGrupoCategorias() {
     }
 
+    /**
+     *
+     * @param pkGrupoCategoria
+     */
     public ShareCatGrupoCategorias(Integer pkGrupoCategoria) {
         this.pkGrupoCategoria = pkGrupoCategoria;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isStatus() {
         return status;
     }
 
+    /**
+     *
+     * @param status
+     */
     public void setStatus(boolean status) {
         this.status = status;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ShareCatCategorias> getCategoriasList() {
         return categoriasList;
     }
 
+    /**
+     *
+     * @param categoriasList
+     */
     public void setCategoriasList(List<ShareCatCategorias> categoriasList) {
         this.categoriasList = categoriasList;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getPkGrupoCategoria() {
         return pkGrupoCategoria;
     }
 
+    /**
+     *
+     * @param pkGrupoCategoria
+     */
     public void setPkGrupoCategoria(Integer pkGrupoCategoria) {
         this.pkGrupoCategoria = pkGrupoCategoria;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getGrupoCategoria() {
         return grupoCategoria;
     }
 
+    /**
+     *
+     * @param grupoCategoria
+     */
     public void setGrupoCategoria(String grupoCategoria) {
         this.grupoCategoria = grupoCategoria.toUpperCase();
     }

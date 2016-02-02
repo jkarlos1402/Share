@@ -7,18 +7,34 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class ShareCatCategoriasDAO {
 
     private String error;
 
+    /**
+     *
+     * @return
+     */
     public String getError() {
         return error;
     }
 
+    /**
+     *
+     * @param error
+     */
     public void setError(String error) {
         this.error = error;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ShareCatCategorias> getCategorias() {
         List<ShareCatCategorias> categories = null;
         try {
@@ -43,6 +59,11 @@ public class ShareCatCategoriasDAO {
         return categories;
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public ShareCatCategorias getCategoria(String name) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -66,6 +87,10 @@ public class ShareCatCategoriasDAO {
         return category;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ShareCatCategorias> getCategoriasAll() {
         List<ShareCatCategorias> categories = null;
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -86,6 +111,11 @@ public class ShareCatCategoriasDAO {
         return categories;
     }
 
+    /**
+     *
+     * @param categoria
+     * @return
+     */
     public boolean saveCategoria(ShareCatCategorias categoria) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();

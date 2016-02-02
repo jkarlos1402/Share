@@ -12,6 +12,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "RVVD_CAT_CATEGORIA_OFICIAL")
 public class RvvdCatCategoriaOficial implements Serializable {
@@ -37,49 +41,96 @@ public class RvvdCatCategoriaOficial implements Serializable {
     @Column(name = "STATUS")
     private boolean status;
 
+    /**
+     *
+     */
     public RvvdCatCategoriaOficial() {
     }
 
+    /**
+     *
+     * @param idCategoriaOficial
+     */
     public RvvdCatCategoriaOficial(Integer idCategoriaOficial) {
         this.idCategoriaOficial = idCategoriaOficial;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isStatus() {
         return status;
     }
 
+    /**
+     *
+     * @param status
+     */
     public void setStatus(boolean status) {
         this.status = status;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getIdCategoriaOficial() {
         return idCategoriaOficial;
     }
 
+    /**
+     *
+     * @param idCategoriaOficial
+     */
     public void setIdCategoriaOficial(Integer idCategoriaOficial) {
         this.idCategoriaOficial = idCategoriaOficial;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCategoriaOficial() {
         return categoriaOficial;
     }
 
+    /**
+     *
+     * @param categoriaOficial
+     */
     public void setCategoriaOficial(String categoriaOficial) {
         this.categoriaOficial = categoriaOficial.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCategoriaOficialEn() {
         return categoriaOficialEn;
     }
 
+    /**
+     *
+     * @param categoriaOficialEn
+     */
     public void setCategoriaOficialEn(String categoriaOficialEn) {
         this.categoriaOficialEn = categoriaOficialEn.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatCategoria> getRvvdCatCategoriaList() {
         return rvvdCatCategoriaList;
     }
 
+    /**
+     *
+     * @param rvvdCatCategoriaList
+     */
     public void setRvvdCatCategoriaList(List<RvvdCatCategoria> rvvdCatCategoriaList) {
         this.rvvdCatCategoriaList = rvvdCatCategoriaList;
     }

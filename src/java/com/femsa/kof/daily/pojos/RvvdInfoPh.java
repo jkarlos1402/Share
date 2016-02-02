@@ -15,6 +15,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "XTMPINDICOMER_PHI_DIA_CARGA")
 //@Table(name = "RVVD_INFO_PH")
@@ -76,137 +80,272 @@ public class RvvdInfoPh implements Serializable {
     @Column(name = "ID_INFO_PH")
     private BigDecimal idInfoPh;
 
+    /**
+     *
+     */
     public RvvdInfoPh() {
     }
 
+    /**
+     *
+     * @param idInfoPh
+     */
     public RvvdInfoPh(BigDecimal idInfoPh) {
         this.idInfoPh = idInfoPh;
     }
 
+    /**
+     *
+     * @return
+     */
     public Date getFecha() {
         return fecha;
     }
 
+    /**
+     *
+     * @param fecha
+     */
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getZona() {
         return zona;
     }
 
+    /**
+     *
+     * @param zona
+     */
     public void setZona(String zona) {
         this.zona = zona;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCategoria() {
         return categoria;
     }
 
+    /**
+     *
+     * @param categoria
+     */
     public void setCategoria(String categoria) {
         this.categoria = categoria;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getUnidadDeNegocio() {
         return unidadDeNegocio;
     }
 
+    /**
+     *
+     * @param unidadDeNegocio
+     */
     public void setUnidadDeNegocio(String unidadDeNegocio) {
         this.unidadDeNegocio = unidadDeNegocio;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getGec() {
         return gec;
     }
 
+    /**
+     *
+     * @param gec
+     */
     public void setGec(String gec) {
         this.gec = gec;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCanal() {
         return canal;
     }
 
+    /**
+     *
+     * @param canal
+     */
     public void setCanal(String canal) {
         this.canal = canal;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getMarca() {
         return marca;
     }
 
+    /**
+     *
+     * @param marca
+     */
     public void setMarca(String marca) {
         this.marca = marca;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getEmpaque() {
         return empaque;
     }
 
+    /**
+     *
+     * @param empaque
+     */
     public void setEmpaque(String empaque) {
         this.empaque = empaque;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getRetornabilidad() {
         return retornabilidad;
     }
 
+    /**
+     *
+     * @param retornabilidad
+     */
     public void setRetornabilidad(String retornabilidad) {
         this.retornabilidad = retornabilidad;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getTipoDeConsumo() {
         return tipoDeConsumo;
     }
 
+    /**
+     *
+     * @param tipoDeConsumo
+     */
     public void setTipoDeConsumo(String tipoDeConsumo) {
         this.tipoDeConsumo = tipoDeConsumo;
     }
 
+    /**
+     *
+     * @return
+     */
     public double getVentaCu() {
         return ventaCu;
     }
 
+    /**
+     *
+     * @param ventaCu
+     */
     public void setVentaCu(double ventaCu) {
         this.ventaCu = ventaCu;
     }
 
+    /**
+     *
+     * @return
+     */
     public double getIngresoNeto() {
         return ingresoNeto;
     }
 
+    /**
+     *
+     * @param ingresoNeto
+     */
     public void setIngresoNeto(double ingresoNeto) {
         this.ingresoNeto = ingresoNeto;
     }
 
+    /**
+     *
+     * @return
+     */
     public double getCuota() {
         return cuota;
     }
 
+    /**
+     *
+     * @param cuota
+     */
     public void setCuota(double cuota) {
         this.cuota = cuota;
     }
 
+    /**
+     *
+     * @return
+     */
     public double getVentaTa() {
         return ventaTa;
     }
 
+    /**
+     *
+     * @param ventaTa
+     */
     public void setVentaTa(double ventaTa) {
         this.ventaTa = ventaTa;
     }
 
+    /**
+     *
+     * @return
+     */
     public BigInteger getIdTiempo() {
         return idTiempo;
     }
 
+    /**
+     *
+     * @param idTiempo
+     */
     public void setIdTiempo(BigInteger idTiempo) {
         this.idTiempo = idTiempo;
     }
 
+    /**
+     *
+     * @return
+     */
     public BigDecimal getIdInfoPh() {
         return idInfoPh;
     }
 
+    /**
+     *
+     * @param idInfoPh
+     */
     public void setIdInfoPh(BigDecimal idInfoPh) {
         this.idInfoPh = idInfoPh;
     }

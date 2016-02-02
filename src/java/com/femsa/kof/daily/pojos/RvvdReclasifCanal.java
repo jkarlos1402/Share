@@ -11,6 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "RVVD_RECLASIF_CANAL")
 public class RvvdReclasifCanal implements Serializable {
@@ -36,49 +40,96 @@ public class RvvdReclasifCanal implements Serializable {
     @Column(name = "ID_RECLASIF_CANAL")
     private BigDecimal idReclasifCanal;
 
+    /**
+     *
+     */
     public RvvdReclasifCanal() {
     }
 
+    /**
+     *
+     * @param idReclasifCanal
+     */
     public RvvdReclasifCanal(BigDecimal idReclasifCanal) {
         this.idReclasifCanal = idReclasifCanal;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPais() {
         return pais;
     }
 
+    /**
+     *
+     * @param pais
+     */
     public void setPais(String pais) {
         this.pais = pais;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCanal() {
         return canal;
     }
 
+    /**
+     *
+     * @param canal
+     */
     public void setCanal(String canal) {
         this.canal = canal;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCanalR() {
         return canalR;
     }
 
+    /**
+     *
+     * @param canalR
+     */
     public void setCanalR(String canalR) {
         this.canalR = canalR;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCanalEn() {
         return canalEn;
     }
 
+    /**
+     *
+     * @param canalEn
+     */
     public void setCanalEn(String canalEn) {
         this.canalEn = canalEn;
     }
 
+    /**
+     *
+     * @return
+     */
     public BigDecimal getIdReclasifCanal() {
         return idReclasifCanal;
     }
 
+    /**
+     *
+     * @param idReclasifCanal
+     */
     public void setIdReclasifCanal(BigDecimal idReclasifCanal) {
         this.idReclasifCanal = idReclasifCanal;
     }

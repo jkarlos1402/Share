@@ -9,18 +9,35 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class ReclasifCategoriaDAO {
 
     private String error;
 
+    /**
+     *
+     * @return
+     */
     public String getError() {
         return error;
     }
 
+    /**
+     *
+     * @param error
+     */
     public void setError(String error) {
         this.error = error;
     }
 
+    /**
+     *
+     * @param usuario
+     * @return
+     */
     public List<RvvdReclasifCategoria> getReclasifCategoriasAll(ShareUsuario usuario) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -49,6 +66,11 @@ public class ReclasifCategoriaDAO {
         return categoriasReclasificadas;
     }
 
+    /**
+     *
+     * @param reclasifCategorias
+     * @return
+     */
     public boolean saveReclasifCategorias(List<RvvdReclasifCategoria> reclasifCategorias) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -85,6 +107,11 @@ public class ReclasifCategoriaDAO {
         return flagOk;
     }
 
+    /**
+     *
+     * @param usuario
+     * @return
+     */
     public long checkReclasifCategorias(ShareUsuario usuario) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();

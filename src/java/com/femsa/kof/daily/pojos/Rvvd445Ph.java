@@ -15,6 +15,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "RVVD_445_PH")
 public class Rvvd445Ph implements Serializable {
@@ -43,49 +47,96 @@ public class Rvvd445Ph implements Serializable {
     @Column(name = "ID_445_PH")
     private BigDecimal id445Ph;
 
+    /**
+     *
+     */
     public Rvvd445Ph() {
     }
 
+    /**
+     *
+     * @param id445Ph
+     */
     public Rvvd445Ph(BigDecimal id445Ph) {
         this.id445Ph = id445Ph;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPais() {
         return pais;
     }
 
+    /**
+     *
+     * @param pais
+     */
     public void setPais(String pais) {
         this.pais = pais;
     }
 
+    /**
+     *
+     * @return
+     */
     public Date getFecha() {
         return fecha;
     }
 
+    /**
+     *
+     * @param fecha
+     */
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 
+    /**
+     *
+     * @return
+     */
     public BigInteger getFechaReasignacion() {
         return fechaReasignacion;
     }
 
+    /**
+     *
+     * @param fechaReasignacion
+     */
     public void setFechaReasignacion(BigInteger fechaReasignacion) {
         this.fechaReasignacion = fechaReasignacion;
     }
 
+    /**
+     *
+     * @return
+     */
     public Date getFechaAa() {
         return fechaAa;
     }
 
+    /**
+     *
+     * @param fechaAa
+     */
     public void setFechaAa(Date fechaAa) {
         this.fechaAa = fechaAa;
     }
 
+    /**
+     *
+     * @return
+     */
     public BigDecimal getId445Ph() {
         return id445Ph;
     }
 
+    /**
+     *
+     * @param id445Ph
+     */
     public void setId445Ph(BigDecimal id445Ph) {
         this.id445Ph = id445Ph;
     }

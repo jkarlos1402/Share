@@ -8,6 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "SHARE_CAT_STATUS")
 public class ShareCatStatus implements Serializable {
@@ -22,25 +26,48 @@ public class ShareCatStatus implements Serializable {
     @Column(name = "DESCRIPCION")
     private String descripcion;
 
+    /**
+     *
+     */
     public ShareCatStatus() {
     }
 
+    /**
+     *
+     * @param pkIdstatus
+     */
     public ShareCatStatus(BigDecimal pkIdstatus) {
         this.pkIdstatus = pkIdstatus;
     }
 
+    /**
+     *
+     * @return
+     */
     public BigDecimal getPkIdstatus() {
         return pkIdstatus;
     }
 
+    /**
+     *
+     * @param pkIdstatus
+     */
     public void setPkIdstatus(BigDecimal pkIdstatus) {
         this.pkIdstatus = pkIdstatus;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getDescripcion() {
         return descripcion;
     }
 
+    /**
+     *
+     * @param descripcion
+     */
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }

@@ -2,6 +2,7 @@ package com.femsa.kof.daily.pojos;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -19,9 +20,9 @@ import javax.persistence.TemporalType;
  * @author TMXIDSJPINAM
  */
 @Entity
-@Table(name = "RVVD_RECLASIF_DIAS_OP")
-public class RvvdReclasifDiasOp implements Serializable {
-    
+@Table(name = "RVVD_445_PH_TMP")
+public class Rvvd445PhTmp implements Serializable {
+
     private static final long serialVersionUID = 1L;
     
     @Column(name = "PAIS")
@@ -31,30 +32,33 @@ public class RvvdReclasifDiasOp implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date fecha;
     
-    @Column(name = "FECHA_R")
+    @Column(name = "FECHA_REASIGNACION")
+    private BigInteger fechaReasignacion;
+    
+    @Column(name = "FECHA_AA")
     @Temporal(TemporalType.DATE)
-    private Date fechaR;
+    private Date fechaAa;
     
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_RECLASIF_DIAS_OP")
-    @SequenceGenerator(name = "RVVD_SEQ_RECLASIF_DIAS_OP", sequenceName = "RVVD_SEQ_RECLASIF_DIAS_OP", allocationSize = 1)
-    @Column(name = "ID_RECLASIF_DIAS_OP")
-    private BigDecimal idReclasifDiasOp;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_445_PH_TMP")
+    @SequenceGenerator(name = "RVVD_SEQ_445_PH_TMP", sequenceName = "RVVD_SEQ_445_PH_TMP", allocationSize = 1)
+    @Column(name = "ID_445_PH")
+    private BigDecimal id445Ph;
 
     /**
      *
      */
-    public RvvdReclasifDiasOp() {
+    public Rvvd445PhTmp() {
     }
 
     /**
      *
-     * @param idReclasifDiasOp
+     * @param id445Ph
      */
-    public RvvdReclasifDiasOp(BigDecimal idReclasifDiasOp) {
-        this.idReclasifDiasOp = idReclasifDiasOp;
+    public Rvvd445PhTmp(BigDecimal id445Ph) {
+        this.id445Ph = id445Ph;
     }
 
     /**
@@ -93,49 +97,65 @@ public class RvvdReclasifDiasOp implements Serializable {
      *
      * @return
      */
-    public Date getFechaR() {
-        return fechaR;
+    public BigInteger getFechaReasignacion() {
+        return fechaReasignacion;
     }
 
     /**
      *
-     * @param fechaR
+     * @param fechaReasignacion
      */
-    public void setFechaR(Date fechaR) {        
-        this.fechaR = fechaR;
+    public void setFechaReasignacion(BigInteger fechaReasignacion) {
+        this.fechaReasignacion = fechaReasignacion;
     }
 
     /**
      *
      * @return
      */
-    public BigDecimal getIdReclasifDiasOp() {
-        return idReclasifDiasOp;
+    public Date getFechaAa() {
+        return fechaAa;
     }
 
     /**
      *
-     * @param idReclasifDiasOp
+     * @param fechaAa
      */
-    public void setIdReclasifDiasOp(BigDecimal idReclasifDiasOp) {
-        this.idReclasifDiasOp = idReclasifDiasOp;
+    public void setFechaAa(Date fechaAa) {
+        this.fechaAa = fechaAa;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public BigDecimal getId445Ph() {
+        return id445Ph;
+    }
+
+    /**
+     *
+     * @param id445Ph
+     */
+    public void setId445Ph(BigDecimal id445Ph) {
+        this.id445Ph = id445Ph;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idReclasifDiasOp != null ? idReclasifDiasOp.hashCode() : 0);
+        hash += (id445Ph != null ? id445Ph.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof RvvdReclasifDiasOp)) {
+        if (!(object instanceof Rvvd445PhTmp)) {
             return false;
         }
-        RvvdReclasifDiasOp other = (RvvdReclasifDiasOp) object;
-        if ((this.idReclasifDiasOp == null && other.idReclasifDiasOp != null) || (this.idReclasifDiasOp != null && !this.idReclasifDiasOp.equals(other.idReclasifDiasOp))) {
+        Rvvd445PhTmp other = (Rvvd445PhTmp) object;
+        if ((this.id445Ph == null && other.id445Ph != null) || (this.id445Ph != null && !this.id445Ph.equals(other.id445Ph))) {
             return false;
         }
         return true;
@@ -143,7 +163,7 @@ public class RvvdReclasifDiasOp implements Serializable {
 
     @Override
     public String toString() {
-        return "com.femsa.kof.daily.pojos.RvvdReclasifDiasOp[ idReclasifDiasOp=" + idReclasifDiasOp + " ]";
+        return "com.femsa.kof.daily.pojos.Rvvd445Ph[ id445Ph=" + id445Ph + " ]";
     }
     
 }

@@ -7,18 +7,34 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class CatTipoConsumoDAO {
 
     private String error;
 
+    /**
+     *
+     * @return
+     */
     public String getError() {
         return error;
     }
 
+    /**
+     *
+     * @param error
+     */
     public void setError(String error) {
         this.error = error;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatTipoConsumo> getTiposConsumoAll() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -39,6 +55,10 @@ public class CatTipoConsumoDAO {
         return tiposConsumo;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatTipoConsumo> getTiposConsumo() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -59,6 +79,11 @@ public class CatTipoConsumoDAO {
         return tiposConsumo;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public RvvdCatTipoConsumo getTipoConsumo(Integer id) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -78,6 +103,11 @@ public class CatTipoConsumoDAO {
         return tipoConsumo;
     }
 
+    /**
+     *
+     * @param tipoConsumo
+     * @return
+     */
     public RvvdCatTipoConsumo getTipoConsumo(String tipoConsumo) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -101,6 +131,11 @@ public class CatTipoConsumoDAO {
         return tipoConsumoT;
     }
 
+    /**
+     *
+     * @param tipoConsumo
+     * @return
+     */
     public boolean saveTipoConsumo(RvvdCatTipoConsumo tipoConsumo) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();

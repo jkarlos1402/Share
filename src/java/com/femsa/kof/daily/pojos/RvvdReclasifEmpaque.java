@@ -11,6 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "RVVD_RECLASIF_EMPAQUE")
 public class RvvdReclasifEmpaque implements Serializable {
@@ -54,97 +58,192 @@ public class RvvdReclasifEmpaque implements Serializable {
     @Column(name = "ID_RECLASIF_EMPAQUE")
     private BigDecimal idReclasifEmpaque;
 
+    /**
+     *
+     */
     public RvvdReclasifEmpaque() {
     }
 
+    /**
+     *
+     * @param idReclasifEmpaque
+     */
     public RvvdReclasifEmpaque(BigDecimal idReclasifEmpaque) {
         this.idReclasifEmpaque = idReclasifEmpaque;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPais() {
         return pais;
     }
 
+    /**
+     *
+     * @param pais
+     */
     public void setPais(String pais) {
         this.pais = pais;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getEmpaque() {
         return empaque;
     }
 
+    /**
+     *
+     * @param empaque
+     */
     public void setEmpaque(String empaque) {
         this.empaque = empaque;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getRetornabilidad() {
         return retornabilidad;
     }
 
+    /**
+     *
+     * @param retornabilidad
+     */
     public void setRetornabilidad(String retornabilidad) {
         this.retornabilidad = retornabilidad;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getTipoConsumo() {
         return tipoConsumo;
     }
 
+    /**
+     *
+     * @param tipoConsumo
+     */
     public void setTipoConsumo(String tipoConsumo) {
         this.tipoConsumo = tipoConsumo;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getTamano() {
         return tamano;
     }
 
+    /**
+     *
+     * @param tamano
+     */
     public void setTamano(String tamano) {
         this.tamano = tamano;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCategoria() {
         return categoria;
     }
 
+    /**
+     *
+     * @param categoria
+     */
     public void setCategoria(String categoria) {
         this.categoria = categoria;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getTipoConsumoR() {
         return tipoConsumoR;
     }
 
+    /**
+     *
+     * @param tipoConsumoR
+     */
     public void setTipoConsumoR(String tipoConsumoR) {
         this.tipoConsumoR = tipoConsumoR;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getTipoConsumoEn() {
         return tipoConsumoEn;
     }
 
+    /**
+     *
+     * @param tipoConsumoEn
+     */
     public void setTipoConsumoEn(String tipoConsumoEn) {
         this.tipoConsumoEn = tipoConsumoEn;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getEmpaqueR() {
         return empaqueR;
     }
 
+    /**
+     *
+     * @param empaqueR
+     */
     public void setEmpaqueR(String empaqueR) {
         this.empaqueR = empaqueR;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getEmpaqueEn() {
         return empaqueEn;
     }
 
+    /**
+     *
+     * @param empaqueEn
+     */
     public void setEmpaqueEn(String empaqueEn) {
         this.empaqueEn = empaqueEn;
     }
 
+    /**
+     *
+     * @return
+     */
     public BigDecimal getIdReclasifEmpaque() {
         return idReclasifEmpaque;
     }
 
+    /**
+     *
+     * @param idReclasifEmpaque
+     */
     public void setIdReclasifEmpaque(BigDecimal idReclasifEmpaque) {
         this.idReclasifEmpaque = idReclasifEmpaque;
     }

@@ -12,6 +12,10 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @ManagedBean
 @SessionScoped
 public class ShareScriptBean implements Serializable {
@@ -21,10 +25,17 @@ public class ShareScriptBean implements Serializable {
     private String scriptText;
     List<String> errors = new ArrayList<String>();
     
+    /**
+     *
+     */
     public ShareScriptBean() {
         scripts = new ArrayList<ScriptKOF>();
     }
     
+    /**
+     *
+     * @return
+     */
     public String getScriptText() {
         if (scriptSelected != null) {
             try {
@@ -36,10 +47,18 @@ public class ShareScriptBean implements Serializable {
         return scriptText;
     }
     
+    /**
+     *
+     * @param scriptText
+     */
     public void setScriptText(String scriptText) {
         this.scriptText = scriptText;
     }
     
+    /**
+     *
+     * @return
+     */
     public List<ScriptKOF> getScripts() {
         scripts.clear();
         ServletContext sc = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
@@ -58,18 +77,33 @@ public class ShareScriptBean implements Serializable {
         return scripts;
     }
     
+    /**
+     *
+     * @param scripts
+     */
     public void setScripts(List<ScriptKOF> scripts) {
         this.scripts = scripts;
     }
     
+    /**
+     *
+     * @return
+     */
     public ScriptKOF getScriptSelected() {
         return scriptSelected;
     }
     
+    /**
+     *
+     * @param scriptSelected
+     */
     public void setScriptSelected(ScriptKOF scriptSelected) {
         this.scriptSelected = scriptSelected;
     }
     
+    /**
+     *
+     */
     public void saveScriptSelected() {
         FacesMessage message = null;
         if (scriptSelected != null) {

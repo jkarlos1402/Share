@@ -21,6 +21,10 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import org.primefaces.model.DualListModel;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @ManagedBean(name = "userBean")
 @SessionScoped
 public class UserBean implements Serializable {
@@ -43,6 +47,9 @@ public class UserBean implements Serializable {
 
     private String error;
 
+    /**
+     *
+     */
     public UserBean() {
         startBean();
     }
@@ -67,30 +74,58 @@ public class UserBean implements Serializable {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public String getError() {
         return error;
     }
 
+    /**
+     *
+     * @param error
+     */
     public void setError(String error) {
         this.error = error;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ShareCatProyecto> getCatProyectos() {
         return catProyectos;
     }
 
+    /**
+     *
+     * @param catProyectos
+     */
     public void setCatProyectos(List<ShareCatProyecto> catProyectos) {
         this.catProyectos = catProyectos;
     }
 
+    /**
+     *
+     * @return
+     */
     public ShareCatProyecto getProyectoSelected() {
         return proyectoSelected;
     }
 
+    /**
+     *
+     * @param proyectoSelected
+     */
     public void setProyectoSelected(ShareCatProyecto proyectoSelected) {
         this.proyectoSelected = proyectoSelected;
     }
 
+    /**
+     *
+     * @return
+     */
     public DualListModel<ShareCatPais> getPaisesAll() {
         ShareCatPaisDAO paisDAO = new ShareCatPaisDAO();
         List<ShareCatPais> sourcePais = paisDAO.getCatPais();
@@ -102,66 +137,130 @@ public class UserBean implements Serializable {
         return paisesAll;
     }
 
+    /**
+     *
+     * @param paisesAll
+     */
     public void setPaisesAll(DualListModel<ShareCatPais> paisesAll) {
         this.paisesAll = paisesAll;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ShareCatRol> getCatRoles() {
         return catRoles;
     }
 
+    /**
+     *
+     * @param catRoles
+     */
     public void setCatRoles(List<ShareCatRol> catRoles) {
         this.catRoles = catRoles;
     }
 
+    /**
+     *
+     * @return
+     */
     public ShareCatRol getRolSelected() {
         return rolSelected;
     }
 
+    /**
+     *
+     * @param rolSelected
+     */
     public void setRolSelected(ShareCatRol rolSelected) {
         this.rolSelected = rolSelected;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getUser() {
         return user;
     }
 
+    /**
+     *
+     * @param user
+     */
     public void setUser(String user) {
         this.user = user;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     *
+     * @param password
+     */
     public void setPassword(String password) {
         this.password = password;
     }
 
+    /**
+     *
+     * @return
+     */
     public ShareUsuario getUsuarioNuevo() {
         return usuarioNuevo;
     }
 
+    /**
+     *
+     * @param usuarioNuevo
+     */
     public void setUsuarioNuevo(ShareUsuario usuarioNuevo) {
         this.usuarioNuevo = usuarioNuevo;
     }
 
+    /**
+     *
+     * @return
+     */
     public ShareUsuario getUsuarioSelected() {
         return usuarioSelected;
     }
 
+    /**
+     *
+     * @param usuarioSelected
+     */
     public void setUsuarioSelected(ShareUsuario usuarioSelected) {
         this.usuarioSelected = usuarioSelected;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ShareUsuario> getUsuariosAll() {
         return usuariosAll;
     }
 
+    /**
+     *
+     * @param usuariosAll
+     */
     public void setUsuariosAll(List<ShareUsuario> usuariosAll) {
         this.usuariosAll = usuariosAll;
     }
 
+    /**
+     *
+     * @return
+     */
     public String logIn() {
         FacesContext context = FacesContext.getCurrentInstance();
         ServletContext servletContext = (ServletContext) context.getExternalContext().getContext();
@@ -214,6 +313,10 @@ public class UserBean implements Serializable {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public String logout() {
         HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         if (httpSession != null) {
@@ -222,6 +325,9 @@ public class UserBean implements Serializable {
         return "index";
     }
 
+    /**
+     *
+     */
     public void saveUser() {
         FacesMessage message = null;
         ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();
@@ -254,6 +360,9 @@ public class UserBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
+    /**
+     *
+     */
     public void newUser() {
         usuarioNuevo = new ShareUsuario();
         usuarioSelected = null;
@@ -264,6 +373,9 @@ public class UserBean implements Serializable {
         proyectoSelected = null;
     }
 
+    /**
+     *
+     */
     public void selectUser() {
         usuarioNuevo.setPkUsuario(usuarioSelected.getPkUsuario());
         usuarioNuevo.setEstatus(usuarioSelected.getEstatus());
@@ -290,6 +402,9 @@ public class UserBean implements Serializable {
         }
     }
 
+    /**
+     *
+     */
     public void refreshUsers() {        
         ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();
         usuariosAll = usuarioDAO.getAllUsers();

@@ -12,6 +12,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "SHARE_CAT_CATEGORIAS")
 public class ShareCatCategorias implements Serializable {
@@ -38,49 +42,96 @@ public class ShareCatCategorias implements Serializable {
     @Column(name = "ID_STATUS")
     private boolean status;
 
+    /**
+     *
+     */
     public ShareCatCategorias() {
     }
 
+    /**
+     *
+     * @param pkCategoria
+     */
     public ShareCatCategorias(Integer pkCategoria) {
         this.pkCategoria = pkCategoria;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean getStatus() {
         return status;
     }
 
+    /**
+     *
+     * @param status
+     */
     public void setStatus(boolean status) {
         this.status = status;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCategoriaEsp() {
         return categoriaEsp;
     }
 
+    /**
+     *
+     * @param categoriaEsp
+     */
     public void setCategoriaEsp(String categoriaEsp) {
         this.categoriaEsp = categoriaEsp.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getPkCategoria() {
         return pkCategoria;
     }
 
+    /**
+     *
+     * @param pkCategoria
+     */
     public void setPkCategoria(Integer pkCategoria) {
         this.pkCategoria = pkCategoria;
     }
 
+    /**
+     *
+     * @return
+     */
     public ShareCatGrupoCategorias getFkGrupoCategoria() {
         return fkGrupoCategoria;
     }
 
+    /**
+     *
+     * @param fkGrupoCategoria
+     */
     public void setFkGrupoCategoria(ShareCatGrupoCategorias fkGrupoCategoria) {
         this.fkGrupoCategoria = fkGrupoCategoria;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCategoria() {
         return categoria;
     }
 
+    /**
+     *
+     * @param categoria
+     */
     public void setCategoria(String categoria) {
         this.categoria = categoria.toUpperCase();
     }

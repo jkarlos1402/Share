@@ -10,6 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "RVVD_CAT_EMPAQUE")
 public class RvvdCatEmpaque implements Serializable {
@@ -32,41 +36,80 @@ public class RvvdCatEmpaque implements Serializable {
     @Column(name = "STATUS")
     private boolean status;
 
+    /**
+     *
+     */
     public RvvdCatEmpaque() {
     }
 
+    /**
+     *
+     * @param idEmpaque
+     */
     public RvvdCatEmpaque(Integer idEmpaque) {
         this.idEmpaque = idEmpaque;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getIdEmpaque() {
         return idEmpaque;
     }
 
+    /**
+     *
+     * @param idEmpaque
+     */
     public void setIdEmpaque(Integer idEmpaque) {
         this.idEmpaque = idEmpaque;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getEmpaqueR() {
         return empaqueR;
     }
 
+    /**
+     *
+     * @param empaqueR
+     */
     public void setEmpaqueR(String empaqueR) {
         this.empaqueR = empaqueR.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getEmpaqueEn() {
         return empaqueEn;
     }
 
+    /**
+     *
+     * @param empaqueEn
+     */
     public void setEmpaqueEn(String empaqueEn) {
         this.empaqueEn = empaqueEn.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean getStatus() {
         return status;
     }
 
+    /**
+     *
+     * @param status
+     */
     public void setStatus(boolean status) {
         this.status = status;
     }

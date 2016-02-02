@@ -15,12 +15,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @WebFilter(filterName = "AccessFilter", urlPatterns = {"/faces/index.xhtml", "/faces/main.xhtml"}, dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ERROR, DispatcherType.INCLUDE})
 public class AccessFilter implements Filter {
 
+    /**
+     *
+     */
     public AccessFilter() {
     }
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @param chain
+     * @throws IOException
+     * @throws ServletException
+     */
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
@@ -42,11 +58,19 @@ public class AccessFilter implements Filter {
         }
     }
 
+    /**
+     *
+     * @param filterConfig
+     * @throws ServletException
+     */
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
     }
 
+    /**
+     *
+     */
     @Override
     public void destroy() {
 

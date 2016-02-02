@@ -7,18 +7,36 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class ShareUsuarioDAO {
 
     private String error;
 
+    /**
+     *
+     * @return
+     */
     public String getError() {
         return error;
     }
 
+    /**
+     *
+     * @param error
+     */
     public void setError(String error) {
         this.error = error;
     }
 
+    /**
+     *
+     * @param user
+     * @param password
+     * @return
+     */
     public ShareUsuario getUsuario(String user, String password) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -43,6 +61,12 @@ public class ShareUsuarioDAO {
         return usuario;
     }   
 
+    /**
+     *
+     * @param user
+     * @param filtrado
+     * @return
+     */
     public ShareUsuario getUsuario(String user, boolean filtrado) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -71,6 +95,10 @@ public class ShareUsuarioDAO {
         return usuario;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ShareUsuario> getAllUsers() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -91,6 +119,11 @@ public class ShareUsuarioDAO {
         return usuarios;
     }
 
+    /**
+     *
+     * @param usuario
+     * @return
+     */
     public boolean saveUser(ShareUsuario usuario) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();

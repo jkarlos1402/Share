@@ -22,6 +22,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "SHARE_USUARIO")
 public class ShareUsuario implements Serializable {
@@ -81,121 +85,238 @@ public class ShareUsuario implements Serializable {
         @JoinColumn(name = "ID_PROYECTO")})
     private List<ShareCatProyecto> proyectos = new ArrayList<ShareCatProyecto>();
 
+    /**
+     *
+     */
     public ShareUsuario() {
     }
 
+    /**
+     *
+     * @param pkUsuario
+     */
     public ShareUsuario(Integer pkUsuario) {
         this.pkUsuario = pkUsuario;
     }
 
+    /**
+     *
+     * @param pkUsuario
+     * @param usuario
+     * @param password
+     */
     public ShareUsuario(Integer pkUsuario, String usuario, String password) {
         this.pkUsuario = pkUsuario;
         this.usuario = usuario;
         this.password = password;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isPassReset() {
         return passReset;
     }
 
+    /**
+     *
+     * @param passReset
+     */
     public void setPassReset(boolean passReset) {
         this.passReset = passReset;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getIntentos() {
         return intentos;
     }
 
+    /**
+     *
+     * @param intentos
+     */
     public void setIntentos(Integer intentos) {
         this.intentos = intentos;
     }
 
+    /**
+     *
+     * @return
+     */
     public Date getLastLogin() {
         return lastLogin;
     }
 
+    /**
+     *
+     * @param lastLogin
+     */
     public void setLastLogin(Date lastLogin) {
         this.lastLogin = lastLogin;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ShareCatProyecto> getProyectos() {
         return proyectos;
     }
 
+    /**
+     *
+     * @param proyectos
+     */
     public void setProyectos(List<ShareCatProyecto> proyectos) {
         this.proyectos = proyectos;
     }
 
+    /**
+     *
+     * @return
+     */
     public ShareCatRol getRol() {
         return rol;
     }
 
+    /**
+     *
+     * @param rol
+     */
     public void setRol(ShareCatRol rol) {
         this.rol = rol;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ShareCatPais> getPaises() {
         return paises;
     }
 
+    /**
+     *
+     * @param paises
+     */
     public void setPaises(List<ShareCatPais> paises) {
         this.paises = paises;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getPkUsuario() {
         return pkUsuario;
     }
 
+    /**
+     *
+     * @param pkUsuario
+     */
     public void setPkUsuario(Integer pkUsuario) {
         this.pkUsuario = pkUsuario;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getUsuario() {
         return usuario;
     }
 
+    /**
+     *
+     * @param usuario
+     */
     public void setUsuario(String usuario) {
         this.usuario = usuario.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPassword() {
         EncrypterKOF encrypterKOF = new EncrypterKOF();
         return encrypterKOF.decrypt(password);
     }
 
+    /**
+     *
+     * @param password
+     */
     public void setPassword(String password) {
         EncrypterKOF encrypterKOF = new EncrypterKOF();
         this.password = encrypterKOF.encrypt(password);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getNombre() {        
         return nombre;
     }
 
+    /**
+     *
+     * @param nombre
+     */
     public void setNombre(String nombre) {
         this.nombre = nombre.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPais() {
         return pais;
     }
 
+    /**
+     *
+     * @param pais
+     */
     public void setPais(String pais) {
         this.pais = pais.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getMail() {
         return mail;
     }
 
+    /**
+     *
+     * @param mail
+     */
     public void setMail(String mail) {
         this.mail = mail;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean getEstatus() {
         return estatus;
     }
 
+    /**
+     *
+     * @param estatus
+     */
     public void setEstatus(boolean estatus) {
         this.estatus = estatus;
     }
@@ -225,6 +346,11 @@ public class ShareUsuario implements Serializable {
         return "ShareUsuario{" + "pkUsuario=" + pkUsuario + ", usuario=" + usuario + ", password=" + password + ", nombre=" + nombre + ", pais=" + pais + ", mail=" + mail + ", estatus=" + estatus + ", rol=" + rol + ", paises=" + paises + '}';
     }
    
+    /**
+     *
+     * @param shortNameCountry
+     * @return
+     */
     public boolean haveCountry(String shortNameCountry){
         if(paises != null){
             for (ShareCatPais pais : paises) {

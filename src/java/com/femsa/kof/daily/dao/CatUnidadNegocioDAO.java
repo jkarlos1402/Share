@@ -7,18 +7,34 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class CatUnidadNegocioDAO {
 
     private String error;
 
+    /**
+     *
+     * @return
+     */
     public String getError() {
         return error;
     }
 
+    /**
+     *
+     * @param error
+     */
     public void setError(String error) {
         this.error = error;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatUnidadNegocio> getUnidadesNegAll() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -39,6 +55,10 @@ public class CatUnidadNegocioDAO {
         return unidades;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatUnidadNegocio> getUnidadesNeg() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -59,6 +79,11 @@ public class CatUnidadNegocioDAO {
         return unidades;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public RvvdCatUnidadNegocio getUnidadNeg(Integer id) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -78,6 +103,11 @@ public class CatUnidadNegocioDAO {
         return unidad;
     }
 
+    /**
+     *
+     * @param unidad
+     * @return
+     */
     public RvvdCatUnidadNegocio getUnidadNeg(String unidad) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -101,6 +131,11 @@ public class CatUnidadNegocioDAO {
         return unidadT;
     }
 
+    /**
+     *
+     * @param unidad
+     * @return
+     */
     public boolean saveUnidadNeg(RvvdCatUnidadNegocio unidad) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();

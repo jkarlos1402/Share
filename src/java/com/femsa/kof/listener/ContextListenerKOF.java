@@ -6,9 +6,17 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @WebListener()
 public class ContextListenerKOF implements ServletContextListener {
 
+    /**
+     *
+     * @param sce
+     */
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
@@ -27,6 +35,10 @@ public class ContextListenerKOF implements ServletContextListener {
         }        
     }
 
+    /**
+     *
+     * @param sce
+     */
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
 

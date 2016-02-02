@@ -8,6 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "SHARE_CAT_CANALES")
 public class ShareCatCanales implements Serializable {
@@ -22,25 +26,48 @@ public class ShareCatCanales implements Serializable {
     @Column(name = "GV_CANAL")
     private String gvCanal;
 
+    /**
+     *
+     */
     public ShareCatCanales() {
     }
 
+    /**
+     *
+     * @param pkCanal
+     */
     public ShareCatCanales(BigDecimal pkCanal) {
         this.pkCanal = pkCanal;
     }
 
+    /**
+     *
+     * @return
+     */
     public BigDecimal getPkCanal() {
         return pkCanal;
     }
 
+    /**
+     *
+     * @param pkCanal
+     */
     public void setPkCanal(BigDecimal pkCanal) {
         this.pkCanal = pkCanal;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getGvCanal() {
         return gvCanal;
     }
 
+    /**
+     *
+     * @param gvCanal
+     */
     public void setGvCanal(String gvCanal) {
         this.gvCanal = gvCanal;
     }

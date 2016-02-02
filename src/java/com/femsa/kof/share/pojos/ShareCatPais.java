@@ -14,6 +14,10 @@ import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "SHARE_CAT_PAIS")
 public class ShareCatPais implements Serializable {
@@ -42,57 +46,112 @@ public class ShareCatPais implements Serializable {
     @ManyToMany(mappedBy = "paises",fetch = FetchType.EAGER)
     private List<ShareUsuario> usuarios = new ArrayList<ShareUsuario>();
 
+    /**
+     *
+     */
     public ShareCatPais() {
     }
 
+    /**
+     *
+     * @param pkPais
+     */
     public ShareCatPais(Integer pkPais) {
         this.pkPais = pkPais;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getNombreTabla() {
         return nombreTabla;
     }
 
+    /**
+     *
+     * @param nombreTabla
+     */
     public void setNombreTabla(String nombreTabla) {
         this.nombreTabla = nombreTabla.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ShareUsuario> getUsuarios() {
         return usuarios;
     }
 
+    /**
+     *
+     * @param usuarios
+     */
     public void setUsuarios(List<ShareUsuario> usuarios) {
         this.usuarios = usuarios;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getPkPais() {
         return pkPais;
     }
 
+    /**
+     *
+     * @param pkPais
+     */
     public void setPkPais(Integer pkPais) {
         this.pkPais = pkPais;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getClaveCorta() {
         return claveCorta;
     }
 
+    /**
+     *
+     * @param claveCorta
+     */
     public void setClaveCorta(String claveCorta) {
         this.claveCorta = claveCorta.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getNombre() {
         return nombre;
     }
 
+    /**
+     *
+     * @param nombre
+     */
     public void setNombre(String nombre) {
         this.nombre = nombre.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean getIdstatus() {
         return idstatus;
     }
 
+    /**
+     *
+     * @param idstatus
+     */
     public void setIdstatus(boolean idstatus) {
         this.idstatus = idstatus;
     }

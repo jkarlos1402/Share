@@ -8,6 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "RVVD_RECLASIF_UN_GEC")
 public class RvvdReclasifUnGec implements Serializable {
@@ -41,73 +45,144 @@ public class RvvdReclasifUnGec implements Serializable {
     @Column(name = "ID_RECLASIF_UN_GEC")
     private BigDecimal idReclasifUnGec;
 
+    /**
+     *
+     */
     public RvvdReclasifUnGec() {
     }
 
+    /**
+     *
+     * @param idReclasifUnGec
+     */
     public RvvdReclasifUnGec(BigDecimal idReclasifUnGec) {
         this.idReclasifUnGec = idReclasifUnGec;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPais() {
         return pais;
     }
 
+    /**
+     *
+     * @param pais
+     */
     public void setPais(String pais) {
         this.pais = pais;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getGec() {
         return gec;
     }
 
+    /**
+     *
+     * @param gec
+     */
     public void setGec(String gec) {
         this.gec = gec;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getGecR() {
         return gecR;
     }
 
+    /**
+     *
+     * @param gecR
+     */
     public void setGecR(String gecR) {
         this.gecR = gecR;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getGecEn() {
         return gecEn;
     }
 
+    /**
+     *
+     * @param gecEn
+     */
     public void setGecEn(String gecEn) {
         this.gecEn = gecEn;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getUnidadNegocio() {
         return unidadNegocio;
     }
 
+    /**
+     *
+     * @param unidadNegocio
+     */
     public void setUnidadNegocio(String unidadNegocio) {
         this.unidadNegocio = unidadNegocio;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getUnidadNegocioR() {
         return unidadNegocioR;
     }
 
+    /**
+     *
+     * @param unidadNegocioR
+     */
     public void setUnidadNegocioR(String unidadNegocioR) {
         this.unidadNegocioR = unidadNegocioR;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getUnidadNegocioEn() {
         return unidadNegocioEn;
     }
 
+    /**
+     *
+     * @param unidadNegocioEn
+     */
     public void setUnidadNegocioEn(String unidadNegocioEn) {
         this.unidadNegocioEn = unidadNegocioEn;
     }
 
+    /**
+     *
+     * @return
+     */
     public BigDecimal getIdReclasifUnGec() {
         return idReclasifUnGec;
     }
 
+    /**
+     *
+     * @param idReclasifUnGec
+     */
     public void setIdReclasifUnGec(BigDecimal idReclasifUnGec) {
         this.idReclasifUnGec = idReclasifUnGec;
     }

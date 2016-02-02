@@ -17,6 +17,10 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class EncrypterKOF {
     
     private Cipher ecipher;
@@ -24,6 +28,11 @@ public class EncrypterKOF {
 
     private final String keyEncr = "kofshare5763623";
     
+    /**
+     *
+     * @param key
+     * @param algorithm
+     */
     public EncrypterKOF(SecretKey key, String algorithm) {
         try {
             ecipher = Cipher.getInstance(algorithm);
@@ -39,6 +48,9 @@ public class EncrypterKOF {
         }
     }
 
+    /**
+     *
+     */
     public EncrypterKOF() {
 
         // 8-bytes Salt
@@ -77,6 +89,11 @@ public class EncrypterKOF {
         }
     }
 
+    /**
+     *
+     * @param str
+     * @return
+     */
     public String encrypt(String str) {
         try {
             // Encode the string into bytes using utf-8
@@ -96,6 +113,11 @@ public class EncrypterKOF {
         return null;
     }
 
+    /**
+     *
+     * @param str
+     * @return
+     */
     public String decrypt(String str) {
 
         try {

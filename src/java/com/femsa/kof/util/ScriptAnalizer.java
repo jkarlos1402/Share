@@ -13,10 +13,24 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class ScriptAnalizer {
 
+    /**
+     *
+     */
     public ScriptAnalizer() {
     }
+
+    /**
+     *
+     * @param errors
+     * @param pais
+     * @return
+     */
     public static boolean executeScritsShare(List<String> errors, ShareCatPais pais) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();

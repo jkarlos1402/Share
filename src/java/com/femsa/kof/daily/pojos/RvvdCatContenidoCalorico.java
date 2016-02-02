@@ -10,6 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "RVVD_CAT_CONTENIDO_CALORICO")
 public class RvvdCatContenidoCalorico implements Serializable {
@@ -32,41 +36,80 @@ public class RvvdCatContenidoCalorico implements Serializable {
     @Column(name = "STATUS")
     private boolean status;
 
+    /**
+     *
+     */
     public RvvdCatContenidoCalorico() {
     }
 
+    /**
+     *
+     * @param idContenidoCalorico
+     */
     public RvvdCatContenidoCalorico(Integer idContenidoCalorico) {
         this.idContenidoCalorico = idContenidoCalorico;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getIdContenidoCalorico() {
         return idContenidoCalorico;
     }
 
+    /**
+     *
+     * @param idContenidoCalorico
+     */
     public void setIdContenidoCalorico(Integer idContenidoCalorico) {
         this.idContenidoCalorico = idContenidoCalorico;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getContenidoCaloricoR() {
         return contenidoCaloricoR;
     }
 
+    /**
+     *
+     * @param contenidoCaloricoR
+     */
     public void setContenidoCaloricoR(String contenidoCaloricoR) {
         this.contenidoCaloricoR = contenidoCaloricoR.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getContenidoCaloricoEn() {
         return contenidoCaloricoEn;
     }
 
+    /**
+     *
+     * @param contenidoCaloricoEn
+     */
     public void setContenidoCaloricoEn(String contenidoCaloricoEn) {
         this.contenidoCaloricoEn = contenidoCaloricoEn.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean getStatus() {
         return status;
     }
 
+    /**
+     *
+     * @param status
+     */
     public void setStatus(boolean status) {
         this.status = status;
     }

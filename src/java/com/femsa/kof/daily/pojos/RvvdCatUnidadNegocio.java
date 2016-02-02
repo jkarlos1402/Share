@@ -10,6 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "RVVD_CAT_UNIDAD_NEGOCIO")
 public class RvvdCatUnidadNegocio implements Serializable {
@@ -33,41 +37,80 @@ public class RvvdCatUnidadNegocio implements Serializable {
     @Column(name = "STATUS")
     private boolean status;
 
+    /**
+     *
+     */
     public RvvdCatUnidadNegocio() {
     }
 
+    /**
+     *
+     * @param idUnidadNegocio
+     */
     public RvvdCatUnidadNegocio(Integer idUnidadNegocio) {
         this.idUnidadNegocio = idUnidadNegocio;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getIdUnidadNegocio() {
         return idUnidadNegocio;
     }
 
+    /**
+     *
+     * @param idUnidadNegocio
+     */
     public void setIdUnidadNegocio(Integer idUnidadNegocio) {
         this.idUnidadNegocio = idUnidadNegocio;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getUnidadNegocioR() {
         return unidadNegocioR;
     }
 
+    /**
+     *
+     * @param unidadNegocioR
+     */
     public void setUnidadNegocioR(String unidadNegocioR) {
         this.unidadNegocioR = unidadNegocioR.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getUnidadNegocioEn() {
         return unidadNegocioEn;
     }
 
+    /**
+     *
+     * @param unidadNegocioEn
+     */
     public void setUnidadNegocioEn(String unidadNegocioEn) {
         this.unidadNegocioEn = unidadNegocioEn.toUpperCase();
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean getStatus() {
         return status;
     }
 
+    /**
+     *
+     * @param status
+     */
     public void setStatus(boolean status) {
         this.status = status;
     }

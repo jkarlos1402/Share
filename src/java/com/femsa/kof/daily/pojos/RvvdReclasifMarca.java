@@ -11,6 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 @Entity
 @Table(name = "RVVD_RECLASIF_MARCA")
 public class RvvdReclasifMarca implements Serializable {
@@ -43,65 +47,128 @@ public class RvvdReclasifMarca implements Serializable {
     @Column(name = "ID_RECLASIF_MARCA")
     private BigDecimal idReclasifMarca;
 
+    /**
+     *
+     */
     public RvvdReclasifMarca() {
     }
 
+    /**
+     *
+     * @param idReclasifMarca
+     */
     public RvvdReclasifMarca(BigDecimal idReclasifMarca) {
         this.idReclasifMarca = idReclasifMarca;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPais() {
         return pais;
     }
 
+    /**
+     *
+     * @param pais
+     */
     public void setPais(String pais) {
         this.pais = pais;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getMarca() {
         return marca;
     }
 
+    /**
+     *
+     * @param marca
+     */
     public void setMarca(String marca) {
         this.marca = marca;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getMarcaR() {
         return marcaR;
     }
 
+    /**
+     *
+     * @param marcaR
+     */
     public void setMarcaR(String marcaR) {
         this.marcaR = marcaR;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getMarcaEn() {
         return marcaEn;
     }
 
+    /**
+     *
+     * @param marcaEn
+     */
     public void setMarcaEn(String marcaEn) {
         this.marcaEn = marcaEn;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getContenidoCaloricoR() {
         return contenidoCaloricoR;
     }
 
+    /**
+     *
+     * @param contenidoCaloricoR
+     */
     public void setContenidoCaloricoR(String contenidoCaloricoR) {
         this.contenidoCaloricoR = contenidoCaloricoR;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getContenidoCaloricoEn() {
         return contenidoCaloricoEn;
     }
 
+    /**
+     *
+     * @param contenidoCaloricoEn
+     */
     public void setContenidoCaloricoEn(String contenidoCaloricoEn) {
         this.contenidoCaloricoEn = contenidoCaloricoEn;
     }
 
+    /**
+     *
+     * @return
+     */
     public BigDecimal getIdReclasifMarca() {
         return idReclasifMarca;
     }
 
+    /**
+     *
+     * @param idReclasifMarca
+     */
     public void setIdReclasifMarca(BigDecimal idReclasifMarca) {
         this.idReclasifMarca = idReclasifMarca;
     }

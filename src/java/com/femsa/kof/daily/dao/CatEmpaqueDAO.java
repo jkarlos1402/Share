@@ -7,18 +7,34 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+/**
+ *
+ * @author TMXIDSJPINAM
+ */
 public class CatEmpaqueDAO {
 
     private String error;
 
+    /**
+     *
+     * @return
+     */
     public String getError() {
         return error;
     }
 
+    /**
+     *
+     * @param error
+     */
     public void setError(String error) {
         this.error = error;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatEmpaque> getEmpaquesAll() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -39,6 +55,10 @@ public class CatEmpaqueDAO {
         return empaques;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<RvvdCatEmpaque> getEmpaques() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -59,6 +79,11 @@ public class CatEmpaqueDAO {
         return empaques;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public RvvdCatEmpaque getEmpaque(Integer id) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -78,6 +103,11 @@ public class CatEmpaqueDAO {
         return empaque;
     }
 
+    /**
+     *
+     * @param empaque
+     * @return
+     */
     public RvvdCatEmpaque getEmpaque(String empaque) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
@@ -101,6 +131,11 @@ public class CatEmpaqueDAO {
         return empaqueT;
     }
 
+    /**
+     *
+     * @param empaque
+     * @return
+     */
     public boolean saveEmpaque(RvvdCatEmpaque empaque) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
