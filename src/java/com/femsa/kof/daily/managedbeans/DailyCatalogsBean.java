@@ -59,6 +59,7 @@ public class DailyCatalogsBean implements Serializable {
     private RvvdCatGec gecNuevo = new RvvdCatGec();
     private RvvdCatGec gecSelected;
     private List<RvvdCatGec> catGecsAll = new ArrayList<RvvdCatGec>();
+    private List<RvvdCatUnidadNegocio> catUnidades = new ArrayList<RvvdCatUnidadNegocio>();
 
     private RvvdCatUnidadNegocio unidadNueva = new RvvdCatUnidadNegocio();
     private RvvdCatUnidadNegocio unidadSelected;
@@ -87,6 +88,7 @@ public class DailyCatalogsBean implements Serializable {
 
         CatUnidadNegocioDAO unidadNegocioDAO = new CatUnidadNegocioDAO();
         catUnidadesAll = unidadNegocioDAO.getUnidadesNegAll();
+        catUnidades = unidadNegocioDAO.getUnidadesNeg();        
 
         CatTipoConsumoDAO tipoConsumoDAO = new CatTipoConsumoDAO();
         catTiposConsumoAll = tipoConsumoDAO.getTiposConsumoAll();
@@ -102,6 +104,22 @@ public class DailyCatalogsBean implements Serializable {
 
         CatCategoriaOficialDAO categoriaOficialDAO = new CatCategoriaOficialDAO();
         catCategoriaOficialAll = categoriaOficialDAO.getCategoriasOficialesAll();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public List<RvvdCatUnidadNegocio> getCatUnidades() {        
+        return catUnidades;
+    }
+
+    /**
+     *
+     * @param catUnidades
+     */
+    public void setCatUnidades(List<RvvdCatUnidadNegocio> catUnidades) {
+        this.catUnidades = catUnidades;
     }
 
     /**
@@ -747,6 +765,7 @@ public class DailyCatalogsBean implements Serializable {
         gecNuevo.setGecEn(gecSelected.getGecEn());
         gecNuevo.setGecR(gecSelected.getGecR());
         gecNuevo.setStatus(gecSelected.getStatus());
+        gecNuevo.setIdUnidadNegocio(gecSelected.getIdUnidadNegocio());
     }
 
     /**
@@ -758,9 +777,9 @@ public class DailyCatalogsBean implements Serializable {
         if (gecDAO.saveGec(gecNuevo)) {
             CatalogLoader.loadCatalogs("daily");
             refreshCatalog("gec");
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Gec saved");
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Client type saved");
         } else {
-            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the gec, " + gecDAO.getError());
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the client type, " + gecDAO.getError());
             gecNuevo.setIdGec(null);
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
@@ -863,9 +882,9 @@ public class DailyCatalogsBean implements Serializable {
         if (contCaloricoDAO.saveContCal(contenidoNueva)) {
             CatalogLoader.loadCatalogs("daily");
             refreshCatalog("calorico");
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Calorie saved");
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Caloric content saved");
         } else {
-            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Calorie, " + contCaloricoDAO.getError());
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Caloric content, " + contCaloricoDAO.getError());
             marcaNueva.setIdMarca(null);
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
@@ -885,6 +904,7 @@ public class DailyCatalogsBean implements Serializable {
             } else if (catalog.equalsIgnoreCase("unidad")) {
                 CatUnidadNegocioDAO unidadNegocioDAO = new CatUnidadNegocioDAO();
                 catUnidadesAll = unidadNegocioDAO.getUnidadesNegAll();
+                catUnidades = unidadNegocioDAO.getUnidadesNeg();
             } else if (catalog.equalsIgnoreCase("tipoConsumo")) {
                 CatTipoConsumoDAO tipoConsumoDAO = new CatTipoConsumoDAO();
                 catTiposConsumoAll = tipoConsumoDAO.getTiposConsumoAll();

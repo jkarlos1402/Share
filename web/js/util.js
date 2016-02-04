@@ -12,12 +12,20 @@ function setFilter(filter) {
 
 $(document).ready(function () {
     if ($("#menuPrincipal").length > 0 && ($("#proyectoUser").val() === "2" || $("#rolUser").val() === "1")) {
+        initMenu();
         setTimeout(function () {
             showNotifications();
         }, 10000);
     }
     $(".ui-outputlabel-rfi").hide();
 });
+
+function initMenu() {
+    $('#menuGeneral').dropdown_menu({
+        sub_indicators: true,
+        vertical: true
+    });
+}
 
 function hideAsteriscos() {
     $(".ui-outputlabel-rfi").hide();
@@ -34,10 +42,11 @@ function showNotifications() {
     }
 }
 
-function showLoading(status){    
-    if($("#showLoading").val() === "1" && status === "1"){        
+function showLoading(status) {
+    if ($("#showLoading").val() === "1" && status === "1") {
         PF('statusDialog').show();
-    }else if(status === "0"){
+    } else if (status === "0") {
         PF('statusDialog').hide();
-    }    
+    }
 }
+

@@ -101,7 +101,7 @@ public class CheckCatalogs {
             notifications.add("You have " + numNotReclassMarca + " trademarks without reclassifying.");
         }        
         if (numNotReclassGec > 0) {
-            notifications.add("You have " + numNotReclassGec + " gecs without reclassifying.");
+            notifications.add("You have " + numNotReclassGec + " client types without reclassifying.");
         }        
         if (numNotReclassEmpaque > 0) {
             notifications.add("You have " + numNotReclassEmpaque + " packings without reclassifying.");

@@ -5,9 +5,12 @@ import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -18,9 +21,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "RVVD_CAT_GEC")
 public class RvvdCatGec implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_CAT_GEC")
@@ -28,13 +31,17 @@ public class RvvdCatGec implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID_GEC")
     private Integer idGec;
-    
+
+    @JoinColumn(name = "ID_UNIDAD_NEGOCIO", referencedColumnName = "ID_UNIDAD_NEGOCIO")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private RvvdCatUnidadNegocio idUnidadNegocio;
+
     @Column(name = "GEC_R")
     private String gecR;
-    
+
     @Column(name = "GEC_EN")
     private String gecEn;
-    
+
     @Column(name = "STATUS")
     private boolean status;
 
@@ -50,6 +57,22 @@ public class RvvdCatGec implements Serializable {
      */
     public RvvdCatGec(Integer idGec) {
         this.idGec = idGec;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public RvvdCatUnidadNegocio getIdUnidadNegocio() {
+        return idUnidadNegocio;
+    }
+
+    /**
+     *
+     * @param idUnidadNegocio
+     */
+    public void setIdUnidadNegocio(RvvdCatUnidadNegocio idUnidadNegocio) {
+        this.idUnidadNegocio = idUnidadNegocio;
     }
 
     /**
@@ -140,5 +163,5 @@ public class RvvdCatGec implements Serializable {
     public String toString() {
         return gecR;
     }
-    
+
 }

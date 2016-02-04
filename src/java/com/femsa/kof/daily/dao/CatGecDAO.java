@@ -147,7 +147,7 @@ public class CatGecDAO {
                 session.saveOrUpdate(gec);
                 error = null;
             } else {
-                error = "Gec already exists";
+                error = "Client type already exists";
                 flagOk = false;
             }
             session.getTransaction().commit();

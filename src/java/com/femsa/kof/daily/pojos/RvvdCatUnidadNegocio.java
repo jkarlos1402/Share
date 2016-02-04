@@ -1,12 +1,15 @@
 package com.femsa.kof.daily.pojos;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -27,15 +30,18 @@ public class RvvdCatUnidadNegocio implements Serializable {
     @SequenceGenerator(name = "RVVD_SEQ_UNIDAD_NEGOCIO", sequenceName = "RVVD_SEQ_UNIDAD_NEGOCIO", allocationSize = 1)
     @Column(name = "ID_UNIDAD_NEGOCIO")
     private Integer idUnidadNegocio;
-    
+
     @Column(name = "UNIDAD_NEGOCIO_R")
     private String unidadNegocioR;
-    
+
     @Column(name = "UNIDAD_NEGOCIO_EN")
     private String unidadNegocioEn;
-    
+
     @Column(name = "STATUS")
     private boolean status;
+
+    @OneToMany(mappedBy = "idUnidadNegocio",fetch = FetchType.EAGER)
+    private List<RvvdCatGec> rvvdCatGecList;
 
     /**
      *
@@ -49,6 +55,22 @@ public class RvvdCatUnidadNegocio implements Serializable {
      */
     public RvvdCatUnidadNegocio(Integer idUnidadNegocio) {
         this.idUnidadNegocio = idUnidadNegocio;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public List<RvvdCatGec> getRvvdCatGecList() {
+        return rvvdCatGecList;
+    }
+
+    /**
+     *
+     * @param rvvdCatGecList
+     */
+    public void setRvvdCatGecList(List<RvvdCatGec> rvvdCatGecList) {
+        this.rvvdCatGecList = rvvdCatGecList;
     }
 
     /**

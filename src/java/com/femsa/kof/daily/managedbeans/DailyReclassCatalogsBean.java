@@ -1,13 +1,5 @@
 package com.femsa.kof.daily.managedbeans;
 
-import com.femsa.kof.daily.dao.CatCanalDAO;
-import com.femsa.kof.daily.dao.CatCategoriaDAO;
-import com.femsa.kof.daily.dao.CatContCaloricoDAO;
-import com.femsa.kof.daily.dao.CatEmpaqueDAO;
-import com.femsa.kof.daily.dao.CatGecDAO;
-import com.femsa.kof.daily.dao.CatMarcaDAO;
-import com.femsa.kof.daily.dao.CatTipoConsumoDAO;
-import com.femsa.kof.daily.dao.CatUnidadNegocioDAO;
 import com.femsa.kof.daily.dao.ReclasifCanalDAO;
 import com.femsa.kof.daily.dao.ReclasifCategoriaDAO;
 import com.femsa.kof.daily.dao.ReclasifDiasOpDAO;
@@ -690,9 +682,9 @@ public class DailyReclassCatalogsBean implements Serializable {
         FacesMessage message = null;
         ReclasifGecDAO reclasifGecDAO = new ReclasifGecDAO();
         if (reclasifGecDAO.saveReclasifUnGec(gecsReclasificados)) {
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Reclassified gecs saved");
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Reclassified client types saved");
         } else {
-            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Reclassified gecs, " + reclasifGecDAO.getError());
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Reclassified client types, " + reclasifGecDAO.getError());
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
