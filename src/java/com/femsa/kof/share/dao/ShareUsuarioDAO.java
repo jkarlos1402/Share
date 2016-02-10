@@ -3,6 +3,8 @@ package com.femsa.kof.share.dao;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -14,6 +16,7 @@ import org.hibernate.SessionFactory;
 public class ShareUsuarioDAO {
 
     private String error;
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
      *
@@ -46,11 +49,12 @@ public class ShareUsuarioDAO {
             Query query = session.createQuery("FROM ShareUsuario u WHERE u.usuario = '" + user.toUpperCase() + "' AND u.password = '" + password + "' AND u.estatus = 1");
             List<ShareUsuario> usuarios = query.list();
 
-            if (usuarios.size() > 0) {
+            if (!usuarios.isEmpty()) {
                 return usuarios.get(0);
             }
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -59,7 +63,7 @@ public class ShareUsuarioDAO {
             hibernateUtil.closeSessionFactory();
         }
         return usuario;
-    }   
+    }
 
     /**
      *
@@ -74,17 +78,18 @@ public class ShareUsuarioDAO {
         ShareUsuario usuario = null;
         Query query = null;
         try {
-            if (filtrado) {                  
+            if (filtrado) {
                 query = session.createQuery("FROM ShareUsuario u WHERE u.usuario = '" + user.toUpperCase() + "' AND u.estatus = 1");
             } else {
                 query = session.createQuery("FROM ShareUsuario u WHERE u.usuario = '" + user.toUpperCase() + "'");
             }
             List<ShareUsuario> usuarios = query.list();
-            if (usuarios.size() > 0) {
+            if (!usuarios.isEmpty()) {
                 return usuarios.get(0);
             }
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -109,6 +114,7 @@ public class ShareUsuarioDAO {
             usuarios = (List<ShareUsuario>) query.list();
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -131,7 +137,7 @@ public class ShareUsuarioDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if ((usuario.getPkUsuario() == null ? getUsuario(usuario.getUsuario(),false) : null) == null) {
+            if ((usuario.getPkUsuario() == null ? getUsuario(usuario.getUsuario(), false) : null) == null) {
                 session.saveOrUpdate(usuario);
                 error = null;
             } else {
@@ -140,6 +146,7 @@ public class ShareUsuarioDAO {
             }
             session.getTransaction().commit();
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();

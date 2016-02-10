@@ -24,21 +24,7 @@ public class ShareCatStatus implements Serializable {
     private BigDecimal pkIdstatus;
 
     @Column(name = "DESCRIPCION")
-    private String descripcion;
-
-    /**
-     *
-     */
-    public ShareCatStatus() {
-    }
-
-    /**
-     *
-     * @param pkIdstatus
-     */
-    public ShareCatStatus(BigDecimal pkIdstatus) {
-        this.pkIdstatus = pkIdstatus;
-    }
+    private String descripcion;    
 
     /**
      *

@@ -73,21 +73,7 @@ public class RvvdStRolling implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_ST_ROLLING")
     @SequenceGenerator(name = "RVVD_SEQ_ST_ROLLING", sequenceName = "RVVD_SEQ_ST_ROLLING", allocationSize = 1)
     @Column(name = "ID_ST_ROLLING")
-    private BigDecimal idStRolling;
-
-    /**
-     *
-     */
-    public RvvdStRolling() {
-    }
-
-    /**
-     *
-     * @param idStRolling
-     */
-    public RvvdStRolling(BigDecimal idStRolling) {
-        this.idStRolling = idStRolling;
-    }
+    private BigDecimal idStRolling;    
 
     /**
      *
@@ -351,7 +337,7 @@ public class RvvdStRolling implements Serializable {
 
     @Override
     public String toString() {
-        return rollingCu+"";
+        return Double.toString(rollingCu);
     }
     
 }

@@ -78,21 +78,7 @@ public class RvvdInfoPh implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_INFO_PH")
     @SequenceGenerator(name = "RVVD_SEQ_INFO_PH", sequenceName = "RVVD_SEQ_INFO_PH", allocationSize = 1)
     @Column(name = "ID_INFO_PH")
-    private BigDecimal idInfoPh;
-
-    /**
-     *
-     */
-    public RvvdInfoPh() {
-    }
-
-    /**
-     *
-     * @param idInfoPh
-     */
-    public RvvdInfoPh(BigDecimal idInfoPh) {
-        this.idInfoPh = idInfoPh;
-    }
+    private BigDecimal idInfoPh;    
 
     /**
      *

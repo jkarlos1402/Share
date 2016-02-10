@@ -44,21 +44,7 @@ public class RvvdDistribucionMxTmp implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_DISTRIBUCION_MX")
     @SequenceGenerator(name = "RVVD_SEQ_DISTRIBUCION_MX", sequenceName = "RVVD_SEQ_DISTRIBUCION_MX", allocationSize = 1)
     @Column(name = "ID_DISTRIBUCION_MX")
-    private BigDecimal idDistribucionMx;
-
-    /**
-     *
-     */
-    public RvvdDistribucionMxTmp() {
-    }
-
-    /**
-     *
-     * @param idDistribucionMx
-     */
-    public RvvdDistribucionMxTmp(BigDecimal idDistribucionMx) {
-        this.idDistribucionMx = idDistribucionMx;
-    }
+    private BigDecimal idDistribucionMx;    
 
     /**
      *

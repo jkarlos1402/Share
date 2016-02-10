@@ -1,0 +1,5 @@
+projectKey=Share
+serverUrl=http://localhost:9000
+dashboardUrl=http://localhost:9000/dashboard/index/Share
+ceTaskId=AVLMkg1vPPDyRNKw12QR
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AVLMkg1vPPDyRNKw12QR

@@ -45,21 +45,7 @@ public class RvvdReclasifMarca implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_RECLASIF_MARCA")
     @SequenceGenerator(name = "RVVD_SEQ_RECLASIF_MARCA", sequenceName = "RVVD_SEQ_RECLASIF_MARCA", allocationSize = 1)
     @Column(name = "ID_RECLASIF_MARCA")
-    private BigDecimal idReclasifMarca;
-
-    /**
-     *
-     */
-    public RvvdReclasifMarca() {
-    }
-
-    /**
-     *
-     * @param idReclasifMarca
-     */
-    public RvvdReclasifMarca(BigDecimal idReclasifMarca) {
-        this.idReclasifMarca = idReclasifMarca;
-    }
+    private BigDecimal idReclasifMarca;    
 
     /**
      *

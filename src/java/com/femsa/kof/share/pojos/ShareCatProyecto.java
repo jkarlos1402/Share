@@ -37,21 +37,7 @@ public class ShareCatProyecto implements Serializable {
     private boolean status;
     
     @ManyToMany(mappedBy = "paises",fetch = FetchType.EAGER)
-    private List<ShareUsuario> usuarios = new ArrayList<ShareUsuario>();
-
-    /**
-     *
-     */
-    public ShareCatProyecto() {
-    }
-
-    /**
-     *
-     * @param idProyecto
-     */
-    public ShareCatProyecto(Integer idProyecto) {
-        this.idProyecto = idProyecto;
-    }
+    private List<ShareUsuario> usuarios = new ArrayList<ShareUsuario>();   
 
     /**
      *

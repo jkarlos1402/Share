@@ -3,6 +3,8 @@ package com.femsa.kof.share.dao;
 import com.femsa.kof.share.pojos.ShareCatProyecto;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -14,6 +16,7 @@ import org.hibernate.SessionFactory;
 public class ShareCatProyectoDAO {
 
     private String error = "";
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
      *
@@ -45,6 +48,7 @@ public class ShareCatProyectoDAO {
             proyecto = (ShareCatProyecto) session.get(ShareCatProyecto.class, id);
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -69,6 +73,7 @@ public class ShareCatProyectoDAO {
             proyectos = query.list();
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -92,11 +97,12 @@ public class ShareCatProyectoDAO {
         try {
             Query query = session.createQuery("SELECT proyecto FROM ShareCatProyecto proyecto WHERE proyecto.nombreProyecto = '" + nombrProyecto.toUpperCase() + "'");
             List<ShareCatProyecto> proyectos = query.list();
-            if (proyectos.size() > 0) {
+            if (!proyectos.isEmpty()) {
                 proyecto = proyectos.get(0);
             }
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -121,6 +127,7 @@ public class ShareCatProyectoDAO {
             proyectos = query.list();
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -147,7 +154,7 @@ public class ShareCatProyectoDAO {
             if (proyecto.getIdProyecto() != null) {
                 session.update(proyecto);
                 error = null;
-            } else if (getProyecto(proyecto.getNombreProyecto()) == null) {                
+            } else if (getProyecto(proyecto.getNombreProyecto()) == null) {
                 session.save(proyecto);
                 error = null;
             } else {
@@ -156,6 +163,7 @@ public class ShareCatProyectoDAO {
             }
             session.getTransaction().commit();
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();

@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import org.hibernate.Query;
@@ -18,6 +20,8 @@ import org.hibernate.SessionFactory;
  * @author TMXIDSJPINAM
  */
 public class ScriptAnalizer {
+
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
      *
@@ -43,7 +47,7 @@ public class ScriptAnalizer {
         session.beginTransaction();
         Query queryNativo = null;
         boolean flagOk = true;
-        try {            
+        try {
             for (int i = 0; i < ficheros.length; i++) {
                 File fichero = ficheros[i];
                 instructions = getInstructionsSQL(fichero, errors, pais);
@@ -51,15 +55,15 @@ public class ScriptAnalizer {
                     for (String instruction : instructions) {
 //                        System.out.println("instruccion: "+instruction);
                         queryNativo = session.createSQLQuery(instruction);
-                        queryNativo.executeUpdate();                        
+                        queryNativo.executeUpdate();
                     }
                 }
-            }            
+            }
         } catch (Exception e) {
-            e.printStackTrace();
-            errors.add("Error running script: " + e.getMessage());            
+            Logger.getLogger(ScriptAnalizer.class.getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
+            errors.add("Error running script: " + e.getMessage());
             flagOk = false;
-        } finally {            
+        } finally {
             session.flush();
             session.clear();
             session.close();
@@ -102,6 +106,7 @@ public class ScriptAnalizer {
                 }
 
             } catch (IOException ex) {
+                Logger.getLogger(ScriptAnalizer.class.getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
                 errors.add("Error trying to open the file " + nombre);
             } finally {
                 if (b != null) {
@@ -115,7 +120,7 @@ public class ScriptAnalizer {
 
         }
         return statements;
-    }    
+    }
 
     private static String getExtension(String filename) {
         int index = filename.lastIndexOf('.');

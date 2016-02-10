@@ -34,21 +34,7 @@ public class RvvdCatTipoConsumo implements Serializable {
     private String tipoConsumoEn;
     
     @Column(name = "STATUS")
-    private boolean status;
-
-    /**
-     *
-     */
-    public RvvdCatTipoConsumo() {
-    }
-
-    /**
-     *
-     * @param idTipoConsumo
-     */
-    public RvvdCatTipoConsumo(Integer idTipoConsumo) {
-        this.idTipoConsumo = idTipoConsumo;
-    }
+    private boolean status;    
 
     /**
      *

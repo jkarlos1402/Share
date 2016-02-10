@@ -34,21 +34,7 @@ public class RvvdCatContenidoCalorico implements Serializable {
     private String contenidoCaloricoEn;
     
     @Column(name = "STATUS")
-    private boolean status;
-
-    /**
-     *
-     */
-    public RvvdCatContenidoCalorico() {
-    }
-
-    /**
-     *
-     * @param idContenidoCalorico
-     */
-    public RvvdCatContenidoCalorico(Integer idContenidoCalorico) {
-        this.idContenidoCalorico = idContenidoCalorico;
-    }
+    private boolean status;    
 
     /**
      *

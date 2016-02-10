@@ -43,21 +43,7 @@ public class RvvdReclasifUnGec implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "ID_RECLASIF_UN_GEC")
-    private BigDecimal idReclasifUnGec;
-
-    /**
-     *
-     */
-    public RvvdReclasifUnGec() {
-    }
-
-    /**
-     *
-     * @param idReclasifUnGec
-     */
-    public RvvdReclasifUnGec(BigDecimal idReclasifUnGec) {
-        this.idReclasifUnGec = idReclasifUnGec;
-    }
+    private BigDecimal idReclasifUnGec;    
 
     /**
      *

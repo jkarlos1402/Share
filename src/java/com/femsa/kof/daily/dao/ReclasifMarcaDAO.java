@@ -5,6 +5,8 @@ import com.femsa.kof.daily.util.CheckCatalogs;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -16,6 +18,7 @@ import org.hibernate.SessionFactory;
 public class ReclasifMarcaDAO {
 
     private String error;
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
      *
@@ -56,6 +59,7 @@ public class ReclasifMarcaDAO {
             marcas = query.list();
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -79,20 +83,19 @@ public class ReclasifMarcaDAO {
         long cont = 0L;
         try {
             session.beginTransaction();
-            if (marcas != null) {
-                for (RvvdReclasifMarca marca : marcas) {
-                    session.update(marca);
-                    if (cont % 100 == 0) {
-                        session.flush();
-                        session.clear();
-                    }
-                    cont++;
+            for (RvvdReclasifMarca marca : marcas) {
+                session.update(marca);
+                if (cont % 100 == 0) {
+                    session.flush();
+                    session.clear();
                 }
-                error = null;
+                cont++;
             }
+            error = null;
             session.getTransaction().commit();
             CheckCatalogs.checkAllCatalogs();
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
@@ -131,6 +134,7 @@ public class ReclasifMarcaDAO {
             numNotReclass = (Long) res.get(0);
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();

@@ -3,6 +3,8 @@ package com.femsa.kof.share.dao;
 import com.femsa.kof.share.pojos.ShareCatPais;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -14,6 +16,7 @@ import org.hibernate.SessionFactory;
 public class ShareCatPaisDAO {
 
     private String error = "";
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
      *
@@ -45,6 +48,7 @@ public class ShareCatPaisDAO {
             countries = query.list();
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -69,11 +73,12 @@ public class ShareCatPaisDAO {
         try {
             Query query = session.createQuery("SELECT pais FROM ShareCatPais pais WHERE pais.nombre = '" + nombrePais.toUpperCase() + "'");
             countries = query.list();
-            if (countries.size() > 0) {
+            if (!countries.isEmpty()) {
                 country = countries.get(0);
             }
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -98,6 +103,7 @@ public class ShareCatPaisDAO {
             countries = query.list();
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -137,6 +143,7 @@ public class ShareCatPaisDAO {
             }
             session.getTransaction().commit();
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();

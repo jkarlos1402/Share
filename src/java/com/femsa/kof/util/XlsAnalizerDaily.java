@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -36,6 +38,8 @@ public class XlsAnalizerDaily {
     private List<String> errors;
     private List<RollingDaily> cargasRolling = new ArrayList<RollingDaily>();
     private List<RvvdDistribucionMxTmp> cargasDistribucion = new ArrayList<RvvdDistribucionMxTmp>();
+
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
      *
@@ -170,11 +174,12 @@ public class XlsAnalizerDaily {
                 }
             }
         } catch (IOException ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
         } finally {
             try {
                 file.getInputstream().close();
-                file = null;
             } catch (IOException ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
             }
         }
     }
@@ -387,6 +392,7 @@ public class XlsAnalizerDaily {
                     try {
                         distribucionTemp.setFechaOrigen(formatoDelTexto.parse(fecha));
                     } catch (ParseException ex) {
+                        Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
                         cargas = null;
                         errors.add("Approximately " + Character.toString((char) (65 + cell.getColumnIndex())) + "" + (cell.getRowIndex() + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
                         break;
@@ -402,6 +408,7 @@ public class XlsAnalizerDaily {
                     try {
                         distribucionTemp.setFechaDestino(formatoDelTexto.parse(fecha));
                     } catch (ParseException ex) {
+                        Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
                         cargas = null;
                         errors.add("Approximately " + Character.toString((char) (65 + cell.getColumnIndex())) + "" + (cell.getRowIndex() + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
                         break;

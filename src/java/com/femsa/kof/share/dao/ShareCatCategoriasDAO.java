@@ -3,6 +3,8 @@ package com.femsa.kof.share.dao;
 import com.femsa.kof.share.pojos.ShareCatCategorias;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -14,6 +16,7 @@ import org.hibernate.SessionFactory;
 public class ShareCatCategoriasDAO {
 
     private String error;
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
      *
@@ -36,25 +39,26 @@ public class ShareCatCategoriasDAO {
      * @return
      */
     public List<ShareCatCategorias> getCategorias() {
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
         List<ShareCatCategorias> categories = null;
         try {
-            HibernateUtil hibernateUtil = new HibernateUtil();
-
             if (hibernateUtil.isConnectionOk()) {
-                SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
-                Session session = sessionFactory.openSession();
                 Query query = session.createQuery("SELECT categ FROM ShareCatCategorias categ WHERE categ.status = 1");
                 categories = query.list();
-                session.flush();
-                session.clear();
-                session.close();
-                hibernateUtil.closeSessionFactory();
                 error = null;
             } else {
                 error = hibernateUtil.getError();
             }
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
         }
         return categories;
     }
@@ -72,11 +76,12 @@ public class ShareCatCategoriasDAO {
         try {
             Query query = session.createQuery("SELECT categ FROM ShareCatCategorias categ WHERE categ.categoria = '" + name.toUpperCase() + "'");
             List<ShareCatCategorias> categories = query.list();
-            if (categories.size() > 0) {
+            if (!categories.isEmpty()) {
                 category = categories.get(0);
             }
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -101,6 +106,7 @@ public class ShareCatCategoriasDAO {
             categories = query.list();
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -132,6 +138,7 @@ public class ShareCatCategoriasDAO {
             }
             session.getTransaction().commit();
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();

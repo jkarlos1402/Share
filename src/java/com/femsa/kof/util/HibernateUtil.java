@@ -22,7 +22,7 @@ public class HibernateUtil {
             // config file.
             sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
             connectionOk = true;
-        } catch (Throwable ex) {
+        } catch (Exception ex) {
             // Log the exception. 
             error = "Initial SessionFactory creation failed." + ex;
             connectionOk = false;

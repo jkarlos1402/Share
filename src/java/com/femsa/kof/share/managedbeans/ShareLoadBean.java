@@ -265,7 +265,7 @@ public class ShareLoadBean implements Serializable {
             omittedSheets = analizer.getOmittedSheets();
             loadedSheets = analizer.getLoadedSheets();
             errors = analizer.getErrors();
-            if (listInfoCarga.size() > 0) {
+            if (!listInfoCarga.isEmpty()) {
                 nameFile = event.getFile().getFileName();
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", event.getFile().getFileName() + " is uploaded.");
             } else {

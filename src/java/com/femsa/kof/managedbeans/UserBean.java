@@ -13,6 +13,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -46,6 +48,7 @@ public class UserBean implements Serializable {
     private ShareCatProyecto proyectoSelected;
 
     private String error;
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
      *
@@ -57,7 +60,7 @@ public class UserBean implements Serializable {
     private void startBean() {
         ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         String errorDatabase = (String) context.getAttribute("error_database");
-        if (errorDatabase == null || (errorDatabase.trim().equalsIgnoreCase(""))) {
+        if (errorDatabase == null || ("".equalsIgnoreCase(errorDatabase.trim()))) {
             ShareCatRolDAO rolDAO = new ShareCatRolDAO();
             ShareCatPaisDAO paisDAO = new ShareCatPaisDAO();
             catRoles = rolDAO.getCatRol();
@@ -264,50 +267,47 @@ public class UserBean implements Serializable {
     public String logIn() {
         FacesContext context = FacesContext.getCurrentInstance();
         ServletContext servletContext = (ServletContext) context.getExternalContext().getContext();
+        if (error != null) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: " + error, ""));
+            if (CatalogLoader.loadCatalogs("share")) {
+                servletContext.setAttribute("error_database", CatalogLoader.error);
+                CatalogLoader.loadCatalogs("daily");
+                error = null;
+                startBean();
+            }
+            return "index";
+        }
         try {
-            if (error == null) {
-                ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();                
-//                ShareUsuario usuario = usuarioDAO.getUsuario(user, passEnc);
-                ShareUsuario usuario = usuarioDAO.getUsuario(user,true);                
-                if (usuario != null) {
-                    if (usuario.getPassword().equalsIgnoreCase(password)) {
-                        HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-                        if(usuario.getLastLogin() == null){
-                            httpSession.setAttribute("first_session_user", true);
-                        }else{
-                            httpSession.setAttribute("first_session_user", false);
-                        }
-                        usuario.setIntentos(0);
-                        usuario.setLastLogin(new Date());
-                        usuarioDAO.saveUser(usuario);
-                        httpSession.setAttribute("session_user", usuario);
-                        return "correct";
-                    } else {
-                        usuario.setIntentos(usuario.getIntentos() + 1);
-                        if (usuario.getIntentos() == 3) {
-                            usuario.setEstatus(false);
-                            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Attention: The user has been blocked, number of attempts exceeded, Contact the administrator", ""));
-                        } else {
-                            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: User or password incorrect", ""));
-                        }
-                        usuarioDAO.saveUser(usuario);
-                        return "index";
-                    }
+            ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();
+            ShareUsuario usuario = usuarioDAO.getUsuario(user, true);
+            if (usuario != null && usuario.getPassword().equalsIgnoreCase(password)) {
+                HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+                if (usuario.getLastLogin() == null) {
+                    httpSession.setAttribute("first_session_user", true);
+                } else {
+                    httpSession.setAttribute("first_session_user", false);
+                }
+                usuario.setIntentos(0);
+                usuario.setLastLogin(new Date());
+                usuarioDAO.saveUser(usuario);
+                httpSession.setAttribute("session_user", usuario);
+                return "correct";
+            } else if (usuario != null) {
+                usuario.setIntentos(usuario.getIntentos() + 1);
+                if (usuario.getIntentos() == 3) {
+                    usuario.setEstatus(false);
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Attention: The user has been blocked, number of attempts exceeded, Contact the administrator", ""));
                 } else {
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: User or password incorrect", ""));
-                    return "index";
                 }
+                usuarioDAO.saveUser(usuario);
+                return "index";
             } else {
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: " + error, ""));
-                if (CatalogLoader.loadCatalogs("share")) {
-                    servletContext.setAttribute("error_database", CatalogLoader.error);
-                    CatalogLoader.loadCatalogs("daily");
-                    error = null;
-                    startBean();
-                }
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: User or password incorrect", ""));
                 return "index";
             }
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: " + e.getMessage(), ""));
             return "index";
         }
@@ -329,7 +329,7 @@ public class UserBean implements Serializable {
      *
      */
     public void saveUser() {
-        FacesMessage message = null;
+        FacesMessage message;
         ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();
         if (usuarioNuevo.getPaises() == null) {
             usuarioNuevo.setPaises(new ArrayList<ShareCatPais>());
@@ -345,8 +345,8 @@ public class UserBean implements Serializable {
             usuarioNuevo.getPaises().add(paisesAll.getTarget().get(i));
         }
         usuarioNuevo.setPassword(usuarioNuevo.getPassword());
-        usuarioNuevo.getProyectos().add(proyectoSelected);  
-        if(usuarioNuevo.getIntentos() != null && usuarioNuevo.getIntentos() == 3){
+        usuarioNuevo.getProyectos().add(proyectoSelected);
+        if (usuarioNuevo.getIntentos() != null && usuarioNuevo.getIntentos() == 3) {
             usuarioNuevo.setPassReset(true);
         }
         usuarioNuevo.setIntentos(0);
@@ -390,14 +390,14 @@ public class UserBean implements Serializable {
         usuarioNuevo.setIntentos(usuarioSelected.getIntentos());
         usuarioNuevo.setLastLogin(usuarioSelected.getLastLogin());
         paisesAll.getTarget().clear();
-        if (usuarioSelected.getPaises() != null && usuarioSelected.getPaises().size() > 0) {
+        if (usuarioSelected.getPaises() != null && !usuarioSelected.getPaises().isEmpty()) {
             Object[] paisesT = usuarioSelected.getPaises().toArray();
             for (int i = 0; i < usuarioSelected.getPaises().size(); i++) {
                 paisesAll.getTarget().add((ShareCatPais) paisesT[i]);
                 paisesAll.getSource().remove((ShareCatPais) paisesT[i]);
             }
         }
-        if (usuarioSelected.getProyectos() != null && usuarioSelected.getProyectos().size() > 0) {
+        if (usuarioSelected.getProyectos() != null && !usuarioSelected.getProyectos().isEmpty()) {
             proyectoSelected = usuarioSelected.getProyectos().get(0);
         }
     }
@@ -405,7 +405,7 @@ public class UserBean implements Serializable {
     /**
      *
      */
-    public void refreshUsers() {        
+    public void refreshUsers() {
         ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();
         usuariosAll = usuarioDAO.getAllUsers();
     }

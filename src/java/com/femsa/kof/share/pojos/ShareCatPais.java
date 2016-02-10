@@ -44,21 +44,7 @@ public class ShareCatPais implements Serializable {
     private String nombreTabla;
     
     @ManyToMany(mappedBy = "paises",fetch = FetchType.EAGER)
-    private List<ShareUsuario> usuarios = new ArrayList<ShareUsuario>();
-
-    /**
-     *
-     */
-    public ShareCatPais() {
-    }
-
-    /**
-     *
-     * @param pkPais
-     */
-    public ShareCatPais(Integer pkPais) {
-        this.pkPais = pkPais;
-    }
+    private List<ShareUsuario> usuarios = new ArrayList<ShareUsuario>();    
 
     /**
      *

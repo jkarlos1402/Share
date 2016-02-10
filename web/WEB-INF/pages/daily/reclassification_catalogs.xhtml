@@ -192,7 +192,7 @@
                             <f:facet name="header">
                                 #{dailyReclassCatalogsBean.diasOpReclasificados.size()} entries found.
                             </f:facet>
-                            <p:ajax event="rowEdit" listener="#{dailyReclassCatalogsBean.onRowEditDias}" />
+                            <p:ajax event="rowEdit" />
                             <p:column headerText="Country" filterBy="#{operativeDay.pais}" sortBy="#{operativeDay.pais}">
                                 <h:outputText value="#{operativeDay.pais}"/>
                             </p:column>

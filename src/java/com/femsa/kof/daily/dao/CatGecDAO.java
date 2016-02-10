@@ -3,17 +3,21 @@ package com.femsa.kof.daily.dao;
 import com.femsa.kof.daily.pojos.RvvdCatGec;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 /**
+ * Permite la manipulación del catálogo de tipos de cliente
  *
  * @author TMXIDSJPINAM
  */
 public class CatGecDAO {
 
     private String error;
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
      *
@@ -32,8 +36,9 @@ public class CatGecDAO {
     }
 
     /**
+     * Obtiene una lista con los tipos de cliente sin importar su estatus
      *
-     * @return
+     * @return Regresa una lista con los tipos de cliente existentes
      */
     public List<RvvdCatGec> getGecAll() {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -45,6 +50,7 @@ public class CatGecDAO {
             gecs = query.list();
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -56,8 +62,9 @@ public class CatGecDAO {
     }
 
     /**
+     * Obtiene una lista de tipos de cliente donde el estatus sea igual a 1
      *
-     * @return
+     * @return Regresa una lista de tipos de cliente filtrados
      */
     public List<RvvdCatGec> getGecs() {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -69,6 +76,7 @@ public class CatGecDAO {
             gecs = query.list();
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -80,9 +88,10 @@ public class CatGecDAO {
     }
 
     /**
+     * Obtiene un tipo de cliente en específico
      *
-     * @param id
-     * @return
+     * @param id El identificador del tipo de cliente
+     * @return El tipo de cliente buscado, en caso de no existir se regresa nulo
      */
     public RvvdCatGec getGec(Integer id) {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -93,6 +102,7 @@ public class CatGecDAO {
             gec = (RvvdCatGec) session.get(RvvdCatGec.class, id);
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -104,9 +114,10 @@ public class CatGecDAO {
     }
 
     /**
+     * Obtiene un tipo de cliente en específico
      *
-     * @param gec
-     * @return
+     * @param gec El nombre del tipo de cliente a buscar
+     * @return El tipo de cliente buscado, en caso de no existir se regresa nulo
      */
     public RvvdCatGec getGec(String gec) {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -116,11 +127,12 @@ public class CatGecDAO {
         try {
             Query query = session.createQuery("SELECT gec FROM RvvdCatGec gec WHERE gec.gecR = '" + gec.toUpperCase() + "' OR gec.gecEn = '" + gec.toUpperCase() + "'");
             List<RvvdCatGec> gecs = query.list();
-            if (gecs.size() > 0) {
+            if (!gecs.isEmpty()) {
                 gecT = gecs.get(0);
             }
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -132,9 +144,11 @@ public class CatGecDAO {
     }
 
     /**
+     * Guarda o actualiza un tipo de cliente
      *
-     * @param gec
-     * @return
+     * @param gec El tipo de cliente a guardar o actualizar
+     * @return En caso de éxito se regresa verdadero, en caso contrario regresa
+     * falso
      */
     public boolean saveGec(RvvdCatGec gec) {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -152,6 +166,7 @@ public class CatGecDAO {
             }
             session.getTransaction().commit();
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();

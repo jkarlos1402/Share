@@ -24,21 +24,7 @@ public class ShareCatCanales implements Serializable {
     private BigDecimal pkCanal;
 
     @Column(name = "GV_CANAL")
-    private String gvCanal;
-
-    /**
-     *
-     */
-    public ShareCatCanales() {
-    }
-
-    /**
-     *
-     * @param pkCanal
-     */
-    public ShareCatCanales(BigDecimal pkCanal) {
-        this.pkCanal = pkCanal;
-    }
+    private String gvCanal;    
 
     /**
      *

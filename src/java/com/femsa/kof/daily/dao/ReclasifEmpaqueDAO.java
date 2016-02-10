@@ -5,17 +5,21 @@ import com.femsa.kof.daily.util.CheckCatalogs;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 /**
+ * Permite reclasificar el catálogo de empaques
  *
  * @author TMXIDSJPINAM
  */
 public class ReclasifEmpaqueDAO {
 
     private String error;
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
      *
@@ -34,9 +38,12 @@ public class ReclasifEmpaqueDAO {
     }
 
     /**
+     * Obtiene los empaques reclasificados y sin reclasificar por parte del
+     * usuario
      *
-     * @param usuario
-     * @return
+     * @param usuario El usuario correspondiente
+     * @return Regresa una lista con los empaques reclasificados y sin
+     * reclasificar por parte del usuario
      */
     public List<RvvdReclasifEmpaque> getReclasifEmpaquesAll(ShareUsuario usuario) {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -56,6 +63,7 @@ public class ReclasifEmpaqueDAO {
             empaquesReclasificados = query.list();
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -67,9 +75,12 @@ public class ReclasifEmpaqueDAO {
     }
 
     /**
+     * Actualiza la lista de empaques reclasificados por parte del usuario
      *
-     * @param reclasifEmpaques
-     * @return
+     * @param reclasifEmpaques La lista de empaques reclasificados por parte del
+     * usuario
+     * @return En caso de éxito se regresa verdadero, de lo contrario se regresa
+     * falso y el error es almacenado en el atributo error
      */
     public boolean saveReclasifEmpaques(List<RvvdReclasifEmpaque> reclasifEmpaques) {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -79,20 +90,19 @@ public class ReclasifEmpaqueDAO {
         long cont = 0L;
         try {
             session.beginTransaction();
-            if (reclasifEmpaques != null) {
-                for (RvvdReclasifEmpaque reclasifEmpaque : reclasifEmpaques) {
-                    session.update(reclasifEmpaque);
-                    if (cont % 100 == 0) {
-                        session.flush();
-                        session.clear();
-                    }
-                    cont++;
+            for (RvvdReclasifEmpaque reclasifEmpaque : reclasifEmpaques) {
+                session.update(reclasifEmpaque);
+                if (cont % 100 == 0) {
+                    session.flush();
+                    session.clear();
                 }
-                error = null;
+                cont++;
             }
+            error = null;
             session.getTransaction().commit();
             CheckCatalogs.checkAllCatalogs();
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
@@ -108,9 +118,11 @@ public class ReclasifEmpaqueDAO {
     }
 
     /**
+     * Obtiene el número de empaques sin reclasificar por parte del usuario
      *
-     * @param usuario
-     * @return
+     * @param usuario El usuario correspondiente
+     * @return Regresa el número de empaques sin reclasificar por parte del
+     * usuario
      */
     public long checkReclasifEmpaques(ShareUsuario usuario) {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -131,6 +143,7 @@ public class ReclasifEmpaqueDAO {
             numNotReclass = (Long) res.get(0);
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();

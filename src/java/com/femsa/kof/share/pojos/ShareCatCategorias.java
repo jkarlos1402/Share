@@ -40,21 +40,7 @@ public class ShareCatCategorias implements Serializable {
     private String categoriaEsp;
     
     @Column(name = "ID_STATUS")
-    private boolean status;
-
-    /**
-     *
-     */
-    public ShareCatCategorias() {
-    }
-
-    /**
-     *
-     * @param pkCategoria
-     */
-    public ShareCatCategorias(Integer pkCategoria) {
-        this.pkCategoria = pkCategoria;
-    }
+    private boolean status;    
 
     /**
      *

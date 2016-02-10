@@ -10,8 +10,11 @@ import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -43,6 +46,8 @@ public class XlsAnalizerSalesPh {
     private ReadOnlySharedStringsTable stringsTable;
     private XMLStreamReader xmlReader;
     private String sheetName;
+
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
      * Constructor sin parámetros de la clase la cual inizializa las listas de
@@ -202,20 +207,21 @@ public class XlsAnalizerSalesPh {
                         numRegistros = rowNum;
                         loadedSheets.clear();
                         loadedSheets.add(sheetName);
+                        errors.clear();
                     }
                 } else {
                     omittedSheets.clear();
                     omittedSheets.add(sheetName.trim().toUpperCase() + ", not valid.");
                 }
             }
-
             if (oPCPackage != null) {
                 oPCPackage.close();
             }
-            errors.clear();
         } catch (IOException ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
             errors.add(ex.getMessage());
         } catch (Exception ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
             errors.add(ex.getMessage());
         }
     }
@@ -272,18 +278,23 @@ public class XlsAnalizerSalesPh {
                 }
             }
         } catch (InvalidFormatException ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
             errors.add(ex.getMessage());
             flagOk = false;
         } catch (IOException ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
             errors.add(ex.getMessage());
             flagOk = false;
         } catch (SAXException ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
             errors.add(ex.getMessage());
             flagOk = false;
         } catch (OpenXML4JException ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
             errors.add(ex.getMessage());
             flagOk = false;
         } catch (XMLStreamException ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
             errors.add(ex.getMessage());
             flagOk = false;
         }
@@ -324,6 +335,7 @@ public class XlsAnalizerSalesPh {
                                 try {
                                     Double.parseDouble(data[i].trim().equalsIgnoreCase("") ? "0" : data[i]);
                                 } catch (NumberFormatException e) {
+                                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
                                     errors.add("Approximately " + Character.toString((char) (65 + i)) + "" + (rowNum) + " cell in " + sheetName + " sheet have a invalid value [" + data[i] + "], the sheet has been omitted.");
                                     rowNum = 0L;
                                     break;
@@ -354,8 +366,11 @@ public class XlsAnalizerSalesPh {
         RvvdInfoPhDAO infoPhDAO = new RvvdInfoPhDAO();
         Session session = infoPhDAO.getSession();
         SimpleDateFormat formatoDelTexto = new SimpleDateFormat("MM/dd/yyyy");
+        SimpleDateFormat formatoDelTextoGeneral = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat formatoDelTextoInverso = new SimpleDateFormat("yyyyMMdd");
         List<RvvdInfoPh> cargas = new ArrayList<RvvdInfoPh>();
+        Date fechaTemp;
+        Calendar calendarTemp = Calendar.getInstance();
         RvvdInfoPh infoTemp = null;
         String elementName = "row";
         String[] data = null;
@@ -372,8 +387,15 @@ public class XlsAnalizerSalesPh {
                         //primera columna FECHA (STRING O numeric)
                         infoTemp = new RvvdInfoPh();
                         try {
-                            infoTemp.setFecha(data[0] != null && data[0].contains("/") ? formatoDelTexto.parse(data[0]) : new Date(Long.parseLong(data[0])));
+                            fechaTemp = formatoDelTextoGeneral.parse("01/01/1900");
+                            calendarTemp.setTime(fechaTemp);
+                            if (data[0] != null && !data[0].contains("/")) {
+                                calendarTemp.add(Calendar.DAY_OF_YEAR, Integer.parseInt(data[0]) - 2);
+                                fechaTemp = formatoDelTextoGeneral.parse(formatoDelTexto.format(calendarTemp.getTime()));
+                            }
+                            infoTemp.setFecha(data[0] != null && data[0].contains("/") ? formatoDelTexto.parse(data[0]) : fechaTemp);
                         } catch (ParseException ex) {
+                            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
                             errors.add(ex.getMessage());
                         }
 
@@ -435,6 +457,7 @@ public class XlsAnalizerSalesPh {
             session.getTransaction().commit();
             errors.clear();
         } catch (Exception ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
             errors.add(ex.getMessage());
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
@@ -506,4 +529,10 @@ public class XlsAnalizerSalesPh {
         }
         return value;
     }
+
+    @Override
+    public String toString() {
+        return "XlsAnalizerSalesPh{" + "omittedSheets=" + omittedSheets + ", errors=" + errors + '}';
+    }
+
 }

@@ -17,6 +17,10 @@ import javax.servlet.http.HttpSession;
  * @author TMXIDSJPINAM
  */
 public class CheckCatalogs {
+    
+    private CheckCatalogs(){
+        //para que no instancien objetos de este tipo
+    }
 
     /**
      *

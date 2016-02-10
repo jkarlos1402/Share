@@ -37,21 +37,7 @@ public class RvvdReclasifCategoria implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_RECLASIF_CATEGORIA")
     @SequenceGenerator(name = "RVVD_SEQ_RECLASIF_CATEGORIA", sequenceName = "RVVD_SEQ_RECLASIF_CATEGORIA", allocationSize = 1)
     @Column(name = "ID_RECLASIF_CATEGORIA")
-    private Integer idReclasifCategoria;
-
-    /**
-     *
-     */
-    public RvvdReclasifCategoria() {
-    }
-
-    /**
-     *
-     * @param idReclasifCategoria
-     */
-    public RvvdReclasifCategoria(Integer idReclasifCategoria) {
-        this.idReclasifCategoria = idReclasifCategoria;
-    }
+    private Integer idReclasifCategoria;    
 
     /**
      *

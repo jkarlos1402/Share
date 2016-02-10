@@ -41,21 +41,7 @@ public class RvvdReclasifDiasOpTmp implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_RECLASIF_DIAS_OP_TMP")
     @SequenceGenerator(name = "RVVD_SEQ_RECLASIF_DIAS_OP_TMP", sequenceName = "RVVD_SEQ_RECLASIF_DIAS_OP_TMP", allocationSize = 1)
     @Column(name = "ID_RECLASIF_DIAS_OP")
-    private BigDecimal idReclasifDiasOp;
-
-    /**
-     *
-     */
-    public RvvdReclasifDiasOpTmp() {
-    }
-
-    /**
-     *
-     * @param idReclasifDiasOp
-     */
-    public RvvdReclasifDiasOpTmp(BigDecimal idReclasifDiasOp) {
-        this.idReclasifDiasOp = idReclasifDiasOp;
-    }
+    private BigDecimal idReclasifDiasOp;    
 
     /**
      *

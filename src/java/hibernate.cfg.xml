@@ -7,13 +7,13 @@
         <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
         <property name="hibernate.connection.url">jdbc:oracle:thin:@localhost:1521:XE</property>
         <property name="hibernate.connection.username">kofuser</property>
-        <property name="hibernate.connection.password">kofuser</property>
+        <property name="hibernate.connection.password">kofuser</property>  
     
         <!-- <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
         <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
         <property name="hibernate.connection.url">jdbc:oracle:thin:@10.138.3.32:1527:DSE</property>
         <property name="hibernate.connection.username">BOE14DEVHA</property>
-        <property name="hibernate.connection.password">temporal</property>  --> 
+        <property name="hibernate.connection.password">temporal</property>   -->
     
         <!-- <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
         <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
@@ -25,7 +25,7 @@
         <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
         <property name="hibernate.connection.url">jdbc:oracle:thin:@10.138.5.209:1527:DMP</property>
         <property name="hibernate.connection.username">DMPPRD</property> 
-        <property name="hibernate.connection.password">pRD#Dm_P</property>  -->
+        <property name="hibernate.connection.password">pRD#Dm_P</property> -->
         
         <!-- Use the C3P0 connection pool. -->
     

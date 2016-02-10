@@ -3,17 +3,21 @@ package com.femsa.kof.daily.dao;
 import com.femsa.kof.daily.pojos.RvvdCatEmpaque;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 /**
+ * Permite la manipulación del catálogo de empaque
  *
  * @author TMXIDSJPINAM
  */
 public class CatEmpaqueDAO {
 
     private String error;
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
      *
@@ -32,8 +36,9 @@ public class CatEmpaqueDAO {
     }
 
     /**
+     * Obtiene una lista de empaques sin importar su estatus
      *
-     * @return
+     * @return Regresa una lista con la totalidad de empaques
      */
     public List<RvvdCatEmpaque> getEmpaquesAll() {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -45,6 +50,7 @@ public class CatEmpaqueDAO {
             empaques = query.list();
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -56,8 +62,9 @@ public class CatEmpaqueDAO {
     }
 
     /**
+     * Obtiene una lista con los empaques donde el estatus es igual a 1
      *
-     * @return
+     * @return La lista de empaques filtrados
      */
     public List<RvvdCatEmpaque> getEmpaques() {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -69,6 +76,7 @@ public class CatEmpaqueDAO {
             empaques = query.list();
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -80,9 +88,10 @@ public class CatEmpaqueDAO {
     }
 
     /**
+     * Obtiene un empaque en específico
      *
-     * @param id
-     * @return
+     * @param id El identificador del empaque a buscar
+     * @return El empaque buscado, si no existe se regresa nulo
      */
     public RvvdCatEmpaque getEmpaque(Integer id) {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -93,6 +102,7 @@ public class CatEmpaqueDAO {
             empaque = (RvvdCatEmpaque) session.get(RvvdCatEmpaque.class, id);
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -104,9 +114,10 @@ public class CatEmpaqueDAO {
     }
 
     /**
+     * Obtiene un empaque en específico
      *
-     * @param empaque
-     * @return
+     * @param empaque Nombre del empaque a buscar
+     * @return El empaque buscado, si no existe se regresa nulo
      */
     public RvvdCatEmpaque getEmpaque(String empaque) {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -116,11 +127,12 @@ public class CatEmpaqueDAO {
         try {
             Query query = session.createQuery("SELECT e FROM RvvdCatEmpaque e WHERE e.empaqueR = '" + empaque.toUpperCase() + "' OR e.empaqueEn = '" + empaque.toUpperCase() + "'");
             List<RvvdCatEmpaque> empaques = query.list();
-            if (empaques.size() > 0) {
+            if (!empaques.isEmpty()) {
                 empaqueT = empaques.get(0);
             }
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -132,9 +144,11 @@ public class CatEmpaqueDAO {
     }
 
     /**
+     * Guarda o actualiza un empaque
      *
-     * @param empaque
-     * @return
+     * @param empaque El empaque a ser guardado o actualizado
+     * @return En caso de éxito se regresa verdadero, en caso contrario se
+     * regresa falso
      */
     public boolean saveEmpaque(RvvdCatEmpaque empaque) {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -152,6 +166,7 @@ public class CatEmpaqueDAO {
             }
             session.getTransaction().commit();
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();

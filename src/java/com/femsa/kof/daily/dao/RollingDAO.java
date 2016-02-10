@@ -1,13 +1,13 @@
 package com.femsa.kof.daily.dao;
 
 import com.femsa.kof.daily.pojos.RollingDaily;
-import com.femsa.kof.daily.pojos.RvvdDistribucionMx;
 import com.femsa.kof.daily.pojos.RvvdDistribucionMxTmp;
-import com.femsa.kof.daily.pojos.RvvdStRolling;
 import com.femsa.kof.daily.pojos.RvvdStRollingTmp;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -19,6 +19,7 @@ import org.hibernate.SessionFactory;
 public class RollingDAO {
 
     private List<String> errors = new ArrayList<String>();
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
      *
@@ -46,7 +47,7 @@ public class RollingDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query queryNativo = null;
+        Query queryNativo;
         boolean flagOk = true;
         long cont = 0L;
         String pais = "";
@@ -55,11 +56,9 @@ public class RollingDAO {
             for (RollingDaily carga : dailys) {
                 pais = carga.getDiasOperativos().getPais();
                 session.save(carga.getDiasOperativos());
-                if (carga.getStRollings() != null) {
-                    for (RvvdStRollingTmp rolling : carga.getStRollings()) {
-                        session.save(rolling);
-                        cont++;
-                    }
+                for (RvvdStRollingTmp rolling : carga.getStRollings() != null ? carga.getStRollings() : new ArrayList<RvvdStRollingTmp>()) {
+                    session.save(rolling);
+                    cont++;
                 }
                 if (cont % 100 == 0) {
                     session.flush();
@@ -67,15 +66,13 @@ public class RollingDAO {
                 }
                 cont++;
             }
-            if (distribuciones != null) {
-                for (RvvdDistribucionMxTmp carga : distribuciones) {
-                    session.save(carga);
-                    if (cont % 100 == 0) {
-                        session.flush();
-                        session.clear();
-                    }
-                    cont++;
+            for (RvvdDistribucionMxTmp carga : distribuciones) {
+                session.save(carga);
+                if (cont % 100 == 0) {
+                    session.flush();
+                    session.clear();
                 }
+                cont++;
             }
             errors.clear();
             session.getTransaction().commit();
@@ -142,6 +139,7 @@ public class RollingDAO {
                 session.getTransaction().commit();
             }
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             errors.add("Error saving records: " + e.getMessage());
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();

@@ -30,21 +30,7 @@ public class ShareCatFabricante implements Serializable {
     private String fabricante;
     
     @Column(name = "ID_STATUS")
-    private boolean status;
-
-    /**
-     *
-     */
-    public ShareCatFabricante() {
-    }
-
-    /**
-     *
-     * @param pkFabricante
-     */
-    public ShareCatFabricante(Integer pkFabricante) {
-        this.pkFabricante = pkFabricante;
-    }
+    private boolean status;    
 
     /**
      *

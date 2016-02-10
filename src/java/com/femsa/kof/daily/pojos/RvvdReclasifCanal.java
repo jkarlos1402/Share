@@ -38,21 +38,7 @@ public class RvvdReclasifCanal implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_RECLASIF_CANAL")
     @SequenceGenerator(name = "RVVD_SEQ_RECLASIF_CANAL", sequenceName = "RVVD_SEQ_RECLASIF_CANAL", allocationSize = 1)
     @Column(name = "ID_RECLASIF_CANAL")
-    private BigDecimal idReclasifCanal;
-
-    /**
-     *
-     */
-    public RvvdReclasifCanal() {
-    }
-
-    /**
-     *
-     * @param idReclasifCanal
-     */
-    public RvvdReclasifCanal(BigDecimal idReclasifCanal) {
-        this.idReclasifCanal = idReclasifCanal;
-    }
+    private BigDecimal idReclasifCanal;    
 
     /**
      *

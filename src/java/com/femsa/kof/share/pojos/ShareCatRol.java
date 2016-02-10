@@ -23,21 +23,7 @@ public class ShareCatRol implements Serializable {
     private Integer pkRol;
 
     @Column(name = "ROL")
-    private String rol;
-
-    /**
-     *
-     */
-    public ShareCatRol() {
-    }
-
-    /**
-     *
-     * @param pkRol
-     */
-    public ShareCatRol(Integer pkRol) {
-        this.pkRol = pkRol;
-    }
+    private String rol;    
 
     /**
      *

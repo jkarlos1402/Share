@@ -3,6 +3,8 @@ package com.femsa.kof.share.dao;
 import com.femsa.kof.share.pojos.ShareCatGrupoCategorias;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -14,6 +16,7 @@ import org.hibernate.SessionFactory;
 public class ShareCatGrupoCategoriasDAO {
 
     private String error;
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
      *
@@ -45,6 +48,7 @@ public class ShareCatGrupoCategoriasDAO {
             grupos = query.list();
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -68,11 +72,12 @@ public class ShareCatGrupoCategoriasDAO {
         try {
             Query query = session.createQuery("SELECT gc FROM ShareCatGrupoCategorias gc WHERE gc.grupoCategoria = '" + name.toUpperCase() + "'");
             List<ShareCatGrupoCategorias> grupos = query.list();
-            if (grupos.size() > 0) {
+            if (!grupos.isEmpty()) {
                 grupo = grupos.get(0);
             }
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -97,6 +102,7 @@ public class ShareCatGrupoCategoriasDAO {
             grupos = query.list();
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getClass().getName() + " - " + e.getMessage();
         } finally {
             session.flush();
@@ -128,6 +134,7 @@ public class ShareCatGrupoCategoriasDAO {
             }
             session.getTransaction().commit();
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();

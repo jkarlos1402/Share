@@ -34,21 +34,7 @@ public class RvvdCatMarca implements Serializable {
     private String marcaEn;
     
     @Column(name = "STATUS")
-    private boolean status;
-
-    /**
-     *
-     */
-    public RvvdCatMarca() {
-    }
-
-    /**
-     *
-     * @param idMarca
-     */
-    public RvvdCatMarca(Integer idMarca) {
-        this.idMarca = idMarca;
-    }
+    private boolean status;    
 
     /**
      *

@@ -34,21 +34,7 @@ public class RvvdCatEmpaque implements Serializable {
     private String empaqueEn;
     
     @Column(name = "STATUS")
-    private boolean status;
-
-    /**
-     *
-     */
-    public RvvdCatEmpaque() {
-    }
-
-    /**
-     *
-     * @param idEmpaque
-     */
-    public RvvdCatEmpaque(Integer idEmpaque) {
-        this.idEmpaque = idEmpaque;
-    }
+    private boolean status;    
 
     /**
      *

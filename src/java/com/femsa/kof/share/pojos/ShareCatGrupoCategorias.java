@@ -37,21 +37,7 @@ public class ShareCatGrupoCategorias implements Serializable {
     private boolean status;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkGrupoCategoria")
-    private List<ShareCatCategorias> categoriasList;
-
-    /**
-     *
-     */
-    public ShareCatGrupoCategorias() {
-    }
-
-    /**
-     *
-     * @param pkGrupoCategoria
-     */
-    public ShareCatGrupoCategorias(Integer pkGrupoCategoria) {
-        this.pkGrupoCategoria = pkGrupoCategoria;
-    }
+    private List<ShareCatCategorias> categoriasList;    
 
     /**
      *

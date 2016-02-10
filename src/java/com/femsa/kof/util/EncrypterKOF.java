@@ -8,6 +8,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -22,12 +24,14 @@ import javax.crypto.spec.PBEParameterSpec;
  * @author TMXIDSJPINAM
  */
 public class EncrypterKOF {
-    
+
     private Cipher ecipher;
     private Cipher dcipher;
 
     private final String keyEncr = "kofshare5763623";
-    
+
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
+
     /**
      *
      * @param key
@@ -40,11 +44,11 @@ public class EncrypterKOF {
             ecipher.init(Cipher.ENCRYPT_MODE, key);
             dcipher.init(Cipher.DECRYPT_MODE, key);
         } catch (NoSuchPaddingException e) {
-            System.out.println("EXCEPTION: NoSuchPaddingException");
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
         } catch (NoSuchAlgorithmException e) {
-            System.out.println("EXCEPTION: NoSuchAlgorithmException");
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
         } catch (InvalidKeyException e) {
-            System.out.println("EXCEPTION: InvalidKeyException");
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
         }
     }
 
@@ -55,8 +59,8 @@ public class EncrypterKOF {
 
         // 8-bytes Salt
         byte[] salt = {
-            (byte)0xA9, (byte)0x9B, (byte)0xC8, (byte)0x32,
-            (byte)0x56, (byte)0x34, (byte)0xE3, (byte)0x03
+            (byte) 0xA9, (byte) 0x9B, (byte) 0xC8, (byte) 0x32,
+            (byte) 0x56, (byte) 0x34, (byte) 0xE3, (byte) 0x03
         };
 
         // Iteration count
@@ -77,15 +81,15 @@ public class EncrypterKOF {
             dcipher.init(Cipher.DECRYPT_MODE, key, paramSpec);
 
         } catch (InvalidAlgorithmParameterException e) {
-            System.out.println("EXCEPTION: InvalidAlgorithmParameterException");
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
         } catch (InvalidKeySpecException e) {
-            System.out.println("EXCEPTION: InvalidKeySpecException");
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
         } catch (NoSuchPaddingException e) {
-            System.out.println("EXCEPTION: NoSuchPaddingException");
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
         } catch (NoSuchAlgorithmException e) {
-            System.out.println("EXCEPTION: NoSuchAlgorithmException");
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
         } catch (InvalidKeyException e) {
-            System.out.println("EXCEPTION: InvalidKeyException");
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
         }
     }
 
@@ -106,9 +110,13 @@ public class EncrypterKOF {
             return new sun.misc.BASE64Encoder().encode(enc);
 
         } catch (BadPaddingException e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
         } catch (IllegalBlockSizeException e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
         } catch (UnsupportedEncodingException e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
         } catch (IOException e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
         }
         return null;
     }
@@ -132,12 +140,15 @@ public class EncrypterKOF {
             return new String(utf8, "UTF8");
 
         } catch (BadPaddingException e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
         } catch (IllegalBlockSizeException e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
         } catch (UnsupportedEncodingException e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
         } catch (IOException e) {
-        } catch(Exception e){
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
         }
         return null;
     }
-    
+
 }

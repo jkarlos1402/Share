@@ -45,21 +45,7 @@ public class Rvvd445PhTmp implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_445_PH_TMP")
     @SequenceGenerator(name = "RVVD_SEQ_445_PH_TMP", sequenceName = "RVVD_SEQ_445_PH_TMP", allocationSize = 1)
     @Column(name = "ID_445_PH")
-    private BigDecimal id445Ph;
-
-    /**
-     *
-     */
-    public Rvvd445PhTmp() {
-    }
-
-    /**
-     *
-     * @param id445Ph
-     */
-    public Rvvd445PhTmp(BigDecimal id445Ph) {
-        this.id445Ph = id445Ph;
-    }
+    private BigDecimal id445Ph;    
 
     /**
      *

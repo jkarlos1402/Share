@@ -116,7 +116,7 @@ public class MainBean implements Serializable {
      * @param proyecto
      */
     public void setPage(String page, String catalog, String proyecto) {
-        if (!proyecto.equalsIgnoreCase("")) {
+        if (!"".equalsIgnoreCase(proyecto)) {
             this.page = "/WEB-INF/pages/" + proyecto + "/" + page + ".xhtml";
             this.catalog = catalog;
         } else {
@@ -151,7 +151,7 @@ public class MainBean implements Serializable {
      *
      */
     public void saveUser() {
-        FacesMessage message = null;
+        FacesMessage message;
         ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         session.setAttribute("first_session_user", false);

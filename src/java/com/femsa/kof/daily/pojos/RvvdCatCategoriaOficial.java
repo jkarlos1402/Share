@@ -39,21 +39,7 @@ public class RvvdCatCategoriaOficial implements Serializable {
     private List<RvvdCatCategoria> rvvdCatCategoriaList;
     
     @Column(name = "STATUS")
-    private boolean status;
-
-    /**
-     *
-     */
-    public RvvdCatCategoriaOficial() {
-    }
-
-    /**
-     *
-     * @param idCategoriaOficial
-     */
-    public RvvdCatCategoriaOficial(Integer idCategoriaOficial) {
-        this.idCategoriaOficial = idCategoriaOficial;
-    }
+    private boolean status;    
 
     /**
      *

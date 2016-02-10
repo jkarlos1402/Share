@@ -6,6 +6,8 @@ import com.femsa.kof.share.pojos.ShareUsuario;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -17,6 +19,7 @@ import org.hibernate.SessionFactory;
 public class ShareTmpAllInfoCargaDAO {
 
     List<String> errors = new ArrayList<String>();
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
      *
@@ -29,14 +32,14 @@ public class ShareTmpAllInfoCargaDAO {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query queryNativo = null;
+        Query queryNativo;
         boolean flagOk = true;
         long cont = 0L;
         try {
             session.beginTransaction();
             for (ShareTmpAllInfoCarga carga : listCarga) {
                 session.save(carga);
-                if(cont % 100 == 0){
+                if (cont % 100 == 0) {
                     session.flush();
                     session.clear();
                 }
@@ -64,7 +67,8 @@ public class ShareTmpAllInfoCargaDAO {
             queryNativo.executeUpdate();
             session.getTransaction().commit();
             errors.clear();
-        } catch (Exception e) {            
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             errors.add("Error saving records: " + e.getMessage());
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
@@ -94,6 +98,5 @@ public class ShareTmpAllInfoCargaDAO {
     public void setErrors(List<String> errors) {
         this.errors = errors;
     }
-    
-    
+
 }

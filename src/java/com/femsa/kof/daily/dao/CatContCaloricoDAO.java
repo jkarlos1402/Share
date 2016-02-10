@@ -3,17 +3,21 @@ package com.femsa.kof.daily.dao;
 import com.femsa.kof.daily.pojos.RvvdCatContenidoCalorico;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 /**
+ * Permite la manipulacion de el catálogo de contenidos calóricos
  *
  * @author TMXIDSJPINAM
  */
 public class CatContCaloricoDAO {
 
     private String error;
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
      *
@@ -32,8 +36,9 @@ public class CatContCaloricoDAO {
     }
 
     /**
+     * Obtiene una lista con los contenidos calóricos sin importar su estatus
      *
-     * @return
+     * @return Regresa una lista con la totalidad de contenidos calóricos
      */
     public List<RvvdCatContenidoCalorico> getContsCalAll() {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -45,6 +50,7 @@ public class CatContCaloricoDAO {
             contenidos = query.list();
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -56,8 +62,9 @@ public class CatContCaloricoDAO {
     }
 
     /**
+     * Obtiene una lista de contenidos calóricos donde el estatus es igual a 1
      *
-     * @return
+     * @return Regresa una lista con los contenidos calóricos filtrados
      */
     public List<RvvdCatContenidoCalorico> getContsCal() {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -69,6 +76,7 @@ public class CatContCaloricoDAO {
             contenidos = query.list();
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -80,9 +88,11 @@ public class CatContCaloricoDAO {
     }
 
     /**
+     * Obtiene un contenido calórico en específico
      *
-     * @param id
-     * @return
+     * @param id El identificador del contenido calórico
+     * @return EL contenido calórico buscado, en caso de no existir se regresa
+     * nulo
      */
     public RvvdCatContenidoCalorico getContCal(Integer id) {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -93,6 +103,7 @@ public class CatContCaloricoDAO {
             contenido = (RvvdCatContenidoCalorico) session.get(RvvdCatContenidoCalorico.class, id);
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -108,9 +119,11 @@ public class CatContCaloricoDAO {
     }
 
     /**
+     * Obtiene un contenido calórico en específico
      *
-     * @param contenido
-     * @return
+     * @param contenido El nombre del contenido calórico a buscar
+     * @return El contenido calórico buscado, en caso de no existir se regresa
+     * nulo
      */
     public RvvdCatContenidoCalorico getContCal(String contenido) {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -121,11 +134,12 @@ public class CatContCaloricoDAO {
             Query query = session.createQuery("SELECT cc FROM RvvdCatContenidoCalorico cc WHERE cc.contenidoCaloricoR = '" + contenido.toUpperCase() + "' OR cc.contenidoCaloricoEn = '" + contenido.toUpperCase() + "'");
             List<RvvdCatContenidoCalorico> contenidos = query.list();
 
-            if (contenidos.size() > 0) {
+            if (!contenidos.isEmpty()) {
                 contenidoT = contenidos.get(0);
             }
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -137,9 +151,11 @@ public class CatContCaloricoDAO {
     }
 
     /**
+     * Guarda o actualiza un contenido calórico
      *
-     * @param contenido
-     * @return
+     * @param contenido El contenido calórico a guardar o actualizar
+     * @return En caso de éxito regresa verdadero, en caso contrario regresa
+     * falso y el error es almacenado en el atributo error
      */
     public boolean saveContCal(RvvdCatContenidoCalorico contenido) {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -157,6 +173,7 @@ public class CatContCaloricoDAO {
             }
             session.getTransaction().commit();
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();

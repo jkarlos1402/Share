@@ -18,7 +18,7 @@ public class AttrSessionListenerKOF implements HttpSessionAttributeListener {
      */
     @Override
     public void attributeAdded(HttpSessionBindingEvent event) {
-        if (event.getName().equalsIgnoreCase("session_user")) {           
+        if ("session_user".equalsIgnoreCase(event.getName())) {           
             CheckCatalogs.checkAllCatalogs();            
         }        
     }
@@ -28,7 +28,8 @@ public class AttrSessionListenerKOF implements HttpSessionAttributeListener {
      * @param event
      */
     @Override
-    public void attributeRemoved(HttpSessionBindingEvent event) {        
+    public void attributeRemoved(HttpSessionBindingEvent event) { 
+        //comentario
     }
 
     /**
@@ -37,6 +38,6 @@ public class AttrSessionListenerKOF implements HttpSessionAttributeListener {
      */
     @Override
     public void attributeReplaced(HttpSessionBindingEvent event) {
-
+        //comentario
     }
 }

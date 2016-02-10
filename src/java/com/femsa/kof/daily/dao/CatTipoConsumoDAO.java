@@ -3,17 +3,21 @@ package com.femsa.kof.daily.dao;
 import com.femsa.kof.daily.pojos.RvvdCatTipoConsumo;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 /**
+ * Permite la manipulación del catálogo de tipo de consumo
  *
  * @author TMXIDSJPINAM
  */
 public class CatTipoConsumoDAO {
 
     private String error;
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
      *
@@ -32,8 +36,9 @@ public class CatTipoConsumoDAO {
     }
 
     /**
+     * Obtiene los tipos de consumo sin importar su estatus
      *
-     * @return
+     * @return Regresa una lista con los tipos de consumo sin filtrar
      */
     public List<RvvdCatTipoConsumo> getTiposConsumoAll() {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -45,6 +50,7 @@ public class CatTipoConsumoDAO {
             tiposConsumo = query.list();
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -56,8 +62,9 @@ public class CatTipoConsumoDAO {
     }
 
     /**
+     * Obtiene los tipos de consumo donde el estaus es igual a 1
      *
-     * @return
+     * @return Regresa una lista con los tipos de consumo filtrados
      */
     public List<RvvdCatTipoConsumo> getTiposConsumo() {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -69,6 +76,7 @@ public class CatTipoConsumoDAO {
             tiposConsumo = query.list();
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -80,9 +88,10 @@ public class CatTipoConsumoDAO {
     }
 
     /**
+     * Obtiene un tipo de consumo en específico
      *
-     * @param id
-     * @return
+     * @param id El identificador del tipo de consumo a buscar
+     * @return El tipo de consumo buscado, en caso de no existir se regresa nulo
      */
     public RvvdCatTipoConsumo getTipoConsumo(Integer id) {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -93,6 +102,7 @@ public class CatTipoConsumoDAO {
             tipoConsumo = (RvvdCatTipoConsumo) session.get(RvvdCatTipoConsumo.class, id);
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -104,9 +114,10 @@ public class CatTipoConsumoDAO {
     }
 
     /**
+     * Obtiene un tipo de consumo en específico
      *
-     * @param tipoConsumo
-     * @return
+     * @param tipoConsumo El nombre del tipo de consumo a buscar
+     * @return El tipo de consumo buscado, en caso de no existir se regresa nulo
      */
     public RvvdCatTipoConsumo getTipoConsumo(String tipoConsumo) {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -116,11 +127,12 @@ public class CatTipoConsumoDAO {
         try {
             Query query = session.createQuery("SELECT tc FROM RvvdCatTipoConsumo tc WHERE tc.tipoConsumoR = '" + tipoConsumo.toUpperCase() + "' OR tc.tipoConsumoEn = '" + tipoConsumo.toUpperCase() + "'");
             List<RvvdCatTipoConsumo> tiposConsumo = query.list();
-            if (tiposConsumo.size() > 0) {
+            if (!tiposConsumo.isEmpty()) {
                 tipoConsumoT = tiposConsumo.get(0);
             }
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -132,9 +144,11 @@ public class CatTipoConsumoDAO {
     }
 
     /**
+     * Guarda o actualiza un tipo de consumo
      *
-     * @param tipoConsumo
-     * @return
+     * @param tipoConsumo El tipo de consumo a guardar o actualizar
+     * @return En caso de éxito se regresa verdadero, de lo contrario se regresa
+     * falso y el error es almacenado en el atributo error
      */
     public boolean saveTipoConsumo(RvvdCatTipoConsumo tipoConsumo) {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -152,6 +166,7 @@ public class CatTipoConsumoDAO {
             }
             session.getTransaction().commit();
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();

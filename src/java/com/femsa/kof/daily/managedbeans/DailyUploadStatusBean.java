@@ -18,13 +18,7 @@ public class DailyUploadStatusBean implements Serializable {
     
     private List<Record> cargasSession = new ArrayList<Record>();
     private SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
-
-    /**
-     *
-     */
-    public DailyUploadStatusBean() {
-    }
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");    
 
     /**
      *

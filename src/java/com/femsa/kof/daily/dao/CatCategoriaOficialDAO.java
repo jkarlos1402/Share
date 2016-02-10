@@ -3,17 +3,21 @@ package com.femsa.kof.daily.dao;
 import com.femsa.kof.daily.pojos.RvvdCatCategoriaOficial;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 /**
+ * Permite la manipulacion de las categorias oficiales
  *
  * @author TMXIDSJPINAM
  */
 public class CatCategoriaOficialDAO {
 
     private String error;
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
      *
@@ -32,8 +36,9 @@ public class CatCategoriaOficialDAO {
     }
 
     /**
+     * Obtiene una lista con las categorias oficiales sin importar su estaus
      *
-     * @return
+     * @return Regresa una lista con la totalidad de categorias oficiales
      */
     public List<RvvdCatCategoriaOficial> getCategoriasOficialesAll() {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -45,6 +50,7 @@ public class CatCategoriaOficialDAO {
             categoriasOficiales = query.list();
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -56,8 +62,9 @@ public class CatCategoriaOficialDAO {
     }
 
     /**
+     * Obtiene las categorias oficiales donde el estatus es 1
      *
-     * @return
+     * @return Regresa una lista con las categorias oficiales filtradas
      */
     public List<RvvdCatCategoriaOficial> getCategoriasOficiales() {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -69,6 +76,7 @@ public class CatCategoriaOficialDAO {
             categoriasOficiales = query.list();
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -80,9 +88,11 @@ public class CatCategoriaOficialDAO {
     }
 
     /**
+     * Obtiene una categoria oficial en específico
      *
-     * @param id
-     * @return
+     * @param id El identificador de la categoria oficial a buscar
+     * @return La categoria oficial buscada, en caso de no existir se regresa
+     * nulo
      */
     public RvvdCatCategoriaOficial getCategoriaOficial(Integer id) {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -93,6 +103,7 @@ public class CatCategoriaOficialDAO {
             categOficial = (RvvdCatCategoriaOficial) session.get(RvvdCatCategoriaOficial.class, id);
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -104,9 +115,11 @@ public class CatCategoriaOficialDAO {
     }
 
     /**
+     * Obtiene una categoria oficial en específico
      *
-     * @param categoria
-     * @return
+     * @param categoria El nombre de la categoria oficial a buscar
+     * @return La categoria oficial buscada, en caso de no existir se regresa
+     * nulo
      */
     public RvvdCatCategoriaOficial getCategoriaOficial(String categoria) {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -116,11 +129,12 @@ public class CatCategoriaOficialDAO {
         try {
             Query query = session.createQuery("SELECT co FROM RvvdCatCategoriaOficial co WHERE co.categoriaOficial = '" + categoria.toUpperCase() + "' OR co.categoriaOficialEn = '" + categoria.toUpperCase() + "'");
             List<RvvdCatCategoriaOficial> categoriasOficiales = query.list();
-            if (categoriasOficiales.size() > 0) {
+            if (!categoriasOficiales.isEmpty()) {
                 categOficial = categoriasOficiales.get(0);
             }
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -132,9 +146,12 @@ public class CatCategoriaOficialDAO {
     }
 
     /**
+     * Guarda o actuliza una categoria oficial
      *
-     * @param catCategoriaOficial
-     * @return
+     * @param catCategoriaOficial La categoria oficial a ser guardada o
+     * actualizada
+     * @return En caso de éxito se regresa verdadero, en caso oontrario se
+     * regresa falso y el error es almacenado en el atributo error
      */
     public boolean saveCategoriaOficial(RvvdCatCategoriaOficial catCategoriaOficial) {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -152,6 +169,7 @@ public class CatCategoriaOficialDAO {
             }
             session.getTransaction().commit();
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();

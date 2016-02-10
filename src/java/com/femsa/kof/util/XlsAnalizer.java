@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -33,6 +35,7 @@ public class XlsAnalizer {
     private final String[] mesesIng = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
     private final String[] mesesPort = {"JAN", "FEV", "MAR", "APR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"};
 
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
     /**
      * Constructor sin parámetros que inicializa los atributos necesarios para
      * el manejo de un archivo de excel correspondiente a Share
@@ -103,16 +106,15 @@ public class XlsAnalizer {
      */
     public List<ShareTmpAllInfoCarga> analizeXls(UploadedFile file, ShareCatPais catPais, ShareUsuario usuario) {
         List<ShareTmpAllInfoCarga> cargas = new ArrayList<ShareTmpAllInfoCarga>();
-        Workbook excelXLS = null;
+        Workbook excelXLS;
         try {
             String extension = getExtension(file.getFileName());
-            Iterator<Row> rowIterator = null;
+            Iterator<Row> rowIterator;
 
-            ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
-            Iterator<Sheet> sheets = null;
+            ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();           
             if (extension.equalsIgnoreCase("xlsx")) {
                 excelXLS = new XSSFWorkbook(file.getInputstream());
-            } else if (extension.equalsIgnoreCase("xls")) {
+            } else {
                 excelXLS = new HSSFWorkbook(file.getInputstream());
             }
             int numberOfSheets = excelXLS.getNumberOfSheets();
@@ -131,7 +133,7 @@ public class XlsAnalizer {
                         }
                     }
                 }
-                List<ShareTmpAllInfoCarga> objsToAdd = null;
+                List<ShareTmpAllInfoCarga> objsToAdd;
                 if (categoria != null) {
                     objsToAdd = this.analizeSheet(rowIterator, categoria, catPais, usuario, sheet.getSheetName());
                     if (objsToAdd != null) {
@@ -148,11 +150,12 @@ public class XlsAnalizer {
 
             }
         } catch (IOException ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
         } finally {
             try {
-                file.getInputstream().close();
-                file = null;
+                file.getInputstream().close();               
             } catch (IOException ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
             }
         }
         return cargas;
@@ -173,15 +176,15 @@ public class XlsAnalizer {
      */
     public List<ShareTmpAllInfoCarga> analizeSheet(Iterator<Row> rowIterator, ShareCatCategorias categoria, ShareCatPais catPais, ShareUsuario usuario, String sheetName) {
         int numRow = 0;
-        int numCell = 0;
-        int indexFecha = 0;
+        int numCell;
+        int indexFecha;
         double valueCargaTmp;
         double valueCargaTmp2;
         double valueCellDef;
         boolean flagVolume = false;
         boolean flagValue = false;
         String[] fechasTmp;
-        String year = "";
+        String year;
         List<ShareTmpAllInfoCarga> cargas = new ArrayList<ShareTmpAllInfoCarga>();
         List<String> fechas = new ArrayList<String>();
         List<Integer> indexCellBimestral = new ArrayList<Integer>();
@@ -197,7 +200,7 @@ public class XlsAnalizer {
             Iterator<Cell> cellIterator = row.cellIterator();
             while (cellIterator.hasNext()) {
                 Cell cell = cellIterator.next();
-                int finAnho = 0;
+                int finAnho;
                 switch (cell.getCellType()) {
                     case Cell.CELL_TYPE_STRING:
                         if (!cell.getStringCellValue().trim().equals("") && numRow == 0 || (numRow == 1 && numCell > 2)) {

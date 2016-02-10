@@ -34,21 +34,7 @@ public class RvvdCatCanal implements Serializable {
     private String canalEn;
 
     @Column(name = "STATUS")
-    private boolean status;
-
-    /**
-     *
-     */
-    public RvvdCatCanal() {
-    }
-
-    /**
-     *
-     * @param idCanal
-     */
-    public RvvdCatCanal(Integer idCanal) {
-        this.idCanal = idCanal;
-    }
+    private boolean status;    
 
     /**
      *

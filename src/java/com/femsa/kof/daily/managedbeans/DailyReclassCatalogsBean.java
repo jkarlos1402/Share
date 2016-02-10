@@ -526,9 +526,9 @@ public class DailyReclassCatalogsBean implements Serializable {
      *
      */
     public void saveCategoriasReclasificadas() {
-        FacesMessage message = null;
+        FacesMessage message;
         ReclasifCategoriaDAO reclasifCategoriaDAO = new ReclasifCategoriaDAO();
-        if (reclasifCategoriaDAO.saveReclasifCategorias(categoriasReclasificadas)) {
+        if (reclasifCategoriaDAO.saveReclasifCategorias(categoriasReclasificadas != null ? categoriasReclasificadas : new ArrayList<RvvdReclasifCategoria>())) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Reclassified categories saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Reclassified categories, " + reclasifCategoriaDAO.getError());
@@ -562,9 +562,9 @@ public class DailyReclassCatalogsBean implements Serializable {
      *
      */
     public void saveCanalesReclasificados() {
-        FacesMessage message = null;
+        FacesMessage message;
         ReclasifCanalDAO reclasifCanalDAO = new ReclasifCanalDAO();
-        if (reclasifCanalDAO.saveReclasifCanales(canalesReclasificados)) {
+        if (reclasifCanalDAO.saveReclasifCanales(canalesReclasificados != null ? canalesReclasificados :  new ArrayList<RvvdReclasifCanal>())) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Reclassified channels saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Reclassified channels, " + reclasifCanalDAO.getError());
@@ -601,9 +601,9 @@ public class DailyReclassCatalogsBean implements Serializable {
      *
      */
     public void saveEmpaquesReclasificados() {
-        FacesMessage message = null;
+        FacesMessage message;
         ReclasifEmpaqueDAO reclasifEmpaqueDAO = new ReclasifEmpaqueDAO();
-        if (reclasifEmpaqueDAO.saveReclasifEmpaques(empaquesReclasificados)) {
+        if (reclasifEmpaqueDAO.saveReclasifEmpaques(empaquesReclasificados != null ? empaquesReclasificados : new ArrayList<RvvdReclasifEmpaque>())) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Reclassified packaging saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Reclassified packaging, " + reclasifEmpaqueDAO.getError());
@@ -640,9 +640,9 @@ public class DailyReclassCatalogsBean implements Serializable {
      *
      */
     public void saveMarcasReclasificados() {
-        FacesMessage message = null;
+        FacesMessage message;
         ReclasifMarcaDAO  reclasifMarcaDAO = new ReclasifMarcaDAO();
-        if (reclasifMarcaDAO.saveReclasifMarcas(marcasReclasificados)) {
+        if (reclasifMarcaDAO.saveReclasifMarcas(marcasReclasificados != null ? marcasReclasificados : new ArrayList<RvvdReclasifMarca>())) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Reclassified Trademarks saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Reclassified Trademarks, " + reclasifMarcaDAO.getError());
@@ -679,25 +679,15 @@ public class DailyReclassCatalogsBean implements Serializable {
      *
      */
     public void saveGecsReclasificados() {
-        FacesMessage message = null;
+        FacesMessage message;
         ReclasifGecDAO reclasifGecDAO = new ReclasifGecDAO();
-        if (reclasifGecDAO.saveReclasifUnGec(gecsReclasificados)) {
+        if (reclasifGecDAO.saveReclasifUnGec(gecsReclasificados != null ? gecsReclasificados : new ArrayList<RvvdReclasifUnGec>())) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Reclassified client types saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Reclassified client types, " + reclasifGecDAO.getError());
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
-    }
-    
-    /**
-     *
-     * @param event
-     */
-    public void onRowEditDias(RowEditEvent event) {
-        System.out.println(event.getObject().toString());
-        System.out.println(((RvvdReclasifDiasOp)event.getObject()).getFecha());
-        System.out.println(((RvvdReclasifDiasOp)event.getObject()).getFechaR());
-    }
+    }        
     
     /**
      *
@@ -714,9 +704,9 @@ public class DailyReclassCatalogsBean implements Serializable {
      *
      */
     public void saveDiasOpReclasificados() {
-        FacesMessage message = null;
+        FacesMessage message;
         ReclasifDiasOpDAO diasOpDAO = new ReclasifDiasOpDAO();
-        if (diasOpDAO.saveReclasifDiasOp(diasOpReclasificados)) {
+        if (diasOpDAO.saveReclasifDiasOp(diasOpReclasificados != null ? diasOpReclasificados : new ArrayList<RvvdReclasifDiasOp>())) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Operative days saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Reclassified Operative days, " + diasOpDAO.getError());

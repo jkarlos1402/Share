@@ -1,6 +1,5 @@
 package com.femsa.kof.util;
 
-import com.femsa.kof.daily.pojos.Rvvd445Ph;
 import com.femsa.kof.daily.pojos.Rvvd445PhTmp;
 import com.femsa.kof.share.pojos.ShareCatPais;
 import com.femsa.kof.share.pojos.ShareUsuario;
@@ -11,8 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -33,6 +32,8 @@ public class XlsAnalizerDiasOpPh {
     private List<String> loadedSheets;
     private List<String> errors;
     private List<Rvvd445PhTmp> cargasDiasPh = new ArrayList<Rvvd445PhTmp>();
+    
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
      * Constructor sin parámetros que inicializa los atributos necesarios para
@@ -143,11 +144,13 @@ public class XlsAnalizerDiasOpPh {
                 }
             }
         } catch (IOException ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
         } finally {
             try {
                 file.getInputstream().close();
                 file = null;
             } catch (IOException ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
             }
         }
     }
@@ -189,6 +192,7 @@ public class XlsAnalizerDiasOpPh {
                         try {
                             diaOpTemp.setFecha(formatoDelTexto.parse(cell.getStringCellValue().trim()));
                         } catch (ParseException ex) {
+                            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
                             errors.add("Approximately " + Character.toString((char) (65 + 1)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
                             cargas = null;
                             break;
@@ -229,6 +233,7 @@ public class XlsAnalizerDiasOpPh {
                         try {
                             diaOpTemp.setFechaAa(formatoDelTexto.parse(cell.getStringCellValue().trim()));
                         } catch (ParseException ex) {
+                            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
                             errors.add("Approximately " + Character.toString((char) (65 + 3)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
                             cargas = null;
                             break;

@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -24,6 +26,7 @@ public class ShareScriptBean implements Serializable {
     private ScriptKOF scriptSelected;
     private String scriptText;
     List<String> errors = new ArrayList<String>();
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
     
     /**
      *
@@ -41,6 +44,7 @@ public class ShareScriptBean implements Serializable {
             try {
                 scriptText = scriptSelected.getTextScript();
             } catch (IOException ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
                 errors.add(ex.getMessage());
             }
         }
@@ -115,6 +119,7 @@ public class ShareScriptBean implements Serializable {
                     errors.add("Error: There was a error while saving the script");
                 }
             } catch (IOException ioe) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ioe);
                 message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the script");
                 errors.add("Error: " + ioe.getMessage());
             }

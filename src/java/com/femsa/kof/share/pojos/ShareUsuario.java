@@ -83,33 +83,7 @@ public class ShareUsuario implements Serializable {
     @JoinTable(name = "SHARE_USUARIO_PROYECTO", joinColumns = {
         @JoinColumn(name = "ID_USER")}, inverseJoinColumns = {
         @JoinColumn(name = "ID_PROYECTO")})
-    private List<ShareCatProyecto> proyectos = new ArrayList<ShareCatProyecto>();
-
-    /**
-     *
-     */
-    public ShareUsuario() {
-    }
-
-    /**
-     *
-     * @param pkUsuario
-     */
-    public ShareUsuario(Integer pkUsuario) {
-        this.pkUsuario = pkUsuario;
-    }
-
-    /**
-     *
-     * @param pkUsuario
-     * @param usuario
-     * @param password
-     */
-    public ShareUsuario(Integer pkUsuario, String usuario, String password) {
-        this.pkUsuario = pkUsuario;
-        this.usuario = usuario;
-        this.password = password;
-    }
+    private List<ShareCatProyecto> proyectos = new ArrayList<ShareCatProyecto>();    
 
     /**
      *

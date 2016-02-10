@@ -20,13 +20,7 @@ import javax.servlet.http.HttpSession;
  * @author TMXIDSJPINAM
  */
 @WebFilter(filterName = "AccessFilter", urlPatterns = {"/faces/index.xhtml", "/faces/main.xhtml"}, dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ERROR, DispatcherType.INCLUDE})
-public class AccessFilter implements Filter {
-
-    /**
-     *
-     */
-    public AccessFilter() {
-    }
+public class AccessFilter implements Filter {  
 
     /**
      *
@@ -51,7 +45,7 @@ public class AccessFilter implements Filter {
         if (usuario != null && usuario.getPkUsuario() != null && !url.contains("main.xhtml")) {
             RequestDispatcher rd = request.getRequestDispatcher("main.xhtml");
             rd.forward(request, response);
-        } else if (usuario == null && url.contains("main.xhtml") && req.getMethod().equalsIgnoreCase("get")) {
+        } else if (usuario == null && url.contains("main.xhtml") && "get".equalsIgnoreCase(req.getMethod())) {
             res.sendError(404);
         } else {
             chain.doFilter(request, response);
@@ -65,7 +59,7 @@ public class AccessFilter implements Filter {
      */
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-
+        // comentario
     }
 
     /**
@@ -73,7 +67,7 @@ public class AccessFilter implements Filter {
      */
     @Override
     public void destroy() {
-
+         // comentario
     }
 
 }

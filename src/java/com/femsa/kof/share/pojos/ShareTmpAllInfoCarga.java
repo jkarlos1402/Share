@@ -48,21 +48,7 @@ public class ShareTmpAllInfoCarga implements Serializable {
     private BigInteger pkInfoCarga;
     
     @Column(name = "FK_USUARIO")
-    private Integer fkUsuario;
-
-    /**
-     *
-     */
-    public ShareTmpAllInfoCarga() {
-    }
-
-    /**
-     *
-     * @param pkInfoCarga
-     */
-    public ShareTmpAllInfoCarga(BigInteger pkInfoCarga) {
-        this.pkInfoCarga = pkInfoCarga;
-    }
+    private Integer fkUsuario;    
 
     /**
      *

@@ -41,21 +41,7 @@ public class RvvdCatUnidadNegocio implements Serializable {
     private boolean status;
 
     @OneToMany(mappedBy = "idUnidadNegocio",fetch = FetchType.EAGER)
-    private List<RvvdCatGec> rvvdCatGecList;
-
-    /**
-     *
-     */
-    public RvvdCatUnidadNegocio() {
-    }
-
-    /**
-     *
-     * @param idUnidadNegocio
-     */
-    public RvvdCatUnidadNegocio(Integer idUnidadNegocio) {
-        this.idUnidadNegocio = idUnidadNegocio;
-    }
+    private List<RvvdCatGec> rvvdCatGecList;    
 
     /**
      *

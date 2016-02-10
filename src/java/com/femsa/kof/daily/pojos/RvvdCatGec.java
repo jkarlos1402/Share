@@ -43,21 +43,7 @@ public class RvvdCatGec implements Serializable {
     private String gecEn;
 
     @Column(name = "STATUS")
-    private boolean status;
-
-    /**
-     *
-     */
-    public RvvdCatGec() {
-    }
-
-    /**
-     *
-     * @param idGec
-     */
-    public RvvdCatGec(Integer idGec) {
-        this.idGec = idGec;
-    }
+    private boolean status;   
 
     /**
      *

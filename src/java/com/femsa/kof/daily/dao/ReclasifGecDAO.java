@@ -5,17 +5,21 @@ import com.femsa.kof.daily.util.CheckCatalogs;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 /**
+ * Permite la reclasificacion del catálogo de tipo de cliente
  *
  * @author TMXIDSJPINAM
  */
 public class ReclasifGecDAO {
 
     private String error;
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
      *
@@ -34,9 +38,12 @@ public class ReclasifGecDAO {
     }
 
     /**
+     * Obtiene los tipos de cliente reclasificados y sin reclasificar por parte
+     * del usuario
      *
-     * @param usuario
-     * @return
+     * @param usuario El usuario correspondiente
+     * @return Regresa una lista de tipos de clientes reclasificados y sin
+     * reclasificar por parte del usuario
      */
     public List<RvvdReclasifUnGec> getReclasifUnGecAll(ShareUsuario usuario) {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -56,6 +63,7 @@ public class ReclasifGecDAO {
             unGecs = query.list();
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();
@@ -67,9 +75,12 @@ public class ReclasifGecDAO {
     }
 
     /**
+     * Actualiza la lista de tipos de clientes reclasificados por parte del
+     * usuario
      *
-     * @param unGecs
-     * @return
+     * @param unGecs La lista de tipos de clientes reclasificados por el cliente
+     * @return En caso de éxito se regresa verdadero, de lo contrario se regresa
+     * falso y el error es almacenado en el atributo error
      */
     public boolean saveReclasifUnGec(List<RvvdReclasifUnGec> unGecs) {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -79,20 +90,19 @@ public class ReclasifGecDAO {
         long cont = 0L;
         try {
             session.beginTransaction();
-            if (unGecs != null) {
-                for (RvvdReclasifUnGec unGec : unGecs) {
-                    session.update(unGec);
-                    if (cont % 100 == 0) {
-                        session.flush();
-                        session.clear();
-                    }
-                    cont++;
+            for (RvvdReclasifUnGec unGec : unGecs) {
+                session.update(unGec);
+                if (cont % 100 == 0) {
+                    session.flush();
+                    session.clear();
                 }
-                error = null;
+                cont++;
             }
+            error = null;
             session.getTransaction().commit();
             CheckCatalogs.checkAllCatalogs();
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
@@ -108,9 +118,11 @@ public class ReclasifGecDAO {
     }
 
     /**
+     * Obtiene el número de tipos de cliente sin reclasificar por el usuario
      *
-     * @param usuario
-     * @return
+     * @param usuario El usuario correspondiente
+     * @return Regresa el número de tipos de cliente sin reclasificar por el
+     * usuario
      */
     public long checkReclasifUnGec(ShareUsuario usuario) {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -131,6 +143,7 @@ public class ReclasifGecDAO {
             numNotReclass = (Long) res.get(0);
             error = null;
         } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getMessage();
         } finally {
             session.flush();

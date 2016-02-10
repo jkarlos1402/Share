@@ -5,7 +5,6 @@ import com.femsa.kof.daily.dao.Rvvd445PhDAO;
 import com.femsa.kof.daily.pojos.RollingDaily;
 import com.femsa.kof.daily.pojos.Rvvd445Ph;
 import com.femsa.kof.daily.pojos.Rvvd445PhTmp;
-import com.femsa.kof.daily.pojos.RvvdDistribucionMx;
 import com.femsa.kof.daily.pojos.RvvdDistribucionMxTmp;
 import com.femsa.kof.daily.pojos.RvvdInfoPh;
 import com.femsa.kof.share.pojos.ShareCatPais;
@@ -16,13 +15,12 @@ import com.femsa.kof.util.XlsAnalizerDiasOpPh;
 import com.femsa.kof.util.XlsAnalizerSalesPh;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -40,7 +38,7 @@ import org.primefaces.model.UploadedFile;
  */
 @ManagedBean(name = "dailyLoadBean")
 @SessionScoped
-public class DailyLoadBean implements Serializable {
+public class DailyLoadBean {
 
     private List<RollingDaily> listInfoCargaRolling;
     private List<Rvvd445PhTmp> listInfoCargaOpDaysPH;
@@ -69,6 +67,8 @@ public class DailyLoadBean implements Serializable {
 
     @ManagedProperty(value = "#{dailyUploadStatusBean}")
     DailyUploadStatusBean statusBean;
+    
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
      *
@@ -450,7 +450,7 @@ public class DailyLoadBean implements Serializable {
      * @param event
      */
     public void handleFileUpload(FileUploadEvent event) {
-        FacesMessage message = null;
+        FacesMessage message;
 
         if (countrySelected != null) {
             XlsAnalizerDaily analizer = new XlsAnalizerDaily();
@@ -460,7 +460,7 @@ public class DailyLoadBean implements Serializable {
             omittedSheets = analizer.getOmittedSheets();
             loadedSheets = analizer.getLoadedSheets();
             errors = analizer.getErrors();
-            if (listInfoCargaRolling.size() > 0) {
+            if (!listInfoCargaRolling.isEmpty()) {
                 nameFile = event.getFile().getFileName();
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", event.getFile().getFileName() + " is uploaded.");
             } else {
@@ -477,14 +477,14 @@ public class DailyLoadBean implements Serializable {
      * @param event
      */
     public void handleFileUploadDaysPH(FileUploadEvent event) {
-        FacesMessage message = null;
+        FacesMessage message;
         XlsAnalizerDiasOpPh analizer = new XlsAnalizerDiasOpPh();
         analizer.analizeXls(event.getFile(), countrySelected, usuario);
         listInfoCargaOpDaysPH = analizer.getCargasDiasPh();
         omittedSheets = analizer.getOmittedSheets();
         loadedSheets = analizer.getLoadedSheets();
         errors = analizer.getErrors();
-        if (listInfoCargaOpDaysPH != null && listInfoCargaOpDaysPH.size() > 0) {
+        if (listInfoCargaOpDaysPH != null && !listInfoCargaOpDaysPH.isEmpty()) {
             nameFile = event.getFile().getFileName();
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", event.getFile().getFileName() + " is uploaded.");
         } else {
@@ -498,24 +498,26 @@ public class DailyLoadBean implements Serializable {
      * @param event
      */
     public void handleFileUploadSalesPH(FileUploadEvent event) {
-        FacesMessage message = null;
+        FacesMessage message;
         XlsAnalizerSalesPh analizer = new XlsAnalizerSalesPh();
         analizer.analizeXls(event.getFile(), countrySelected, usuario);
-        uploadedFile = event.getFile();
+        uploadedFile = event.getFile();        
         try {
             stream = uploadedFile.getInputstream();
+            errors.clear();
         } catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
+            errors.add(ex.getMessage());            
         }
         omittedSheets = analizer.getOmittedSheets();
         loadedSheets = analizer.getLoadedSheets();
-        errors = analizer.getErrors();
+        errors = analizer.getErrors();                
         numRegistros = analizer.getNumRegistros();
         if (numRegistros > 0) {
             nameFile = event.getFile().getFileName();
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", event.getFile().getFileName() + " is uploaded.");
         } else {
-            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", event.getFile().getFileName() + " is empity or corrupt.");
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", event.getFile().getFileName() + " is empity or corrupt." );
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -524,7 +526,7 @@ public class DailyLoadBean implements Serializable {
      *
      */
     public void saveInfoCarga() {
-        FacesMessage message = null;
+        FacesMessage message;
         ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         Boolean flagLoadRollingDaily = (Boolean) context.getAttribute("flag_load_rolling_daily");
         if (!flagLoadRollingDaily) {
@@ -536,9 +538,9 @@ public class DailyLoadBean implements Serializable {
             record.setProcess("LOAD ROLLING");
             record.setDateExecution(new Date());
             record.setProject("DAILY DASHBOARD");
-            if (countrySelected.getClaveCorta().toUpperCase().equals(listInfoCargaRolling.get(0).getDiasOperativos().getPais().toUpperCase())) {
+            if (countrySelected.getClaveCorta().equalsIgnoreCase(listInfoCargaRolling.get(0).getDiasOperativos().getPais())) {
                 RollingDAO rollingDAO = new RollingDAO();
-                if (rollingDAO.saveDaily(listInfoCargaRolling, listInfoCargaDistribucion)) {
+                if (rollingDAO.saveDaily(listInfoCargaRolling != null ? listInfoCargaRolling : new ArrayList<RollingDaily>(), listInfoCargaDistribucion != null ? listInfoCargaDistribucion : new ArrayList<RvvdDistribucionMxTmp>())) {
                     record.setNumEntriesSaved(listInfoCargaRolling.size() + (listInfoCargaRolling.size() * 4));
                     message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Records saved.");
                 } else {
@@ -577,7 +579,7 @@ public class DailyLoadBean implements Serializable {
      *
      */
     public void saveInfoDiasOpPh() {
-        FacesMessage message = null;
+        FacesMessage message;
         ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         Boolean flagLoadOpDaysDaily = (Boolean) context.getAttribute("flag_load_opdays_daily");
         if (!flagLoadOpDaysDaily) {
@@ -625,7 +627,7 @@ public class DailyLoadBean implements Serializable {
      *
      */
     public void saveInfoPh() {
-        FacesMessage message = null;
+        FacesMessage message;
         ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         Boolean flagLoadSalesDayly = (Boolean) context.getAttribute("flag_load_sales_daily");
         if (!flagLoadSalesDayly) {
