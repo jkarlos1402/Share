@@ -219,7 +219,7 @@ public class ShareUsuario implements Serializable {
      */
     public String getPassword() {
         EncrypterKOF encrypterKOF = new EncrypterKOF();
-        return encrypterKOF.decrypt(password);
+        return password != null ? encrypterKOF.decrypt(password) : password;
     }
 
     /**
