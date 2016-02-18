@@ -307,7 +307,7 @@
             <h:form id="formReclaTrademark" rendered="#{mainBean.catalog eq 'reclassificationTrademarkDaily' ? true : false}">
                 <p:growl id="msgsReclaTrademark" showDetail="true"/>
                 <p:messages showDetail="true" closable="true"/>
-                <p:panel header="Trademark" id="panelReclaTrademark">                                        
+                <p:panel header="Brand" id="panelReclaTrademark">                                        
                     <h:panelGrid columns="1">
                         <p:dataTable id="tableReclaTrademark" var="reclaTrademark" value="#{dailyReclassCatalogsBean.marcasReclasificados}" editable="true" paginator="true" rows="10" 
                                      rowStyleClass="#{reclaTrademark.marcaR eq null || reclaTrademark.marcaR eq '' || reclaTrademark.marcaEn eq null || reclaTrademark.marcaEn eq '' || reclaTrademark.contenidoCaloricoR eq null || reclaTrademark.contenidoCaloricoR eq '' || reclaTrademark.contenidoCaloricoEn eq null || reclaTrademark.contenidoCaloricoEn eq ''? 'ui-state-error' : null}">
@@ -318,10 +318,10 @@
                             <p:column headerText="Country">
                                 <h:outputText value="#{reclaTrademark.pais}"/>
                             </p:column>
-                            <p:column headerText="Trademark" filterBy="#{reclaTrademark.marca}" filterMatchMode="contains">
+                            <p:column headerText="Brand" filterBy="#{reclaTrademark.marca}" filterMatchMode="contains">
                                 <h:outputText value="#{reclaTrademark.marca}"/>
                             </p:column>                                                                                                                                
-                            <p:column headerText="Reclassified Trademark" sortBy="#{reclaTrademark.marcaR}">                                
+                            <p:column headerText="Reclassified Brand" sortBy="#{reclaTrademark.marcaR}">                                
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{reclaTrademark.marcaR}"/></f:facet>
                                     <f:facet name="input">
@@ -332,7 +332,7 @@
                                     </f:facet>
                                 </p:cellEditor>
                             </p:column>
-                            <p:column headerText="Reclassified Trademark(English)" sortBy="#{reclaTrademark.marcaEn}">
+                            <p:column headerText="Reclassified Brand (English)" sortBy="#{reclaTrademark.marcaEn}">
                                 <h:outputText value="#{reclaTrademark.marcaEn}"/>
                             </p:column>                           
                             <p:column headerText="Reclassified Caloric content" sortBy="#{reclaTrademark.contenidoCaloricoR}">                                

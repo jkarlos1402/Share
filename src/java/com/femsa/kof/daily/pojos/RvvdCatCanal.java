@@ -1,12 +1,15 @@
 package com.femsa.kof.daily.pojos;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -34,7 +37,18 @@ public class RvvdCatCanal implements Serializable {
     private String canalEn;
 
     @Column(name = "STATUS")
-    private boolean status;    
+    private boolean status;
+
+    @OneToMany(mappedBy = "canal", fetch = FetchType.EAGER)
+    private List<RvvdCatSubCanal> subCanalesList;
+
+    public List<RvvdCatSubCanal> getSubCanalesList() {
+        return subCanalesList;
+    }
+
+    public void setSubCanalesList(List<RvvdCatSubCanal> subCanalesList) {
+        this.subCanalesList = subCanalesList;
+    }
 
     /**
      *

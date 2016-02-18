@@ -1,10 +1,12 @@
 package com.femsa.kof.share.managedbeans;
 
+import com.femsa.kof.managedbeans.MainBean;
+import com.femsa.kof.share.dao.ShareLoadLogDAO;
 import com.femsa.kof.share.dao.ShareTmpAllInfoCargaDAO;
 import com.femsa.kof.share.pojos.ShareCatPais;
+import com.femsa.kof.share.pojos.ShareLoadLog;
 import com.femsa.kof.share.pojos.ShareTmpAllInfoCarga;
 import com.femsa.kof.share.pojos.ShareUsuario;
-import com.femsa.kof.util.Record;
 import com.femsa.kof.util.ScriptAnalizer;
 import com.femsa.kof.util.XlsAnalizer;
 import java.io.Serializable;
@@ -42,10 +44,10 @@ public class ShareLoadBean implements Serializable {
     private Integer numEntriesSaved = 0;
     private Date dateExecution;
     private Date dateEndExecution;
-
-    @ManagedProperty(value = "#{shareUploadStatusBean}")
-    ShareUploadStatusBean statusBean;
-
+    
+    @ManagedProperty("#{mainBean}")
+    private MainBean beanPrincipal;
+    
     /**
      *
      */
@@ -56,6 +58,14 @@ public class ShareLoadBean implements Serializable {
         loadedSheets = new ArrayList<String>();
         errors = new ArrayList<String>();
         errorsScript = new ArrayList<String>();
+    }
+
+    public MainBean getBeanPrincipal() {
+        return beanPrincipal;
+    }
+
+    public void setBeanPrincipal(MainBean beanPrincipal) {
+        this.beanPrincipal = beanPrincipal;
     }
 
     /**
@@ -72,23 +82,7 @@ public class ShareLoadBean implements Serializable {
      */
     public void setErrorsScript(List<String> errorsScript) {
         this.errorsScript = errorsScript;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public ShareUploadStatusBean getStatusBean() {
-        return statusBean;
-    }
-
-    /**
-     *
-     * @param statusBean
-     */
-    public void setStatusBean(ShareUploadStatusBean statusBean) {
-        this.statusBean = statusBean;
-    }
+    }    
 
     /**
      *
@@ -258,7 +252,8 @@ public class ShareLoadBean implements Serializable {
      * @param event
      */
     public void handleFileUpload(FileUploadEvent event) {
-        FacesMessage message = null;
+        beanPrincipal.setPorcentajeAvance(50);
+        FacesMessage message;
         if (countrySelected != null) {
             XlsAnalizer analizer = new XlsAnalizer();
             listInfoCarga = analizer.analizeXls(event.getFile(), countrySelected, usuario);
@@ -275,28 +270,31 @@ public class ShareLoadBean implements Serializable {
             message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", "Select a country");
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
+        beanPrincipal.setPorcentajeAvance(0);
     }
 
     /**
      *
      */
     public void saveInfoCarga() {
-        FacesMessage message = null;
+        FacesMessage message;
         ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         Boolean flagLoadInfShare = (Boolean) context.getAttribute("flag_load_share");
+        ShareLoadLogDAO logDAO = new ShareLoadLogDAO();
         if (!flagLoadInfShare) {
             flagLoadInfShare = true;
             context.setAttribute("flag_load_share", flagLoadInfShare);
-            Record record = new Record();
-            record.setFecha(new Date());
-            record.setNameFile(nameFile);
-            record.setProcess("LOAD SHARE");
-            record.setDateExecution(new Date());
-            record.setProject("SHARE");
+            ShareLoadLog record = new ShareLoadLog();
+            record.setFechaEjecucion(new Date());
+            record.setNombreArchivo(nameFile);
+            record.setNombreProceso("LOAD SHARE");
+            record.setInicioEjecucion(new Date());
+            record.setNombreProyecto("SHARE");
+            record.setPais(countrySelected.getNombre());
             if (countrySelected.getNombre().toUpperCase().equals(listInfoCarga.get(0).getPais().toUpperCase())) {
                 ShareTmpAllInfoCargaDAO cargaDAO = new ShareTmpAllInfoCargaDAO();
-                if (cargaDAO.saveInfoCarga(listInfoCarga, countrySelected, usuario)) {
-                    record.setNumEntriesSaved(listInfoCarga.size());
+                if (cargaDAO.saveInfoCarga(listInfoCarga, countrySelected, usuario,beanPrincipal,ScriptAnalizer.obtieneNumSentencias(errorsScript, countrySelected))) {
+                    record.setRegistrosProcesados(listInfoCarga.size());
                     if (ScriptAnalizer.executeScritsShare(errorsScript, countrySelected)) {
                         message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Records saved.");
                     } else {
@@ -323,11 +321,9 @@ public class ShareLoadBean implements Serializable {
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "Wrong country selected");
             }
-            record.setDateEndExecution(new Date());
-            if (statusBean == null) {
-                statusBean = new ShareUploadStatusBean();
-            }
-            statusBean.getCargasSession().add(record);
+            record.setFinEjecucion(new Date());
+            record.setIdUsuario(usuario);            
+            logDAO.saveLog(record);
             errorsScript.clear();
             flagLoadInfShare = false;
             context.setAttribute("flag_load_share", flagLoadInfShare);

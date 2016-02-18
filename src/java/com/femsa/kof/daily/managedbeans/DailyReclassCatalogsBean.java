@@ -643,9 +643,9 @@ public class DailyReclassCatalogsBean implements Serializable {
         FacesMessage message;
         ReclasifMarcaDAO  reclasifMarcaDAO = new ReclasifMarcaDAO();
         if (reclasifMarcaDAO.saveReclasifMarcas(marcasReclasificados != null ? marcasReclasificados : new ArrayList<RvvdReclasifMarca>())) {
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Reclassified Trademarks saved");
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Reclassified Brands saved");
         } else {
-            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Reclassified Trademarks, " + reclasifMarcaDAO.getError());
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Reclassified Brands, " + reclasifMarcaDAO.getError());
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }

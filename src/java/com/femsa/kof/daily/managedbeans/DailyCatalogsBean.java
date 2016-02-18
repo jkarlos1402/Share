@@ -7,6 +7,7 @@ import com.femsa.kof.daily.dao.CatContCaloricoDAO;
 import com.femsa.kof.daily.dao.CatEmpaqueDAO;
 import com.femsa.kof.daily.dao.CatGecDAO;
 import com.femsa.kof.daily.dao.CatMarcaDAO;
+import com.femsa.kof.daily.dao.CatSubCanalDAO;
 import com.femsa.kof.daily.dao.CatTipoConsumoDAO;
 import com.femsa.kof.daily.dao.CatUnidadNegocioDAO;
 import com.femsa.kof.daily.pojos.RvvdCatCanal;
@@ -16,6 +17,7 @@ import com.femsa.kof.daily.pojos.RvvdCatContenidoCalorico;
 import com.femsa.kof.daily.pojos.RvvdCatEmpaque;
 import com.femsa.kof.daily.pojos.RvvdCatGec;
 import com.femsa.kof.daily.pojos.RvvdCatMarca;
+import com.femsa.kof.daily.pojos.RvvdCatSubCanal;
 import com.femsa.kof.daily.pojos.RvvdCatTipoConsumo;
 import com.femsa.kof.daily.pojos.RvvdCatUnidadNegocio;
 import com.femsa.kof.util.CatalogLoader;
@@ -47,6 +49,11 @@ public class DailyCatalogsBean implements Serializable {
     private RvvdCatCanal canalNuevo = new RvvdCatCanal();
     private RvvdCatCanal canalSelected;
     private List<RvvdCatCanal> catCanalesAll = new ArrayList<RvvdCatCanal>();
+    private List<RvvdCatCanal> catCanales = new ArrayList<RvvdCatCanal>();
+
+    private RvvdCatSubCanal subCanalNuevo = new RvvdCatSubCanal();
+    private RvvdCatSubCanal subCanalSelected;
+    private List<RvvdCatSubCanal> catSubCanalesAll = new ArrayList<RvvdCatSubCanal>();
 
     private RvvdCatTipoConsumo tipoConsumoNuevo = new RvvdCatTipoConsumo();
     private RvvdCatTipoConsumo tipoConsumoSelected;
@@ -98,12 +105,48 @@ public class DailyCatalogsBean implements Serializable {
 
         CatCanalDAO canalDAO = new CatCanalDAO();
         catCanalesAll = canalDAO.getCanalesAll();
+        catCanales = canalDAO.getCanales();
+
+        CatSubCanalDAO subCanalDAO = new CatSubCanalDAO();
+        catSubCanalesAll = subCanalDAO.getSubCanalesAll();
 
         CatCategoriaDAO categoriaDAO = new CatCategoriaDAO();
         catCategoriaAll = categoriaDAO.getCategoriasAll();
 
         CatCategoriaOficialDAO categoriaOficialDAO = new CatCategoriaOficialDAO();
         catCategoriaOficialAll = categoriaOficialDAO.getCategoriasOficialesAll();
+    }
+
+    public List<RvvdCatCanal> getCatCanales() {
+        return catCanales;
+    }
+
+    public void setCatCanales(List<RvvdCatCanal> catCanales) {
+        this.catCanales = catCanales;
+    }
+
+    public RvvdCatSubCanal getSubCanalNuevo() {
+        return subCanalNuevo;
+    }
+
+    public void setSubCanalNuevo(RvvdCatSubCanal subCanalNuevo) {
+        this.subCanalNuevo = subCanalNuevo;
+    }
+
+    public RvvdCatSubCanal getSubCanalSelected() {
+        return subCanalSelected;
+    }
+
+    public void setSubCanalSelected(RvvdCatSubCanal subCanalSelected) {
+        this.subCanalSelected = subCanalSelected;
+    }
+
+    public List<RvvdCatSubCanal> getCatSubCanalesAll() {
+        return catSubCanalesAll;
+    }
+
+    public void setCatSubCanalesAll(List<RvvdCatSubCanal> catSubCanalesAll) {
+        this.catSubCanalesAll = catSubCanalesAll;
     }
 
     /**
@@ -660,6 +703,7 @@ public class DailyCatalogsBean implements Serializable {
         canalNuevo.setCanalR(canalSelected.getCanalR());
         canalNuevo.setCanalEn(canalSelected.getCanalEn());
         canalNuevo.setStatus(canalSelected.getStatus());
+        canalNuevo.setSubCanalesList(canalSelected.getSubCanalesList());
     }
 
     /**
@@ -847,9 +891,9 @@ public class DailyCatalogsBean implements Serializable {
         if (marcaDAO.saveMarca(marcaNueva)) {
             CatalogLoader.loadCatalogs("daily");
             refreshCatalog("marca");
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Trademark saved");
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Brand saved");
         } else {
-            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Trademark, " + marcaDAO.getError());
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Brand, " + marcaDAO.getError());
             marcaNueva.setIdMarca(null);
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
@@ -890,6 +934,42 @@ public class DailyCatalogsBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
+    /**
+     *
+     */
+    public void newSubCanal() {
+        subCanalNuevo = new RvvdCatSubCanal();
+        subCanalSelected = null;
+    }
+
+    /**
+     *
+     */
+    public void selectSubCanal() {
+        subCanalNuevo.setIdSubCanal(subCanalSelected.getIdSubCanal());
+        subCanalNuevo.setCanal(subCanalSelected.getCanal());
+        subCanalNuevo.setStatus(subCanalSelected.getStatus());
+        subCanalNuevo.setSubCanalEn(subCanalSelected.getSubCanalEn());
+        subCanalNuevo.setSubCanalR(subCanalSelected.getSubCanalR());
+    }
+
+    /**
+     *
+     */
+    public void saveSubCanal() {
+        FacesMessage message;
+        CatSubCanalDAO catSubCanalDAO = new CatSubCanalDAO();
+        if (catSubCanalDAO.saveSubCanal(subCanalNuevo)) {
+            CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("subCanal");
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Subchannel saved");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the subchannel, " + catSubCanalDAO.getError());
+            marcaNueva.setIdMarca(null);
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
     private void refreshCatalog(String catalog) {
         if ("calorico".equalsIgnoreCase(catalog)) {
             CatContCaloricoDAO contCaloricoDAO = new CatContCaloricoDAO();
@@ -913,12 +993,16 @@ public class DailyCatalogsBean implements Serializable {
         } else if ("canal".equalsIgnoreCase(catalog)) {
             CatCanalDAO canalDAO = new CatCanalDAO();
             catCanalesAll = canalDAO.getCanalesAll();
+            catCanales = canalDAO.getCanales();
         } else if ("categoria".equalsIgnoreCase(catalog)) {
             CatCategoriaDAO categoriaDAO = new CatCategoriaDAO();
             catCategoriaAll = categoriaDAO.getCategoriasAll();
         } else if ("categoriaOficial".equalsIgnoreCase(catalog)) {
             CatCategoriaOficialDAO categoriaOficialDAO = new CatCategoriaOficialDAO();
             catCategoriaOficialAll = categoriaOficialDAO.getCategoriasOficialesAll();
+        } else if ("subCanal".equalsIgnoreCase(catalog)) {
+            CatSubCanalDAO catSubCanalDAO = new CatSubCanalDAO();
+            catSubCanalesAll = catSubCanalDAO.getSubCanalesAll();
         }
     }
 }

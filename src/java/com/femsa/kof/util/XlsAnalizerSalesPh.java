@@ -2,6 +2,7 @@ package com.femsa.kof.util;
 
 import com.femsa.kof.daily.dao.RvvdInfoPhDAO;
 import com.femsa.kof.daily.pojos.RvvdInfoPh;
+import com.femsa.kof.managedbeans.MainBean;
 import com.femsa.kof.share.pojos.ShareCatPais;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import java.io.IOException;
@@ -175,16 +176,16 @@ public class XlsAnalizerSalesPh {
      * @param catPais pais seleccionado para realizar la carga
      * @param usuario Usuario quien realizará el análisis del archivo excel
      */
-    public void analizeXls(UploadedFile file, ShareCatPais catPais, ShareUsuario usuario) {
+    public void analizeXls(UploadedFile file, ShareCatPais catPais, ShareUsuario usuario,MainBean mainBean) {
         int numSheet = 0;
         try {
             OPCPackage oPCPackage = null;
             oPCPackage = OPCPackage.open(file.getInputstream());
             stringsTable = new ReadOnlySharedStringsTable(oPCPackage);
 
-            XSSFReader xssfReader = new XSSFReader(oPCPackage);
+            XSSFReader xssfReader = new XSSFReader(oPCPackage);            
             XMLInputFactory factory = XMLInputFactory.newInstance();
-            XSSFReader.SheetIterator iter = (XSSFReader.SheetIterator) xssfReader.getSheetsData();
+            XSSFReader.SheetIterator iter = (XSSFReader.SheetIterator) xssfReader.getSheetsData();            
             while (iter.hasNext()) {
                 InputStream inputStream = iter.next();
                 sheetName = iter.getSheetName();
@@ -217,6 +218,7 @@ public class XlsAnalizerSalesPh {
             if (oPCPackage != null) {
                 oPCPackage.close();
             }
+            mainBean.setPorcentajeAvance(100);
         } catch (IOException ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
             errors.add(ex.getMessage());
@@ -239,14 +241,14 @@ public class XlsAnalizerSalesPh {
      * @return regresa verdadero si el guardado a base de datos fué exitoso, de
      * lo contrario retorna false
      */
-    public boolean saveSheetInfoPh(UploadedFile file, InputStream stream, long numRegistros) {
+    public boolean saveSheetInfoPh(UploadedFile file, InputStream stream, long numRegistros, MainBean mainBean) {
         boolean flagOk = true;
         try {
             int numSheet = 0;
             OPCPackage oPCPackage = null;
             oPCPackage = OPCPackage.open(file.getInputstream());
             stringsTable = new ReadOnlySharedStringsTable(oPCPackage);
-
+            mainBean.setNumRegistrosTotales(numRegistros);
             XSSFReader xssfReader = new XSSFReader(oPCPackage);
             XMLInputFactory factory = XMLInputFactory.newInstance();
             XSSFReader.SheetIterator iter = (XSSFReader.SheetIterator) xssfReader.getSheetsData();
@@ -264,7 +266,7 @@ public class XlsAnalizerSalesPh {
                             }
                         }
                     }
-                    if (saveRows(numRegistros)) {
+                    if (saveRows(numRegistros, mainBean)) {
                         if (oPCPackage != null) {
                             oPCPackage.close();
                         }
@@ -355,12 +357,13 @@ public class XlsAnalizerSalesPh {
      *
      * @param numRegistros número de registros a ser almacenados en la base de
      * datos
+     *
      * @return regresa verdadero si el guardado a la base de datos fué exitoso,
      * de lo contrario regresa falso
      * @throws XMLStreamException Si la estructura del archivo cargado es
      * incorrecta se lanza excepción.
      */
-    public boolean saveRows(long numRegistros) throws XMLStreamException {
+    public boolean saveRows(long numRegistros, MainBean mainBean) throws XMLStreamException {
         errors.clear();
         boolean flagOk = true;
         RvvdInfoPhDAO infoPhDAO = new RvvdInfoPhDAO();
@@ -437,8 +440,9 @@ public class XlsAnalizerSalesPh {
 
                         infoTemp.setIdTiempo(new BigInteger(formatoDelTextoInverso.format(infoTemp.getFecha())));
                         cargas.add(infoTemp);
-                        if (rowNum % 10000 == 0 || rowNum == (numRegistros - 1)) {
-                            System.out.println("entro a guardar en: " + rowNum);
+                        if (rowNum % 10000 == 0 || rowNum == (numRegistros - 1)) {                            
+                            mainBean.setNumRegistrosProcesados(rowNum);
+                            mainBean.setPorcentajeAvance((int) ((rowNum * 100) / numRegistros));
                             for (RvvdInfoPh carga : cargas) {
                                 session.save(carga);
                                 if (cont % 100 == 0) {
@@ -456,6 +460,9 @@ public class XlsAnalizerSalesPh {
             }
             session.getTransaction().commit();
             errors.clear();
+            mainBean.setNumRegistrosProcesados(0L);
+            mainBean.setPorcentajeAvance(null); 
+            mainBean.setNumRegistrosTotales(0L);
         } catch (Exception ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
             errors.add(ex.getMessage());

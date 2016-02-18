@@ -1,7 +1,9 @@
 function handleResponse(status) {
     if (status === 1) {
         PF('statusDialog').show();
+        PF('pbAjax').start();
     } else if (status === 2) {
+        PF('pbAjax').cancel();
         PF('statusDialog').hide();
     }
 }
@@ -11,7 +13,7 @@ function setFilter(filter) {
 }
 
 $(document).ready(function () {
-    if ($("#menuPrincipal").length > 0 && ($("#proyectoUser").val() === "2" || $("#rolUser").val() === "1")) {
+    if ($("#menuPrincipal").length > 0 && ($("#proyectoUser").val() === "2" || $("#proyectoUser").val() === "1" || $("#rolUser").val() === "1")) {
         initMenu();
         setTimeout(function () {
             showNotifications();
@@ -42,10 +44,13 @@ function showNotifications() {
     }
 }
 
-function showLoading(status) {
+function showLoading(status) {    
     if ($("#showLoading").val() === "1" && status === "1") {
         PF('statusDialog').show();
+        PF('pbAjax').start();
+
     } else if (status === "0") {
+        PF('pbAjax').cancel();
         PF('statusDialog').hide();
     }
 }

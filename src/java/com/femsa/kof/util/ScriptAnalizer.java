@@ -72,7 +72,27 @@ public class ScriptAnalizer {
         return flagOk;
     }
 
-    private static List<String> getInstructionsSQL(File scritpSQL, List<String> errors, ShareCatPais pais) throws IOException {
+    public static int obtieneNumSentencias(List<String> errors, ShareCatPais pais) {
+        int numInstrucciones = 0;
+        ServletContext sc = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        String contextPathResources = sc.getRealPath("");
+        File directorioBase = new File(contextPathResources + File.separator + "WEB-INF" + File.separator + "scripts" + File.separator);
+        File[] ficheros = directorioBase.listFiles();
+
+        boolean flagOk = true;
+        try {
+            for (int i = 0; i < ficheros.length; i++) {
+                File fichero = ficheros[i];
+                numInstrucciones += getInstructionsSQL(fichero, errors, pais).size();
+            }
+        } catch (Exception e) {
+            Logger.getLogger(ScriptAnalizer.class.getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
+
+        }
+        return numInstrucciones;
+    }
+
+    public static List<String> getInstructionsSQL(File scritpSQL, List<String> errors, ShareCatPais pais) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
         FileReader f = null;
         BufferedReader b = null;

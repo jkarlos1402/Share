@@ -1,5 +1,6 @@
 package com.femsa.kof.share.dao;
 
+import com.femsa.kof.managedbeans.MainBean;
 import com.femsa.kof.share.pojos.ShareCatPais;
 import com.femsa.kof.share.pojos.ShareTmpAllInfoCarga;
 import com.femsa.kof.share.pojos.ShareUsuario;
@@ -28,7 +29,7 @@ public class ShareTmpAllInfoCargaDAO {
      * @param usuario
      * @return
      */
-    public boolean saveInfoCarga(List<ShareTmpAllInfoCarga> listCarga, ShareCatPais pais, ShareUsuario usuario) {
+    public boolean saveInfoCarga(List<ShareTmpAllInfoCarga> listCarga, ShareCatPais pais, ShareUsuario usuario, MainBean mainBean, int total) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
@@ -38,6 +39,8 @@ public class ShareTmpAllInfoCargaDAO {
         try {
             session.beginTransaction();
             for (ShareTmpAllInfoCarga carga : listCarga) {
+                mainBean.setNumRegistrosProcesados(cont);
+                mainBean.setPorcentajeAvance((int) ((cont * 100) / (listCarga.size() + total)));
                 session.save(carga);
                 if (cont % 100 == 0) {
                     session.flush();
@@ -50,22 +53,27 @@ public class ShareTmpAllInfoCargaDAO {
             queryNativo = session.createSQLQuery("TRUNCATE TABLE " + pais.getNombreTabla());
             queryNativo.executeUpdate();
             session.getTransaction().commit();
+            mainBean.setPorcentajeAvance((int) ((++cont * 100) / (listCarga.size()+ total)));
             session.beginTransaction();
             queryNativo = session.createSQLQuery("INSERT INTO " + pais.getNombreTabla() + " SELECT PAIS,CANAL,FECHA,GRUPO_CATEGORIA,CATEGORIA,FABRICANTE,VOLUMEN_MES,VENTA_MES FROM SHARE_TMP_ALL_INFO_CARGA");
             queryNativo.executeUpdate();
             session.getTransaction().commit();
+            mainBean.setPorcentajeAvance((int) ((++cont * 100) / (listCarga.size()+ total)));
             session.beginTransaction();
             queryNativo = session.createSQLQuery("DELETE FROM SHARE_TMP_ALL_INFO_CARGA WHERE FK_USUARIO = " + usuario.getPkUsuario() + " AND PAIS = '" + pais.getNombre().toUpperCase() + "'");
             queryNativo.executeUpdate();
             session.getTransaction().commit();
+            mainBean.setPorcentajeAvance((int) ((++cont * 100) / (listCarga.size()+ total)));
             session.beginTransaction();
             queryNativo = session.createSQLQuery("DROP SEQUENCE SHARE_SEQ_ALL_INFO_CARGA");
             queryNativo.executeUpdate();
             session.getTransaction().commit();
+            mainBean.setPorcentajeAvance((int) ((++cont * 100) / (listCarga.size()+ total)));
             session.beginTransaction();
             queryNativo = session.createSQLQuery("CREATE SEQUENCE SHARE_SEQ_ALL_INFO_CARGA INCREMENT BY 1 START WITH 1");
             queryNativo.executeUpdate();
             session.getTransaction().commit();
+            mainBean.setPorcentajeAvance((int) ((++cont * 100) / (listCarga.size()+ total)));
             errors.clear();
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
@@ -79,7 +87,7 @@ public class ShareTmpAllInfoCargaDAO {
             session.clear();
             session.close();
             hibernateUtil.closeSessionFactory();
-        }
+        }        
         return flagOk;
     }
 

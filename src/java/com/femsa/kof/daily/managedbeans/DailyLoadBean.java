@@ -7,9 +7,11 @@ import com.femsa.kof.daily.pojos.Rvvd445Ph;
 import com.femsa.kof.daily.pojos.Rvvd445PhTmp;
 import com.femsa.kof.daily.pojos.RvvdDistribucionMxTmp;
 import com.femsa.kof.daily.pojos.RvvdInfoPh;
+import com.femsa.kof.managedbeans.MainBean;
+import com.femsa.kof.share.dao.ShareLoadLogDAO;
 import com.femsa.kof.share.pojos.ShareCatPais;
+import com.femsa.kof.share.pojos.ShareLoadLog;
 import com.femsa.kof.share.pojos.ShareUsuario;
-import com.femsa.kof.util.Record;
 import com.femsa.kof.util.XlsAnalizerDaily;
 import com.femsa.kof.util.XlsAnalizerDiasOpPh;
 import com.femsa.kof.util.XlsAnalizerSalesPh;
@@ -51,7 +53,7 @@ public class DailyLoadBean {
     private List<String> loadedSheets;
     private List<String> errors;
     private ShareUsuario usuario;
-    private List<Record> cargas;
+    private List<ShareLoadLog> cargas;
     private String nameFile;
     private long numRegistros;
 
@@ -65,9 +67,9 @@ public class DailyLoadBean {
     private Date dateExecution;
     private Date dateEndExecution;
 
-    @ManagedProperty(value = "#{dailyUploadStatusBean}")
-    DailyUploadStatusBean statusBean;
-    
+    @ManagedProperty("#{mainBean}")
+    private MainBean beanPrincipal;
+
     private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
@@ -79,9 +81,17 @@ public class DailyLoadBean {
         omittedSheets = new ArrayList<String>();
         loadedSheets = new ArrayList<String>();
         errors = new ArrayList<String>();
-        cargas = new ArrayList<Record>();
+        cargas = new ArrayList<ShareLoadLog>();
         Rvvd445PhDAO rvvd445PhDAO = new Rvvd445PhDAO();
         listInfoOpDaysPH = rvvd445PhDAO.get445Ph();
+    }
+
+    public MainBean getBeanPrincipal() {
+        return beanPrincipal;
+    }
+
+    public void setBeanPrincipal(MainBean beanPrincipal) {
+        this.beanPrincipal = beanPrincipal;
     }
 
     /**
@@ -170,22 +180,6 @@ public class DailyLoadBean {
      */
     public void setNameFile(String nameFile) {
         this.nameFile = nameFile;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public DailyUploadStatusBean getStatusBean() {
-        return statusBean;
-    }
-
-    /**
-     *
-     * @param statusBean
-     */
-    public void setStatusBean(DailyUploadStatusBean statusBean) {
-        this.statusBean = statusBean;
     }
 
     /**
@@ -336,7 +330,7 @@ public class DailyLoadBean {
      *
      * @return
      */
-    public List<Record> getCargas() {
+    public List<ShareLoadLog> getCargas() {
         return cargas;
     }
 
@@ -344,7 +338,7 @@ public class DailyLoadBean {
      *
      * @param cargas
      */
-    public void setCargas(List<Record> cargas) {
+    public void setCargas(List<ShareLoadLog> cargas) {
         this.cargas = cargas;
     }
 
@@ -455,7 +449,7 @@ public class DailyLoadBean {
         if (countrySelected != null) {
             XlsAnalizerDaily analizer = new XlsAnalizerDaily();
             analizer.analizeXls(event.getFile(), countrySelected, usuario);
-            listInfoCargaRolling = analizer.getCargasRolling();            
+            listInfoCargaRolling = analizer.getCargasRolling();
             listInfoCargaDistribucion = analizer.getCargasDistribucion();
             omittedSheets = analizer.getOmittedSheets();
             loadedSheets = analizer.getLoadedSheets();
@@ -477,9 +471,10 @@ public class DailyLoadBean {
      * @param event
      */
     public void handleFileUploadDaysPH(FileUploadEvent event) {
+        beanPrincipal.setPorcentajeAvance(50);
         FacesMessage message;
         XlsAnalizerDiasOpPh analizer = new XlsAnalizerDiasOpPh();
-        analizer.analizeXls(event.getFile(), countrySelected, usuario);
+        analizer.analizeXls(event.getFile(), countrySelected, usuario,beanPrincipal);
         listInfoCargaOpDaysPH = analizer.getCargasDiasPh();
         omittedSheets = analizer.getOmittedSheets();
         loadedSheets = analizer.getLoadedSheets();
@@ -491,35 +486,41 @@ public class DailyLoadBean {
             message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", event.getFile().getFileName() + " is empity or corrupt.");
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
+        beanPrincipal.setPorcentajeAvance(null);
     }
 
     /**
      *
      * @param event
      */
-    public void handleFileUploadSalesPH(FileUploadEvent event) {
+    public void handleFileUploadSalesPH(FileUploadEvent event) { 
+        beanPrincipal.setNumRegistrosTotales(1L);
+        beanPrincipal.setPorcentajeAvance(50);        
         FacesMessage message;
         XlsAnalizerSalesPh analizer = new XlsAnalizerSalesPh();
-        analizer.analizeXls(event.getFile(), countrySelected, usuario);
-        uploadedFile = event.getFile();        
+        analizer.analizeXls(event.getFile(), countrySelected, usuario,beanPrincipal);
+        beanPrincipal.setPorcentajeAvance(90);
+        uploadedFile = event.getFile();
         try {
             stream = uploadedFile.getInputstream();
             errors.clear();
         } catch (IOException ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
-            errors.add(ex.getMessage());            
+            errors.add(ex.getMessage());
         }
         omittedSheets = analizer.getOmittedSheets();
         loadedSheets = analizer.getLoadedSheets();
-        errors = analizer.getErrors();                
+        errors = analizer.getErrors();
         numRegistros = analizer.getNumRegistros();
         if (numRegistros > 0) {
             nameFile = event.getFile().getFileName();
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", event.getFile().getFileName() + " is uploaded.");
         } else {
-            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", event.getFile().getFileName() + " is empity or corrupt." );
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", event.getFile().getFileName() + " is empity or corrupt.");
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
+        beanPrincipal.setPorcentajeAvance(null);
+        beanPrincipal.setNumRegistrosTotales(0L);        
     }
 
     /**
@@ -529,19 +530,21 @@ public class DailyLoadBean {
         FacesMessage message;
         ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         Boolean flagLoadRollingDaily = (Boolean) context.getAttribute("flag_load_rolling_daily");
+        ShareLoadLogDAO logDAO = new ShareLoadLogDAO();
         if (!flagLoadRollingDaily) {
             flagLoadRollingDaily = true;
             context.setAttribute("flag_load_rolling_daily", flagLoadRollingDaily);
-            Record record = new Record();
-            record.setFecha(new Date());
-            record.setNameFile(nameFile);
-            record.setProcess("LOAD ROLLING");
-            record.setDateExecution(new Date());
-            record.setProject("DAILY DASHBOARD");
+            ShareLoadLog record = new ShareLoadLog();
+            record.setFechaEjecucion(new Date());
+            record.setNombreArchivo(nameFile);
+            record.setNombreProceso("LOAD ROLLING");
+            record.setInicioEjecucion(new Date());
+            record.setNombreProceso("DAILY DASHBOARD");
+            record.setPais(countrySelected.getNombre());
             if (countrySelected.getClaveCorta().equalsIgnoreCase(listInfoCargaRolling.get(0).getDiasOperativos().getPais())) {
                 RollingDAO rollingDAO = new RollingDAO();
-                if (rollingDAO.saveDaily(listInfoCargaRolling != null ? listInfoCargaRolling : new ArrayList<RollingDaily>(), listInfoCargaDistribucion != null ? listInfoCargaDistribucion : new ArrayList<RvvdDistribucionMxTmp>())) {
-                    record.setNumEntriesSaved(listInfoCargaRolling.size() + (listInfoCargaRolling.size() * 4));
+                if (rollingDAO.saveDaily(listInfoCargaRolling != null ? listInfoCargaRolling : new ArrayList<RollingDaily>(), listInfoCargaDistribucion != null ? listInfoCargaDistribucion : new ArrayList<RvvdDistribucionMxTmp>(),beanPrincipal)) {
+                    record.setRegistrosProcesados(listInfoCargaRolling.size() + (listInfoCargaRolling.size() * 4));
                     message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Records saved.");
                 } else {
                     errors = rollingDAO.getErrors();
@@ -562,11 +565,9 @@ public class DailyLoadBean {
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "Wrong country selected");
             }
-            record.setDateEndExecution(new Date());
-            if (statusBean == null) {
-                statusBean = new DailyUploadStatusBean();
-            }
-            statusBean.getCargasSession().add(record);
+            record.setFinEjecucion(new Date());
+            record.setIdUsuario(usuario);
+            logDAO.saveLog(record);
             flagLoadRollingDaily = false;
             context.setAttribute("flag_load_rolling_daily", flagLoadRollingDaily);
         } else {
@@ -582,18 +583,20 @@ public class DailyLoadBean {
         FacesMessage message;
         ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         Boolean flagLoadOpDaysDaily = (Boolean) context.getAttribute("flag_load_opdays_daily");
+        ShareLoadLogDAO logDAO = new ShareLoadLogDAO();
         if (!flagLoadOpDaysDaily) {
             flagLoadOpDaysDaily = true;
             context.setAttribute("flag_load_opdays_daily", flagLoadOpDaysDaily);
-            Record record = new Record();
-            record.setFecha(new Date());
-            record.setNameFile(nameFile);
-            record.setProcess("LOAD OPERATIVE DAYS PHILIPPINES");
-            record.setDateExecution(new Date());
-            record.setProject("DAILY DASHBOARD");
+            ShareLoadLog record = new ShareLoadLog();
+            record.setFechaEjecucion(new Date());
+            record.setNombreArchivo(nameFile);
+            record.setNombreProceso("LOAD OPERATIVE DAYS PHILIPPINES");
+            record.setInicioEjecucion(new Date());
+            record.setNombreProyecto("DAILY DASHBOARD");
+            record.setPais("PHILIPPINES");
             Rvvd445PhDAO rvvd445PhDAO = new Rvvd445PhDAO();
-            if (rvvd445PhDAO.save445Ph(listInfoCargaOpDaysPH)) {
-                record.setNumEntriesSaved(listInfoCargaOpDaysPH.size());
+            if (rvvd445PhDAO.save445Ph(listInfoCargaOpDaysPH,beanPrincipal)) {
+                record.setRegistrosProcesados(listInfoCargaOpDaysPH.size());
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Records saved.");
                 refreshDiasOpPh();
             } else {
@@ -610,11 +613,11 @@ public class DailyLoadBean {
             loadedSheets.clear();
             errors.clear();
             countrySelected = null;
-            record.setDateEndExecution(new Date());
-            if (statusBean == null) {
-                statusBean = new DailyUploadStatusBean();
-            }
-            statusBean.getCargasSession().add(record);
+            beanPrincipal.setPorcentajeAvance(null);
+            beanPrincipal.setNumRegistrosProcesados(0L);
+            record.setFinEjecucion(new Date());
+            record.setIdUsuario(usuario);
+            logDAO.saveLog(record);
             flagLoadOpDaysDaily = false;
             context.setAttribute("flag_load_opdays_daily", flagLoadOpDaysDaily);
         } else {
@@ -630,25 +633,28 @@ public class DailyLoadBean {
         FacesMessage message;
         ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         Boolean flagLoadSalesDayly = (Boolean) context.getAttribute("flag_load_sales_daily");
+        ShareLoadLogDAO logDAO = new ShareLoadLogDAO();
+        XlsAnalizerSalesPh salesPh = new XlsAnalizerSalesPh();
         if (!flagLoadSalesDayly) {
             flagLoadSalesDayly = true;
             context.setAttribute("flag_load_sales_daily", flagLoadSalesDayly);
-            Record record = new Record();
-            record.setFecha(new Date());
-            record.setNameFile(nameFile);
-            record.setProcess("LOAD SALES PHILIPPINES");
-            record.setDateExecution(new Date());
-            record.setProject("DAILY DASHBOARD");
-            XlsAnalizerSalesPh salesPh = new XlsAnalizerSalesPh();
-            if (salesPh.saveSheetInfoPh(uploadedFile, stream, numRegistros)) {
-                record.setNumEntriesSaved(numRegistros);
+            ShareLoadLog record = new ShareLoadLog();
+            record.setFechaEjecucion(new Date());
+            record.setNombreArchivo(nameFile);
+            record.setNombreProceso("LOAD SALES PHILIPPINES");
+            record.setInicioEjecucion(new Date());
+            record.setNombreProyecto("DAILY DASHBOARD");
+            record.setPais("PHILIPPINES");
+            if (salesPh.saveSheetInfoPh(uploadedFile, stream, numRegistros, beanPrincipal)) {
+                record.setRegistrosProcesados(numRegistros);
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Records saved.");
             } else {
                 errors = salesPh.getErrors();
                 String cadenaError = "";
                 for (String error : errors) {
-                    cadenaError += error + ", ";
+                    cadenaError += ", " + error;
                 }
+                cadenaError = cadenaError.replaceFirst(",", "");
                 message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "An error ocurred while saving records [" + cadenaError + "]");
             }
             omittedSheets.clear();
@@ -656,16 +662,14 @@ public class DailyLoadBean {
             errors.clear();
             countrySelected = null;
             numRegistros = 0L;
-            record.setDateEndExecution(new Date());
-            if (statusBean == null) {
-                statusBean = new DailyUploadStatusBean();
-            }
-            statusBean.getCargasSession().add(record);
+            record.setFinEjecucion(new Date());
+            record.setIdUsuario(usuario);
+            logDAO.saveLog(record);
             flagLoadSalesDayly = false;
             context.setAttribute("flag_load_sales_daily", flagLoadSalesDayly);
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Sorry", "Other country is loading, try again later");
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
-    }    
+    }
 }

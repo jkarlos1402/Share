@@ -20,16 +20,41 @@ import javax.servlet.http.HttpSession;
 public class MainBean implements Serializable {
 
     private String page = "/WEB-INF/pages/welcome.xhtml";
-
     private String catalog = "";
-
     private ShareUsuario usuario;
-
     private List<String> notifications;
-    
     private String password;
-    
     private boolean firstSession;
+    private Integer porcentajeAvance = 0;
+    private Long numRegistrosProcesados = 0L;
+    private Long numRegistrosTotales = 0L;       
+
+    public Long getNumRegistrosTotales() {
+        return numRegistrosTotales;
+    }
+
+    public void setNumRegistrosTotales(Long numRegistrosTotales) {
+        this.numRegistrosTotales = numRegistrosTotales;
+    }
+
+    public Integer getPorcentajeAvance() {
+        return porcentajeAvance;
+    }
+
+    public void setPorcentajeAvance(Integer porcentajeAvance) {
+        if(porcentajeAvance != null && porcentajeAvance > 100){
+            porcentajeAvance = 100;
+        }
+        this.porcentajeAvance = porcentajeAvance;
+    }
+
+    public Long getNumRegistrosProcesados() {
+        return numRegistrosProcesados;
+    }
+
+    public void setNumRegistrosProcesados(Long numRegistrosProcesados) {
+        this.numRegistrosProcesados = numRegistrosProcesados;
+    }
 
     /**
      *
@@ -61,7 +86,7 @@ public class MainBean implements Serializable {
      *
      * @param firstSession
      */
-    public void setFirstSession(boolean firstSession) {        
+    public void setFirstSession(boolean firstSession) {
         this.firstSession = firstSession;
     }
 
@@ -164,12 +189,17 @@ public class MainBean implements Serializable {
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
+
     /**
      *
      */
-    public void changeUserPassword(){
+    public void changeUserPassword() {
         usuario.setPassword(password);
         saveUser();
+    }
+
+    public void status() {
+        System.out.println("registros proecesados: " + numRegistrosProcesados);
+        System.out.println("registros totales: " + numRegistrosTotales);
     }
 }

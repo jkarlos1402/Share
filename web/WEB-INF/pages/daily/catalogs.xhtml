@@ -150,6 +150,58 @@
                     </h:panelGrid>
                 </p:panel>
             </h:form>
+            <h:form id="formSubchannel" rendered="#{mainBean.catalog eq 'subchannelDaily' ? true : false}">
+                <p:growl id="msgsSubchannel" showDetail="true"/>
+                <p:messages showDetail="true" closable="true"/>
+                <p:panel header="Subchannel catalog" id="panelSubchannel">                    
+                    <h:panelGrid columns="4" cellpadding="5px" >
+                        <p:outputLabel for="nameSubchannel" value="Subchannel:" />
+                        <p:inputText id="nameSubchannel" required="true" value="#{dailyCatalogsBean.subCanalNuevo.subCanalR}" maxlength="60"/>
+                        
+                        <p:outputLabel for="nameSubchannelEN" value="Subchannel (English):" />
+                        <p:inputText id="nameSubchannelEN" required="true" value="#{dailyCatalogsBean.subCanalNuevo.subCanalEn}" maxlength="60"/>                                                
+                        
+                        <p:outputLabel for="idChannel" value="Channel:" />
+                        <p:selectOneMenu id="idChannel" value="#{dailyCatalogsBean.subCanalNuevo.canal}" converter="channelConverterDaily" required="true" label="Bussiness Unit" immediate="true">
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItems value="#{dailyCatalogsBean.catCanales}"/>                           
+                        </p:selectOneMenu>                                                
+                        
+                        <p:outputLabel for="statusSubchannel" value="Status:" />
+                        <p:selectOneRadio id="statusSubchannel" layout="pageDirection" required="true" value="#{dailyCatalogsBean.subCanalNuevo.status}">
+                            <f:selectItem itemLabel="Enable" itemValue="true" />
+                            <f:selectItem itemLabel="Disable" itemValue="false" />                            
+                        </p:selectOneRadio>
+                       
+                        <f:facet name="footer">
+                            <h:panelGrid columns="2" cellspacing="10px">
+                                <p:commandButton value="Save" update="formSubchannel" actionListener="#{dailyCatalogsBean.saveSubCanal}">
+                                    <p:confirm message="Are you sure?" header="Save Subchannel"/>
+                                </p:commandButton>
+                                <p:commandButton value="New" update="formSubchannel" actionListener="#{dailyCatalogsBean.newSubCanal}" rendered="#{dailyCatalogsBean.subCanalNuevo.canal ne null ? true : false}"/>
+                            </h:panelGrid>
+                        </f:facet>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <h:panelGrid columns="1">
+                        <p:dataTable id="tableSubchannel" var="subchannel" value="#{dailyCatalogsBean.catSubCanalesAll}" rowKey="#{subchannel.idSubCanal}" selection="#{dailyCatalogsBean.subCanalSelected}" selectionMode="single" paginator="true" rows="10">
+                            <p:column headerText="Subchannel">
+                                <h:outputText value="#{subchannel.subCanalR}"/>
+                            </p:column>
+                            <p:column headerText="Subchannel (English)">
+                                <h:outputText value="#{subchannel.subCanalEn}"/>
+                            </p:column>                                                                                                                                         
+                            <p:column headerText="Channel">
+                                <h:outputText value="#{subchannel.canal.canalR}"/>
+                            </p:column>                                                                                                                                         
+                            <p:column headerText="Status">
+                                <h:outputText value="#{subchannel.status ? 'ENABLED' : 'DISABLED'}"/>
+                            </p:column>
+                            <p:ajax event="rowSelect" update=":formSubchannel:panelSubchannel" listener="#{dailyCatalogsBean.selectSubCanal}"/>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </p:panel>
+            </h:form>
             
             <h:form id="formConsumption" rendered="#{mainBean.catalog eq 'consumptionDaily' ? true : false}">
                 <p:growl id="msgsConsumption" showDetail="true"/>
@@ -242,12 +294,12 @@
             <h:form id="formTrademark" rendered="#{mainBean.catalog eq 'trademarkDaily' ? true : false}">
                 <p:growl id="msgsTrademark" showDetail="true"/>
                 <p:messages showDetail="true" closable="true"/>
-                <p:panel header="Trademark catalog" id="panelTrademark">                    
+                <p:panel header="Brand catalog" id="panelTrademark">                    
                     <h:panelGrid columns="4" cellpadding="5px" >
-                        <p:outputLabel for="nameTrademark" value="Trademark:" />
+                        <p:outputLabel for="nameTrademark" value="Brand:" />
                         <p:inputText id="nameTrademark" required="true" value="#{dailyCatalogsBean.marcaNueva.marcaR}" maxlength="255"/>
                         
-                        <p:outputLabel for="nameTrademarkEN" value="Trademark (English):" />
+                        <p:outputLabel for="nameTrademarkEN" value="Brand (English):" />
                         <p:inputText id="nameTrademarkEN" required="true" value="#{dailyCatalogsBean.marcaNueva.marcaEn}" maxlength="255"/>                                                
                         
                         <p:outputLabel for="statusTrademark" value="Status:" />
@@ -268,10 +320,10 @@
                     <p:separator/>
                     <h:panelGrid columns="1">
                         <p:dataTable id="tableTrademark" var="trademark" value="#{dailyCatalogsBean.catMarcasAll}" rowKey="#{trademark.idMarca}" selection="#{dailyCatalogsBean.marcaSelected}" selectionMode="single" paginator="true" rows="10">
-                            <p:column headerText="Trademark">
+                            <p:column headerText="Brand">
                                 <h:outputText value="#{trademark.marcaR}"/>
                             </p:column>
-                            <p:column headerText="Trademark (English)">
+                            <p:column headerText="Brand (English)">
                                 <h:outputText value="#{trademark.marcaEn}"/>
                             </p:column>                                                                                                                                         
                             <p:column headerText="Status">

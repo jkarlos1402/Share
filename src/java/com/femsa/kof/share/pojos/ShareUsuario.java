@@ -317,7 +317,7 @@ public class ShareUsuario implements Serializable {
 
     @Override
     public String toString() {
-        return "ShareUsuario{" + "pkUsuario=" + pkUsuario + ", usuario=" + usuario + ", password=" + password + ", nombre=" + nombre + ", pais=" + pais + ", mail=" + mail + ", estatus=" + estatus + ", rol=" + rol + ", paises=" + paises + '}';
+        return nombre;
     }
    
     /**

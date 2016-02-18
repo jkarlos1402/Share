@@ -293,10 +293,10 @@ ul {
 
 .main-nav__submenu {
     /*max-height: 0;*/
-/*    -webkit-transition: max-height 0.5s ease-in-out;
-    transition: max-height 0.5s ease-in-out;
-     background-color: rgba(0, 0, 0, 0.5);
-    overflow: hidden;*/
+    /*    -webkit-transition: max-height 0.5s ease-in-out;
+        transition: max-height 0.5s ease-in-out;
+         background-color: rgba(0, 0, 0, 0.5);
+        overflow: hidden;*/
 }
 /*.main-nav__submenu i {
   display: none;
@@ -465,3 +465,6 @@ span.ui-radiobutton-icon.ui-icon.ui-c.ui-icon-bullet{
 
 }
 
+.animated .ui-progressbar-value { 
+    background-image: url("../images/pbar-ani.gif.xhtml"); 
+}

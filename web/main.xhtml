@@ -108,7 +108,7 @@
                                                 </ul>
                                             </li>
                                         </h:panelGroup>
-                                        <h:panelGroup rendered="#{(mainBean.usuario.proyectos ne null and mainBean.usuario.proyectos.size() > 0 and mainBean.usuario.proyectos.get(0).idProyecto eq '1') or mainBean.usuario.rol.pkRol eq '2' ? true : false}">
+                                        <h:panelGroup rendered="#{(mainBean.usuario.proyectos ne null and mainBean.usuario.proyectos.size() > 0 and mainBean.usuario.proyectos.get(0).idProyecto eq '2') or mainBean.usuario.rol.pkRol eq '1' ? true : false}">
                                             <li >
                                                 <a href="#" onclick="return false;">                                            
                                                     Daily Dashboard
@@ -177,7 +177,7 @@
                                                                 </li>                                            
                                                                 <li>
                                                                     <p:commandLink action="#{mainBean.setPage('reclassification_catalogs','reclassificationTrademarkDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();initMenu();">
-                                                                        <span><img src="images/BG9-18.png"/>Trademark</span>
+                                                                        <span><img src="images/BG9-18.png"/>Brand</span>
                                                                     </p:commandLink>
                                                                 </li>                                            
                                                             </ul>                                                                                                                                                                                                                                                                                                        
@@ -221,6 +221,11 @@
                                                                     <li>
                                                                         <p:commandLink  action="#{mainBean.setPage('catalogs','channelDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();initMenu();">
                                                                             <span><img src="images/BG9-28.png"/>Channel</span>
+                                                                        </p:commandLink>
+                                                                    </li>
+                                                                    <li>
+                                                                        <p:commandLink  action="#{mainBean.setPage('catalogs','subchannelDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();initMenu();">
+                                                                            <span><img src="images/BG9-28.png"/>Subchannel</span>
                                                                         </p:commandLink>
                                                                     </li>
                                                                     <li>
@@ -279,15 +284,18 @@
                 </div>
             </div>
         </p:outputPanel>
-        <p:ajaxStatus style="position: fixed;display:block;bottom:100px;right: 20px;height:24px;" onstart="showLoading('1');" onsuccess="showLoading('0');" oncomplete="hideAsteriscos();"/>                   
-        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
-            <p style="font-size:14px; text-align: center;">
-                <p:graphicImage value="/images/loading.gif" />
-                <p style="font-size:14px;">
-                    Loading...
-                </p>                
-            </p>
-        </p:dialog>
+        <p:ajaxStatus style="position: fixed;display:block;bottom:100px;right: 20px;height:24px;" onstart="showLoading('1');" onsuccess="showLoading('0');" oncomplete="hideAsteriscos();"/>                           
+        <h:form id="formStatus">             
+            <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false" width="200">
+                <p style="font-size:14px; text-align: center;">
+                    <p:graphicImage value="/images/loading.gif" />
+                    <p style="font-size:14px; text-align: center;">                         
+                        Loading...
+                        <p:progressBar id="progress" widgetVar="pbAjax" ajax="true" value="#{mainBean.porcentajeAvance}" labelTemplate="{value}%"  styleClass="animated" global="false" interval="500"/>                                                                                                                  
+                    </p>                
+                </p>
+            </p:dialog>
+        </h:form>        
         <p:graphicImage  value="/images/loading.gif" style="position: fixed;display:block;bottom:10px;right: 10px;height:100px; display: none;" id="loadingGIF"/>
         <h:form id="formNotificaciones"> 
             <p:poll oncomplete="showNotifications()" interval="300" onstart="$('#showLoading').val('0');" onsuccess="$('#showLoading').val('1');"/>

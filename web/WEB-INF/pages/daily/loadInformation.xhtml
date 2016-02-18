@@ -267,7 +267,7 @@
                             </h:panelGrid>
                         </p:panel>
                         <f:facet name="footer">
-                            <p:commandButton value="Save" actionListener="#{dailyLoadBean.saveInfoPh}" update=":formLoadSalesPhi" rendered="#{dailyLoadBean.numRegistros > 0 ? true : false}">
+                            <p:commandButton value="Save" actionListener="#{dailyLoadBean.saveInfoPh}" update=":formLoadSalesPhi" rendered="#{dailyLoadBean.numRegistros > 0 ? true : false}" >
                                 <p:confirm message="Are you sure?" header="Save records"/>
                             </p:commandButton>                        
                         </f:facet>

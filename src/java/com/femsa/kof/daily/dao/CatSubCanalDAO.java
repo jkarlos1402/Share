@@ -1,6 +1,7 @@
 package com.femsa.kof.daily.dao;
 
-import com.femsa.kof.daily.pojos.RvvdCatMarca;
+import com.femsa.kof.daily.pojos.RvvdCatGec;
+import com.femsa.kof.daily.pojos.RvvdCatSubCanal;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
 import java.util.logging.Level;
@@ -10,11 +11,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 /**
- * Permite manipular el catálogo de marca
+ * Permite la administracion del catálogo de sub canales
  *
  * @author TMXIDSJPINAM
  */
-public class CatMarcaDAO {
+public class CatSubCanalDAO {
 
     private String error;
     private static final String MSG_ERROR_TITULO = "Mensaje de error...";
@@ -36,18 +37,18 @@ public class CatMarcaDAO {
     }
 
     /**
-     * Obtiene la lista de marcas sin importar el estatus
+     * Obtiene una lista con los sub-canales sin importar su estatus
      *
-     * @return La lista de marcas sin filtrar
+     * @return Regresa una lista con los sub-canales existentes
      */
-    public List<RvvdCatMarca> getMarcasAll() {
+    public List<RvvdCatSubCanal> getSubCanalesAll() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        List<RvvdCatMarca> marcas = null;
+        List<RvvdCatSubCanal> subCanales = null;
         try {
-            Query query = session.createQuery("SELECT m FROM RvvdCatMarca m");
-            marcas = query.list();
+            Query query = session.createQuery("SELECT sc FROM RvvdCatSubCanal sc");
+            subCanales = query.list();
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
@@ -58,22 +59,22 @@ public class CatMarcaDAO {
             session.close();
             hibernateUtil.closeSessionFactory();
         }
-        return marcas;
+        return subCanales;
     }
 
     /**
-     * Obtiene las marcas donde el estatus es igual a 1
+     * Obtiene una lista de sub-canales donde el estatus sea igual a 1
      *
-     * @return Regresa una lista con las marcas filtradas
+     * @return Regresa una lista de sub-canales filtrados
      */
-    public List<RvvdCatMarca> getMarcas() {
+    public List<RvvdCatSubCanal> getSubCanales() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        List<RvvdCatMarca> marcas = null;
+        List<RvvdCatSubCanal> subCanales = null;
         try {
-            Query query = session.createQuery("SELECT m FROM RvvdCatMarca m WHERE m.status = 1");
-            marcas = query.list();
+            Query query = session.createQuery("SELECT sc FROM RvvdCatSubCanal sc WHERE sc.status = 1");
+            subCanales = query.list();
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
@@ -84,22 +85,22 @@ public class CatMarcaDAO {
             session.close();
             hibernateUtil.closeSessionFactory();
         }
-        return marcas;
+        return subCanales;
     }
 
     /**
-     * Obtiene una marca en específico
+     * Obtiene un sub-canal en específico
      *
-     * @param id EL identificador de la marca a buscar
-     * @return La marca buscada, en caso de no existir se regresa nulo
+     * @param id El identificador del sub-canal
+     * @return El tipo de sub-canal, en caso de no existir se regresa nulo
      */
-    public RvvdCatMarca getMarca(Integer id) {
+    public RvvdCatSubCanal getSubCanal(Integer id) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        RvvdCatMarca marca = null;
+        RvvdCatSubCanal subCanal = null;
         try {
-            marca = (RvvdCatMarca) session.get(RvvdCatMarca.class, id);
+            subCanal = (RvvdCatSubCanal) session.get(RvvdCatSubCanal.class, id);
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
@@ -110,25 +111,25 @@ public class CatMarcaDAO {
             session.close();
             hibernateUtil.closeSessionFactory();
         }
-        return marca;
+        return subCanal;
     }
 
     /**
-     * Obtiene una marca en específico
+     * Obtiene un sub-canal en específico
      *
-     * @param marca El nombre de la marca a buscar
-     * @return La marca buscada, en caso de no existir se regresa nulo
+     * @param subCanal El nombre del sub-canal a buscar
+     * @return El sub-canal buscado, en caso de no existir se regresa nulo
      */
-    public RvvdCatMarca getMarca(String marca) {
+    public RvvdCatSubCanal getSubCanal(String subCanal) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        RvvdCatMarca marcaT = null;
+        RvvdCatSubCanal subCanalT = null;
         try {
-            Query query = session.createQuery("SELECT m FROM RvvdCatMarca m WHERE m.marcaR = '" + marca.toUpperCase() + "' OR m.marcaEn = '" + marca.toUpperCase() + "'");
-            List<RvvdCatMarca> marcas = query.list();
-            if (!marcas.isEmpty()) {
-                marcaT = marcas.get(0);
+            Query query = session.createQuery("SELECT sc FROM RvvdCatSubCanal sc WHERE sc.subCanalR = '" + subCanal.toUpperCase() + "' OR sc.subCanalEn = '" + subCanal.toUpperCase() + "'");
+            List<RvvdCatSubCanal> subCanales = query.list();
+            if (!subCanales.isEmpty()) {
+                subCanalT = subCanales.get(0);
             }
             error = null;
         } catch (Exception e) {
@@ -140,28 +141,28 @@ public class CatMarcaDAO {
             session.close();
             hibernateUtil.closeSessionFactory();
         }
-        return marcaT;
+        return subCanalT;
     }
 
     /**
-     * Guarda o actuliza una marca
+     * Guarda o actualiza un sub-canal
      *
-     * @param marca La marca a guardar o actualizar
-     * @return En caso de éxito se regresa verdadero, en caso contrario se
-     * regresa falso y se almacena el error en el atributo error
+     * @param subCanal El sub-canal a guardar o actualizar
+     * @return En caso de éxito se regresa verdadero, en caso contrario regresa
+     * falso y el error se almacena en el atributo error
      */
-    public boolean saveMarca(RvvdCatMarca marca) {
+    public boolean saveSubCanal(RvvdCatSubCanal subCanal) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if ((marca.getIdMarca() == null ? getMarca(marca.getMarcaR()) : null) == null) {
-                session.saveOrUpdate(marca);
+            if ((subCanal.getIdSubCanal() == null ? getSubCanal(subCanal.getSubCanalR()) : null) == null) {
+                session.saveOrUpdate(subCanal);
                 error = null;
             } else {
-                error = "Brand already exists";
+                error = "Subchannel already exists";
                 flagOk = false;
             }
             session.getTransaction().commit();

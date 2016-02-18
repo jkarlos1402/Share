@@ -102,7 +102,7 @@ public class CheckCatalogs {
             notifications.add("You have " + numNotReclassCanal + " channels without reclassifying.");
         }        
         if (numNotReclassMarca > 0) {
-            notifications.add("You have " + numNotReclassMarca + " trademarks without reclassifying.");
+            notifications.add("You have " + numNotReclassMarca + " brands without reclassifying.");
         }        
         if (numNotReclassGec > 0) {
             notifications.add("You have " + numNotReclassGec + " client types without reclassifying.");

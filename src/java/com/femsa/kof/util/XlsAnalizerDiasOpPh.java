@@ -1,6 +1,7 @@
 package com.femsa.kof.util;
 
 import com.femsa.kof.daily.pojos.Rvvd445PhTmp;
+import com.femsa.kof.managedbeans.MainBean;
 import com.femsa.kof.share.pojos.ShareCatPais;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import java.io.IOException;
@@ -117,7 +118,7 @@ public class XlsAnalizerDiasOpPh {
      * @param catPais pais que realiza el análisis
      * @param usuario usuario que realiza el análisis
      */
-    public void analizeXls(UploadedFile file, ShareCatPais catPais, ShareUsuario usuario) {
+    public void analizeXls(UploadedFile file, ShareCatPais catPais, ShareUsuario usuario,MainBean mainBean) {
         Workbook excelXLS = null;
         try {
             String extension = getExtension(file.getFileName());
@@ -143,6 +144,7 @@ public class XlsAnalizerDiasOpPh {
                     omittedSheets.add(sheet.getSheetName().trim().toUpperCase() + ", not valid.");
                 }
             }
+            mainBean.setPorcentajeAvance(100);
         } catch (IOException ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
         } finally {

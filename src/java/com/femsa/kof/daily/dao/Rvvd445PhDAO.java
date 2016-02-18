@@ -2,6 +2,7 @@ package com.femsa.kof.daily.dao;
 
 import com.femsa.kof.daily.pojos.Rvvd445Ph;
 import com.femsa.kof.daily.pojos.Rvvd445PhTmp;
+import com.femsa.kof.managedbeans.MainBean;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,7 @@ public class Rvvd445PhDAO {
      * @param diasOpPh
      * @return
      */
-    public boolean save445Ph(List<Rvvd445PhTmp> diasOpPh) {
+    public boolean save445Ph(List<Rvvd445PhTmp> diasOpPh, MainBean mainBean) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
@@ -79,6 +80,8 @@ public class Rvvd445PhDAO {
         try {
             session.beginTransaction();
             for (Rvvd445PhTmp carga : diasOpPh) {
+                mainBean.setNumRegistrosProcesados(cont);
+                mainBean.setPorcentajeAvance((int) ((cont * 100) / (diasOpPh.size() + 5)));
                 pais = carga.getPais();
                 session.save(carga);
                 if (cont % 100 == 0) {
@@ -102,29 +105,38 @@ public class Rvvd445PhDAO {
                     session.clear();
                 }
                 cont++;
-            }
+            }            
             errors.clear();
-            session.getTransaction().commit();
+            session.getTransaction().commit();           
             session.beginTransaction();
             queryNativo = session.createSQLQuery("DELETE FROM RVVD_445_PH WHERE PAIS = '" + pais + "' AND FECHA IN (SELECT DISTINCT(FECHA) FROM RVVD_445_PH_TMP)");
             queryNativo.executeUpdate();
             session.getTransaction().commit();
+            mainBean.setPorcentajeAvance((int) ((++cont * 100) / (diasOpPh.size() + 5)));
             session.beginTransaction();
             queryNativo = session.createSQLQuery("INSERT INTO RVVD_445_PH(PAIS,FECHA,FECHA_REASIGNACION,FECHA_AA) SELECT PAIS,FECHA,FECHA_REASIGNACION,FECHA_AA FROM RVVD_445_PH_TMP");
             queryNativo.executeUpdate();
             session.getTransaction().commit();
+            mainBean.setPorcentajeAvance((int) ((++cont * 100) / (diasOpPh.size() + 5)));
             session.beginTransaction();
             queryNativo = session.createSQLQuery("TRUNCATE TABLE RVVD_445_PH_TMP");
             queryNativo.executeUpdate();
             session.getTransaction().commit();
+            mainBean.setPorcentajeAvance((int) ((++cont * 100) / (diasOpPh.size() + 5)));
             session.beginTransaction();
             queryNativo = session.createSQLQuery("DROP SEQUENCE RVVD_SEQ_445_PH_TMP");
             queryNativo.executeUpdate();
             session.getTransaction().commit();
+            mainBean.setPorcentajeAvance((int) ((++cont * 100) / (diasOpPh.size() + 5)));
             session.beginTransaction();
             queryNativo = session.createSQLQuery("CREATE SEQUENCE RVVD_SEQ_445_PH_TMP INCREMENT BY 1 START WITH 1");
             queryNativo.executeUpdate();
             session.getTransaction().commit();
+            session.beginTransaction();
+            queryNativo = session.createSQLQuery("COMMIT");
+            queryNativo.executeUpdate();
+            session.getTransaction().commit();
+            mainBean.setPorcentajeAvance((int) ((++cont * 100) / (diasOpPh.size() + 5)));
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             errors.add("Error saving records: " + e.getMessage());

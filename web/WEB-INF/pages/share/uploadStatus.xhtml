@@ -17,7 +17,7 @@
                 <h1>Upload Status</h1>                 
                 <p:panel id="panelLoad">   
                     <h:panelGrid columns="1" cellpadding="5px">
-                        <p:dataTable var="carga" value="#{shareUploadStatusBean.cargasSession}">
+                        <p:dataTable var="carga" value="#{shareUploadStatusBean.cargasMes}">
                             <f:facet name="header">
                                 Uploads status
                             </f:facet>
@@ -25,12 +25,17 @@
                                 <p:rowToggler />
                             </p:column>
                             <p:column headerText="File name">
-                                <h:outputText value="#{carga.nameFile}" />
+                                <h:outputText value="#{carga.nombreArchivo}" />
                             </p:column>
                             <p:column headerText="Date">
-                                <h:outputText value="#{shareUploadStatusBean.dateFormat.format(carga.fecha)}" />
+                                <h:outputText value="#{shareUploadStatusBean.dateFormat.format(carga.fechaEjecucion)}" />
                             </p:column>
-
+                            <p:column headerText="Country" rendered="#{dailyUploadStatusBean.usuario.rol.pkRol eq 1 ? true : false}">
+                                <h:outputText value="#{carga.pais}" />
+                            </p:column>
+                            <p:column headerText="User" rendered="#{dailyUploadStatusBean.usuario.rol.pkRol eq 1 ? true : false}">
+                                <h:outputText value="#{carga.usuario}" />
+                            </p:column>
                             <p:rowExpansion>
                                 <p:panelGrid  columns="2" columnClasses="label,value" style="width:100%">
                                     <f:facet name="header">
@@ -38,28 +43,31 @@
                                     </f:facet>
 
                                     <h:outputText value="Project:" />
-                                    <h:outputText value="#{carga.project}" />
+                                    <h:outputText value="#{carga.nombreProyecto}" />
                                                                         
                                     <h:outputText value="Process:" />
-                                    <h:outputText value="#{carga.process}" />
+                                    <h:outputText value="#{carga.nombreProceso}" />
 
                                     <h:outputText value="File name:" />
-                                    <h:outputText value="#{carga.nameFile}" />
+                                    <h:outputText value="#{carga.nombreArchivo}" />
 
                                     <h:outputText value="Execution date:" />
-                                    <h:outputText value="#{shareUploadStatusBean.dateFormat.format(carga.fecha)}"/>
+                                    <h:outputText value="#{shareUploadStatusBean.dateFormat.format(carga.fechaEjecucion)}"/>
 
                                     <h:outputText value="Data Entries:" />
-                                    <h:outputText value="#{carga.numEntriesSaved}" />
+                                    <h:outputText value="#{carga.registrosProcesados}" />
                                     
                                     <h:outputText value="Start:" />
-                                    <h:outputText value="#{shareUploadStatusBean.dateTimeFormat.format(carga.dateExecution)}" />
+                                    <h:outputText value="#{shareUploadStatusBean.dateTimeFormat.format(carga.inicioEjecucion)}" />
                                     
                                     <h:outputText value="End:" />
-                                    <h:outputText value="#{shareUploadStatusBean.dateTimeFormat.format(carga.dateEndExecution)}" />
+                                    <h:outputText value="#{shareUploadStatusBean.dateTimeFormat.format(carga.finEjecucion)}" />
                                 </p:panelGrid>
                             </p:rowExpansion>
                         </p:dataTable>
+                        <f:facet name="footer">
+                            <p:commandButton value="Refresh" actionListener="#{shareUploadStatusBean.refresh}" update="panelLoad"/>
+                        </f:facet>
                     </h:panelGrid>                      
                 </p:panel>
             </h:form>
