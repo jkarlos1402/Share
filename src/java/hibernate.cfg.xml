@@ -3,7 +3,7 @@
 <hibernate-configuration>
     <session-factory>
         
-         <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
         <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
         <property name="hibernate.connection.url">jdbc:oracle:thin:@localhost:1521:XE</property>
         <property name="hibernate.connection.username">kofuser</property>
@@ -79,5 +79,8 @@
         <mapping class="com.femsa.kof.daily.pojos.Rvvd445Ph"/>
         <mapping class="com.femsa.kof.daily.pojos.Rvvd445PhTmp"/>
         <mapping class="com.femsa.kof.daily.pojos.RvvdInfoPh"/>
+        <mapping class="com.femsa.kof.daily.pojos.RvvdInfoPhTmp"/>
+        <mapping class="com.femsa.kof.daily.pojos.RvvdCatZona"/>
+        <mapping class="com.femsa.kof.daily.pojos.RvvdReclasifZona"/>
     </session-factory>
 </hibernate-configuration>

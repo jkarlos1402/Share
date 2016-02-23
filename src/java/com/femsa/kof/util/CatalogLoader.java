@@ -7,8 +7,10 @@ import com.femsa.kof.daily.dao.CatContCaloricoDAO;
 import com.femsa.kof.daily.dao.CatEmpaqueDAO;
 import com.femsa.kof.daily.dao.CatGecDAO;
 import com.femsa.kof.daily.dao.CatMarcaDAO;
+import com.femsa.kof.daily.dao.CatSubCanalDAO;
 import com.femsa.kof.daily.dao.CatTipoConsumoDAO;
 import com.femsa.kof.daily.dao.CatUnidadNegocioDAO;
+import com.femsa.kof.daily.dao.CatZonaDAO;
 import com.femsa.kof.share.dao.ShareCatCategoriasDAO;
 import com.femsa.kof.share.dao.ShareCatPaisDAO;
 import com.femsa.kof.share.dao.ShareCatCanalesDAO;
@@ -79,6 +81,12 @@ public class CatalogLoader {
 
             CatCanalDAO canalDAO = new CatCanalDAO();
             sc.setAttribute("canal_daily_catalog", canalDAO.getCanales());
+            
+            CatSubCanalDAO subCanalDAO = new CatSubCanalDAO();
+            sc.setAttribute("sub_canal_daily_catalog", subCanalDAO.getSubCanales());
+            
+            CatZonaDAO zonaDAO = new CatZonaDAO();
+            sc.setAttribute("zona_daily_catalog", zonaDAO.getZonas());
         }
         return bndOk;
     }

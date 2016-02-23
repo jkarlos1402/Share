@@ -6,6 +6,7 @@ import com.femsa.kof.daily.dao.ReclasifDiasOpDAO;
 import com.femsa.kof.daily.dao.ReclasifEmpaqueDAO;
 import com.femsa.kof.daily.dao.ReclasifGecDAO;
 import com.femsa.kof.daily.dao.ReclasifMarcaDAO;
+import com.femsa.kof.daily.dao.ReclasifZonaDAO;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +82,16 @@ public class CheckCatalogs {
         ReclasifDiasOpDAO reclasifDiasOpDAO = new ReclasifDiasOpDAO();
         return reclasifDiasOpDAO.checkReclasifDiasOp(usuario);
     }
+    
+    /**
+     *
+     * @param usuario
+     * @return
+     */
+    public static long checkZonaDaily(ShareUsuario usuario) {
+        ReclasifZonaDAO zonaDAO = new ReclasifZonaDAO();
+        return zonaDAO.checkReclasifZonas(usuario);
+    }
 
     /**
      *
@@ -95,6 +106,7 @@ public class CheckCatalogs {
         long numNotReclassGec = checkGECDaily(usuario);
         long numNotReclassEmpaque = checkPackingDaily(usuario);
         long numNotReclassDiasOp = checkOperativeDaysDaily(usuario);
+        long numNotReclassZonas = checkZonaDaily(usuario);
         if (numNotReclassCateg > 0) {
             notifications.add("You have " + numNotReclassCateg + " categories without reclassifying.");
         }
@@ -112,6 +124,9 @@ public class CheckCatalogs {
         }        
         if (numNotReclassDiasOp > 0) {
             notifications.add("You have " + numNotReclassDiasOp + " operative days without reclassifying.");
+        }        
+        if (numNotReclassZonas > 0) {
+            notifications.add("You have " + numNotReclassZonas + " zones without reclassifying.");
         }        
         session.setAttribute("notifications_user", notifications);        
     }

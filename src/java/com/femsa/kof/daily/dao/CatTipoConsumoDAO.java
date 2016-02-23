@@ -51,7 +51,7 @@ public class CatTipoConsumoDAO {
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
         } finally {
             session.flush();
             session.clear();
@@ -77,7 +77,7 @@ public class CatTipoConsumoDAO {
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
         } finally {
             session.flush();
             session.clear();
@@ -103,7 +103,7 @@ public class CatTipoConsumoDAO {
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
         } finally {
             session.flush();
             session.clear();
@@ -127,13 +127,13 @@ public class CatTipoConsumoDAO {
         try {
             Query query = session.createQuery("SELECT tc FROM RvvdCatTipoConsumo tc WHERE tc.tipoConsumoR = '" + tipoConsumo.toUpperCase() + "' OR tc.tipoConsumoEn = '" + tipoConsumo.toUpperCase() + "'");
             List<RvvdCatTipoConsumo> tiposConsumo = query.list();
-            if (!tiposConsumo.isEmpty()) {
+            if (tiposConsumo != null && !tiposConsumo.isEmpty()) {
                 tipoConsumoT = tiposConsumo.get(0);
             }
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
         } finally {
             session.flush();
             session.clear();
@@ -167,7 +167,7 @@ public class CatTipoConsumoDAO {
             session.getTransaction().commit();
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

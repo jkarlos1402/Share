@@ -53,7 +53,7 @@ public class ShareCatCategoriasDAO {
             }
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
         } finally {
             session.flush();
             session.clear();
@@ -76,13 +76,13 @@ public class ShareCatCategoriasDAO {
         try {
             Query query = session.createQuery("SELECT categ FROM ShareCatCategorias categ WHERE categ.categoria = '" + name.toUpperCase() + "'");
             List<ShareCatCategorias> categories = query.list();
-            if (!categories.isEmpty()) {
+            if (categories != null && !categories.isEmpty()) {
                 category = categories.get(0);
             }
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
         } finally {
             session.flush();
             session.clear();
@@ -107,7 +107,7 @@ public class ShareCatCategoriasDAO {
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
         } finally {
             session.flush();
             session.clear();
@@ -139,7 +139,7 @@ public class ShareCatCategoriasDAO {
             session.getTransaction().commit();
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

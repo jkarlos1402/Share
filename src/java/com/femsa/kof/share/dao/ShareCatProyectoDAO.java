@@ -49,7 +49,7 @@ public class ShareCatProyectoDAO {
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
         } finally {
             session.flush();
             session.clear();
@@ -74,7 +74,7 @@ public class ShareCatProyectoDAO {
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
         } finally {
             session.flush();
             session.clear();
@@ -97,13 +97,13 @@ public class ShareCatProyectoDAO {
         try {
             Query query = session.createQuery("SELECT proyecto FROM ShareCatProyecto proyecto WHERE proyecto.nombreProyecto = '" + nombrProyecto.toUpperCase() + "'");
             List<ShareCatProyecto> proyectos = query.list();
-            if (!proyectos.isEmpty()) {
+            if (proyectos != null && !proyectos.isEmpty()) {
                 proyecto = proyectos.get(0);
             }
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
         } finally {
             session.flush();
             session.clear();
@@ -128,7 +128,7 @@ public class ShareCatProyectoDAO {
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
         } finally {
             session.flush();
             session.clear();
@@ -164,7 +164,7 @@ public class ShareCatProyectoDAO {
             session.getTransaction().commit();
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

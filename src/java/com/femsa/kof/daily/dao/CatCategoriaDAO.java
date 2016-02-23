@@ -51,7 +51,7 @@ public class CatCategoriaDAO {
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
         } finally {
             session.flush();
             session.clear();
@@ -77,7 +77,7 @@ public class CatCategoriaDAO {
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
         } finally {
             session.flush();
             session.clear();
@@ -103,7 +103,7 @@ public class CatCategoriaDAO {
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
         } finally {
             session.flush();
             session.clear();
@@ -127,13 +127,13 @@ public class CatCategoriaDAO {
         try {
             Query query = session.createQuery("SELECT c FROM RvvdCatCategoria c WHERE c.categoria = '" + categoria.toUpperCase() + "' OR c.categoriaEn = '" + categoria.toUpperCase() + "'");
             List<RvvdCatCategoria> categorias = query.list();
-            if (!categorias.isEmpty()) {
+            if (categorias != null && !categorias.isEmpty()) {
                 categ = categorias.get(0);
             }
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
         } finally {
             session.flush();
             session.clear();
@@ -167,7 +167,7 @@ public class CatCategoriaDAO {
             session.getTransaction().commit();
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

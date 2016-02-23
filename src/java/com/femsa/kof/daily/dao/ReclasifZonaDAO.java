@@ -1,6 +1,7 @@
 package com.femsa.kof.daily.dao;
 
-import com.femsa.kof.daily.pojos.RvvdReclasifMarca;
+import com.femsa.kof.daily.pojos.RvvdReclasifCanal;
+import com.femsa.kof.daily.pojos.RvvdReclasifZona;
 import com.femsa.kof.daily.util.CheckCatalogs;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import com.femsa.kof.util.HibernateUtil;
@@ -12,10 +13,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 /**
+ * Permite la reclasificación del catálogo zona
  *
  * @author TMXIDSJPINAM
  */
-public class ReclasifMarcaDAO {
+public class ReclasifZonaDAO {
 
     private String error;
     private static final String MSG_ERROR_TITULO = "Mensaje de error...";
@@ -37,11 +39,14 @@ public class ReclasifMarcaDAO {
     }
 
     /**
+     * Obtiene la lista completa de Zonas reclasificadas y sin reclasificar de
+     * acuerdo al usuario
      *
-     * @param usuario
-     * @return
+     * @param usuario El usuario que realiza la búsqueda
+     * @return Una lista con las zonas reclasificadas y sin reclasificar
+     * pertenecientes al usuario
      */
-    public List<RvvdReclasifMarca> getReclasifMarcasAll(ShareUsuario usuario) {
+    public List<RvvdReclasifZona> getReclasifZonasAll(ShareUsuario usuario) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
@@ -53,10 +58,10 @@ public class ReclasifMarcaDAO {
                 paises = "'" + (usuario.getPaises().get(i).getClaveCorta()) + "'";
             }
         }
-        List<RvvdReclasifMarca> marcas = null;
+        List<RvvdReclasifZona> zonasReclasificadas = null;
         try {
-            Query query = session.createQuery("SELECT rm FROM RvvdReclasifMarca rm WHERE rm.pais IN (" + paises + ")");
-            marcas = query.list();
+            Query query = session.createQuery("SELECT rz FROM RvvdReclasifZona rz WHERE rz.pais IN (" + paises + ") ORDER BY rz.zonaR DESC,rz.zonaEn DESC");
+            zonasReclasificadas = query.list();
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
@@ -67,15 +72,18 @@ public class ReclasifMarcaDAO {
             session.close();
             hibernateUtil.closeSessionFactory();
         }
-        return marcas;
+        return zonasReclasificadas;
     }
 
     /**
+     * Actualiza la lista de zonas reclasificadas con los cambios realizados
+     * por el usuario
      *
-     * @param marcas
-     * @return
+     * @param reclasifZonas La lista actualizada de zonas reclasificadas
+     * @return En caso de éxito se regresa verdadero, en caso contrario se
+     * regresa falso, y el error es almacenado en el atributo error
      */
-    public boolean saveReclasifMarcas(List<RvvdReclasifMarca> marcas) {
+    public boolean saveReclasifZonas(List<RvvdReclasifZona> reclasifZonas) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
@@ -83,8 +91,8 @@ public class ReclasifMarcaDAO {
         long cont = 0L;
         try {
             session.beginTransaction();
-            for (RvvdReclasifMarca marca : marcas) {
-                session.update(marca);
+            for (RvvdReclasifZona reclasifZona : reclasifZonas) {
+                session.saveOrUpdate(reclasifZona);
                 if (cont % 100 == 0) {
                     session.flush();
                     session.clear();
@@ -111,11 +119,13 @@ public class ReclasifMarcaDAO {
     }
 
     /**
+     * Obtiene el número de zonas sin reclasificar por el usuario
      *
-     * @param usuario
-     * @return
+     * @param usuario El usuario correspondiente
+     * @return Regresa el número de canales sin reclasificar por parte del
+     * usuario
      */
-    public long checkReclasifMarcas(ShareUsuario usuario) {
+    public long checkReclasifZonas(ShareUsuario usuario) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
@@ -129,7 +139,7 @@ public class ReclasifMarcaDAO {
         }
         long numNotReclass = 0L;
         try {
-            Query query = session.createQuery("SELECT count(rm.idReclasifMarca) FROM RvvdReclasifMarca rm WHERE rm.pais IN (" + paises + ") AND (rm.contenidoCaloricoR IS NULL OR rm.contenidoCaloricoEn IS NULL OR rm.marcaR IS NULL OR rm.marcaEn IS NULL)");
+            Query query = session.createQuery("SELECT count(rz.idReclasifZona) FROM RvvdReclasifZona rz WHERE rz.pais IN (" + paises + ") AND (rz.zonaR IS NULL OR rz.zonaEn IS NULL)");
             List<Object> res = query.list();
             numNotReclass = (Long) res.get(0);
             error = null;

@@ -10,6 +10,7 @@ import com.femsa.kof.daily.dao.CatMarcaDAO;
 import com.femsa.kof.daily.dao.CatSubCanalDAO;
 import com.femsa.kof.daily.dao.CatTipoConsumoDAO;
 import com.femsa.kof.daily.dao.CatUnidadNegocioDAO;
+import com.femsa.kof.daily.dao.CatZonaDAO;
 import com.femsa.kof.daily.pojos.RvvdCatCanal;
 import com.femsa.kof.daily.pojos.RvvdCatCategoria;
 import com.femsa.kof.daily.pojos.RvvdCatCategoriaOficial;
@@ -20,6 +21,7 @@ import com.femsa.kof.daily.pojos.RvvdCatMarca;
 import com.femsa.kof.daily.pojos.RvvdCatSubCanal;
 import com.femsa.kof.daily.pojos.RvvdCatTipoConsumo;
 import com.femsa.kof.daily.pojos.RvvdCatUnidadNegocio;
+import com.femsa.kof.daily.pojos.RvvdCatZona;
 import com.femsa.kof.util.CatalogLoader;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -80,6 +82,10 @@ public class DailyCatalogsBean implements Serializable {
     private RvvdCatContenidoCalorico contenidoSelected;
     private List<RvvdCatContenidoCalorico> catContenidosAll = new ArrayList<RvvdCatContenidoCalorico>();
 
+    private RvvdCatZona zonaNueva = new RvvdCatZona();
+    private RvvdCatZona zonaSelected;
+    private List<RvvdCatZona> catZonasAll = new ArrayList<RvvdCatZona>();
+
     /**
      *
      */
@@ -115,6 +121,33 @@ public class DailyCatalogsBean implements Serializable {
 
         CatCategoriaOficialDAO categoriaOficialDAO = new CatCategoriaOficialDAO();
         catCategoriaOficialAll = categoriaOficialDAO.getCategoriasOficialesAll();
+
+        CatZonaDAO zonaDAO = new CatZonaDAO();
+        catZonasAll = zonaDAO.getZonasAll();
+    }
+
+    public RvvdCatZona getZonaNueva() {
+        return zonaNueva;
+    }
+
+    public void setZonaNueva(RvvdCatZona zonaNueva) {
+        this.zonaNueva = zonaNueva;
+    }
+
+    public RvvdCatZona getZonaSelected() {
+        return zonaSelected;
+    }
+
+    public void setZonaSelected(RvvdCatZona zonaSelected) {
+        this.zonaSelected = zonaSelected;
+    }
+
+    public List<RvvdCatZona> getCatZonasAll() {
+        return catZonasAll;
+    }
+
+    public void setCatZonasAll(List<RvvdCatZona> catZonasAll) {
+        this.catZonasAll = catZonasAll;
     }
 
     public List<RvvdCatCanal> getCatCanales() {
@@ -970,6 +1003,41 @@ public class DailyCatalogsBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
+    /**
+     *
+     */
+    public void newZona() {
+        zonaNueva = new RvvdCatZona();
+        zonaSelected = null;
+    }
+
+    /**
+     *
+     */
+    public void selectZona() {
+        zonaNueva.setIdZona(zonaSelected.getIdZona());
+        zonaNueva.setStatus(zonaSelected.getStatus());
+        zonaNueva.setZonaEn(zonaSelected.getZonaEn());
+        zonaNueva.setZonaR(zonaSelected.getZonaR());
+    }
+
+    /**
+     *
+     */
+    public void saveZona() {
+        FacesMessage message;
+        CatZonaDAO zonaDAO = new CatZonaDAO();
+        if (zonaDAO.saveZona(zonaNueva)) {
+            CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("zona");
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Zone saved");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the zone, " + zonaDAO.getError());
+            zonaNueva.setIdZona(null);
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
     private void refreshCatalog(String catalog) {
         if ("calorico".equalsIgnoreCase(catalog)) {
             CatContCaloricoDAO contCaloricoDAO = new CatContCaloricoDAO();
@@ -1003,6 +1071,9 @@ public class DailyCatalogsBean implements Serializable {
         } else if ("subCanal".equalsIgnoreCase(catalog)) {
             CatSubCanalDAO catSubCanalDAO = new CatSubCanalDAO();
             catSubCanalesAll = catSubCanalDAO.getSubCanalesAll();
+        } else if ("zona".equalsIgnoreCase(catalog)) {
+            CatZonaDAO zonaDAO = new CatZonaDAO();
+            catZonasAll = zonaDAO.getZonasAll();
         }
     }
 }

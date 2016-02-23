@@ -52,7 +52,7 @@ public class Rvvd445PhDAO {
             errors.clear();
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            errors.add(e.getMessage());
+            errors.add(e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
         } finally {
             session.flush();
             session.clear();
@@ -139,7 +139,11 @@ public class Rvvd445PhDAO {
             mainBean.setPorcentajeAvance((int) ((++cont * 100) / (diasOpPh.size() + 5)));
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            errors.add("Error saving records: " + e.getMessage());
+            errors.add("Error saving records: " + e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+            queryNativo = session.createSQLQuery("ROLLBACK");
+            queryNativo.executeUpdate();
+            queryNativo = session.createSQLQuery("COMMIT");
+            queryNativo.executeUpdate();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

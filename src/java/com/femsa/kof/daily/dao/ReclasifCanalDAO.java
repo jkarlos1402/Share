@@ -64,7 +64,7 @@ public class ReclasifCanalDAO {
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
         } finally {
             session.flush();
             session.clear();
@@ -75,7 +75,7 @@ public class ReclasifCanalDAO {
     }
 
     /**
-     * Actualiza la lista de canales reclasificados con los cmabios realizados
+     * Actualiza la lista de canales reclasificados con los cambios realizados
      * por el usuario
      *
      * @param reclasifCanales La lista actualizada de canales reclasificados
@@ -104,7 +104,7 @@ public class ReclasifCanalDAO {
             CheckCatalogs.checkAllCatalogs();
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }
@@ -145,7 +145,7 @@ public class ReclasifCanalDAO {
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
         } finally {
             session.flush();
             session.clear();

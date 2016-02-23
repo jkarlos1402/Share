@@ -454,7 +454,7 @@ public class DailyLoadBean {
             omittedSheets = analizer.getOmittedSheets();
             loadedSheets = analizer.getLoadedSheets();
             errors = analizer.getErrors();
-            if (!listInfoCargaRolling.isEmpty()) {
+            if (listInfoCargaRolling != null && !listInfoCargaRolling.isEmpty()) {
                 nameFile = event.getFile().getFileName();
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", event.getFile().getFileName() + " is uploaded.");
             } else {
@@ -506,7 +506,7 @@ public class DailyLoadBean {
             errors.clear();
         } catch (IOException ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
-            errors.add(ex.getMessage());
+            errors.add(ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
         }
         omittedSheets = analizer.getOmittedSheets();
         loadedSheets = analizer.getLoadedSheets();

@@ -367,6 +367,55 @@
                 </p:panel>
             </h:form>             
 
+            <h:form id="formReclaZona" rendered="#{mainBean.catalog eq 'reclassificationZoneDaily' ? true : false}">
+                <p:growl id="msgsReclaZona" showDetail="true"/>
+                <p:messages showDetail="true" closable="true"/>
+                <p:panel header="Zone" id="panelReclaZona">                                        
+                    <h:panelGrid columns="1">
+                        <p:dataTable id="tableReclaZona" var="zona" value="#{dailyReclassCatalogsBean.zonasReclasificadas}" editable="true" paginator="true" rows="10" 
+                                     rowStyleClass="#{zona.zonaR eq null || zona.zonaR eq '' || zona.zonaEn eq null || zona.zonaEn eq '' ? 'ui-state-error' : null}">
+                            <p:ajax event="rowEdit" listener="#{dailyReclassCatalogsBean.onRowEditZona}" />
+                            <f:facet name="header">
+                                <h:outputText value="#{dailyReclassCatalogsBean.zonasReclasificadas.size()} entries found."/>                                                                
+                            </f:facet>
+                            <p:column headerText="Country">
+                                <h:outputText value="#{zona.pais}"/>
+                            </p:column>
+                            <p:column headerText="Zone" filterBy="#{zona.zona}" filterMatchMode="contains">
+                                <h:outputText value="#{zona.zona}"/>
+                            </p:column>                                                                                                                                
+                            <p:column headerText="Reclassified Zone" sortBy="#{zona.zonaR}">                                
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{zona.zonaR}"/></f:facet>
+                                    <f:facet name="input">
+                                        <h:selectOneMenu id="idReclassTrade" value="#{dailyReclassCatalogsBean.catZonaSelected}" converter="zonaConverter" label="Reclassified Zone" immediate="true" required="true" style="width: 100%">                                            
+                                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                            <f:selectItems value="#{dailyReclassCatalogsBean.catZonas}"/>                           
+                                        </h:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Reclassified Zone (English)" sortBy="#{zona.zonaEn}">
+                                <h:outputText value="#{zona.zonaEn}"/>
+                            </p:column>                                                                                 
+                            <p:column style="width:25px">
+                                <p:rowEditor />
+                            </p:column>                            
+                        </p:dataTable>
+                    </h:panelGrid>
+                    <f:facet name="footer">
+                        <h:panelGrid columns="2" cellspacing="5px">
+                            <p:commandButton value="Save" update=":formReclaZona,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.saveZonasReclasificados}">
+                                <p:confirm header="Save changes" message="Are you Sure?" />
+                            </p:commandButton>
+                            <p:commandButton value="Refresh" update=":formReclaZona,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.refreshZonasReclasificadas}">
+                                <p:confirm header="Refresh table" message="Unsaved changes will be lost, are you Sure?" />
+                            </p:commandButton>
+                        </h:panelGrid>                        
+                    </f:facet>
+                </p:panel>
+            </h:form>             
+
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                 <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                 <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />

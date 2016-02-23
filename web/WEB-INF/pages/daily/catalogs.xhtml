@@ -475,6 +475,50 @@
                     </h:panelGrid>
                 </p:panel>
             </h:form> 
+            
+            <h:form id="formZona" rendered="#{mainBean.catalog eq 'zonaDaily' ? true : false}">
+                <p:growl id="msgsZona" showDetail="true"/>
+                <p:messages showDetail="true" closable="true"/>
+                <p:panel header="Zone catalog" id="panelZona">                    
+                    <h:panelGrid columns="4" cellpadding="5px" >
+                        <p:outputLabel for="nameZona" value="Zone:" />
+                        <p:inputText id="nameZona" required="true" value="#{dailyCatalogsBean.zonaNueva.zonaR}" maxlength="255"/>
+                        
+                        <p:outputLabel for="nameZonaEN" value="Zone (English):" />
+                        <p:inputText id="nameZonaEN" required="true" value="#{dailyCatalogsBean.zonaNueva.zonaEn}" maxlength="255"/>                                                
+                        
+                        <p:outputLabel for="statusZona" value="Status:" />
+                        <p:selectOneRadio id="statusZona" layout="pageDirection" required="true" value="#{dailyCatalogsBean.zonaNueva.status}">
+                            <f:selectItem itemLabel="Enable" itemValue="true" />
+                            <f:selectItem itemLabel="Disable" itemValue="false" />                            
+                        </p:selectOneRadio>
+                       
+                        <f:facet name="footer">
+                            <h:panelGrid columns="2" cellspacing="10px">
+                                <p:commandButton value="Save" update="formZona" actionListener="#{dailyCatalogsBean.saveZona}">
+                                    <p:confirm message="Are you sure?" header="Save Zone"/>
+                                </p:commandButton>
+                                <p:commandButton value="New" update="formZona" actionListener="#{dailyCatalogsBean.newZona}" rendered="#{dailyCatalogsBean.zonaNueva.idZona ne null ? true : false}"/>
+                            </h:panelGrid>
+                        </f:facet>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <h:panelGrid columns="1">
+                        <p:dataTable id="tableZona" var="zona" value="#{dailyCatalogsBean.catZonasAll}" rowKey="#{zona.idZona}" selection="#{dailyCatalogsBean.zonaSelected}" selectionMode="single" paginator="true" rows="10">
+                            <p:column headerText="Zone">
+                                <h:outputText value="#{zona.zonaR}"/>
+                            </p:column>
+                            <p:column headerText="Zone (English)">
+                                <h:outputText value="#{zona.zonaEn}"/>
+                            </p:column>                                                                                                                                         
+                            <p:column headerText="Status">
+                                <h:outputText value="#{zona.status ? 'ENABLED' : 'DISABLED'}"/>
+                            </p:column>
+                            <p:ajax event="rowSelect" update=":formZona:panelZona" listener="#{dailyCatalogsBean.selectZona}"/>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </p:panel>
+            </h:form> 
              
             <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                 <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />

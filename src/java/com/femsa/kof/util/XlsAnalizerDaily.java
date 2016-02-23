@@ -142,16 +142,13 @@ public class XlsAnalizerDaily {
         Workbook excelXLS = null;
         try {
             String extension = getExtension(file.getFileName());
-            Iterator<Row> rowIterator = null;
-
-            HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-            Iterator<Sheet> sheets = null;
+            Iterator<Row> rowIterator;
             if (extension.equalsIgnoreCase("xlsx")) {
                 excelXLS = new XSSFWorkbook(file.getInputstream());
             } else if (extension.equalsIgnoreCase("xls")) {
                 excelXLS = new HSSFWorkbook(file.getInputstream());
             }
-            int numberOfSheets = excelXLS.getNumberOfSheets();
+            int numberOfSheets = excelXLS != null ? excelXLS.getNumberOfSheets() : 0;
             for (int i = 0; i < numberOfSheets; i++) {
                 Sheet sheet = excelXLS.getSheetAt(i);
                 rowIterator = sheet.iterator();
@@ -211,148 +208,243 @@ public class XlsAnalizerDaily {
         }
         RvvdCatCategoriaOficial categoriaOficialTemp = null;
         Calendar fechaTemp = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String descPais = "";
         String zona = "";
+        RvvdReclasifDiasOpTmp diaOp = null;
+        RollingDaily rolling = null;
+        RvvdStRollingTmp stRolling = null;
         end:
         while (rowIterator != null && rowIterator.hasNext()) {
             numCell = 0;
             Row row = rowIterator.next();
-            Iterator<Cell> cellIterator = row.cellIterator();
-            RvvdReclasifDiasOpTmp diaOp = null;
-            RollingDaily rolling = null;
-            RvvdStRollingTmp stRolling = null;
-            while (cellIterator.hasNext()) {
-                Cell cell = cellIterator.next();
-                switch (cell.getCellType()) {
-                    case Cell.CELL_TYPE_STRING:
-                        if (!cell.getStringCellValue().trim().equals("") && numRow == 0) {
-                            cabeceras.add(new Columnas(cell.getStringCellValue().trim(), numCell));
-                        } else if (!cell.getStringCellValue().trim().equals("") && numRow > 0) {
-                            if (cabeceras.get(numCell).getNameColumn().equalsIgnoreCase("country") && !cell.getStringCellValue().trim().equals("")) {
-                                diaOp = new RvvdReclasifDiasOpTmp();
-                                rolling = new RollingDaily();
-                                rolling.setDiasOperativos(diaOp);
-                                descPais = catPais.getNombre();
-                                zona = cell.getStringCellValue().trim().toUpperCase();
-                                diaOp.setPais(catPais.getClaveCorta());
-                                cargas.add(rolling);
+            Cell cell = null;
+            if (numRow == 0) {
+                Iterator<Cell> cellIterator = row.cellIterator();
+                while (cellIterator.hasNext()) {
+                    cell = cellIterator.next();
+                    switch (cell.getCellType()) {
+                        case Cell.CELL_TYPE_STRING:
+                            if (!"".equals(cell.getStringCellValue().trim())) {
+                                cabeceras.add(new Columnas(cell.getStringCellValue().trim(), numCell));
                             }
-                        }
-                        break;
-                    case Cell.CELL_TYPE_FORMULA:
-                        switch (cell.getCachedFormulaResultType()) {
-                            case Cell.CELL_TYPE_STRING:
-                                if (!cell.getStringCellValue().trim().equals("") && numRow == 0) {
-                                    cabeceras.add(new Columnas(cell.getStringCellValue().trim(), numCell));
-                                } else if (!cell.getStringCellValue().trim().equals("") && numRow > 0) {
-                                    if (cabeceras.get(numCell).getNameColumn().equalsIgnoreCase("country") && !cell.getStringCellValue().trim().equals("")) {
-                                        diaOp = new RvvdReclasifDiasOpTmp();
-                                        descPais = catPais.getNombre();
-                                        zona = cell.getStringCellValue().trim().toUpperCase();
-                                        diaOp.setPais(catPais.getClaveCorta());
-                                        cargas.add(rolling);
-                                    }
-                                }
-                                break;
-                            case Cell.CELL_TYPE_NUMERIC:
-                                if (diaOp != null && cabeceras.get(numCell).getNameColumn().equalsIgnoreCase("Date current year") && numRow > 0 && numCell > 0) {
-                                    diaOp.setFecha(cell.getDateCellValue());
-                                } else if (diaOp != null && cabeceras.get(numCell).getNameColumn().equalsIgnoreCase("Date PY") && numRow > 0 && numCell > 0) {
-                                    diaOp.setFechaR(cell.getDateCellValue());
-                                } else if (diaOp != null && nombreCatOficiales.indexOf(cabeceras.get(numCell).getNameColumn().toUpperCase()) != -1 && numRow > 0 && numCell > 0) {
-                                    stRolling = new RvvdStRollingTmp();
-                                    fechaTemp.setTime(diaOp.getFecha());
-                                    stRolling.setAnio(fechaTemp.get(Calendar.YEAR));
-                                    stRolling.setMes(fechaTemp.get(Calendar.MONTH) + 1);
-                                    stRolling.setDia(fechaTemp.get(Calendar.DAY_OF_MONTH));
-                                    stRolling.setFecha(diaOp.getFecha());
-                                    categoriaOficialTemp = categoriasOficiales.get(nombreCatOficiales.indexOf(cabeceras.get(numCell).getNameColumn().toUpperCase()));
-                                    stRolling.setCategoriaOficialR(categoriaOficialTemp.getCategoriaOficial());
-                                    stRolling.setCategoriaOficialEn(categoriaOficialTemp.getCategoriaOficialEn());
-                                    stRolling.setPais(catPais.getClaveCorta());
-                                    stRolling.setDescPais(descPais);
-                                    if (catPais.getClaveCorta().trim().equalsIgnoreCase("CAM")) {
-                                        stRolling.setZona(zona);
-                                    } else {
-                                        stRolling.setZona("ROLLING");
-                                    }
-                                    stRolling.setGec("ROLLING");
-                                    stRolling.setCategoria("ROLLING");
-                                    stRolling.setRollingCu(cell.getNumericCellValue());
-                                    rolling.addRolling(stRolling);
-                                } else if (diaOp != null && cabeceras.get(numCell).getNameColumn().equalsIgnoreCase("Others") && numRow > 0 && numCell > 0) {
-                                    stRolling = new RvvdStRollingTmp();
-                                    fechaTemp.setTime(diaOp.getFecha());
-                                    stRolling.setAnio(fechaTemp.get(Calendar.YEAR));
-                                    stRolling.setMes(fechaTemp.get(Calendar.MONTH) + 1);
-                                    stRolling.setDia(fechaTemp.get(Calendar.DAY_OF_MONTH));
-                                    stRolling.setCategoriaOficialR("OTROS");
-                                    stRolling.setCategoriaOficialEn("OTHERS");
-                                    stRolling.setPais(catPais.getClaveCorta());
-                                    stRolling.setDescPais(descPais);
-                                    if (catPais.getClaveCorta().trim().equalsIgnoreCase("CAM")) {
-                                        stRolling.setZona(zona);
-                                    } else {
-                                        stRolling.setZona("ROLLING");
-                                    }
-                                    stRolling.setGec("ROLLING");
-                                    stRolling.setCategoria("ROLLING");
-                                    stRolling.setRollingCu(cell.getNumericCellValue());
-                                    rolling.addRolling(stRolling);
-                                }
-                                break;
-                        }
-                        break;
-                    case Cell.CELL_TYPE_NUMERIC:
-                        if (diaOp != null && cabeceras.get(numCell).getNameColumn().equalsIgnoreCase("Date current year") && numRow > 0 && numCell > 0) {
-                            diaOp.setFecha(cell.getDateCellValue());
-                        } else if (diaOp != null && cabeceras.get(numCell).getNameColumn().equalsIgnoreCase("Date PY") && numRow > 0 && numCell > 0) {
-                            diaOp.setFechaR(cell.getDateCellValue());
-                        } else if (diaOp != null && nombreCatOficiales.indexOf(cabeceras.get(numCell).getNameColumn().toUpperCase()) != -1 && numRow > 0 && numCell > 0) {
-                            stRolling = new RvvdStRollingTmp();
-                            fechaTemp.setTime(diaOp.getFecha());
-                            stRolling.setAnio(fechaTemp.get(Calendar.YEAR));
-                            stRolling.setMes(fechaTemp.get(Calendar.MONTH) + 1);
-                            stRolling.setDia(fechaTemp.get(Calendar.DAY_OF_MONTH));
-                            stRolling.setFecha(diaOp.getFecha());
-                            categoriaOficialTemp = categoriasOficiales.get(nombreCatOficiales.indexOf(cabeceras.get(numCell).getNameColumn().toUpperCase()));
-                            stRolling.setCategoriaOficialR(categoriaOficialTemp.getCategoriaOficial());
-                            stRolling.setCategoriaOficialEn(categoriaOficialTemp.getCategoriaOficialEn());
-                            stRolling.setPais(catPais.getClaveCorta());
-                            stRolling.setDescPais(descPais);
-                            if (catPais.getClaveCorta().trim().equalsIgnoreCase("CAM")) {
-                                stRolling.setZona(zona);
-                            } else {
-                                stRolling.setZona("ROLLING");
-                            }
-                            stRolling.setGec("ROLLING");
-                            stRolling.setCategoria("ROLLING");
-                            stRolling.setRollingCu(cell.getNumericCellValue());
-                            rolling.addRolling(stRolling);
-                        } else if (diaOp != null && cabeceras.get(numCell).getNameColumn().equalsIgnoreCase("Others") && numRow > 0 && numCell > 0) {
-                            stRolling = new RvvdStRollingTmp();
-                            fechaTemp.setTime(diaOp.getFecha());
-                            stRolling.setAnio(fechaTemp.get(Calendar.YEAR));
-                            stRolling.setMes(fechaTemp.get(Calendar.MONTH) + 1);
-                            stRolling.setDia(fechaTemp.get(Calendar.DAY_OF_MONTH));
-                            stRolling.setFecha(diaOp.getFecha());
-                            stRolling.setCategoriaOficialR("OTROS");
-                            stRolling.setCategoriaOficialEn("OTHERS");
-                            stRolling.setPais(catPais.getClaveCorta());
-                            stRolling.setDescPais(descPais);
-                            if (catPais.getClaveCorta().trim().equalsIgnoreCase("CAM")) {
-                                stRolling.setZona(zona);
-                            } else {
-                                stRolling.setZona("ROLLING");
-                            }
-                            stRolling.setGec("ROLLING");
-                            stRolling.setCategoria("ROLLING");
-                            stRolling.setRollingCu(cell.getNumericCellValue());
-                            rolling.addRolling(stRolling);
-                        }
-                        break;
+                            break;
+                    }
+                    numCell++;
                 }
-                numCell++;
+            } else {
+                //Country
+                cell = row.getCell(0);
+                if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+                    if ("country".equalsIgnoreCase(cabeceras.get(0).getNameColumn()) && !cell.getStringCellValue().trim().equals("")) {
+                        diaOp = new RvvdReclasifDiasOpTmp();
+                        rolling = new RollingDaily();
+                        rolling.setDiasOperativos(diaOp);
+                        descPais = catPais.getNombre();
+                        zona = cell.getStringCellValue().trim().toUpperCase();
+                        diaOp.setPais(catPais.getClaveCorta());
+                        cargas.add(rolling);
+                    } else {
+                        cargas = null;
+                        errors.add("Column " + cabeceras.get(0).getNameColumn() + " invalid, " + sheetName + " sheet has been omitted.");
+                        break;
+                    }
+                } else {
+                    cargas = null;
+                    errors.add("Approximately " + Character.toString((char) (65 + 0)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
+                    break;
+                }
+                //Date current year
+                cell = row.getCell(1);
+                if (cell != null && cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                    if ("Date current year".equalsIgnoreCase(cabeceras.get(1).getNameColumn())) {
+                        diaOp.setFecha(cell.getDateCellValue());
+                    } else {
+                        cargas = null;
+                        errors.add("Column " + cabeceras.get(1).getNameColumn() + " invalid, " + sheetName + " sheet has been omitted.");
+                        break;
+                    }
+                } else if (cell != null && cell.getCellType() == Cell.CELL_TYPE_STRING) {
+                    if ("Date current year".equalsIgnoreCase(cabeceras.get(1).getNameColumn()) && !cell.getStringCellValue().trim().equals("") && cell.getStringCellValue().trim().contains("/")) {
+                        try {
+                            diaOp.setFecha(sdf.parse(cell.getStringCellValue()));
+                        } catch (ParseException ex) {
+                            cargas = null;
+                            errors.add("Approximately " + Character.toString((char) (65 + 1)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
+                            break;
+                        }
+                    } else {
+                        cargas = null;
+                        errors.add("Approximately " + Character.toString((char) (65 + 1)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
+                        break;
+                    }
+                } else {
+                    cargas = null;
+                    errors.add("Approximately " + Character.toString((char) (65 + 1)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
+                }
+                //Date PY
+                cell = row.getCell(3);
+                if (cell != null && cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                    if ("Date PY".equalsIgnoreCase(cabeceras.get(3).getNameColumn())) {
+                        diaOp.setFechaR(cell.getDateCellValue());
+                    } else {
+                        cargas = null;
+                        errors.add("Column " + cabeceras.get(3).getNameColumn() + " invalid, " + sheetName + " sheet has been omitted.");
+                        break;
+                    }
+                } else if (cell != null && cell.getCellType() == Cell.CELL_TYPE_STRING) {
+                    if ("Date PY".equalsIgnoreCase(cabeceras.get(3).getNameColumn()) && !cell.getStringCellValue().trim().equals("") && cell.getStringCellValue().trim().contains("/")) {
+                        try {
+                            diaOp.setFechaR(sdf.parse(cell.getStringCellValue()));
+                        } catch (ParseException ex) {
+                            cargas = null;
+                            errors.add("Approximately " + Character.toString((char) (65 + 3)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
+                            break;
+                        }
+                    } else {
+                        cargas = null;
+                        errors.add("Approximately " + Character.toString((char) (65 + 3)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
+                        break;
+                    }
+                } else {
+                    cargas = null;
+                    errors.add("Approximately " + Character.toString((char) (65 + 3)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
+                }
+                //CSDs
+                cell = row.getCell(6);
+                if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                    if (nombreCatOficiales.indexOf(cabeceras.get(6).getNameColumn().toUpperCase()) != -1) {
+                        stRolling = new RvvdStRollingTmp();
+                        fechaTemp.setTime(diaOp.getFecha());
+                        stRolling.setAnio(fechaTemp.get(Calendar.YEAR));
+                        stRolling.setMes(fechaTemp.get(Calendar.MONTH) + 1);
+                        stRolling.setDia(fechaTemp.get(Calendar.DAY_OF_MONTH));
+                        stRolling.setFecha(diaOp.getFecha());
+                        categoriaOficialTemp = categoriasOficiales.get(nombreCatOficiales.indexOf(cabeceras.get(6).getNameColumn().toUpperCase()));
+                        stRolling.setCategoriaOficialR(categoriaOficialTemp.getCategoriaOficial());
+                        stRolling.setCategoriaOficialEn(categoriaOficialTemp.getCategoriaOficialEn());
+                        stRolling.setPais(catPais.getClaveCorta());
+                        stRolling.setDescPais(descPais);
+                        if (catPais.getClaveCorta().trim().equalsIgnoreCase("CAM")) {
+                            stRolling.setZona(zona);
+                        } else {
+                            stRolling.setZona("ROLLING");
+                        }
+                        stRolling.setGec("ROLLING");
+                        stRolling.setCategoria("ROLLING");
+                        stRolling.setRollingCu(cell.getNumericCellValue());
+                        rolling.addRolling(stRolling);
+                    } else {
+                        cargas = null;
+                        errors.add("Official Category " + cabeceras.get(6).getNameColumn() + " invalid, " + sheetName + " sheet has been omitted.");
+                        break;
+                    }
+                } else {
+                    cargas = null;
+                    errors.add("Approximately " + Character.toString((char) (65 + 6)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
+                    break;
+                }
+                //NCBs
+                cell = row.getCell(7);
+                if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                    if (nombreCatOficiales.indexOf(cabeceras.get(7).getNameColumn().toUpperCase()) != -1) {
+                        stRolling = new RvvdStRollingTmp();
+                        fechaTemp.setTime(diaOp.getFecha());
+                        stRolling.setAnio(fechaTemp.get(Calendar.YEAR));
+                        stRolling.setMes(fechaTemp.get(Calendar.MONTH) + 1);
+                        stRolling.setDia(fechaTemp.get(Calendar.DAY_OF_MONTH));
+                        stRolling.setFecha(diaOp.getFecha());
+                        categoriaOficialTemp = categoriasOficiales.get(nombreCatOficiales.indexOf(cabeceras.get(7).getNameColumn().toUpperCase()));
+                        stRolling.setCategoriaOficialR(categoriaOficialTemp.getCategoriaOficial());
+                        stRolling.setCategoriaOficialEn(categoriaOficialTemp.getCategoriaOficialEn());
+                        stRolling.setPais(catPais.getClaveCorta());
+                        stRolling.setDescPais(descPais);
+                        if (catPais.getClaveCorta().trim().equalsIgnoreCase("CAM")) {
+                            stRolling.setZona(zona);
+                        } else {
+                            stRolling.setZona("ROLLING");
+                        }
+                        stRolling.setGec("ROLLING");
+                        stRolling.setCategoria("ROLLING");
+                        stRolling.setRollingCu(cell.getNumericCellValue());
+                        rolling.addRolling(stRolling);
+                    } else {
+                        cargas = null;
+                        errors.add("Official Category " + cabeceras.get(7).getNameColumn() + " invalid or not exists, " + sheetName + " sheet has been omitted.");
+                        break;
+                    }
+                } else {
+                    cargas = null;
+                    errors.add("Approximately " + Character.toString((char) (65 + 7)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
+                    break;
+                }
+                //Water
+                cell = row.getCell(8);
+                if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                    if (nombreCatOficiales.indexOf(cabeceras.get(8).getNameColumn().toUpperCase()) != -1) {
+                        stRolling = new RvvdStRollingTmp();
+                        fechaTemp.setTime(diaOp.getFecha());
+                        stRolling.setAnio(fechaTemp.get(Calendar.YEAR));
+                        stRolling.setMes(fechaTemp.get(Calendar.MONTH) + 1);
+                        stRolling.setDia(fechaTemp.get(Calendar.DAY_OF_MONTH));
+                        stRolling.setFecha(diaOp.getFecha());
+                        categoriaOficialTemp = categoriasOficiales.get(nombreCatOficiales.indexOf(cabeceras.get(8).getNameColumn().toUpperCase()));
+                        stRolling.setCategoriaOficialR(categoriaOficialTemp.getCategoriaOficial());
+                        stRolling.setCategoriaOficialEn(categoriaOficialTemp.getCategoriaOficialEn());
+                        stRolling.setPais(catPais.getClaveCorta());
+                        stRolling.setDescPais(descPais);
+                        if (catPais.getClaveCorta().trim().equalsIgnoreCase("CAM")) {
+                            stRolling.setZona(zona);
+                        } else {
+                            stRolling.setZona("ROLLING");
+                        }
+                        stRolling.setGec("ROLLING");
+                        stRolling.setCategoria("ROLLING");
+                        stRolling.setRollingCu(cell.getNumericCellValue());
+                        rolling.addRolling(stRolling);
+                    } else {
+                        cargas = null;
+                        errors.add("Official Category " + cabeceras.get(8).getNameColumn() + " invalid or not exists, " + sheetName + " sheet has been omitted.");
+                        break;
+                    }
+                } else {
+                    cargas = null;
+                    errors.add("Approximately " + Character.toString((char) (65 + 8)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
+                    break;
+                }
+                //Others
+                cell = row.getCell(9);
+                if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                    if ("Others".equalsIgnoreCase(cabeceras.get(9).getNameColumn().toUpperCase())) {
+                        stRolling = new RvvdStRollingTmp();
+                        fechaTemp.setTime(diaOp.getFecha());
+                        stRolling.setAnio(fechaTemp.get(Calendar.YEAR));
+                        stRolling.setMes(fechaTemp.get(Calendar.MONTH) + 1);
+                        stRolling.setDia(fechaTemp.get(Calendar.DAY_OF_MONTH));
+                        stRolling.setFecha(diaOp.getFecha());
+                        stRolling.setCategoriaOficialR("OTROS");
+                        stRolling.setCategoriaOficialEn("OTHERS");
+                        stRolling.setPais(catPais.getClaveCorta());
+                        stRolling.setDescPais(descPais);
+                        if (catPais.getClaveCorta().trim().equalsIgnoreCase("CAM")) {
+                            stRolling.setZona(zona);
+                        } else {
+                            stRolling.setZona("ROLLING");
+                        }
+                        stRolling.setGec("ROLLING");
+                        stRolling.setCategoria("ROLLING");
+                        stRolling.setRollingCu(cell.getNumericCellValue());
+                        rolling.addRolling(stRolling);
+                    } else {
+                        cargas = null;
+                        errors.add("Official Category " + cabeceras.get(9).getNameColumn() + " invalid or not exists, " + sheetName + " sheet has been omitted.");
+                        break;
+                    }
+                } else {
+                    cargas = null;
+                    errors.add("Approximately " + Character.toString((char) (65 + 9)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
+                    break;
+                }
             }
             numRow++;
         }
@@ -375,13 +467,12 @@ public class XlsAnalizerDaily {
     public List<RvvdDistribucionMxTmp> analizeSheetDistribucionMx(Iterator<Row> rowIterator, ShareCatPais catPais, ShareUsuario usuario, String sheetName) {
         int numRow = 0;
         List<RvvdDistribucionMxTmp> cargas = new ArrayList<RvvdDistribucionMxTmp>();
-        RvvdDistribucionMxTmp distribucionTemp = null;
+        RvvdDistribucionMxTmp distribucionTemp;
         SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyyMMdd");
-        String fecha = "";
-        double porcentaje = 0.00;
+        String fecha;
+        double porcentaje;
         while (rowIterator != null && rowIterator.hasNext()) {
             Row row = rowIterator.next();
-            Iterator<Cell> cellIterator = row.iterator();
             Cell cell = null;
             if (numRow > 0) {
                 distribucionTemp = new RvvdDistribucionMxTmp();

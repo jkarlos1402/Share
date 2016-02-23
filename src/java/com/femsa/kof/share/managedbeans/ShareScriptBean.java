@@ -45,7 +45,7 @@ public class ShareScriptBean implements Serializable {
                 scriptText = scriptSelected.getTextScript();
             } catch (IOException ex) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
-                errors.add(ex.getMessage());
+                errors.add(ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
             }
         }
         return scriptText;
@@ -121,7 +121,7 @@ public class ShareScriptBean implements Serializable {
             } catch (IOException ioe) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ioe);
                 message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the script");
-                errors.add("Error: " + ioe.getMessage());
+                errors.add("Error: " + ioe.getCause().getMessage());
             }
             FacesContext.getCurrentInstance().addMessage(null, message);
         }        

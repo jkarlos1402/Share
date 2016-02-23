@@ -28,8 +28,7 @@ public class DailyUploadStatusBean implements Serializable {
     public DailyUploadStatusBean() {
         HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);        
         usuario = (ShareUsuario) httpSession.getAttribute("session_user");
-        ShareLoadLogDAO logDAO = new ShareLoadLogDAO();  
-        System.out.println(usuario.getRol().getPkRol());
+        ShareLoadLogDAO logDAO = new ShareLoadLogDAO();          
         cargasMes = usuario.getRol().getPkRol().equals(2) ? logDAO.getLogByUser(usuario,"daily") : logDAO.getLogAll("daily");
     }
 

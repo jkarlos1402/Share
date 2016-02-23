@@ -308,7 +308,7 @@ public class UserBean implements Serializable {
             }
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: " + e.getMessage(), ""));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error: " + e.getCause() != null ? e.getCause().getMessage() : e.getMessage(), ""));
             return "index";
         }
     }

@@ -180,6 +180,11 @@
                                                                         <span><img src="images/BG9-18.png"/>Brand</span>
                                                                     </p:commandLink>
                                                                 </li>                                            
+                                                                <li>
+                                                                    <p:commandLink action="#{mainBean.setPage('reclassification_catalogs','reclassificationZoneDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();initMenu();">
+                                                                        <span><img src="images/BG9-12.png"/>Zone</span>
+                                                                    </p:commandLink>
+                                                                </li>                                            
                                                             </ul>                                                                                                                                                                                                                                                                                                        
                                                         </li> 
                                                         <h:panelGroup rendered="#{mainBean.usuario.rol.pkRol eq '1' ? true : false}">
@@ -236,6 +241,11 @@
                                                                     <li>
                                                                         <p:commandLink action="#{mainBean.setPage('catalogs','gecDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();initMenu();">
                                                                             <span><img src="images/BG9-20.png"/>Client type</span>
+                                                                        </p:commandLink>
+                                                                    </li>                                                                    
+                                                                    <li>
+                                                                        <p:commandLink action="#{mainBean.setPage('catalogs','zonaDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();initMenu();">
+                                                                            <span><img src="images/BG9-12.png"/>Zone</span>
                                                                         </p:commandLink>
                                                                     </li>                                                                    
                                                                 </ul>                                                                                                                                                                                                                                                                                                        

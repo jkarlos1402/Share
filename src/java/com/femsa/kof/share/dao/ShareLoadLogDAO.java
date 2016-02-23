@@ -48,7 +48,7 @@ public class ShareLoadLogDAO {
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }
@@ -70,15 +70,15 @@ public class ShareLoadLogDAO {
         Query query = null;
         try {
             if ("daily".equalsIgnoreCase(proyecto)) {
-                query = session.createQuery("SELECT sll FROM ShareLoadLog sll WHERE month(sll.fechaEjecucion) = month(CURRENT_DATE) AND NOMBRE_PROYECTO = 'DAILY DASHBOARD' AND sll.usuario.pkUsuario = " + usuario.getPkUsuario());
-            }else if("share".equalsIgnoreCase(proyecto)){
-                query = session.createQuery("SELECT sll FROM ShareLoadLog sll WHERE month(sll.fechaEjecucion) = month(CURRENT_DATE) AND NOMBRE_PROYECTO = 'SHARE' AND sll.usuario.pkUsuario = " + usuario.getPkUsuario());
+                query = session.createQuery("SELECT sll FROM ShareLoadLog sll WHERE month(sll.fechaEjecucion) = month(CURRENT_DATE) AND NOMBRE_PROYECTO = 'DAILY DASHBOARD' AND sll.usuario.pkUsuario = " + usuario.getPkUsuario() + " ORDER BY sll.fechaEjecucion DESC");
+            } else if ("share".equalsIgnoreCase(proyecto)) {
+                query = session.createQuery("SELECT sll FROM ShareLoadLog sll WHERE month(sll.fechaEjecucion) = month(CURRENT_DATE) AND NOMBRE_PROYECTO = 'SHARE' AND sll.usuario.pkUsuario = " + usuario.getPkUsuario() + " ORDER BY sll.fechaEjecucion DESC");
             }
             logs = query != null ? query.list() : null;
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
         } finally {
             session.flush();
             session.clear();
@@ -96,15 +96,15 @@ public class ShareLoadLogDAO {
         Query query = null;
         try {
             if ("daily".equalsIgnoreCase(proyecto)) {
-                query = session.createQuery("SELECT sll FROM ShareLoadLog sll WHERE month(sll.fechaEjecucion) = month(CURRENT_DATE) AND NOMBRE_PROYECTO = 'DAILY DASHBOARD'");
-            }else if("share".equalsIgnoreCase(proyecto)){
-                query = session.createQuery("SELECT sll FROM ShareLoadLog sll WHERE month(sll.fechaEjecucion) = month(CURRENT_DATE) AND NOMBRE_PROYECTO = 'SHARE'");
-            }            
+                query = session.createQuery("SELECT sll FROM ShareLoadLog sll WHERE month(sll.fechaEjecucion) = month(CURRENT_DATE) AND NOMBRE_PROYECTO = 'DAILY DASHBOARD' ORDER BY sll.fechaEjecucion DESC");
+            } else if ("share".equalsIgnoreCase(proyecto)) {
+                query = session.createQuery("SELECT sll FROM ShareLoadLog sll WHERE month(sll.fechaEjecucion) = month(CURRENT_DATE) AND NOMBRE_PROYECTO = 'SHARE' ORDER BY sll.fechaEjecucion DESC");
+            }
             logs = query != null ? query.list() : null;
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
         } finally {
             session.flush();
             session.clear();

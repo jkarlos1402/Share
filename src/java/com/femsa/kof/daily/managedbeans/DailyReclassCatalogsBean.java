@@ -6,6 +6,7 @@ import com.femsa.kof.daily.dao.ReclasifDiasOpDAO;
 import com.femsa.kof.daily.dao.ReclasifEmpaqueDAO;
 import com.femsa.kof.daily.dao.ReclasifGecDAO;
 import com.femsa.kof.daily.dao.ReclasifMarcaDAO;
+import com.femsa.kof.daily.dao.ReclasifZonaDAO;
 import com.femsa.kof.daily.pojos.RvvdCatCanal;
 import com.femsa.kof.daily.pojos.RvvdCatCategoria;
 import com.femsa.kof.daily.pojos.RvvdCatContenidoCalorico;
@@ -14,12 +15,14 @@ import com.femsa.kof.daily.pojos.RvvdCatGec;
 import com.femsa.kof.daily.pojos.RvvdCatMarca;
 import com.femsa.kof.daily.pojos.RvvdCatTipoConsumo;
 import com.femsa.kof.daily.pojos.RvvdCatUnidadNegocio;
+import com.femsa.kof.daily.pojos.RvvdCatZona;
 import com.femsa.kof.daily.pojos.RvvdReclasifCanal;
 import com.femsa.kof.daily.pojos.RvvdReclasifCategoria;
 import com.femsa.kof.daily.pojos.RvvdReclasifDiasOp;
 import com.femsa.kof.daily.pojos.RvvdReclasifEmpaque;
 import com.femsa.kof.daily.pojos.RvvdReclasifMarca;
 import com.femsa.kof.daily.pojos.RvvdReclasifUnGec;
+import com.femsa.kof.daily.pojos.RvvdReclasifZona;
 import com.femsa.kof.daily.util.CheckCatalogs;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import java.io.Serializable;
@@ -55,63 +58,98 @@ public class DailyReclassCatalogsBean implements Serializable {
     private RvvdCatTipoConsumo tipoConsumoSelected;
     private List<RvvdCatEmpaque> catEmpaques;
     private RvvdCatEmpaque empaqueSelected;
-    
+
     private SimpleDateFormat formatDay = new SimpleDateFormat("dd/MM/yy");
 
     private List<RvvdReclasifUnGec> gecsReclasificados = new ArrayList<RvvdReclasifUnGec>();
     private List<RvvdCatGec> catGecs;
     private RvvdCatGec gecSelected;
     private List<RvvdCatUnidadNegocio> catUnidadesNegocio;
-    private RvvdCatUnidadNegocio unidadSelected; 
-    
+    private RvvdCatUnidadNegocio unidadSelected;
+
     private List<RvvdReclasifMarca> marcasReclasificados = new ArrayList<RvvdReclasifMarca>();
     private List<RvvdCatMarca> catMarcas;
     private RvvdCatMarca marcaSelected;
     private List<RvvdCatContenidoCalorico> catContenidosCaloricos;
-    private RvvdCatContenidoCalorico contenidoSelected; 
-    
-    private List<RvvdReclasifDiasOp> diasOpReclasificados = new ArrayList<RvvdReclasifDiasOp>();       
+    private RvvdCatContenidoCalorico contenidoSelected;
+
+    private List<RvvdReclasifDiasOp> diasOpReclasificados = new ArrayList<RvvdReclasifDiasOp>();
+
+    private List<RvvdReclasifZona> zonasReclasificadas = new ArrayList<RvvdReclasifZona>();
+    private List<RvvdCatZona> catZonas;
+    private RvvdCatZona catZonaSelected;
 
     /**
      *
      */
     public DailyReclassCatalogsBean() {
-        ServletContext context = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
-        HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        ShareUsuario usuario = (ShareUsuario)session.getAttribute("session_user");
+        ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        ShareUsuario usuario = (ShareUsuario) session.getAttribute("session_user");
         ReclasifCategoriaDAO reclasifCategoriaDAO = new ReclasifCategoriaDAO();
         categoriasReclasificadas = reclasifCategoriaDAO.getReclasifCategoriasAll(usuario);
-        
+
         ReclasifCanalDAO reclasifCanalDAO = new ReclasifCanalDAO();
         canalesReclasificados = reclasifCanalDAO.getReclasifCanalesAll(usuario);
-        
+
         ReclasifEmpaqueDAO reclasifEmpaqueDAO = new ReclasifEmpaqueDAO();
         empaquesReclasificados = reclasifEmpaqueDAO.getReclasifEmpaquesAll(usuario);
-        
+
         ReclasifGecDAO reclasifGecDAO = new ReclasifGecDAO();
         gecsReclasificados = reclasifGecDAO.getReclasifUnGecAll(usuario);
-        
+
         ReclasifDiasOpDAO reclasifDiasOpDAO = new ReclasifDiasOpDAO();
         diasOpReclasificados = reclasifDiasOpDAO.getReclasifDiasOpAll(usuario);
-        
+
         ReclasifMarcaDAO reclasifMarcaDAO = new ReclasifMarcaDAO();
         marcasReclasificados = reclasifMarcaDAO.getReclasifMarcasAll(usuario);
-                
-        catCategorias = (List<RvvdCatCategoria>)context.getAttribute("categoria_daily_catalog");
-                
-        catMarcas = (List<RvvdCatMarca>)context.getAttribute("marca_daily_catalog");
-                
-        catContenidosCaloricos = (List<RvvdCatContenidoCalorico>)context.getAttribute("contCalorico_daily_catalog");
-                         
-        catGecs = (List<RvvdCatGec>)context.getAttribute("gec_daily_catalog");
-                        
-        catUnidadesNegocio = (List<RvvdCatUnidadNegocio>)context.getAttribute("unidadNegocio_daily_catalog");
-                       
-        catTiposConsumo = (List<RvvdCatTipoConsumo>)context.getAttribute("tipoConsumo_daily_catalog");
-                       
-        catEmpaques = (List<RvvdCatEmpaque>)context.getAttribute("empaque_daily_catalog");
-                       
-        catCanales = (List<RvvdCatCanal>)context.getAttribute("canal_daily_catalog");
+
+        ReclasifZonaDAO reclasifZonaDAO = new ReclasifZonaDAO();
+        zonasReclasificadas = reclasifZonaDAO.getReclasifZonasAll(usuario);
+
+        catCategorias = (List<RvvdCatCategoria>) context.getAttribute("categoria_daily_catalog");
+
+        catMarcas = (List<RvvdCatMarca>) context.getAttribute("marca_daily_catalog");
+
+        catContenidosCaloricos = (List<RvvdCatContenidoCalorico>) context.getAttribute("contCalorico_daily_catalog");
+
+        catGecs = (List<RvvdCatGec>) context.getAttribute("gec_daily_catalog");
+
+        catUnidadesNegocio = (List<RvvdCatUnidadNegocio>) context.getAttribute("unidadNegocio_daily_catalog");
+
+        catTiposConsumo = (List<RvvdCatTipoConsumo>) context.getAttribute("tipoConsumo_daily_catalog");
+
+        catEmpaques = (List<RvvdCatEmpaque>) context.getAttribute("empaque_daily_catalog");
+
+        catCanales = (List<RvvdCatCanal>) context.getAttribute("canal_daily_catalog");
+
+        catZonas = (List<RvvdCatZona>) context.getAttribute("zona_daily_catalog");
+    }
+
+    public List<RvvdReclasifZona> getZonasReclasificadas() {
+        return zonasReclasificadas;
+    }
+
+    public void setZonasReclasificadas(List<RvvdReclasifZona> zonasReclasificadas) {
+        this.zonasReclasificadas = zonasReclasificadas;
+    }
+
+    public List<RvvdCatZona> getCatZonas() {
+        ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        catZonas = (List<RvvdCatZona>) context.getAttribute("zona_daily_catalog");
+        return catZonas;
+    }
+
+    public void setCatZonas(List<RvvdCatZona> catZonas) {
+        this.catZonas = catZonas;
+    }
+
+    public RvvdCatZona getCatZonaSelected() {
+        return catZonaSelected;
+    }
+
+    public void setCatZonaSelected(RvvdCatZona catZonaSelected) {
+        this.catZonaSelected = catZonaSelected;
     }
 
     /**
@@ -135,8 +173,8 @@ public class DailyReclassCatalogsBean implements Serializable {
      * @return
      */
     public List<RvvdCatMarca> getCatMarcas() {
-        ServletContext context = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
-        catMarcas = (List<RvvdCatMarca>)context.getAttribute("marca_daily_catalog");
+        ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        catMarcas = (List<RvvdCatMarca>) context.getAttribute("marca_daily_catalog");
         return catMarcas;
     }
 
@@ -168,9 +206,9 @@ public class DailyReclassCatalogsBean implements Serializable {
      *
      * @return
      */
-    public List<RvvdCatContenidoCalorico> getCatContenidosCaloricos() {  
-        ServletContext context = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
-        catContenidosCaloricos = (List<RvvdCatContenidoCalorico>)context.getAttribute("contCalorico_daily_catalog");
+    public List<RvvdCatContenidoCalorico> getCatContenidosCaloricos() {
+        ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        catContenidosCaloricos = (List<RvvdCatContenidoCalorico>) context.getAttribute("contCalorico_daily_catalog");
         return catContenidosCaloricos;
     }
 
@@ -251,8 +289,8 @@ public class DailyReclassCatalogsBean implements Serializable {
      * @return
      */
     public List<RvvdCatGec> getCatGecs() {
-        ServletContext context = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
-        catGecs = (List<RvvdCatGec>)context.getAttribute("gec_daily_catalog");
+        ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        catGecs = (List<RvvdCatGec>) context.getAttribute("gec_daily_catalog");
         return catGecs;
     }
 
@@ -285,8 +323,8 @@ public class DailyReclassCatalogsBean implements Serializable {
      * @return
      */
     public List<RvvdCatUnidadNegocio> getCatUnidadesNegocio() {
-        ServletContext context = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
-        catUnidadesNegocio = (List<RvvdCatUnidadNegocio>)context.getAttribute("unidadNegocio_daily_catalog");
+        ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        catUnidadesNegocio = (List<RvvdCatUnidadNegocio>) context.getAttribute("unidadNegocio_daily_catalog");
         return catUnidadesNegocio;
     }
 
@@ -335,8 +373,8 @@ public class DailyReclassCatalogsBean implements Serializable {
      * @return
      */
     public List<RvvdCatTipoConsumo> getCatTiposConsumo() {
-        ServletContext context = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
-        catTiposConsumo = (List<RvvdCatTipoConsumo>)context.getAttribute("tipoConsumo_daily_catalog");
+        ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        catTiposConsumo = (List<RvvdCatTipoConsumo>) context.getAttribute("tipoConsumo_daily_catalog");
         return catTiposConsumo;
     }
 
@@ -352,7 +390,7 @@ public class DailyReclassCatalogsBean implements Serializable {
      *
      * @return
      */
-    public RvvdCatTipoConsumo getTipoConsumoSelected() {        
+    public RvvdCatTipoConsumo getTipoConsumoSelected() {
         return tipoConsumoSelected;
     }
 
@@ -369,8 +407,8 @@ public class DailyReclassCatalogsBean implements Serializable {
      * @return
      */
     public List<RvvdCatEmpaque> getCatEmpaques() {
-        ServletContext context = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
-        catEmpaques = (List<RvvdCatEmpaque>)context.getAttribute("empaque_daily_catalog");
+        ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        catEmpaques = (List<RvvdCatEmpaque>) context.getAttribute("empaque_daily_catalog");
         return catEmpaques;
     }
 
@@ -419,8 +457,8 @@ public class DailyReclassCatalogsBean implements Serializable {
      * @return
      */
     public List<RvvdCatCanal> getCatCanales() {
-        ServletContext context = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
-        catCanales = (List<RvvdCatCanal>)context.getAttribute("canal_daily_catalog");
+        ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        catCanales = (List<RvvdCatCanal>) context.getAttribute("canal_daily_catalog");
         return catCanales;
     }
 
@@ -468,9 +506,9 @@ public class DailyReclassCatalogsBean implements Serializable {
      *
      * @return
      */
-    public List<RvvdCatCategoria> getCatCategorias() {  
-        ServletContext context = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
-        catCategorias = (List<RvvdCatCategoria>)context.getAttribute("categoria_daily_catalog");
+    public List<RvvdCatCategoria> getCatCategorias() {
+        ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        catCategorias = (List<RvvdCatCategoria>) context.getAttribute("categoria_daily_catalog");
         return catCategorias;
     }
 
@@ -514,9 +552,9 @@ public class DailyReclassCatalogsBean implements Serializable {
     /**
      *
      */
-    public void refreshCategoriasReclasificadas() {  
-        HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        ShareUsuario usuario = (ShareUsuario)session.getAttribute("session_user");
+    public void refreshCategoriasReclasificadas() {
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        ShareUsuario usuario = (ShareUsuario) session.getAttribute("session_user");
         ReclasifCategoriaDAO reclasifCategoriaDAO = new ReclasifCategoriaDAO();
         categoriasReclasificadas = reclasifCategoriaDAO.getReclasifCategoriasAll(usuario);
         CheckCatalogs.checkAllCatalogs();
@@ -550,9 +588,9 @@ public class DailyReclassCatalogsBean implements Serializable {
     /**
      *
      */
-    public void refreshCanalesReclasificados() {  
-        HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        ShareUsuario usuario = (ShareUsuario)session.getAttribute("session_user");
+    public void refreshCanalesReclasificados() {
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        ShareUsuario usuario = (ShareUsuario) session.getAttribute("session_user");
         ReclasifCanalDAO reclasifCanalDAO = new ReclasifCanalDAO();
         canalesReclasificados = reclasifCanalDAO.getReclasifCanalesAll(usuario);
         CheckCatalogs.checkAllCatalogs();
@@ -564,14 +602,14 @@ public class DailyReclassCatalogsBean implements Serializable {
     public void saveCanalesReclasificados() {
         FacesMessage message;
         ReclasifCanalDAO reclasifCanalDAO = new ReclasifCanalDAO();
-        if (reclasifCanalDAO.saveReclasifCanales(canalesReclasificados != null ? canalesReclasificados :  new ArrayList<RvvdReclasifCanal>())) {
+        if (reclasifCanalDAO.saveReclasifCanales(canalesReclasificados != null ? canalesReclasificados : new ArrayList<RvvdReclasifCanal>())) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Reclassified channels saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Reclassified channels, " + reclasifCanalDAO.getError());
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
+
     /**
      *
      * @param event
@@ -589,9 +627,9 @@ public class DailyReclassCatalogsBean implements Serializable {
     /**
      *
      */
-    public void refreshEmpaquesReclasificados() {  
-        HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        ShareUsuario usuario = (ShareUsuario)session.getAttribute("session_user");
+    public void refreshEmpaquesReclasificados() {
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        ShareUsuario usuario = (ShareUsuario) session.getAttribute("session_user");
         ReclasifEmpaqueDAO reclasifEmpaqueDAO = new ReclasifEmpaqueDAO();
         empaquesReclasificados = reclasifEmpaqueDAO.getReclasifEmpaquesAll(usuario);
         CheckCatalogs.checkAllCatalogs();
@@ -610,7 +648,7 @@ public class DailyReclassCatalogsBean implements Serializable {
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
+
     /**
      *
      * @param event
@@ -628,9 +666,9 @@ public class DailyReclassCatalogsBean implements Serializable {
     /**
      *
      */
-    public void refreshMarcasReclasificados() {  
-        HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        ShareUsuario usuario = (ShareUsuario)session.getAttribute("session_user");
+    public void refreshMarcasReclasificados() {
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        ShareUsuario usuario = (ShareUsuario) session.getAttribute("session_user");
         ReclasifMarcaDAO marcaDAO = new ReclasifMarcaDAO();
         marcasReclasificados = marcaDAO.getReclasifMarcasAll(usuario);
         CheckCatalogs.checkAllCatalogs();
@@ -641,7 +679,7 @@ public class DailyReclassCatalogsBean implements Serializable {
      */
     public void saveMarcasReclasificados() {
         FacesMessage message;
-        ReclasifMarcaDAO  reclasifMarcaDAO = new ReclasifMarcaDAO();
+        ReclasifMarcaDAO reclasifMarcaDAO = new ReclasifMarcaDAO();
         if (reclasifMarcaDAO.saveReclasifMarcas(marcasReclasificados != null ? marcasReclasificados : new ArrayList<RvvdReclasifMarca>())) {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Reclassified Brands saved");
         } else {
@@ -649,7 +687,7 @@ public class DailyReclassCatalogsBean implements Serializable {
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
+
     /**
      *
      * @param event
@@ -667,9 +705,9 @@ public class DailyReclassCatalogsBean implements Serializable {
     /**
      *
      */
-    public void refreshGecsReclasificados() {  
-        HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        ShareUsuario usuario = (ShareUsuario)session.getAttribute("session_user");
+    public void refreshGecsReclasificados() {
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        ShareUsuario usuario = (ShareUsuario) session.getAttribute("session_user");
         ReclasifGecDAO reclasifGecDAO = new ReclasifGecDAO();
         gecsReclasificados = reclasifGecDAO.getReclasifUnGecAll(usuario);
         CheckCatalogs.checkAllCatalogs();
@@ -687,14 +725,14 @@ public class DailyReclassCatalogsBean implements Serializable {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Reclassified client types, " + reclasifGecDAO.getError());
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
-    }        
-    
+    }
+
     /**
      *
      */
-    public void refreshDiasOpReclasificados() {  
-        HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        ShareUsuario usuario = (ShareUsuario)session.getAttribute("session_user");
+    public void refreshDiasOpReclasificados() {
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        ShareUsuario usuario = (ShareUsuario) session.getAttribute("session_user");
         ReclasifDiasOpDAO diasOpDAO = new ReclasifDiasOpDAO();
         diasOpReclasificados = diasOpDAO.getReclasifDiasOpAll(usuario);
         CheckCatalogs.checkAllCatalogs();
@@ -710,6 +748,42 @@ public class DailyReclassCatalogsBean implements Serializable {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Operative days saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Reclassified Operative days, " + diasOpDAO.getError());
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    /**
+     *
+     * @param event
+     */
+    public void onRowEditZona(RowEditEvent event) {
+        RvvdReclasifZona zona = (RvvdReclasifZona) event.getObject();
+        zona.setZonaR(catZonaSelected.getZonaR());
+        zona.setZonaEn(catZonaSelected.getZonaEn());
+        catZonaSelected = null;
+    }
+
+    /**
+     *
+     */
+    public void refreshZonasReclasificadas() {
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        ShareUsuario usuario = (ShareUsuario) session.getAttribute("session_user");
+        ReclasifZonaDAO reclasifZonaDAO = new ReclasifZonaDAO();
+        zonasReclasificadas = reclasifZonaDAO.getReclasifZonasAll(usuario);
+        CheckCatalogs.checkAllCatalogs();
+    }
+
+    /**
+     *
+     */
+    public void saveZonasReclasificados() {
+        FacesMessage message;
+        ReclasifZonaDAO reclasifZonaDAO = new ReclasifZonaDAO();
+        if (reclasifZonaDAO.saveReclasifZonas(zonasReclasificadas != null ? zonasReclasificadas : new ArrayList<RvvdReclasifZona>())) {
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Reclassified zones saved");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Reclassified zones, " + reclasifZonaDAO.getError());
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }

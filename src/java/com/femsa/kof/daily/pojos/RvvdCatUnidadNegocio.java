@@ -26,8 +26,8 @@ public class RvvdCatUnidadNegocio implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation    
     @Id
     @Basic(optional = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_UNIDAD_NEGOCIO")
-    @SequenceGenerator(name = "RVVD_SEQ_UNIDAD_NEGOCIO", sequenceName = "RVVD_SEQ_UNIDAD_NEGOCIO", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_CAT_UNIDAD_NEGOCIO")
+    @SequenceGenerator(name = "RVVD_SEQ_CAT_UNIDAD_NEGOCIO", sequenceName = "RVVD_SEQ_CAT_UNIDAD_NEGOCIO", allocationSize = 1)
     @Column(name = "ID_UNIDAD_NEGOCIO")
     private Integer idUnidadNegocio;
 

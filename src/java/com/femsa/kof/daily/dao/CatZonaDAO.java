@@ -1,6 +1,6 @@
-package com.femsa.kof.share.dao;
+package com.femsa.kof.daily.dao;
 
-import com.femsa.kof.share.pojos.ShareUsuario;
+import com.femsa.kof.daily.pojos.RvvdCatZona;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
 import java.util.logging.Level;
@@ -10,12 +10,15 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 /**
+ * Clase que permite la manipulación del catálogo de zonas pertenecientes a
+ * Daily Dashboard
  *
  * @author TMXIDSJPINAM
  */
-public class ShareUsuarioDAO {
+public class CatZonaDAO {
 
     private String error;
+
     private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
@@ -35,22 +38,101 @@ public class ShareUsuarioDAO {
     }
 
     /**
+     * Obtiene la lista completa de zonas
      *
-     * @param user
-     * @param password
-     * @return
+     * @return Regresa una lista de zonas
      */
-    public ShareUsuario getUsuario(String user, String password) {
+    public List<RvvdCatZona> getZonasAll() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        ShareUsuario usuario = null;
+        List<RvvdCatZona> zonas = null;
         try {
-            Query query = session.createQuery("FROM ShareUsuario u WHERE u.usuario = '" + user.toUpperCase() + "' AND u.password = '" + password + "' AND u.estatus = 1");
-            List<ShareUsuario> usuarios = query.list();
+            Query query = session.createQuery("SELECT z FROM RvvdCatZona z");
+            zonas = query.list();
+            error = null;
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
+        return zonas;
+    }
 
-            if (usuarios != null && !usuarios.isEmpty()) {
-                return usuarios.get(0);
+    /**
+     * Obtiene el catálogo de zonas activas
+     *
+     * @return Regresa una lista de zonas donde el estatus es igual a 1
+     */
+    public List<RvvdCatZona> getZonas() {
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        List<RvvdCatZona> zonas = null;
+        try {
+            Query query = session.createQuery("SELECT z FROM RvvdCatZona z WHERE z.status = 1");
+            zonas = query.list();
+            error = null;
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
+        return zonas;
+    }
+
+    /**
+     * Obtiene una zona en específico
+     *
+     * @param id El identificador de la zona a buscar
+     * @return Regresa la zona obtenida, si esxiste, en caso de no existir se
+     * regresa nulo
+     */
+    public RvvdCatZona getZona(Integer id) {
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        RvvdCatZona zona = null;
+        try {
+            zona = (RvvdCatZona) session.get(RvvdCatZona.class, id);
+            error = null;
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
+        return zona;
+    }
+
+    /**
+     * Obtenio una zona en específico
+     *
+     * @param zona nombre de la zona a buscar
+     * @return Regresa la zona buscada, en caso de no existir se regresa nulo
+     */
+    public RvvdCatZona getZona(String zona) {
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        RvvdCatZona zonaT = null;
+        try {
+            Query query = session.createQuery("SELECT z FROM RvvdCatZona z WHERE z.zonaR = '" + zona.toUpperCase() + "' OR z.zonaEn = '" + zona.toUpperCase() + "'");
+            List<RvvdCatZona> zonas = query.list();
+
+            if (zonas != null && !zonas.isEmpty()) {
+                zonaT = zonas.get(0);
             }
             error = null;
         } catch (Exception e) {
@@ -62,86 +144,28 @@ public class ShareUsuarioDAO {
             session.close();
             hibernateUtil.closeSessionFactory();
         }
-        return usuario;
+        return zonaT;
     }
 
     /**
+     * Guarda o actualiza una zona
      *
-     * @param user
-     * @param filtrado
-     * @return
+     * @param zona Zona a guardar
+     * @return Si el guardado concluyo con éxito se regresa verdadero, en caso
+     * contrario se regresa falso y el error es almacenado en el atributo error
      */
-    public ShareUsuario getUsuario(String user, boolean filtrado) {
-        HibernateUtil hibernateUtil = new HibernateUtil();
-        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
-        Session session = sessionFactory.openSession();
-        ShareUsuario usuario = null;
-        Query query = null;
-        try {
-            if (filtrado) {
-                query = session.createQuery("FROM ShareUsuario u WHERE u.usuario = '" + user.toUpperCase() + "' AND u.estatus = 1");
-            } else {
-                query = session.createQuery("FROM ShareUsuario u WHERE u.usuario = '" + user.toUpperCase() + "'");
-            }
-            List<ShareUsuario> usuarios = query.list();
-            if (usuarios != null && !usuarios.isEmpty()) {
-                return usuarios.get(0);
-            }
-            error = null;
-        } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
-        } finally {
-            session.flush();
-            session.clear();
-            session.close();
-            hibernateUtil.closeSessionFactory();
-        }
-        return usuario;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public List<ShareUsuario> getAllUsers() {
-        HibernateUtil hibernateUtil = new HibernateUtil();
-        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
-        Session session = sessionFactory.openSession();
-        List<ShareUsuario> usuarios = null;
-        try {
-            Query query = session.createQuery("FROM ShareUsuario u");
-            usuarios = (List<ShareUsuario>) query.list();
-            error = null;
-        } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
-        } finally {
-            session.flush();
-            session.clear();
-            session.close();
-            hibernateUtil.closeSessionFactory();
-        }
-        return usuarios;
-    }
-
-    /**
-     *
-     * @param usuario
-     * @return
-     */
-    public boolean saveUser(ShareUsuario usuario) {
+    public boolean saveZona(RvvdCatZona zona) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if ((usuario.getPkUsuario() == null ? getUsuario(usuario.getUsuario(), false) : null) == null) {
-                session.saveOrUpdate(usuario);
+            if ((zona.getIdZona()== null ? getZona(zona.getZonaR()) : null) == null) {
+                session.saveOrUpdate(zona);
                 error = null;
             } else {
-                error = "User already exists";
+                error = "Zone already exists";
                 flagOk = false;
             }
             session.getTransaction().commit();

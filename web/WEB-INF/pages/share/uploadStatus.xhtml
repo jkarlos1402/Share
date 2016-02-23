@@ -17,7 +17,7 @@
                 <h1>Upload Status</h1>                 
                 <p:panel id="panelLoad">   
                     <h:panelGrid columns="1" cellpadding="5px">
-                        <p:dataTable var="carga" value="#{shareUploadStatusBean.cargasMes}">
+                        <p:dataTable var="carga" value="#{shareUploadStatusBean.cargasMes}" paginator="true" rows="15">
                             <f:facet name="header">
                                 Uploads status
                             </f:facet>

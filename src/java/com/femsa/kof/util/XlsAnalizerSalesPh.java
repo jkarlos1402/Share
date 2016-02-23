@@ -2,6 +2,7 @@ package com.femsa.kof.util;
 
 import com.femsa.kof.daily.dao.RvvdInfoPhDAO;
 import com.femsa.kof.daily.pojos.RvvdInfoPh;
+import com.femsa.kof.daily.pojos.RvvdInfoPhTmp;
 import com.femsa.kof.managedbeans.MainBean;
 import com.femsa.kof.share.pojos.ShareCatPais;
 import com.femsa.kof.share.pojos.ShareUsuario;
@@ -26,6 +27,7 @@ import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.eventusermodel.ReadOnlySharedStringsTable;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.primefaces.model.UploadedFile;
 import org.xml.sax.SAXException;
@@ -41,7 +43,7 @@ public class XlsAnalizerSalesPh {
     private List<String> omittedSheets;
     private List<String> loadedSheets;
     private List<String> errors;
-    private List<RvvdInfoPh> cargasInfoPh = new ArrayList<RvvdInfoPh>();
+    private List<RvvdInfoPhTmp> cargasInfoPh = new ArrayList<RvvdInfoPhTmp>();
     private long numRegistros = 0L;
     private long rowNum = 0;
     private ReadOnlySharedStringsTable stringsTable;
@@ -152,7 +154,7 @@ public class XlsAnalizerSalesPh {
      *
      * @return Regresa un lista con los registros a guardar en base de datos.
      */
-    public List<RvvdInfoPh> getCargasInfoPh() {
+    public List<RvvdInfoPhTmp> getCargasInfoPh() {
         return cargasInfoPh;
     }
 
@@ -163,7 +165,7 @@ public class XlsAnalizerSalesPh {
      *
      * @param cargasInfoPh Lista de registros a ser almacenados en base de datos
      */
-    public void setCargasInfoPh(List<RvvdInfoPh> cargasInfoPh) {
+    public void setCargasInfoPh(List<RvvdInfoPhTmp> cargasInfoPh) {
         this.cargasInfoPh = cargasInfoPh;
     }
 
@@ -175,17 +177,18 @@ public class XlsAnalizerSalesPh {
      * primefaces
      * @param catPais pais seleccionado para realizar la carga
      * @param usuario Usuario quien realizará el análisis del archivo excel
+     * @param mainBean
      */
-    public void analizeXls(UploadedFile file, ShareCatPais catPais, ShareUsuario usuario,MainBean mainBean) {
+    public void analizeXls(UploadedFile file, ShareCatPais catPais, ShareUsuario usuario, MainBean mainBean) {
         int numSheet = 0;
         try {
-            OPCPackage oPCPackage = null;
+            OPCPackage oPCPackage;
             oPCPackage = OPCPackage.open(file.getInputstream());
             stringsTable = new ReadOnlySharedStringsTable(oPCPackage);
 
-            XSSFReader xssfReader = new XSSFReader(oPCPackage);            
+            XSSFReader xssfReader = new XSSFReader(oPCPackage);
             XMLInputFactory factory = XMLInputFactory.newInstance();
-            XSSFReader.SheetIterator iter = (XSSFReader.SheetIterator) xssfReader.getSheetsData();            
+            XSSFReader.SheetIterator iter = (XSSFReader.SheetIterator) xssfReader.getSheetsData();
             while (iter.hasNext()) {
                 InputStream inputStream = iter.next();
                 sheetName = iter.getSheetName();
@@ -221,10 +224,10 @@ public class XlsAnalizerSalesPh {
             mainBean.setPorcentajeAvance(100);
         } catch (IOException ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
-            errors.add(ex.getMessage());
+            errors.add(ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
         } catch (Exception ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
-            errors.add(ex.getMessage());
+            errors.add(ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
         }
     }
 
@@ -238,6 +241,7 @@ public class XlsAnalizerSalesPh {
      * @param stream flujo de bits correspondiente al archivo cargado desde la
      * interfaz gráfica
      * @param numRegistros número de registros a guardar
+     * @param mainBean
      * @return regresa verdadero si el guardado a base de datos fué exitoso, de
      * lo contrario retorna false
      */
@@ -245,7 +249,7 @@ public class XlsAnalizerSalesPh {
         boolean flagOk = true;
         try {
             int numSheet = 0;
-            OPCPackage oPCPackage = null;
+            OPCPackage oPCPackage;
             oPCPackage = OPCPackage.open(file.getInputstream());
             stringsTable = new ReadOnlySharedStringsTable(oPCPackage);
             mainBean.setNumRegistrosTotales(numRegistros);
@@ -281,23 +285,23 @@ public class XlsAnalizerSalesPh {
             }
         } catch (InvalidFormatException ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
-            errors.add(ex.getMessage());
+            errors.add(ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
             flagOk = false;
         } catch (IOException ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
-            errors.add(ex.getMessage());
+            errors.add(ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
             flagOk = false;
         } catch (SAXException ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
-            errors.add(ex.getMessage());
+            errors.add(ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
             flagOk = false;
         } catch (OpenXML4JException ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
-            errors.add(ex.getMessage());
+            errors.add(ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
             flagOk = false;
         } catch (XMLStreamException ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
-            errors.add(ex.getMessage());
+            errors.add(ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
             flagOk = false;
         }
         return flagOk;
@@ -371,16 +375,19 @@ public class XlsAnalizerSalesPh {
         SimpleDateFormat formatoDelTexto = new SimpleDateFormat("MM/dd/yyyy");
         SimpleDateFormat formatoDelTextoGeneral = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat formatoDelTextoInverso = new SimpleDateFormat("yyyyMMdd");
-        List<RvvdInfoPh> cargas = new ArrayList<RvvdInfoPh>();
+        List<RvvdInfoPhTmp> cargas = new ArrayList<RvvdInfoPhTmp>();
         Date fechaTemp;
         Calendar calendarTemp = Calendar.getInstance();
-        RvvdInfoPh infoTemp = null;
+        RvvdInfoPhTmp infoTemp;
         String elementName = "row";
-        String[] data = null;
+        String[] data;
+        Query queryNativo;
         rowNum = 0L;
         long cont = 0L;
         try {
             session.beginTransaction();
+            queryNativo = session.createSQLQuery("DELETE FROM RVVD_INFO_PH_TMP");
+            queryNativo.executeUpdate();
             while (xmlReader.hasNext()) {
                 xmlReader.next();
                 if (xmlReader.isStartElement()) {
@@ -388,7 +395,7 @@ public class XlsAnalizerSalesPh {
                         data = getDataRow();
                         /////////////
                         //primera columna FECHA (STRING O numeric)
-                        infoTemp = new RvvdInfoPh();
+                        infoTemp = new RvvdInfoPhTmp();
                         try {
                             fechaTemp = formatoDelTextoGeneral.parse("01/01/1900");
                             calendarTemp.setTime(fechaTemp);
@@ -399,7 +406,7 @@ public class XlsAnalizerSalesPh {
                             infoTemp.setFecha(data[0] != null && data[0].contains("/") ? formatoDelTexto.parse(data[0]) : fechaTemp);
                         } catch (ParseException ex) {
                             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
-                            errors.add(ex.getMessage());
+                            errors.add(ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
                         }
 
                         //segunda columna, string o nulo
@@ -437,13 +444,12 @@ public class XlsAnalizerSalesPh {
                         infoTemp.setCuota(data[12] != null && !data[12].equals("") ? Double.parseDouble(data[12]) : 0L);
                         //catorceaba columna, numeric         
                         infoTemp.setVentaTa(data[13] != null && !data[13].equals("") ? Double.parseDouble(data[13]) : 0L);
-
-                        infoTemp.setIdTiempo(new BigInteger(formatoDelTextoInverso.format(infoTemp.getFecha())));
+                        
                         cargas.add(infoTemp);
-                        if (rowNum % 10000 == 0 || rowNum == (numRegistros - 1)) {                            
+                        if (rowNum % 10000 == 0 || rowNum == (numRegistros - 1)) {
                             mainBean.setNumRegistrosProcesados(rowNum);
                             mainBean.setPorcentajeAvance((int) ((rowNum * 100) / numRegistros));
-                            for (RvvdInfoPh carga : cargas) {
+                            for (RvvdInfoPhTmp carga : cargas) {
                                 session.save(carga);
                                 if (cont % 100 == 0) {
                                     session.flush();
@@ -459,13 +465,33 @@ public class XlsAnalizerSalesPh {
                 rowNum++;
             }
             session.getTransaction().commit();
+            session.beginTransaction();
+            queryNativo = session.createSQLQuery("UPDATE RVVD_INFO_PH_TMP SET ID_TIEMPO = (CASE WHEN (SELECT FECHA_REASIGNACION FROM RVVD_445_PH WHERE FECHA = RVVD_INFO_PH_TMP.FECHA) IS NULL THEN 0 ELSE (SELECT FECHA_REASIGNACION FROM RVVD_445_PH WHERE FECHA = RVVD_INFO_PH_TMP.FECHA) END)");
+            queryNativo.executeUpdate();            
+            queryNativo = session.createSQLQuery("DELETE FROM RVVD_INFO_PH WHERE FECHA IN (SELECT DISTINCT(FECHA) FROM RVVD_INFO_PH_TMP)");
+            queryNativo.executeUpdate();
+            queryNativo = session.createSQLQuery("INSERT INTO RVVD_INFO_PH(FECHA,ZONA,CATEGORIA,UNIDAD_DE_NEGOCIO,GEC,CANAL,MARCA,EMPAQUE,RETORNABILIDAD,TIPO_DE_CONSUMO,VENTA_CU,INGRESO_NETO,CUOTA,VENTA_TA,ID_TIEMPO) SELECT FECHA,ZONA,CATEGORIA,UNIDAD_DE_NEGOCIO,GEC,CANAL,MARCA,EMPAQUE,RETORNABILIDAD,TIPO_DE_CONSUMO,VENTA_CU,INGRESO_NETO,CUOTA,VENTA_TA,ID_TIEMPO FROM RVVD_INFO_PH_TMP");
+            queryNativo.executeUpdate();
+            queryNativo = session.createSQLQuery("DELETE FROM RVVD_INFO_PH_TMP");
+            queryNativo.executeUpdate();
+            queryNativo = session.createSQLQuery("COMMIT");
+            queryNativo.executeUpdate();
+            queryNativo = session.createSQLQuery("DROP SEQUENCE RVVD_SEQ_INFO_PH_TMP");
+            queryNativo.executeUpdate();
+            queryNativo = session.createSQLQuery("CREATE SEQUENCE RVVD_SEQ_INFO_PH_TMP INCREMENT BY 1 START WITH 1");
+            queryNativo.executeUpdate();
+            session.getTransaction().commit();
             errors.clear();
             mainBean.setNumRegistrosProcesados(0L);
-            mainBean.setPorcentajeAvance(null); 
+            mainBean.setPorcentajeAvance(null);
             mainBean.setNumRegistrosTotales(0L);
         } catch (Exception ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
-            errors.add(ex.getMessage());
+            errors.add(ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
+            queryNativo = session.createSQLQuery("ROLLBACK");
+            queryNativo.executeUpdate();
+            queryNativo = session.createSQLQuery("COMMIT");
+            queryNativo.executeUpdate();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

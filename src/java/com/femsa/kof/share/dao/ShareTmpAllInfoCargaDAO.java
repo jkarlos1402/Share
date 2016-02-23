@@ -77,7 +77,7 @@ public class ShareTmpAllInfoCargaDAO {
             errors.clear();
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            errors.add("Error saving records: " + e.getMessage());
+            errors.add("Error saving records: " + e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

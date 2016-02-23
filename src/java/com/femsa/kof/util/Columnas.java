@@ -49,5 +49,10 @@ public class Columnas {
     public void setIndexColumn(int indexColumn) {
         this.indexColumn = indexColumn;
     }
+
+    @Override
+    public String toString() {
+        return "Columnas{" + "nameColumn=" + nameColumn + ", indexColumn=" + indexColumn + '}';
+    }
     
 }
