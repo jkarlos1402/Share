@@ -199,7 +199,6 @@ public class MainBean implements Serializable {
     }
 
     public void status() {
-        System.out.println("registros proecesados: " + numRegistrosProcesados);
-        System.out.println("registros totales: " + numRegistrosTotales);
+       // to do
     }
 }

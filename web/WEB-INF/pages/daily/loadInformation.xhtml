@@ -145,19 +145,27 @@
                                         <p:outputLabel value="#{dailyLoadBean.listInfoOpDaysPH.size()} records found." rendered="#{dailyLoadBean.listInfoOpDaysPH != null ? true : false}" />                                
                                     </f:facet>
                                     <p:column headerText="Country">
-                                        <h:outputText value="#{infoDiasPH.pais}" />
+                                        <h:outputText value="#{infoDiasPH.gvDescPais}" />
                                     </p:column>
 
-                                    <p:column headerText="Date" sortBy="#{infoDiasPH.fecha}">
-                                        <h:outputText value="#{infoDiasPH.fecha != null ? dailyLoadBean.formatDay.format(infoDiasPH.fecha) : ''}" />
+                                    <p:column headerText="Date Last Year" sortBy="#{infoDiasPH.gdFechaAa}">
+                                        <h:outputText value="#{infoDiasPH.gdFechaAa != null ? dailyLoadBean.formatDay.format(infoDiasPH.gdFechaAa) : ''}" />
+                                    </p:column>
+                                    
+                                    <p:column headerText="Operative day Last Year" sortBy="#{infoDiasPH.gvDiaOpAa}">
+                                        <h:outputText value="#{infoDiasPH.gvDiaOpAa}" />
                                     </p:column>
 
-                                    <p:column headerText="Date reallocation">
-                                        <h:outputText value="#{infoDiasPH.fechaReasignacion != null ? infoDiasPH.fechaReasignacion : ''}" />
+                                    <p:column headerText="Current date">
+                                        <h:outputText value="#{infoDiasPH.gdFechaAct != null ? dailyLoadBean.formatDay.format(infoDiasPH.gdFechaAct) : ''}" />
                                     </p:column>                                    
 
-                                    <p:column headerText="Date AA">
-                                        <h:outputText value="#{infoDiasPH.fechaAa != null ? dailyLoadBean.formatDay.format(infoDiasPH.fechaAa) : ''}"/>
+                                    <p:column headerText="Operative day corrent year">
+                                        <h:outputText value="#{infoDiasPH.gvDiaOpAct}"/>
+                                    </p:column>
+                                    
+                                    <p:column headerText="Month number">
+                                        <h:outputText value="#{infoDiasPH.gvNMes}"/>
                                     </p:column>
                                     
                                     <f:facet name="footer">
@@ -168,20 +176,28 @@
                                     <f:facet name="header">
                                         <p:outputLabel value="#{dailyLoadBean.listInfoCargaOpDaysPH.size()} records found." rendered="#{dailyLoadBean.listInfoCargaOpDaysPH != null ? true : false}" />                                
                                     </f:facet>
-                                    <p:column headerText="Country">
-                                        <h:outputText value="#{infoCargaDiasPH.pais}" />
+                                   <p:column headerText="Country">
+                                        <h:outputText value="#{infoCargaDiasPH.gvDescPais}" />
                                     </p:column>
 
-                                    <p:column headerText="Date" sortBy="#{infoCargaDiasPH.fecha}">
-                                        <h:outputText value="#{infoCargaDiasPH.fecha != null ? dailyLoadBean.formatDay.format(infoCargaDiasPH.fecha) : ''}" />
+                                    <p:column headerText="Date Last Year" sortBy="#{infoCargaDiasPH.gdFechaAa}">
+                                        <h:outputText value="#{infoCargaDiasPH.gdFechaAa != null ? dailyLoadBean.formatDay.format(infoCargaDiasPH.gdFechaAa) : ''}" />
+                                    </p:column>
+                                    
+                                    <p:column headerText="Operative day Last Year" sortBy="#{infoCargaDiasPH.gvDiaOpAa}">
+                                        <h:outputText value="#{infoCargaDiasPH.gvDiaOpAa}" />
                                     </p:column>
 
-                                    <p:column headerText="Date reallocation">
-                                        <h:outputText value="#{infoCargaDiasPH.fechaReasignacion != null ? infoCargaDiasPH.fechaReasignacion : ''}" />
+                                    <p:column headerText="Current date">
+                                        <h:outputText value="#{infoCargaDiasPH.gdFechaAct != null ? dailyLoadBean.formatDay.format(infoCargaDiasPH.gdFechaAct) : ''}" />
                                     </p:column>                                    
 
-                                    <p:column headerText="Date AA">
-                                        <h:outputText value="#{infoCargaDiasPH.fechaAa != null ? dailyLoadBean.formatDay.format(infoCargaDiasPH.fechaAa) : ''}"/>
+                                    <p:column headerText="Operative day corrent year">
+                                        <h:outputText value="#{infoCargaDiasPH.gvDiaOpAct}"/>
+                                    </p:column>
+                                    
+                                    <p:column headerText="Month number">
+                                        <h:outputText value="#{infoCargaDiasPH.gvNMes}"/>
                                     </p:column>
                                 </p:dataTable>
                             </h:panelGrid>

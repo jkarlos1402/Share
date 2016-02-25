@@ -466,7 +466,7 @@ public class XlsAnalizerSalesPh {
             }
             session.getTransaction().commit();
             session.beginTransaction();
-            queryNativo = session.createSQLQuery("UPDATE RVVD_INFO_PH_TMP SET ID_TIEMPO = (CASE WHEN (SELECT FECHA_REASIGNACION FROM RVVD_445_PH WHERE FECHA = RVVD_INFO_PH_TMP.FECHA) IS NULL THEN 0 ELSE (SELECT FECHA_REASIGNACION FROM RVVD_445_PH WHERE FECHA = RVVD_INFO_PH_TMP.FECHA) END)");
+            queryNativo = session.createSQLQuery("UPDATE RVVD_INFO_PH_TMP SET ID_TIEMPO = (CASE WHEN (SELECT PK_TIEMPO FROM RVVD_DIM_TIEMPO WHERE GD_FECHA = RVVD_INFO_PH_TMP.FECHA) IS NULL THEN 0 ELSE (SELECT PK_TIEMPO FROM RVVD_DIM_TIEMPO WHERE GD_FECHA = RVVD_INFO_PH_TMP.FECHA) END)");
             queryNativo.executeUpdate();            
             queryNativo = session.createSQLQuery("DELETE FROM RVVD_INFO_PH WHERE FECHA IN (SELECT DISTINCT(FECHA) FROM RVVD_INFO_PH_TMP)");
             queryNativo.executeUpdate();

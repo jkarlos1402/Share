@@ -1,14 +1,17 @@
 package com.femsa.kof.util;
 
+import com.femsa.kof.daily.dao.Rvvd445PhDAO;
 import com.femsa.kof.daily.pojos.Rvvd445PhTmp;
 import com.femsa.kof.managedbeans.MainBean;
 import com.femsa.kof.share.pojos.ShareCatPais;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -33,7 +36,7 @@ public class XlsAnalizerDiasOpPh {
     private List<String> loadedSheets;
     private List<String> errors;
     private List<Rvvd445PhTmp> cargasDiasPh = new ArrayList<Rvvd445PhTmp>();
-    
+
     private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
@@ -118,7 +121,7 @@ public class XlsAnalizerDiasOpPh {
      * @param catPais pais que realiza el análisis
      * @param usuario usuario que realiza el análisis
      */
-    public void analizeXls(UploadedFile file, ShareCatPais catPais, ShareUsuario usuario,MainBean mainBean) {
+    public void analizeXls(UploadedFile file, ShareCatPais catPais, ShareUsuario usuario, MainBean mainBean) {
         Workbook excelXLS = null;
         try {
             String extension = getExtension(file.getFileName());
@@ -129,7 +132,7 @@ public class XlsAnalizerDiasOpPh {
             } else if (extension.equalsIgnoreCase("xls")) {
                 excelXLS = new HSSFWorkbook(file.getInputstream());
             }
-            int numberOfSheets = excelXLS.getNumberOfSheets();
+            int numberOfSheets = excelXLS != null ? excelXLS.getNumberOfSheets() : 0;
             for (int i = 0; i < numberOfSheets; i++) {
                 Sheet sheet = excelXLS.getSheetAt(i);
                 rowIterator = sheet.iterator();
@@ -174,14 +177,26 @@ public class XlsAnalizerDiasOpPh {
         List<Rvvd445PhTmp> cargas = new ArrayList<Rvvd445PhTmp>();
         Rvvd445PhTmp diaOpTemp = null;
         SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formatoIdTiempo = new SimpleDateFormat("yyyyMMdd");
+        Calendar calendario = Calendar.getInstance();
+        DecimalFormat decFormat = new DecimalFormat("00");
+        Rvvd445PhDAO rvvd445PhDAO = new Rvvd445PhDAO();
+        List<String> paises = rvvd445PhDAO.getDescPaisGeografia();
+        end:
         while (rowIterator != null && rowIterator.hasNext()) {
             Row row = rowIterator.next();
             Cell cell = null;
             if (numRow > 0) {
                 cell = row.getCell(0);//primera columna
                 if (cell != null && cell.getCellType() == Cell.CELL_TYPE_STRING) {
-                    diaOpTemp = new Rvvd445PhTmp();
-                    diaOpTemp.setPais(cell.getStringCellValue().trim().toUpperCase());
+                    if (paises.contains(cell.getStringCellValue().trim().toUpperCase())) {
+                        diaOpTemp = new Rvvd445PhTmp();
+                        diaOpTemp.setGvDescPais(cell.getStringCellValue().trim().toUpperCase());
+                    } else {
+                        cargas = null;
+                        errors.add(cell.getStringCellValue().trim().toUpperCase()+" is not valid");
+                        break;
+                    }
                 } else {
                     cargas = null;
                     errors.add("Approximately " + Character.toString((char) (65 + 0)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
@@ -189,10 +204,10 @@ public class XlsAnalizerDiasOpPh {
                 }
 
                 cell = row.getCell(1);//segunda columna
-                if (cell != null && (cell.getCellType() == Cell.CELL_TYPE_STRING || cell.getCellType() == Cell.CELL_TYPE_NUMERIC)) {
-                    if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+                if (cell == null || cell.getCellType() == Cell.CELL_TYPE_STRING || cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                    if (cell == null || cell.getCellType() == Cell.CELL_TYPE_STRING) {
                         try {
-                            diaOpTemp.setFecha(formatoDelTexto.parse(cell.getStringCellValue().trim()));
+                            diaOpTemp.setGdFechaAa(cell != null ? formatoDelTexto.parse(cell.getStringCellValue().trim()) : null);
                         } catch (ParseException ex) {
                             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
                             errors.add("Approximately " + Character.toString((char) (65 + 1)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
@@ -200,7 +215,7 @@ public class XlsAnalizerDiasOpPh {
                             break;
                         }
                     } else {
-                        diaOpTemp.setFecha(cell.getDateCellValue());
+                        diaOpTemp.setGdFechaAa(cell.getDateCellValue());
                     }
                 } else {
                     cargas = null;
@@ -209,31 +224,51 @@ public class XlsAnalizerDiasOpPh {
                 }
 
                 cell = row.getCell(2);//tercera columna
-                switch (cell.getCellType()) {
-                    case Cell.CELL_TYPE_STRING:
-                        diaOpTemp.setFechaReasignacion(new BigInteger(cell.getStringCellValue().trim()));
-                        break;
-                    case Cell.CELL_TYPE_NUMERIC:
-                        diaOpTemp.setFechaReasignacion(new BigInteger((long) cell.getNumericCellValue() + ""));
-                        break;
-                    case Cell.CELL_TYPE_FORMULA:
-                        switch (cell.getCachedFormulaResultType()) {
-                            case Cell.CELL_TYPE_STRING:
-                                diaOpTemp.setFechaReasignacion(new BigInteger(cell.getStringCellValue().trim()));
-                                break;
-                            case Cell.CELL_TYPE_NUMERIC:
-                                diaOpTemp.setFechaReasignacion(new BigInteger((long) cell.getNumericCellValue() + ""));
-                                break;
-                        }
-                        break;
-                    default:
-                        break;
+                if (cell != null) {
+                    switch (cell.getCellType()) {
+                        case Cell.CELL_TYPE_STRING:
+                            try {
+                                diaOpTemp.setGvDiaOpAa(Integer.parseInt(cell.getStringCellValue()));
+                            } catch (Exception ex) {
+                                Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
+                                errors.add("Approximately " + Character.toString((char) (65 + 2)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
+                                cargas = null;
+                                break end;
+                            }
+                            break;
+                        case Cell.CELL_TYPE_NUMERIC:
+                            diaOpTemp.setGvDiaOpAa((int) cell.getNumericCellValue());
+                            break;
+                        case Cell.CELL_TYPE_FORMULA:
+                            switch (cell.getCachedFormulaResultType()) {
+                                case Cell.CELL_TYPE_STRING:
+                                    try {
+                                        diaOpTemp.setGvDiaOpAa(Integer.parseInt(cell.getStringCellValue()));
+                                    } catch (Exception ex) {
+                                        Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
+                                        errors.add("Approximately " + Character.toString((char) (65 + 2)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
+                                        cargas = null;
+                                        break end;
+                                    }
+                                    break;
+                                case Cell.CELL_TYPE_NUMERIC:
+                                    diaOpTemp.setGvDiaOpAa((int) cell.getNumericCellValue());
+                                    break;
+                            }
+                            break;
+                        default:
+                            cargas = null;
+                            errors.add("Approximately " + Character.toString((char) (65 + 2)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
+                            break end;
+                    }
+                } else {
+                    diaOpTemp.setGvDiaOpAa(0);
                 }
                 cell = row.getCell(3);//cuarta columna
-                if (cell != null && (cell.getCellType() == Cell.CELL_TYPE_STRING || cell.getCellType() == Cell.CELL_TYPE_NUMERIC)) {
-                    if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+                if (cell == null || cell.getCellType() == Cell.CELL_TYPE_STRING || cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                    if (cell == null || cell.getCellType() == Cell.CELL_TYPE_STRING) {
                         try {
-                            diaOpTemp.setFechaAa(formatoDelTexto.parse(cell.getStringCellValue().trim()));
+                            diaOpTemp.setGdFechaAct(cell != null ? formatoDelTexto.parse(cell.getStringCellValue().trim()) : null);
                         } catch (ParseException ex) {
                             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
                             errors.add("Approximately " + Character.toString((char) (65 + 3)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
@@ -241,13 +276,101 @@ public class XlsAnalizerDiasOpPh {
                             break;
                         }
                     } else {
-                        diaOpTemp.setFechaAa(cell.getDateCellValue());
+                        diaOpTemp.setGdFechaAct(cell.getDateCellValue());
                     }
                 } else {
                     cargas = null;
                     errors.add("Approximately " + Character.toString((char) (65 + 3)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
                     break;
                 }
+                cell = row.getCell(4);//quinta columna
+                if (cell != null) {
+                    switch (cell.getCellType()) {
+                        case Cell.CELL_TYPE_STRING:
+                            try {
+                                diaOpTemp.setGvDiaOpAct(Integer.parseInt(cell.getStringCellValue()));
+                            } catch (Exception ex) {
+                                Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
+                                errors.add("Approximately " + Character.toString((char) (65 + 4)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
+                                cargas = null;
+                                break end;
+                            }
+                            break;
+                        case Cell.CELL_TYPE_NUMERIC:
+                            diaOpTemp.setGvDiaOpAct((int) cell.getNumericCellValue());
+                            break;
+                        case Cell.CELL_TYPE_FORMULA:
+                            switch (cell.getCachedFormulaResultType()) {
+                                case Cell.CELL_TYPE_STRING:
+                                    try {
+                                        diaOpTemp.setGvDiaOpAct(Integer.parseInt(cell.getStringCellValue()));
+                                    } catch (Exception ex) {
+                                        Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
+                                        errors.add("Approximately " + Character.toString((char) (65 + 4)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
+                                        cargas = null;
+                                        break end;
+                                    }
+                                    break;
+                                case Cell.CELL_TYPE_NUMERIC:
+                                    diaOpTemp.setGvDiaOpAct((int) cell.getNumericCellValue());
+                                    break;
+                            }
+                            break;
+                        default:
+                            cargas = null;
+                            errors.add("Approximately " + Character.toString((char) (65 + 4)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
+                            break end;
+                    }
+                } else {
+                    diaOpTemp.setGvDiaOpAct(0);
+                }
+                cell = row.getCell(5);//sexta columna
+                if (cell != null) {
+                    switch (cell.getCellType()) {
+                        case Cell.CELL_TYPE_STRING:
+                            try {
+                                diaOpTemp.setGvNMes(Integer.parseInt(cell.getStringCellValue()));
+                            } catch (Exception ex) {
+                                Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
+                                errors.add("Approximately " + Character.toString((char) (65 + 5)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
+                                cargas = null;
+                                break end;
+                            }
+                            break;
+                        case Cell.CELL_TYPE_NUMERIC:
+                            diaOpTemp.setGvNMes((int) cell.getNumericCellValue());
+                            break;
+                        case Cell.CELL_TYPE_FORMULA:
+                            switch (cell.getCachedFormulaResultType()) {
+                                case Cell.CELL_TYPE_STRING:
+                                    try {
+                                        diaOpTemp.setGvNMes(Integer.parseInt(cell.getStringCellValue()));
+                                    } catch (Exception ex) {
+                                        Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
+                                        errors.add("Approximately " + Character.toString((char) (65 + 5)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
+                                        cargas = null;
+                                        break end;
+                                    }
+                                    break;
+                                case Cell.CELL_TYPE_NUMERIC:
+                                    diaOpTemp.setGvNMes((int) cell.getNumericCellValue());
+                                    break;
+                            }
+                            break;
+                        default:
+                            cargas = null;
+                            errors.add("Approximately " + Character.toString((char) (65 + 5)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
+                            break end;
+                    }
+                } else {
+                    cargas = null;
+                    errors.add("Approximately " + Character.toString((char) (65 + 5)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
+                    break;
+                }
+                calendario.setTime(diaOpTemp.getGdFechaAct());
+                diaOpTemp.setPkTiempo(new Integer(calendario.get(Calendar.YEAR) + "" + decFormat.format(diaOpTemp.getGvNMes()) + "" + decFormat.format(diaOpTemp.getGvDiaOpAct())));
+                diaOpTemp.setPkTiempoAa(new Integer(formatoIdTiempo.format(diaOpTemp.getGdFechaAa())));
+                diaOpTemp.setPkTiempoAct(new Integer(formatoIdTiempo.format(diaOpTemp.getGdFechaAct())));
                 cargas.add(diaOpTemp);
             }
             numRow++;

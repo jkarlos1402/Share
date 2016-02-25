@@ -131,10 +131,7 @@ public class RollingDAO {
             queryNativo = session.createSQLQuery("CREATE SEQUENCE RVVD_SEQ_DISTRIBUCION_MX_TMP INCREMENT BY 1 START WITH 1");
             queryNativo.executeUpdate();     
             session.getTransaction().commit();
-        } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            errors.add("Error saving records: " + e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
-            errors.add("One or more records are not valid, contact the administrator");
+        } catch (Exception e) {            
             queryNativo = session.createSQLQuery("ROLLBACK");
             queryNativo.executeUpdate();
             queryNativo = session.createSQLQuery("DELETE FROM RVVD_RECLASIF_DIAS_OP_TMP");
@@ -145,6 +142,9 @@ public class RollingDAO {
                 session.getTransaction().rollback();
             }
             flagOk = false;
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
+            errors.add("Error saving records: " + e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+            errors.add("One or more records are not valid, contact the administrator");
         } finally {
             session.flush();
             session.clear();

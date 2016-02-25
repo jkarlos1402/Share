@@ -75,13 +75,13 @@ public class ShareTmpAllInfoCargaDAO {
             session.getTransaction().commit();
             mainBean.setPorcentajeAvance((int) ((++cont * 100) / (listCarga.size()+ total)));
             errors.clear();
-        } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            errors.add("Error saving records: " + e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+        } catch (Exception e) {            
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }
             flagOk = false;
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
+            errors.add("Error saving records: " + e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
         } finally {
             session.flush();
             session.clear();

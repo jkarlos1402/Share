@@ -1,8 +1,6 @@
 package com.femsa.kof.daily.pojos;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -16,7 +14,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- *
+ * Mapea la tabla RVVD_445_PH 
  * @author TMXIDSJPINAM
  */
 @Entity
@@ -25,106 +23,128 @@ public class Rvvd445Ph implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    @Column(name = "PAIS")
-    private String pais;
-    
-    @Column(name = "FECHA")
-    @Temporal(TemporalType.DATE)
-    private Date fecha;
-    
-    @Column(name = "FECHA_REASIGNACION")
-    private BigInteger fechaReasignacion;
-    
-    @Column(name = "FECHA_AA")
-    @Temporal(TemporalType.DATE)
-    private Date fechaAa;
-    
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_445_PH")
     @SequenceGenerator(name = "RVVD_SEQ_445_PH", sequenceName = "RVVD_SEQ_445_PH", allocationSize = 1)
     @Column(name = "ID_445_PH")
-    private BigDecimal id445Ph;    
+    private Long id445Ph;
+    
+    @Column(name = "GV_DESC_PAIS")
+    private String gvDescPais;
+    
+    @Column(name = "GD_FECHA_AA")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date gdFechaAa;
+    
+    @Column(name = "GV_DIA_OP_AA")
+    private Integer gvDiaOpAa;
+    
+    @Column(name = "GD_FECHA_ACT")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date gdFechaAct;
+    
+    @Column(name = "GV_DIA_OP_ACT")
+    private Integer gvDiaOpAct;
+    
+    @Column(name = "GV_N_MES")
+    private Integer gvNMes;
+    
+    @Column(name = "PK_TIEMPO")
+    private Integer pkTiempo;
+    
+    @Column(name = "PK_TIEMPO_AA")
+    private Integer pkTiempoAa;
+    
+    @Column(name = "PK_TIEMPO_ACT")
+    private Integer pkTiempoAct;
 
-    /**
-     *
-     * @return
-     */
-    public String getPais() {
-        return pais;
+    public Rvvd445Ph() {
     }
 
-    /**
-     *
-     * @param pais
-     */
-    public void setPais(String pais) {
-        this.pais = pais;
+    public Rvvd445Ph(Long id445Ph) {
+        this.id445Ph = id445Ph;
     }
 
-    /**
-     *
-     * @return
-     */
-    public Date getFecha() {
-        return fecha;
-    }
-
-    /**
-     *
-     * @param fecha
-     */
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public BigInteger getFechaReasignacion() {
-        return fechaReasignacion;
-    }
-
-    /**
-     *
-     * @param fechaReasignacion
-     */
-    public void setFechaReasignacion(BigInteger fechaReasignacion) {
-        this.fechaReasignacion = fechaReasignacion;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Date getFechaAa() {
-        return fechaAa;
-    }
-
-    /**
-     *
-     * @param fechaAa
-     */
-    public void setFechaAa(Date fechaAa) {
-        this.fechaAa = fechaAa;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public BigDecimal getId445Ph() {
+    public Long getId445Ph() {
         return id445Ph;
     }
 
-    /**
-     *
-     * @param id445Ph
-     */
-    public void setId445Ph(BigDecimal id445Ph) {
+    public void setId445Ph(Long id445Ph) {
         this.id445Ph = id445Ph;
+    }
+
+    public String getGvDescPais() {
+        return gvDescPais;
+    }
+
+    public void setGvDescPais(String gvDescPais) {
+        this.gvDescPais = gvDescPais;
+    }
+
+    public Date getGdFechaAa() {
+        return gdFechaAa;
+    }
+
+    public void setGdFechaAa(Date gdFechaAa) {
+        this.gdFechaAa = gdFechaAa;
+    }
+
+    public Integer getGvDiaOpAa() {
+        return gvDiaOpAa;
+    }
+
+    public void setGvDiaOpAa(Integer gvDiaOpAa) {
+        this.gvDiaOpAa = gvDiaOpAa;
+    }
+
+    public Date getGdFechaAct() {
+        return gdFechaAct;
+    }
+
+    public void setGdFechaAct(Date gdFechaAct) {
+        this.gdFechaAct = gdFechaAct;
+    }
+
+    public Integer getGvDiaOpAct() {
+        return gvDiaOpAct;
+    }
+
+    public void setGvDiaOpAct(Integer gvDiaOpAct) {
+        this.gvDiaOpAct = gvDiaOpAct;
+    }
+
+    public Integer getGvNMes() {
+        return gvNMes;
+    }
+
+    public void setGvNMes(Integer gvNMes) {
+        this.gvNMes = gvNMes;
+    }
+
+    public Integer getPkTiempo() {
+        return pkTiempo;
+    }
+
+    public void setPkTiempo(Integer pkTiempo) {
+        this.pkTiempo = pkTiempo;
+    }
+
+    public Integer getPkTiempoAa() {
+        return pkTiempoAa;
+    }
+
+    public void setPkTiempoAa(Integer pkTiempoAa) {
+        this.pkTiempoAa = pkTiempoAa;
+    }
+
+    public Integer getPkTiempoAct() {
+        return pkTiempoAct;
+    }
+
+    public void setPkTiempoAct(Integer pkTiempoAct) {
+        this.pkTiempoAct = pkTiempoAct;
     }
 
     @Override

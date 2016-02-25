@@ -59,10 +59,10 @@ public class ScriptAnalizer {
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (Exception e) {            
+            flagOk = false;
             Logger.getLogger(ScriptAnalizer.class.getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             errors.add("Error running script: " + e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
-            flagOk = false;
         } finally {
             session.flush();
             session.clear();
