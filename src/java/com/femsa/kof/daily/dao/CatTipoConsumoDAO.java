@@ -46,7 +46,7 @@ public class CatTipoConsumoDAO {
         Session session = sessionFactory.openSession();
         List<RvvdCatTipoConsumo> tiposConsumo = null;
         try {
-            Query query = session.createQuery("SELECT tc FROM RvvdCatTipoConsumo tc");
+            Query query = session.createQuery("SELECT tc FROM RvvdCatTipoConsumo tc ORDER BY tc.tipoConsumoR ASC");
             tiposConsumo = query.list();
             error = null;
         } catch (Exception e) {
@@ -72,7 +72,7 @@ public class CatTipoConsumoDAO {
         Session session = sessionFactory.openSession();
         List<RvvdCatTipoConsumo> tiposConsumo = null;
         try {
-            Query query = session.createQuery("SELECT tc FROM RvvdCatTipoConsumo tc WHERE tc.status = 1");
+            Query query = session.createQuery("SELECT tc FROM RvvdCatTipoConsumo tc WHERE tc.status = 1 ORDER BY tc.tipoConsumoR ASC");
             tiposConsumo = query.list();
             error = null;
         } catch (Exception e) {
@@ -157,7 +157,7 @@ public class CatTipoConsumoDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if ((tipoConsumo.getIdTipoConsumo() == null ? getTipoConsumo(tipoConsumo.getTipoConsumoR()) : null) == null) {
+            if (getTipoConsumo(tipoConsumo.getTipoConsumoR()) == null) {
                 session.saveOrUpdate(tipoConsumo);
                 error = null;
             } else {
@@ -168,6 +168,56 @@ public class CatTipoConsumoDAO {
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            if (session.getTransaction().isActive()) {
+                session.getTransaction().rollback();
+            }
+            flagOk = false;
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
+        return flagOk;
+    }
+
+    /**
+     * Elimina un tipo de consumo
+     *
+     * @param tipoConsumo Tipo de consumo a eliminar
+     * @return Si la eliminación concluyó con éxito se regresa verdadero, en
+     * caso contrario se regresa falso y el error es almacenado en el atributo
+     * error
+     */
+    public boolean deleteTipoConsumo(RvvdCatTipoConsumo tipoConsumo) {
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query queryNativo;
+        List<Object> resValicacion;
+        int numOcurrencias = 0;
+        boolean flagOk = true;
+        RvvdCatTipoConsumo tipoConsumoActual = (RvvdCatTipoConsumo) session.get(RvvdCatTipoConsumo.class, tipoConsumo.getIdTipoConsumo());
+        try {
+            session.beginTransaction();
+            if (tipoConsumo.getIdTipoConsumo() != null) {
+                queryNativo = session.createSQLQuery("SELECT COUNT(PAIS) FROM RVVD_RECLASIF_EMPAQUE WHERE TIPO_CONSUMO_R = '" + tipoConsumoActual.getTipoConsumoR() + "'");
+                resValicacion = queryNativo.list();
+                for (Object object : resValicacion) {
+                    numOcurrencias = Integer.parseInt(object.toString());
+                }
+                if (numOcurrencias == 0) {
+                    session.delete(tipoConsumoActual);
+                    error = null;
+                } else {
+                    error = "Can not delete the type of consumption, is already used";
+                    flagOk = false;
+                }
+            }
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
+            error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

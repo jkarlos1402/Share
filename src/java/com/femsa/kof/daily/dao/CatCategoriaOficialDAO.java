@@ -46,7 +46,7 @@ public class CatCategoriaOficialDAO {
         Session session = sessionFactory.openSession();
         List<RvvdCatCategoriaOficial> categoriasOficiales = null;
         try {
-            Query query = session.createQuery("SELECT co FROM RvvdCatCategoriaOficial co");
+            Query query = session.createQuery("SELECT co FROM RvvdCatCategoriaOficial co ORDER BY co.categoriaOficial ASC");
             categoriasOficiales = query.list();
             error = null;
         } catch (Exception e) {
@@ -72,7 +72,7 @@ public class CatCategoriaOficialDAO {
         Session session = sessionFactory.openSession();
         List<RvvdCatCategoriaOficial> categoriasOficiales = null;
         try {
-            Query query = session.createQuery("SELECT co FROM RvvdCatCategoriaOficial co WHERE co.status = 1");
+            Query query = session.createQuery("SELECT co FROM RvvdCatCategoriaOficial co WHERE co.status = 1 ORDER BY co.categoriaOficial ASC");
             categoriasOficiales = query.list();
             error = null;
         } catch (Exception e) {
@@ -160,7 +160,7 @@ public class CatCategoriaOficialDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if ((catCategoriaOficial.getIdCategoriaOficial() == null ? getCategoriaOficial(catCategoriaOficial.getCategoriaOficial()) : null) == null) {
+            if (getCategoriaOficial(catCategoriaOficial.getCategoriaOficial()) == null) {
                 session.saveOrUpdate(catCategoriaOficial);
                 error = null;
             } else {
@@ -171,6 +171,56 @@ public class CatCategoriaOficialDAO {
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            if (session.getTransaction().isActive()) {
+                session.getTransaction().rollback();
+            }
+            flagOk = false;
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
+        return flagOk;
+    }
+
+    /**
+     * Elimina una categoria oficial
+     *
+     * @param categoriaOficial Categoria oficial a eliminar
+     * @return Si la eliminación concluyó con éxito se regresa verdadero, en
+     * caso contrario se regresa falso y el error es almacenado en el atributo
+     * error
+     */
+    public boolean deleteCategoriaOficial(RvvdCatCategoriaOficial categoriaOficial) {
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query queryNativo;
+        List<Object> resValicacion;
+        int numOcurrencias = 0;
+        boolean flagOk = true;
+        RvvdCatCategoriaOficial categoriaOficialActual = (RvvdCatCategoriaOficial) session.get(RvvdCatCategoriaOficial.class, categoriaOficial.getIdCategoriaOficial());
+        try {
+            session.beginTransaction();
+            if (categoriaOficial.getIdCategoriaOficial() != null) {
+                queryNativo = session.createSQLQuery("SELECT COUNT(PAIS) FROM RVVD_RECLASIF_CATEGORIA WHERE CATEGORIA_OFICIAL_R = '" + categoriaOficialActual.getCategoriaOficial() + "'");
+                resValicacion = queryNativo.list();
+                for (Object object : resValicacion) {
+                    numOcurrencias = Integer.parseInt(object.toString());
+                }
+                if (numOcurrencias == 0) {
+                    session.delete(categoriaOficialActual);
+                    error = null;
+                } else {
+                    error = "Can not delete the official category, is already used";
+                    flagOk = false;
+                }
+            }
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
+            error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

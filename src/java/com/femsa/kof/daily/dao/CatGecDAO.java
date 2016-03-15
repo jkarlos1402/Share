@@ -46,7 +46,7 @@ public class CatGecDAO {
         Session session = sessionFactory.openSession();
         List<RvvdCatGec> gecs = null;
         try {
-            Query query = session.createQuery("SELECT gec FROM RvvdCatGec gec");
+            Query query = session.createQuery("SELECT gec FROM RvvdCatGec gec ORDER BY gec.gecR ASC");
             gecs = query.list();
             error = null;
         } catch (Exception e) {
@@ -72,7 +72,7 @@ public class CatGecDAO {
         Session session = sessionFactory.openSession();
         List<RvvdCatGec> gecs = null;
         try {
-            Query query = session.createQuery("SELECT gec FROM RvvdCatGec gec WHERE gec.status = 1");
+            Query query = session.createQuery("SELECT gec FROM RvvdCatGec gec WHERE gec.status = 1 ORDER BY gec.gecR ASC");
             gecs = query.list();
             error = null;
         } catch (Exception e) {
@@ -157,7 +157,7 @@ public class CatGecDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if ((gec.getIdGec() == null ? getGec(gec.getGecR()) : null) == null) {
+            if (getGec(gec.getGecR()) == null) {
                 session.saveOrUpdate(gec);
                 error = null;
             } else {
@@ -168,6 +168,56 @@ public class CatGecDAO {
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            if (session.getTransaction().isActive()) {
+                session.getTransaction().rollback();
+            }
+            flagOk = false;
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
+        return flagOk;
+    }
+
+    /**
+     * Elimina un gec
+     *
+     * @param gec Gec a eliminar
+     * @return Si la eliminación concluyó con éxito se regresa verdadero, en
+     * caso contrario se regresa falso y el error es almacenado en el atributo
+     * error
+     */
+    public boolean deleteGec(RvvdCatGec gec) {
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query queryNativo;
+        List<Object> resValicacion;
+        int numOcurrencias = 0;
+        boolean flagOk = true;
+        RvvdCatGec gecActual = (RvvdCatGec) session.get(RvvdCatGec.class, gec.getIdGec());
+        try {
+            session.beginTransaction();
+            if (gec.getIdGec() != null) {
+                queryNativo = session.createSQLQuery("SELECT COUNT(PAIS) FROM RVVD_RECLASIF_UN_GEC WHERE GEC_R = '" + gecActual.getGecR() + "'");
+                resValicacion = queryNativo.list();
+                for (Object object : resValicacion) {
+                    numOcurrencias = Integer.parseInt(object.toString());
+                }
+                if (numOcurrencias == 0) {
+                    session.delete(gecActual);
+                    error = null;
+                } else {
+                    error = "Can not delete the client type, is already used";
+                    flagOk = false;
+                }
+            }
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
+            error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

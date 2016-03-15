@@ -61,13 +61,13 @@
                                                 <img src="images/BG9-19.png" width="17" height="16" />  Home
                                             </p:commandLink>                                                                                                            
                                         </li>
-                                        <h:panelGroup rendered="#{(mainBean.usuario.proyectos ne null and mainBean.usuario.proyectos.size() > 0 and mainBean.usuario.proyectos.get(0).idProyecto eq '1') or mainBean.usuario.rol.pkRol eq '1' ? true : false}">
+                                        <h:panelGroup rendered="#{(mainBean.usuario.proyectos ne null and mainBean.usuario.proyectos.size() > 0 and mainBean.haveProject(1)) or mainBean.usuario.rol.pkRol eq '1' ? true : false}">
                                             <li >
                                                 <a  href="#" onclick="return false;">                                            
                                                     Share
                                                 </a>
                                                 <ul >
-                                                    <h:panelGroup rendered="#{(mainBean.usuario.proyectos ne null and mainBean.usuario.proyectos.size() > 0 and mainBean.usuario.proyectos.get(0).idProyecto eq '1') or mainBean.usuario.rol.pkRol eq '1' ? true : false}">
+                                                    <h:panelGroup rendered="#{(mainBean.usuario.proyectos ne null and mainBean.usuario.proyectos.size() > 0 and mainBean.haveProject(1)) or mainBean.usuario.rol.pkRol eq '1' ? true : false}">
                                                         <li>
                                                             <p:commandLink action="#{mainBean.setPage('loadInformation','','share')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();initMenu();">
                                                                 <img src="images/BG9-24.png"/>Information Load
@@ -108,13 +108,13 @@
                                                 </ul>
                                             </li>
                                         </h:panelGroup>
-                                        <h:panelGroup rendered="#{(mainBean.usuario.proyectos ne null and mainBean.usuario.proyectos.size() > 0 and mainBean.usuario.proyectos.get(0).idProyecto eq '2') or mainBean.usuario.rol.pkRol eq '1' ? true : false}">
+                                        <h:panelGroup rendered="#{(mainBean.usuario.proyectos ne null and mainBean.usuario.proyectos.size() > 0 and mainBean.haveProject(2)) or mainBean.usuario.rol.pkRol eq '1' ? true : false}">
                                             <li >
                                                 <a href="#" onclick="return false;">                                            
                                                     Daily Dashboard
                                                 </a>
                                                 <ul >
-                                                    <h:panelGroup rendered="#{(mainBean.usuario.proyectos ne null and mainBean.usuario.proyectos.size() > 0 and mainBean.usuario.proyectos.get(0).idProyecto eq '2') or mainBean.usuario.rol.pkRol eq '1' ? true : false}">
+                                                    <h:panelGroup rendered="#{(mainBean.usuario.proyectos ne null and mainBean.usuario.proyectos.size() > 0 and mainBean.haveProject(2)) or mainBean.usuario.rol.pkRol eq '1' ? true : false}">
                                                         <li>
                                                             <a  href="#" onclick="return false;">
                                                                 <img src="images/BG9-24.png"/> Information Load
@@ -151,6 +151,11 @@
                                                             </a>
                                                             <ul >
                                                                 <li>
+                                                                    <p:commandLink action="#{mainBean.setPage('reclassification_catalogs','reclassificationTrademarkDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();initMenu();">
+                                                                        <span><img src="images/BG9-18.png"/>Brand</span>
+                                                                    </p:commandLink>
+                                                                </li>  
+                                                                <li>
                                                                     <p:commandLink  action="#{mainBean.setPage('reclassification_catalogs','reclassificationCategoryDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();initMenu();">
                                                                         <span><img src="images/BG9-21.png"/>Category</span>
                                                                     </p:commandLink>
@@ -170,16 +175,7 @@
                                                                         <span><img src="images/BG9-20.png"/>Client type</span>
                                                                     </p:commandLink>
                                                                 </li>
-                                                                <li>
-                                                                    <p:commandLink action="#{mainBean.setPage('reclassification_catalogs','reclassificationOperativeDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();initMenu();">
-                                                                        <span><img src="images/BG9-29.png"/>Operative Days</span>
-                                                                    </p:commandLink>
-                                                                </li>                                            
-                                                                <li>
-                                                                    <p:commandLink action="#{mainBean.setPage('reclassification_catalogs','reclassificationTrademarkDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();initMenu();">
-                                                                        <span><img src="images/BG9-18.png"/>Brand</span>
-                                                                    </p:commandLink>
-                                                                </li>                                            
+                                                                <!--aqui iba lo de reclasificacion de dias operativos-->
                                                                 <li>
                                                                     <p:commandLink action="#{mainBean.setPage('reclassification_catalogs','reclassificationZoneDaily','daily')}" update=":panelMain" oncomplete="$('.ui-outputlabel-rfi').hide();initMenu();">
                                                                         <span><img src="images/BG9-12.png"/>Zone</span>
@@ -322,7 +318,7 @@
                     </h:panelGrid>                    
                 </p:outputPanel>
             </p:overlayPanel>
-            <input type="hidden" id="proyectoUser" value="#{(mainBean.usuario.proyectos ne null and mainBean.usuario.proyectos.size() > 0) ? mainBean.usuario.proyectos.get(0).idProyecto : '0'}" />
+            <input type="hidden" id="proyectoUser" value="#{(mainBean.usuario.proyectos ne null and mainBean.usuario.proyectos.size() > 0) ? mainBean.usuario.listProjects(false) : '0'}" />
             <input type="hidden" id="rolUser" value="#{mainBean.usuario.rol.pkRol}" />
             <input type="hidden" id="showLoading" value="1" />
         </h:form>

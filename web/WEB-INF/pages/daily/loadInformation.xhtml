@@ -137,41 +137,8 @@
                         <p:separator />
                         <h3>Resume</h3>
                         <p:panel>
-                            <h:panelGrid columns="2" columnClasses="topElemsClass,topElemsClass">
-                                <p:outputLabel value="Existing records"/>
-                                <p:outputLabel value="New records"/>
-                                <p:dataTable  var="infoDiasPH" value="#{dailyLoadBean.listInfoOpDaysPH}" id="tableInfoDiasPH" reflow="true" rows="20" paginator="true" widgetVar="tableInfoDiasPH">                    
-                                    <f:facet name="header">
-                                        <p:outputLabel value="#{dailyLoadBean.listInfoOpDaysPH.size()} records found." rendered="#{dailyLoadBean.listInfoOpDaysPH != null ? true : false}" />                                
-                                    </f:facet>
-                                    <p:column headerText="Country">
-                                        <h:outputText value="#{infoDiasPH.gvDescPais}" />
-                                    </p:column>
-
-                                    <p:column headerText="Date Last Year" sortBy="#{infoDiasPH.gdFechaAa}">
-                                        <h:outputText value="#{infoDiasPH.gdFechaAa != null ? dailyLoadBean.formatDay.format(infoDiasPH.gdFechaAa) : ''}" />
-                                    </p:column>
-                                    
-                                    <p:column headerText="Operative day Last Year" sortBy="#{infoDiasPH.gvDiaOpAa}">
-                                        <h:outputText value="#{infoDiasPH.gvDiaOpAa}" />
-                                    </p:column>
-
-                                    <p:column headerText="Current date">
-                                        <h:outputText value="#{infoDiasPH.gdFechaAct != null ? dailyLoadBean.formatDay.format(infoDiasPH.gdFechaAct) : ''}" />
-                                    </p:column>                                    
-
-                                    <p:column headerText="Operative day corrent year">
-                                        <h:outputText value="#{infoDiasPH.gvDiaOpAct}"/>
-                                    </p:column>
-                                    
-                                    <p:column headerText="Month number">
-                                        <h:outputText value="#{infoDiasPH.gvNMes}"/>
-                                    </p:column>
-                                    
-                                    <f:facet name="footer">
-                                        <p:commandButton value="Refresh" actionListener="#{dailyLoadBean.refreshDiasOpPh}" update="tableInfoDiasPH" />
-                                    </f:facet>
-                                </p:dataTable>
+                            <h:panelGrid columns="1" columnClasses="topElemsClass,topElemsClass">                               
+                                <p:outputLabel value="New records"/>                                
                                 <p:dataTable var="infoCargaDiasPH" value="#{dailyLoadBean.listInfoCargaOpDaysPH}" id="tableInfoCargaDiasPH" reflow="true" rows="20" paginator="true" widgetVar="tableInfCargaDiasPH">                    
                                     <f:facet name="header">
                                         <p:outputLabel value="#{dailyLoadBean.listInfoCargaOpDaysPH.size()} records found." rendered="#{dailyLoadBean.listInfoCargaOpDaysPH != null ? true : false}" />                                

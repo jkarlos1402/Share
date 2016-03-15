@@ -46,7 +46,7 @@ public class CatCategoriaDAO {
         Session session = sessionFactory.openSession();
         List<RvvdCatCategoria> categorias = null;
         try {
-            Query query = session.createQuery("SELECT c FROM RvvdCatCategoria c");
+            Query query = session.createQuery("SELECT c FROM RvvdCatCategoria c ORDER BY c.categoria ASC");
             categorias = query.list();
             error = null;
         } catch (Exception e) {
@@ -72,7 +72,7 @@ public class CatCategoriaDAO {
         Session session = sessionFactory.openSession();
         List<RvvdCatCategoria> categorias = null;
         try {
-            Query query = session.createQuery("SELECT c FROM RvvdCatCategoria c WHERE c.status = 1");
+            Query query = session.createQuery("SELECT c FROM RvvdCatCategoria c WHERE c.status = 1 ORDER BY c.categoria ASC");
             categorias = query.list();
             error = null;
         } catch (Exception e) {
@@ -157,7 +157,7 @@ public class CatCategoriaDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if ((catCategoria.getIdCategoria() == null ? getCategoria(catCategoria.getCategoria()) : null) == null) {
+            if (getCategoria(catCategoria.getCategoria()) == null) {
                 session.saveOrUpdate(catCategoria);
                 error = null;
             } else {
@@ -168,6 +168,56 @@ public class CatCategoriaDAO {
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            if (session.getTransaction().isActive()) {
+                session.getTransaction().rollback();
+            }
+            flagOk = false;
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
+        return flagOk;
+    }
+
+    /**
+     * Elimina una categoria
+     *
+     * @param categoria Categoria a eliminar
+     * @return Si la eliminación concluyó con éxito se regresa verdadero, en
+     * caso contrario se regresa falso y el error es almacenado en el atributo
+     * error
+     */
+    public boolean deleteCategoria(RvvdCatCategoria categoria) {
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query queryNativo;
+        List<Object> resValicacion;
+        int numOcurrencias = 0;
+        boolean flagOk = true;
+        RvvdCatCategoria categoriaActual = (RvvdCatCategoria) session.get(RvvdCatCategoria.class, categoria.getIdCategoria());
+        try {
+            session.beginTransaction();
+            if (categoria.getIdCategoria() != null) {
+                queryNativo = session.createSQLQuery("SELECT COUNT(PAIS) FROM RVVD_RECLASIF_CATEGORIA WHERE CATEGORIA_R = '" + categoriaActual.getCategoria()+ "'");
+                resValicacion = queryNativo.list();
+                for (Object object : resValicacion) {
+                    numOcurrencias = Integer.parseInt(object.toString());
+                }
+                if (numOcurrencias == 0) {
+                    session.delete(categoriaActual);
+                    error = null;
+                } else {
+                    error = "Can not delete the category, is already used";
+                    flagOk = false;
+                }
+            }
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
+            error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

@@ -24,6 +24,14 @@ public class RvvdStRollingTmp implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
+     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Id
+    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_ST_ROLLING_TMP")
+    @SequenceGenerator(name = "RVVD_SEQ_ST_ROLLING_TMP", sequenceName = "RVVD_SEQ_ST_ROLLING_TMP", allocationSize = 1)
+    @Column(name = "ID_ST_ROLLING")
+    private BigDecimal idStRolling;  
+    
     @Column(name = "ANIO")
     private Integer anio;
     
@@ -65,15 +73,7 @@ public class RvvdStRollingTmp implements Serializable {
     private Double rollingIngreso;
     
     @Column(name = "ROLLING_TA")
-    private Double rollingTa;
-    
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Id
-    @Basic(optional = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_ST_ROLLING_TMP")
-    @SequenceGenerator(name = "RVVD_SEQ_ST_ROLLING_TMP", sequenceName = "RVVD_SEQ_ST_ROLLING_TMP", allocationSize = 1)
-    @Column(name = "ID_ST_ROLLING")
-    private BigDecimal idStRolling;    
+    private Double rollingTa;         
 
     /**
      *

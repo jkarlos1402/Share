@@ -13,7 +13,7 @@ function setFilter(filter) {
 }
 
 $(document).ready(function () {
-    if ($("#menuPrincipal").length > 0 && ($("#proyectoUser").val() === "2" || $("#proyectoUser").val() === "1" || $("#rolUser").val() === "1")) {
+    if ($("#menuPrincipal").length > 0 && ($("#proyectoUser").val() !== "0" || $("#rolUser").val() === "1")) {
         initMenu();
         setTimeout(function () {
             showNotifications();
@@ -34,7 +34,7 @@ function hideAsteriscos() {
 }
 
 function showNotifications() {
-    if ($("#menuPrincipal").length > 0 && ($("#proyectoUser").val() === "2" || $("#rolUser").val() === "1")) {
+    if ($("#menuPrincipal").length > 0 && ($("#proyectoUser").val().indexOf("2") !== -1 || $("#rolUser").val() === "1")) {
         setTimeout(function () {
             PF('notificationPanel').show();
             setTimeout(function () {

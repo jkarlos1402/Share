@@ -3,10 +3,8 @@ package com.femsa.kof.daily.managedbeans;
 import com.femsa.kof.daily.dao.RollingDAO;
 import com.femsa.kof.daily.dao.Rvvd445PhDAO;
 import com.femsa.kof.daily.pojos.RollingDaily;
-import com.femsa.kof.daily.pojos.Rvvd445Ph;
 import com.femsa.kof.daily.pojos.Rvvd445PhTmp;
 import com.femsa.kof.daily.pojos.RvvdDistribucionMxTmp;
-import com.femsa.kof.daily.pojos.RvvdInfoPh;
 import com.femsa.kof.managedbeans.MainBean;
 import com.femsa.kof.share.dao.ShareLoadLogDAO;
 import com.femsa.kof.share.pojos.ShareCatPais;
@@ -44,9 +42,7 @@ public class DailyLoadBean {
 
     private List<RollingDaily> listInfoCargaRolling;
     private List<Rvvd445PhTmp> listInfoCargaOpDaysPH;
-    private List<Rvvd445Ph> listInfoOpDaysPH;
     private List<RvvdDistribucionMxTmp> listInfoCargaDistribucion;
-    private List<RvvdInfoPh> listInfoPh;
     private ShareCatPais countrySelected;
     private List<SelectItem> catCountriesUser;
     private List<String> omittedSheets;
@@ -82,8 +78,6 @@ public class DailyLoadBean {
         loadedSheets = new ArrayList<String>();
         errors = new ArrayList<String>();
         cargas = new ArrayList<ShareLoadLog>();
-        Rvvd445PhDAO rvvd445PhDAO = new Rvvd445PhDAO();
-        listInfoOpDaysPH = rvvd445PhDAO.get445Ph();
     }
 
     public MainBean getBeanPrincipal() {
@@ -92,30 +86,6 @@ public class DailyLoadBean {
 
     public void setBeanPrincipal(MainBean beanPrincipal) {
         this.beanPrincipal = beanPrincipal;
-    }
-
-    /**
-     *
-     */
-    public void refreshDiasOpPh() {
-        Rvvd445PhDAO rvvd445PhDAO = new Rvvd445PhDAO();
-        listInfoOpDaysPH = rvvd445PhDAO.get445Ph();
-    }
-
-    /**
-     *
-     * @return
-     */
-    public List<Rvvd445Ph> getListInfoOpDaysPH() {
-        return listInfoOpDaysPH;
-    }
-
-    /**
-     *
-     * @param listInfoOpDaysPH
-     */
-    public void setListInfoOpDaysPH(List<Rvvd445Ph> listInfoOpDaysPH) {
-        this.listInfoOpDaysPH = listInfoOpDaysPH;
     }
 
     /**
@@ -180,22 +150,6 @@ public class DailyLoadBean {
      */
     public void setNameFile(String nameFile) {
         this.nameFile = nameFile;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public List<RvvdInfoPh> getListInfoPh() {
-        return listInfoPh;
-    }
-
-    /**
-     *
-     * @param listInfoPh
-     */
-    public void setListInfoPh(List<RvvdInfoPh> listInfoPh) {
-        this.listInfoPh = listInfoPh;
     }
 
     /**
@@ -474,7 +428,7 @@ public class DailyLoadBean {
         beanPrincipal.setPorcentajeAvance(50);
         FacesMessage message;
         XlsAnalizerDiasOpPh analizer = new XlsAnalizerDiasOpPh();
-        analizer.analizeXls(event.getFile(), countrySelected, usuario,beanPrincipal);
+        analizer.analizeXls(event.getFile(), countrySelected, usuario, beanPrincipal);
         listInfoCargaOpDaysPH = analizer.getCargasDiasPh();
         omittedSheets = analizer.getOmittedSheets();
         loadedSheets = analizer.getLoadedSheets();
@@ -493,12 +447,12 @@ public class DailyLoadBean {
      *
      * @param event
      */
-    public void handleFileUploadSalesPH(FileUploadEvent event) { 
+    public void handleFileUploadSalesPH(FileUploadEvent event) {
         beanPrincipal.setNumRegistrosTotales(1L);
-        beanPrincipal.setPorcentajeAvance(50);        
+        beanPrincipal.setPorcentajeAvance(50);
         FacesMessage message;
         XlsAnalizerSalesPh analizer = new XlsAnalizerSalesPh();
-        analizer.analizeXls(event.getFile(), countrySelected, usuario,beanPrincipal);
+        analizer.analizeXls(event.getFile(), countrySelected, usuario, beanPrincipal);
         beanPrincipal.setPorcentajeAvance(90);
         uploadedFile = event.getFile();
         try {
@@ -506,7 +460,7 @@ public class DailyLoadBean {
             errors.clear();
         } catch (IOException ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
-            errors.add(ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
+            errors.add( ex.getMessage());
         }
         omittedSheets = analizer.getOmittedSheets();
         loadedSheets = analizer.getLoadedSheets();
@@ -520,7 +474,7 @@ public class DailyLoadBean {
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
         beanPrincipal.setPorcentajeAvance(null);
-        beanPrincipal.setNumRegistrosTotales(0L);        
+        beanPrincipal.setNumRegistrosTotales(0L);
     }
 
     /**
@@ -541,9 +495,9 @@ public class DailyLoadBean {
             record.setInicioEjecucion(new Date());
             record.setNombreProceso("DAILY DASHBOARD");
             record.setPais(countrySelected.getNombre());
-            if (countrySelected.getClaveCorta().equalsIgnoreCase(listInfoCargaRolling.get(0).getDiasOperativos().getPais())) {
+            if (countrySelected.getClaveCorta().equalsIgnoreCase(listInfoCargaRolling.get(0).getDiasOperativos().getPais()) || "CAM".equalsIgnoreCase(countrySelected.getClaveCorta())) {
                 RollingDAO rollingDAO = new RollingDAO();
-                if (rollingDAO.saveDaily(listInfoCargaRolling != null ? listInfoCargaRolling : new ArrayList<RollingDaily>(), listInfoCargaDistribucion != null ? listInfoCargaDistribucion : new ArrayList<RvvdDistribucionMxTmp>(),beanPrincipal)) {
+                if (rollingDAO.saveDaily(listInfoCargaRolling != null ? listInfoCargaRolling : new ArrayList<RollingDaily>(), listInfoCargaDistribucion != null ? listInfoCargaDistribucion : new ArrayList<RvvdDistribucionMxTmp>(), beanPrincipal)) {
                     record.setRegistrosProcesados(listInfoCargaRolling.size() + (listInfoCargaRolling.size() * 4));
                     message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Records saved.");
                 } else {
@@ -554,13 +508,23 @@ public class DailyLoadBean {
                     }
                     message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "An error ocurred while saving records [" + cadenaError + "]");
                 }
-                listInfoCargaRolling.clear();
+                if (listInfoCargaRolling != null) {
+                    listInfoCargaRolling.clear();
+                }
                 listInfoCargaRolling = null;
-                listInfoCargaDistribucion.clear();
+                if (listInfoCargaDistribucion != null) {
+                    listInfoCargaDistribucion.clear();
+                }
                 listInfoCargaDistribucion = null;
-                omittedSheets.clear();
-                loadedSheets.clear();
-                errors.clear();
+                if (omittedSheets != null) {
+                    omittedSheets.clear();
+                }
+                if (loadedSheets != null) {
+                    loadedSheets.clear();
+                }
+                if (errors != null) {
+                    errors.clear();
+                }                              
                 countrySelected = null;
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "Wrong country selected");
@@ -595,10 +559,9 @@ public class DailyLoadBean {
             record.setNombreProyecto("DAILY DASHBOARD");
             record.setPais("PHILIPPINES");
             Rvvd445PhDAO rvvd445PhDAO = new Rvvd445PhDAO();
-            if (rvvd445PhDAO.save445Ph(listInfoCargaOpDaysPH,beanPrincipal)) {
+            if (rvvd445PhDAO.save445Ph(listInfoCargaOpDaysPH, beanPrincipal)) {
                 record.setRegistrosProcesados(listInfoCargaOpDaysPH.size());
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Records saved.");
-                refreshDiasOpPh();
             } else {
                 errors = rvvd445PhDAO.getErrors();
                 String cadenaError = "";

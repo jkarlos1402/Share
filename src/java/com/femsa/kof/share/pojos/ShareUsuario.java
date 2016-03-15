@@ -294,6 +294,22 @@ public class ShareUsuario implements Serializable {
     public void setEstatus(boolean estatus) {
         this.estatus = estatus;
     }
+    
+    public String listProjects(boolean nombre) {
+        String proyectosCadena = "";
+        if (proyectos != null && !proyectos.isEmpty() && !nombre) {
+            for (ShareCatProyecto proyecto : proyectos) {
+                proyectosCadena += "," + proyecto.getIdProyecto();
+            }
+            proyectosCadena = proyectosCadena.replaceFirst(",", "");
+        }else if(proyectos != null && !proyectos.isEmpty() && nombre){
+            for (ShareCatProyecto proyecto : proyectos) {
+                proyectosCadena += ", " + proyecto.getNombreProyecto();
+            }
+            proyectosCadena = proyectosCadena.replaceFirst(",", "");
+        }
+        return proyectosCadena.trim();
+    }
 
     @Override
     public int hashCode() {

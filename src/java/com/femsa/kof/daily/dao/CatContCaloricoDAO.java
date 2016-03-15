@@ -111,10 +111,6 @@ public class CatContCaloricoDAO {
             session.close();
             hibernateUtil.closeSessionFactory();
         }
-        session.flush();
-        session.clear();
-        session.close();
-        hibernateUtil.closeSessionFactory();
         return contenido;
     }
 
@@ -164,7 +160,7 @@ public class CatContCaloricoDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if ((contenido.getIdContenidoCalorico() == null ? getContCal(contenido.getContenidoCaloricoR()) : null) == null) {
+            if (getContCal(contenido.getContenidoCaloricoR()) == null) {
                 session.saveOrUpdate(contenido);
                 error = null;
             } else {
@@ -175,6 +171,56 @@ public class CatContCaloricoDAO {
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            if (session.getTransaction().isActive()) {
+                session.getTransaction().rollback();
+            }
+            flagOk = false;
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
+        return flagOk;
+    }
+
+    /**
+     * Elimina un contenido calórico
+     *
+     * @param contCalorico Contenido calórico a eliminar
+     * @return Si la eliminación concluyó con éxito se regresa verdadero, en
+     * caso contrario se regresa falso y el error es almacenado en el atributo
+     * error
+     */
+    public boolean deleteContenidoCalorico(RvvdCatContenidoCalorico contCalorico) {
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query queryNativo;
+        List<Object> resValicacion;
+        int numOcurrencias = 0;
+        boolean flagOk = true;
+        RvvdCatContenidoCalorico contCaloricoActual = (RvvdCatContenidoCalorico) session.get(RvvdCatContenidoCalorico.class, contCalorico.getIdContenidoCalorico());
+        try {
+            session.beginTransaction();
+            if (contCalorico.getIdContenidoCalorico() != null) {
+                queryNativo = session.createSQLQuery("SELECT COUNT(PAIS) FROM RVVD_RECLASIF_MARCA WHERE CONTENIDO_CALORICO_R = '" + contCaloricoActual.getContenidoCaloricoR() + "'");
+                resValicacion = queryNativo.list();
+                for (Object object : resValicacion) {
+                    numOcurrencias = Integer.parseInt(object.toString());
+                }
+                if (numOcurrencias == 0) {
+                    session.delete(contCaloricoActual);
+                    error = null;
+                } else {
+                    error = "Can not delete the caloric content, is already used";
+                    flagOk = false;
+                }
+            }
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
+            error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

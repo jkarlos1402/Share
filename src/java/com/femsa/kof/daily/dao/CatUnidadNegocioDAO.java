@@ -46,7 +46,7 @@ public class CatUnidadNegocioDAO {
         Session session = sessionFactory.openSession();
         List<RvvdCatUnidadNegocio> unidades = null;
         try {
-            Query query = session.createQuery("SELECT un FROM RvvdCatUnidadNegocio un");
+            Query query = session.createQuery("SELECT un FROM RvvdCatUnidadNegocio un ORDER BY un.unidadNegocioR ASC");
             unidades = query.list();
             error = null;
         } catch (Exception e) {
@@ -72,7 +72,7 @@ public class CatUnidadNegocioDAO {
         Session session = sessionFactory.openSession();
         List<RvvdCatUnidadNegocio> unidades = null;
         try {
-            Query query = session.createQuery("SELECT un FROM RvvdCatUnidadNegocio un WHERE un.status = 1");
+            Query query = session.createQuery("SELECT un FROM RvvdCatUnidadNegocio un WHERE un.status = 1 ORDER BY un.unidadNegocioR ASC");
             unidades = query.list();
             error = null;
         } catch (Exception e) {
@@ -160,7 +160,7 @@ public class CatUnidadNegocioDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if ((unidad.getIdUnidadNegocio() == null ? getUnidadNeg(unidad.getUnidadNegocioR()) : null) == null) {
+            if (getUnidadNeg(unidad.getUnidadNegocioR()) == null) {
                 session.saveOrUpdate(unidad);
                 error = null;
             } else {
@@ -171,6 +171,56 @@ public class CatUnidadNegocioDAO {
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            if (session.getTransaction().isActive()) {
+                session.getTransaction().rollback();
+            }
+            flagOk = false;
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
+        return flagOk;
+    }
+
+    /**
+     * Elimina una Unidad de negocio
+     *
+     * @param unidadNegocio Unidad de negocio a eliminar
+     * @return Si la eliminación concluyó con éxito se regresa verdadero, en
+     * caso contrario se regresa falso y el error es almacenado en el atributo
+     * error
+     */
+    public boolean deleteUnidadNegocio(RvvdCatUnidadNegocio unidadNegocio) {
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query queryNativo;
+        List<Object> resValicacion;
+        int numOcurrencias = 0;
+        boolean flagOk = true;
+        RvvdCatUnidadNegocio unidadNegocioActual = (RvvdCatUnidadNegocio) session.get(RvvdCatUnidadNegocio.class, unidadNegocio.getIdUnidadNegocio());
+        try {
+            session.beginTransaction();
+            if (unidadNegocio.getIdUnidadNegocio() != null) {
+                queryNativo = session.createSQLQuery("SELECT COUNT(PAIS) FROM RVVD_RECLASIF_UN_GEC WHERE UNIDAD_NEGOCIO_R = '" + unidadNegocioActual.getUnidadNegocioR() + "'");
+                resValicacion = queryNativo.list();
+                for (Object object : resValicacion) {
+                    numOcurrencias = Integer.parseInt(object.toString());
+                }
+                if (numOcurrencias == 0) {
+                    session.delete(unidadNegocioActual);
+                    error = null;
+                } else {
+                    error = "Can not delete the bussiness unit, is already used";
+                    flagOk = false;
+                }
+            }
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
+            error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

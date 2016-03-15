@@ -39,13 +39,14 @@ public class UserBean implements Serializable {
 
     private List<ShareUsuario> usuariosAll;
 
-    private DualListModel<ShareCatPais> paisesAll;
+    private DualListModel<ShareCatPais> paisesAll;    
 
     private List<ShareCatRol> catRoles = new ArrayList<ShareCatRol>();
     private ShareCatRol rolSelected;
 
-    private List<ShareCatProyecto> catProyectos = new ArrayList<ShareCatProyecto>();
-    private ShareCatProyecto proyectoSelected;
+    private DualListModel<ShareCatProyecto> catProyectos;
+//    private List<ShareCatProyecto> catProyectos = new ArrayList<ShareCatProyecto>();
+//    private ShareCatProyecto proyectoSelected;
 
     private String error;
     private static final String MSG_ERROR_TITULO = "Mensaje de error...";
@@ -67,7 +68,9 @@ public class UserBean implements Serializable {
             List<ShareCatPais> sourcePais = paisDAO.getCatPais();
             List<ShareCatPais> targetPais = new ArrayList<ShareCatPais>();
             ShareCatProyectoDAO proyectoDAO = new ShareCatProyectoDAO();
-            catProyectos = proyectoDAO.getCatProyectos();
+            List<ShareCatProyecto> sourceProyecto = proyectoDAO.getCatProyectos();
+            List<ShareCatProyecto> targetProyecto = new ArrayList<ShareCatProyecto>();
+            catProyectos = new DualListModel(sourceProyecto, targetProyecto);
             paisesAll = new DualListModel<ShareCatPais>(sourcePais, targetPais);
 
             ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();
@@ -97,7 +100,14 @@ public class UserBean implements Serializable {
      *
      * @return
      */
-    public List<ShareCatProyecto> getCatProyectos() {
+    public DualListModel<ShareCatProyecto> getCatProyectos() {
+        ShareCatProyectoDAO proyectoDAO = new ShareCatProyectoDAO();
+        List<ShareCatProyecto> sourceProyecto = proyectoDAO.getCatProyectos();
+        List<ShareCatProyecto> targetProyecto = catProyectos.getTarget();
+        for (ShareCatProyecto proyecto : targetProyecto) {
+            sourceProyecto.remove(proyecto);
+        }
+        catProyectos.setSource(sourceProyecto);
         return catProyectos;
     }
 
@@ -105,25 +115,25 @@ public class UserBean implements Serializable {
      *
      * @param catProyectos
      */
-    public void setCatProyectos(List<ShareCatProyecto> catProyectos) {
+    public void setCatProyectos(DualListModel<ShareCatProyecto> catProyectos) {
         this.catProyectos = catProyectos;
     }
 
-    /**
-     *
-     * @return
-     */
-    public ShareCatProyecto getProyectoSelected() {
-        return proyectoSelected;
-    }
-
-    /**
-     *
-     * @param proyectoSelected
-     */
-    public void setProyectoSelected(ShareCatProyecto proyectoSelected) {
-        this.proyectoSelected = proyectoSelected;
-    }
+//    /**
+//     *
+//     * @return
+//     */
+//    public ShareCatProyecto getProyectoSelected() {
+//        return proyectoSelected;
+//    }
+//
+//    /**
+//     *
+//     * @param proyectoSelected
+//     */
+//    public void setProyectoSelected(ShareCatProyecto proyectoSelected) {
+//        this.proyectoSelected = proyectoSelected;
+//    }
 
     /**
      *
@@ -344,8 +354,10 @@ public class UserBean implements Serializable {
         for (int i = 0; i < paisesAll.getTarget().size(); i++) {
             usuarioNuevo.getPaises().add(paisesAll.getTarget().get(i));
         }
-        usuarioNuevo.setPassword(usuarioNuevo.getPassword());
-        usuarioNuevo.getProyectos().add(proyectoSelected);
+        for (int i = 0; i < catProyectos.getTarget().size(); i++) {
+            usuarioNuevo.getProyectos().add(catProyectos.getTarget().get(i));
+        }
+        usuarioNuevo.setPassword(usuarioNuevo.getPassword());       
         if (usuarioNuevo.getIntentos() != null && usuarioNuevo.getIntentos() == 3) {
             usuarioNuevo.setPassReset(true);
         }
@@ -370,7 +382,11 @@ public class UserBean implements Serializable {
             paisesAll.getSource().add(paisesAll.getTarget().get(i));
         }
         paisesAll.getTarget().clear();
-        proyectoSelected = null;
+        for (int i = 0; i < catProyectos.getTarget().size(); i++) {
+            catProyectos.getSource().add(catProyectos.getTarget().get(i));
+        }
+        catProyectos.getTarget().clear();
+//        proyectoSelected = null;
     }
 
     /**
@@ -390,6 +406,7 @@ public class UserBean implements Serializable {
         usuarioNuevo.setIntentos(usuarioSelected.getIntentos());
         usuarioNuevo.setLastLogin(usuarioSelected.getLastLogin());
         paisesAll.getTarget().clear();
+        catProyectos.getTarget().clear();
         if (usuarioSelected.getPaises() != null && !usuarioSelected.getPaises().isEmpty()) {
             Object[] paisesT = usuarioSelected.getPaises().toArray();
             for (int i = 0; i < usuarioSelected.getPaises().size(); i++) {
@@ -398,7 +415,12 @@ public class UserBean implements Serializable {
             }
         }
         if (usuarioSelected.getProyectos() != null && !usuarioSelected.getProyectos().isEmpty()) {
-            proyectoSelected = usuarioSelected.getProyectos().get(0);
+//            proyectoSelected = usuarioSelected.getProyectos().get(0);
+            Object[] proyectosT = usuarioSelected.getProyectos().toArray();
+            for (int i = 0; i < usuarioSelected.getProyectos().size(); i++) {
+                catProyectos.getTarget().add((ShareCatProyecto) proyectosT[i]);
+                catProyectos.getSource().remove((ShareCatProyecto) proyectosT[i]);
+            }
         }
     }
 
@@ -408,5 +430,5 @@ public class UserBean implements Serializable {
     public void refreshUsers() {
         ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();
         usuariosAll = usuarioDAO.getAllUsers();
-    }
+    }       
 }

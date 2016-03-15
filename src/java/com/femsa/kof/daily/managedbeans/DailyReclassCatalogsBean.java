@@ -458,7 +458,7 @@ public class DailyReclassCatalogsBean implements Serializable {
      */
     public List<RvvdCatCanal> getCatCanales() {
         ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
-        catCanales = (List<RvvdCatCanal>) context.getAttribute("canal_daily_catalog");
+        catCanales = (List<RvvdCatCanal>) context.getAttribute("canal_daily_catalog");        
         return catCanales;
     }
 

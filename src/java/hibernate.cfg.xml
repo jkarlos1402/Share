@@ -3,13 +3,13 @@
 <hibernate-configuration>
     <session-factory>
         
-        <!--<property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+         <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
         <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
         <property name="hibernate.connection.url">jdbc:oracle:thin:@localhost:1521:XE</property>
         <property name="hibernate.connection.username">kofuser</property>
-        <property name="hibernate.connection.password">kofuser</property> -->
+        <property name="hibernate.connection.password">kofuser</property>  
     
-        <!-- <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+<!--         <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
         <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
         <property name="hibernate.connection.url">jdbc:oracle:thin:@10.138.3.32:1527:DSE</property>
         <property name="hibernate.connection.username">BOE14DEVHA</property>
@@ -21,11 +21,17 @@
         <property name="hibernate.connection.username">BOE14QASHA</property>
         <property name="hibernate.connection.password">B0EI4#QA5AH</property> -->
     
-         <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+<!--         <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
         <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
         <property name="hibernate.connection.url">jdbc:oracle:thin:@10.138.5.209:1527:DMP</property>
         <property name="hibernate.connection.username">DMPPRD</property> 
-        <property name="hibernate.connection.password">pRD#Dm_P</property> 
+        <property name="hibernate.connection.password">pRD#Dm_P</property>-->
+        
+<!--        <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+        <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
+        <property name="hibernate.connection.url">jdbc:oracle:thin:@10.138.3.223:1527:BSE</property>
+        <property name="hibernate.connection.username">BOE14PRDHA</property> 
+        <property name="hibernate.connection.password">B0EI4PR#AH</property>-->
         
         <!-- Use the C3P0 connection pool. -->
     
@@ -71,14 +77,10 @@
         <mapping class="com.femsa.kof.daily.pojos.RvvdReclasifDiasOpTmp"/>
         <mapping class="com.femsa.kof.daily.pojos.RvvdCatMarca"/>
         <mapping class="com.femsa.kof.daily.pojos.RvvdCatContenidoCalorico"/>
-        <mapping class="com.femsa.kof.daily.pojos.RvvdReclasifMarca"/>
-        <mapping class="com.femsa.kof.daily.pojos.RvvdStRolling"/>
-        <mapping class="com.femsa.kof.daily.pojos.RvvdStRollingTmp"/>
-        <mapping class="com.femsa.kof.daily.pojos.RvvdDistribucionMx"/>
-        <mapping class="com.femsa.kof.daily.pojos.RvvdDistribucionMxTmp"/>
-        <mapping class="com.femsa.kof.daily.pojos.Rvvd445Ph"/>
-        <mapping class="com.femsa.kof.daily.pojos.Rvvd445PhTmp"/>
-        <mapping class="com.femsa.kof.daily.pojos.RvvdInfoPh"/>
+        <mapping class="com.femsa.kof.daily.pojos.RvvdReclasifMarca"/>        
+        <mapping class="com.femsa.kof.daily.pojos.RvvdStRollingTmp"/>        
+        <mapping class="com.femsa.kof.daily.pojos.RvvdDistribucionMxTmp"/>        
+        <mapping class="com.femsa.kof.daily.pojos.Rvvd445PhTmp"/>        
         <mapping class="com.femsa.kof.daily.pojos.RvvdInfoPhTmp"/>
         <mapping class="com.femsa.kof.daily.pojos.RvvdCatZona"/>
         <mapping class="com.femsa.kof.daily.pojos.RvvdReclasifZona"/>

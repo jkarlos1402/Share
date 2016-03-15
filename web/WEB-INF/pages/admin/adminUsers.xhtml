@@ -39,21 +39,19 @@
                         <p:outputLabel for="userPaisOrigen" value="Country:" />
                         <p:inputText id="userPaisOrigen" required="true" value="#{userBean.usuarioNuevo.pais}" maxlength="20"/>
 
-                        <p:outputLabel for="userProy" value="Project:" />
-                        <p:selectOneMenu id="userProy" immediate="true" value="#{userBean.proyectoSelected}" style="width:125px" converter="proyectoConverter" required="true" label="Project">
-                            <f:selectItem itemLabel="Select One" itemValue="" />
-                            <f:selectItems value="#{userBean.catProyectos}" />                             
-                        </p:selectOneMenu>
                     </h:panelGrid>
+                    <h:panelGrid columns="2" cellpadding="5px">
+                        <p:outputLabel for="userProy" value="Project(s):" />
+                        <p:pickList id="userProy" value="#{userBean.catProyectos}" var="proyectoUser" itemLabel="#{proyectoUser}" itemValue="#{proyectoUser}" converter="proyectoConverter"/>                        
+                    </h:panelGrid> 
                     <h:panelGrid columns="4" cellpadding="5px">
                         <p:outputLabel for="userPaises" value="Countries:" />
                         <p:pickList id="userPaises" value="#{userBean.paisesAll}" var="countrieUser" itemLabel="#{countrieUser}" itemValue="#{countrieUser}" converter="countryConverter"/>
-
                         <p:outputLabel for="userStatus" value="Status:" rendered="#{userBean.usuarioNuevo ne null and mainBean.usuario.equals(userBean.usuarioNuevo) ? false : true}" />
                         <p:selectOneRadio id="userStatus" layout="pageDirection" required="true" value="#{userBean.usuarioNuevo.estatus}" rendered="#{userBean.usuarioNuevo ne null and mainBean.usuario.equals(userBean.usuarioNuevo) ? false : true}">
                             <f:selectItem itemLabel="Enable" itemValue="true" />
                             <f:selectItem itemLabel="Disable" itemValue="false" />                            
-                        </p:selectOneRadio>
+                        </p:selectOneRadio>                        
                         <f:facet name="footer">
                             <h:panelGrid columns="2" cellspacing="10px">
                                 <p:commandButton value="Save" update=":formUsers,:formTableUsers" actionListener="#{userBean.saveUser}">
@@ -82,6 +80,9 @@
                             </p:column>
                             <p:column headerText="Country">
                                 <h:outputText value="#{userTable.pais}"/>
+                            </p:column>                            
+                            <p:column headerText="Project(s)">
+                                <h:outputText value="#{userTable.listProjects(true)}"/>
                             </p:column>                            
                             <p:column headerText="Status">
                                 <h:outputText value="#{userTable.estatus ? 'ENABLED' : 'DISABLED'}"/>

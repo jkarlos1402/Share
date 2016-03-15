@@ -46,7 +46,7 @@ public class CatEmpaqueDAO {
         Session session = sessionFactory.openSession();
         List<RvvdCatEmpaque> empaques = null;
         try {
-            Query query = session.createQuery("SELECT e FROM RvvdCatEmpaque e");
+            Query query = session.createQuery("SELECT e FROM RvvdCatEmpaque e ORDER BY e.empaqueR ASC");
             empaques = query.list();
             error = null;
         } catch (Exception e) {
@@ -72,7 +72,7 @@ public class CatEmpaqueDAO {
         Session session = sessionFactory.openSession();
         List<RvvdCatEmpaque> empaques = null;
         try {
-            Query query = session.createQuery("SELECT e FROM RvvdCatEmpaque e WHERE e.status = 1");
+            Query query = session.createQuery("SELECT e FROM RvvdCatEmpaque e WHERE e.status = 1 ORDER BY e.empaqueR ASC");
             empaques = query.list();
             error = null;
         } catch (Exception e) {
@@ -157,7 +157,7 @@ public class CatEmpaqueDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if ((empaque.getIdEmpaque() == null ? getEmpaque(empaque.getEmpaqueR()) : null) == null) {
+            if (getEmpaque(empaque.getEmpaqueR()) == null) {
                 session.saveOrUpdate(empaque);
                 error = null;
             } else {
@@ -168,6 +168,56 @@ public class CatEmpaqueDAO {
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            if (session.getTransaction().isActive()) {
+                session.getTransaction().rollback();
+            }
+            flagOk = false;
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
+        return flagOk;
+    }
+
+    /**
+     * Elimina un empaque
+     *
+     * @param empaque Empaque a eliminar
+     * @return Si la eliminación concluyó con éxito se regresa verdadero, en
+     * caso contrario se regresa falso y el error es almacenado en el atributo
+     * error
+     */
+    public boolean deleteEmpaque(RvvdCatEmpaque empaque) {
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query queryNativo;
+        List<Object> resValicacion;
+        int numOcurrencias = 0;
+        boolean flagOk = true;
+        RvvdCatEmpaque empaqueActual = (RvvdCatEmpaque) session.get(RvvdCatEmpaque.class, empaque.getIdEmpaque());
+        try {
+            session.beginTransaction();
+            if (empaque.getIdEmpaque() != null) {
+                queryNativo = session.createSQLQuery("SELECT COUNT(PAIS) FROM RVVD_RECLASIF_EMPAQUE WHERE EMPAQUE_R = '" + empaqueActual.getEmpaqueR() + "'");
+                resValicacion = queryNativo.list();
+                for (Object object : resValicacion) {
+                    numOcurrencias = Integer.parseInt(object.toString());
+                }
+                if (numOcurrencias == 0) {
+                    session.delete(empaqueActual);
+                    error = null;
+                } else {
+                    error = "Can not delete the packing, is already used";
+                    flagOk = false;
+                }
+            }
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
+            error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

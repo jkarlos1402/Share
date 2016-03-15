@@ -1,6 +1,5 @@
 package com.femsa.kof.daily.dao;
 
-import com.femsa.kof.daily.pojos.Rvvd445Ph;
 import com.femsa.kof.daily.pojos.Rvvd445PhTmp;
 import com.femsa.kof.managedbeans.MainBean;
 import com.femsa.kof.util.HibernateUtil;
@@ -37,31 +36,6 @@ public class Rvvd445PhDAO {
      */
     public void setErrors(List<String> errors) {
         this.errors = errors;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public List<Rvvd445Ph> get445Ph() {
-        HibernateUtil hibernateUtil = new HibernateUtil();
-        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
-        Session session = sessionFactory.openSession();
-        List<Rvvd445Ph> diasOpPh = null;
-        try {
-            Query query = session.createQuery("SELECT do FROM Rvvd445Ph do");
-            diasOpPh = query.list();
-            errors.clear();
-        } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            errors.add(e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
-        } finally {
-            session.flush();
-            session.clear();
-            session.close();
-            hibernateUtil.closeSessionFactory();
-        }
-        return diasOpPh;
     }
 
     /**

@@ -39,6 +39,8 @@ public class RollingDAO {
     }
 
     /**
+     * Permite guardar la información de Rolling, dias operativos y distribucion
+     * MX obtenida del archivo excel
      *
      * @param dailys
      * @param distribuciones
@@ -53,14 +55,18 @@ public class RollingDAO {
         boolean flagOk = true;
         long cont = 0L;
         String pais = "";
+        String zona = "";
         try {
             session.beginTransaction();
             for (RollingDaily carga : dailys) {
                 pais = carga.getDiasOperativos().getPais();
-                session.save(carga.getDiasOperativos());
+                if (!"PHI".equalsIgnoreCase(pais)) {
+                    session.save(carga.getDiasOperativos());
+                }
                 mainBean.setNumRegistrosProcesados(cont);
                 mainBean.setPorcentajeAvance((int) ((cont * 100) / ((carga.getStRollings() != null ? carga.getStRollings().size() : 0) + dailys.size() + (distribuciones != null ? distribuciones.size() : 0))));
                 for (RvvdStRollingTmp rolling : carga.getStRollings() != null ? carga.getStRollings() : new ArrayList<RvvdStRollingTmp>()) {
+                    zona = rolling.getZona();
                     mainBean.setNumRegistrosProcesados(cont);
                     mainBean.setPorcentajeAvance((int) ((cont * 100) / ((carga.getStRollings() != null ? carga.getStRollings().size() : 0) + dailys.size() + (distribuciones != null ? distribuciones.size() : 0))));
                     session.save(rolling);
@@ -72,15 +78,17 @@ public class RollingDAO {
                 }
                 cont++;
             }
-            for (RvvdDistribucionMxTmp carga : distribuciones) {
-                session.save(carga);
-                mainBean.setNumRegistrosProcesados(cont);
-                mainBean.setPorcentajeAvance((int) ((cont * 100) / (dailys.size() + (distribuciones != null ? distribuciones.size() : 0))));
-                if (cont % 100 == 0) {
-                    session.flush();
-                    session.clear();
+            if (distribuciones != null) {
+                for (RvvdDistribucionMxTmp carga : distribuciones) {
+                    session.save(carga);
+                    mainBean.setNumRegistrosProcesados(cont);
+                    mainBean.setPorcentajeAvance((int) ((cont * 100) / (dailys.size() + distribuciones.size())));
+                    if (cont % 100 == 0) {
+                        session.flush();
+                        session.clear();
+                    }
+                    cont++;
                 }
-                cont++;
             }
             errors.clear();
             session.getTransaction().commit();
@@ -88,13 +96,17 @@ public class RollingDAO {
             queryNativo = session.createSQLQuery("DELETE FROM RVVD_RECLASIF_DIAS_OP WHERE PAIS = '" + pais + "' AND FECHA IN (SELECT DISTINCT(FECHA) FROM RVVD_RECLASIF_DIAS_OP_TMP)");
             queryNativo.executeUpdate();
             mainBean.setPorcentajeAvance((int) ((++cont * 100) / (dailys.size() + (distribuciones != null ? distribuciones.size() : 0))));
-            queryNativo = session.createSQLQuery("INSERT INTO RVVD_RECLASIF_DIAS_OP(PAIS,FECHA,ID_TIEMPO,FECHA_R,ID_TIEMPO_R) SELECT PAIS,FECHA,(SELECT PK_TIEMPO FROM RVVD_DIM_TIEMPO WHERE GD_FECHA = FECHA),FECHA_R,(SELECT PK_TIEMPO FROM RVVD_DIM_TIEMPO WHERE GD_FECHA = FECHA_R) FROM RVVD_RECLASIF_DIAS_OP_TMP");
+            queryNativo = session.createSQLQuery("INSERT INTO RVVD_RECLASIF_DIAS_OP(ID_RECLASIF_DIAS_OP,PAIS,FECHA,ID_TIEMPO,FECHA_R,ID_TIEMPO_R) SELECT RVVD_SEQ_RECLASIF_DIAS_OP.NextVal,PAIS,FECHA,(SELECT PK_TIEMPO FROM RVVD_DIM_TIEMPO WHERE GD_FECHA = FECHA),FECHA_R,(SELECT PK_TIEMPO FROM RVVD_DIM_TIEMPO WHERE GD_FECHA = FECHA_R) FROM RVVD_RECLASIF_DIAS_OP_TMP");
             queryNativo.executeUpdate();
             mainBean.setPorcentajeAvance((int) ((++cont * 100) / (dailys.size() + (distribuciones != null ? distribuciones.size() : 0))));
             queryNativo = session.createSQLQuery("DELETE FROM RVVD_RECLASIF_DIAS_OP_TMP");
             queryNativo.executeUpdate();
             mainBean.setPorcentajeAvance((int) ((++cont * 100) / (dailys.size() + (distribuciones != null ? distribuciones.size() : 0))));
-            queryNativo = session.createSQLQuery("DELETE FROM RVVD_ST_ROLLING WHERE PAIS = '" + pais + "' AND FECHA IN (SELECT DISTINCT(FECHA) FROM RVVD_ST_ROLLING_TMP)");
+            if ("CAM".equalsIgnoreCase(pais)) {
+                queryNativo = session.createSQLQuery("DELETE FROM RVVD_ST_ROLLING WHERE PAIS = '" + pais + "' AND ZONA = '" + zona + "' AND FECHA IN (SELECT DISTINCT(FECHA) FROM RVVD_ST_ROLLING_TMP)");
+            } else {
+                queryNativo = session.createSQLQuery("DELETE FROM RVVD_ST_ROLLING WHERE PAIS = '" + pais + "' AND FECHA IN (SELECT DISTINCT(FECHA) FROM RVVD_ST_ROLLING_TMP)");
+            }
             queryNativo.executeUpdate();
             mainBean.setPorcentajeAvance((int) ((++cont * 100) / (dailys.size() + (distribuciones != null ? distribuciones.size() : 0))));
             queryNativo = session.createSQLQuery("INSERT INTO RVVD_ST_ROLLING(ANIO,MES,DIA,FECHA,PAIS,DESC_PAIS,ZONA,CATEGORIA,CATEGORIA_OFICIAL_R,CATEGORIA_OFICIAL_EN,GEC,ROLLING_CU,ROLLING_INGRESO,ROLLING_TA) SELECT ANIO,MES,DIA,FECHA,PAIS,DESC_PAIS,ZONA,CATEGORIA,CATEGORIA_OFICIAL_R,CATEGORIA_OFICIAL_EN,GEC,ROLLING_CU,ROLLING_INGRESO,ROLLING_TA FROM RVVD_ST_ROLLING_TMP");
@@ -108,30 +120,30 @@ public class RollingDAO {
             if (distribuciones != null) {
                 queryNativo = session.createSQLQuery("DELETE FROM RVVD_DISTRIBUCION_MX WHERE PAIS = '" + pais + "' AND FECHA_ORIGEN IN (SELECT DISTINCT(FECHA_ORIGEN) FROM RVVD_DISTRIBUCION_MX_TMP)");
                 queryNativo.executeUpdate();
-                mainBean.setPorcentajeAvance((int) ((++cont * 100) / (dailys.size() + (distribuciones != null ? distribuciones.size() : 0))));
-                queryNativo = session.createSQLQuery("INSERT INTO RVVD_DISTRIBUCION_MX(PAIS,FECHA_ORIGEN,FECHA_DESTINO,PORCENTAJE) SELECT PAIS,FECHA_ORIGEN,FECHA_DESTINO,PORCENTAJE FROM RVVD_DISTRIBUCION_MX_TMP");
+                mainBean.setPorcentajeAvance((int) ((++cont * 100) / (dailys.size() + distribuciones.size())));
+                queryNativo = session.createSQLQuery("INSERT INTO RVVD_DISTRIBUCION_MX(PAIS,FECHA_ORIGEN,ID_TIEMPO_FECHA_ORIGEN,FECHA_DESTINO,ID_TIEMPO_FECHA_DESTINO,PORCENTAJE) SELECT PAIS,FECHA_ORIGEN,ID_TIEMPO_FECHA_ORIGEN,FECHA_DESTINO,ID_TIEMPO_FECHA_DESTINO,PORCENTAJE FROM RVVD_DISTRIBUCION_MX_TMP");
                 queryNativo.executeUpdate();
-                mainBean.setPorcentajeAvance((int) ((++cont * 100) / (dailys.size() + (distribuciones != null ? distribuciones.size() : 0))));
+                mainBean.setPorcentajeAvance((int) ((++cont * 100) / (dailys.size() + distribuciones.size())));
                 queryNativo = session.createSQLQuery("DELETE FROM RVVD_DISTRIBUCION_MX_TMP");
                 queryNativo.executeUpdate();
-                mainBean.setPorcentajeAvance((int) ((++cont * 100) / (dailys.size() + (distribuciones != null ? distribuciones.size() : 0))));                
+                mainBean.setPorcentajeAvance((int) ((++cont * 100) / (dailys.size() + distribuciones.size())));
             }
             queryNativo = session.createSQLQuery("COMMIT");
             queryNativo.executeUpdate();
             queryNativo = session.createSQLQuery("DROP SEQUENCE RVVD_SEQ_RECLASIF_DIAS_OP_TMP");
-            queryNativo.executeUpdate();            
+            queryNativo.executeUpdate();
             queryNativo = session.createSQLQuery("CREATE SEQUENCE RVVD_SEQ_RECLASIF_DIAS_OP_TMP INCREMENT BY 1 START WITH 1");
             queryNativo.executeUpdate();
             queryNativo = session.createSQLQuery("DROP SEQUENCE RVVD_SEQ_ST_ROLLING_TMP");
-            queryNativo.executeUpdate();                   
+            queryNativo.executeUpdate();
             queryNativo = session.createSQLQuery("CREATE SEQUENCE RVVD_SEQ_ST_ROLLING_TMP INCREMENT BY 1 START WITH 1");
             queryNativo.executeUpdate();
             queryNativo = session.createSQLQuery("DROP SEQUENCE RVVD_SEQ_DISTRIBUCION_MX_TMP");
-            queryNativo.executeUpdate();            
+            queryNativo.executeUpdate();
             queryNativo = session.createSQLQuery("CREATE SEQUENCE RVVD_SEQ_DISTRIBUCION_MX_TMP INCREMENT BY 1 START WITH 1");
-            queryNativo.executeUpdate();     
+            queryNativo.executeUpdate();
             session.getTransaction().commit();
-        } catch (Exception e) {            
+        } catch (Exception e) {
             queryNativo = session.createSQLQuery("ROLLBACK");
             queryNativo.executeUpdate();
             queryNativo = session.createSQLQuery("DELETE FROM RVVD_RECLASIF_DIAS_OP_TMP");

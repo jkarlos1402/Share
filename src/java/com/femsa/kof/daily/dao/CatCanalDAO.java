@@ -48,7 +48,7 @@ public class CatCanalDAO {
         Session session = sessionFactory.openSession();
         List<RvvdCatCanal> canales = null;
         try {
-            Query query = session.createQuery("SELECT c FROM RvvdCatCanal c");
+            Query query = session.createQuery("SELECT c FROM RvvdCatCanal c ORDER BY c.canalR ASC");
             canales = query.list();
             error = null;
         } catch (Exception e) {
@@ -74,7 +74,7 @@ public class CatCanalDAO {
         Session session = sessionFactory.openSession();
         List<RvvdCatCanal> canales = null;
         try {
-            Query query = session.createQuery("SELECT c FROM RvvdCatCanal c WHERE c.status = 1");
+            Query query = session.createQuery("SELECT c FROM RvvdCatCanal c WHERE c.status = 1 ORDER BY c.canalR ASC");
             canales = query.list();
             error = null;
         } catch (Exception e) {
@@ -161,7 +161,7 @@ public class CatCanalDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if ((canal.getIdCanal() == null ? getCanal(canal.getCanalR()) : null) == null) {
+            if (getCanal(canal.getCanalR()) == null) {
                 session.saveOrUpdate(canal);
                 error = null;
             } else {
@@ -172,6 +172,56 @@ public class CatCanalDAO {
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            if (session.getTransaction().isActive()) {
+                session.getTransaction().rollback();
+            }
+            flagOk = false;
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
+        return flagOk;
+    }
+
+    /**
+     * Elimina un canal
+     *
+     * @param canal Canal a eliminar
+     * @return Si la eliminación concluyó con éxito se regresa verdadero, en
+     * caso contrario se regresa falso y el error es almacenado en el atributo
+     * error
+     */
+    public boolean deleteCanal(RvvdCatCanal canal) {
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query queryNativo;
+        List<Object> resValicacion;
+        int numOcurrencias = 0;
+        boolean flagOk = true;
+        RvvdCatCanal canalActual = (RvvdCatCanal)session.get(RvvdCatCanal.class, canal.getIdCanal());
+        try {
+            session.beginTransaction();            
+            if (canal.getIdCanal() != null) {                
+                queryNativo = session.createSQLQuery("SELECT COUNT(PAIS) FROM RVVD_RECLASIF_CANAL WHERE CANAL_R = '" + canalActual.getCanalR() + "'");
+                resValicacion = queryNativo.list();
+                for (Object object : resValicacion) {                    
+                    numOcurrencias = Integer.parseInt(object.toString());
+                }                
+                if (numOcurrencias == 0) {                    
+                    session.delete(canalActual);
+                    error = null;
+                } else {
+                    error = "Can not delete the channel, is already used";
+                    flagOk = false;
+                }
+            }
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
+            error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

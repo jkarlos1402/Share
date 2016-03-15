@@ -22,10 +22,10 @@
                             <f:facet name="header">
                                 #{dailyReclassCatalogsBean.categoriasReclasificadas.size()} entries found.
                             </f:facet>
-                            <p:column headerText="Country">
+                            <p:column headerText="Country" filterBy="#{reclaCategory.pais}" filterMatchMode="contains">
                                 <h:outputText value="#{reclaCategory.pais}"/>
                             </p:column>
-                            <p:column headerText="Category" filterBy="##{reclaCategory.categoria}" filterMatchMode="contains">
+                            <p:column headerText="Category" filterBy="#{reclaCategory.categoria}" filterMatchMode="contains">
                                 <h:outputText value="#{reclaCategory.categoria}"/>
                             </p:column>                                                        
                             <p:column headerText="Reclassified category" sortBy="#{reclaCategory.categoriaR}">                                
@@ -77,7 +77,7 @@
                             <f:facet name="header">
                                 #{dailyReclassCatalogsBean.canalesReclasificados.size()} entries found.
                             </f:facet>
-                            <p:column headerText="Country">
+                            <p:column headerText="Country" filterBy="#{reclaChannel.pais}" filterMatchMode="contains">
                                 <h:outputText value="#{reclaChannel.pais}"/>
                             </p:column>
                             <p:column headerText="Channel" filterBy="##{reclaChannel.canal}" filterMatchMode="contains">
@@ -126,7 +126,7 @@
                             <f:facet name="header">
                                 #{dailyReclassCatalogsBean.gecsReclasificados.size()} entries found.
                             </f:facet>
-                            <p:column headerText="Country">
+                            <p:column headerText="Country" filterBy="#{reclaGec.pais}" filterMatchMode="contains">
                                 <h:outputText value="#{reclaGec.pais}"/>
                             </p:column>
                             <p:column headerText="Bussiness unit" filterBy="#{reclaGec.unidadNegocio}" filterMatchMode="contains">
@@ -193,7 +193,7 @@
                                 #{dailyReclassCatalogsBean.diasOpReclasificados.size()} entries found.
                             </f:facet>
                             <p:ajax event="rowEdit" />
-                            <p:column headerText="Country" filterBy="#{operativeDay.pais}" sortBy="#{operativeDay.pais}">
+                            <p:column headerText="Country" filterBy="#{operativeDay.pais}" filterMatchMode="contains" sortBy="#{operativeDay.pais}">
                                 <h:outputText value="#{operativeDay.pais}"/>
                             </p:column>
                             <p:column headerText="Date" sortBy="#{operativeDay.fecha}" >
@@ -240,7 +240,7 @@
                                 <p:columnToggler datasource="tableReclaPacking" trigger="toggler" />
                                 <br/>
                             </f:facet>
-                            <p:column headerText="Country">
+                            <p:column headerText="Country" filterBy="#{reclaPacking.pais}" filterMatchMode="contains">
                                 <h:outputText value="#{reclaPacking.pais}"/>
                             </p:column>
                             <p:column headerText="Packing" filterBy="#{reclaPacking.empaque}" filterMatchMode="contains">
@@ -315,7 +315,7 @@
                             <f:facet name="header">
                                 <h:outputText value="#{dailyReclassCatalogsBean.marcasReclasificados.size()} entries found."/>                                                                
                             </f:facet>
-                            <p:column headerText="Country">
+                            <p:column headerText="Country" filterBy="#{reclaTrademark.pais}" filterMatchMode="contains">
                                 <h:outputText value="#{reclaTrademark.pais}"/>
                             </p:column>
                             <p:column headerText="Brand" filterBy="#{reclaTrademark.marca}" filterMatchMode="contains">
@@ -378,7 +378,7 @@
                             <f:facet name="header">
                                 <h:outputText value="#{dailyReclassCatalogsBean.zonasReclasificadas.size()} entries found."/>                                                                
                             </f:facet>
-                            <p:column headerText="Country">
+                            <p:column headerText="Country" filterBy="#{zona.pais}" filterMatchMode="contains">
                                 <h:outputText value="#{zona.pais}"/>
                             </p:column>
                             <p:column headerText="Zone" filterBy="#{zona.zona}" filterMatchMode="contains">

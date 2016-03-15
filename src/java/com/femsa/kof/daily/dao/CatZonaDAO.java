@@ -48,7 +48,7 @@ public class CatZonaDAO {
         Session session = sessionFactory.openSession();
         List<RvvdCatZona> zonas = null;
         try {
-            Query query = session.createQuery("SELECT z FROM RvvdCatZona z");
+            Query query = session.createQuery("SELECT z FROM RvvdCatZona z ORDER BY z.zonaR ASC");
             zonas = query.list();
             error = null;
         } catch (Exception e) {
@@ -74,7 +74,7 @@ public class CatZonaDAO {
         Session session = sessionFactory.openSession();
         List<RvvdCatZona> zonas = null;
         try {
-            Query query = session.createQuery("SELECT z FROM RvvdCatZona z WHERE z.status = 1");
+            Query query = session.createQuery("SELECT z FROM RvvdCatZona z WHERE z.status = 1 ORDER BY z.zonaR ASC");
             zonas = query.list();
             error = null;
         } catch (Exception e) {
@@ -161,7 +161,7 @@ public class CatZonaDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if ((zona.getIdZona()== null ? getZona(zona.getZonaR()) : null) == null) {
+            if (getZona(zona.getZonaR()) == null) {
                 session.saveOrUpdate(zona);
                 error = null;
             } else {
@@ -172,6 +172,56 @@ public class CatZonaDAO {
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            if (session.getTransaction().isActive()) {
+                session.getTransaction().rollback();
+            }
+            flagOk = false;
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
+        return flagOk;
+    }
+
+    /**
+     * Elimina una zona
+     *
+     * @param zona Zona a eliminar
+     * @return Si la eliminación concluyó con éxito se regresa verdadero, en
+     * caso contrario se regresa falso y el error es almacenado en el atributo
+     * error
+     */
+    public boolean deleteZona(RvvdCatZona zona) {
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query queryNativo;
+        List<Object> resValicacion;
+        int numOcurrencias = 0;
+        boolean flagOk = true;
+        RvvdCatZona zonaActual = (RvvdCatZona) session.get(RvvdCatZona.class, zona.getIdZona());
+        try {
+            session.beginTransaction();
+            if (zona.getIdZona() != null) {
+                queryNativo = session.createSQLQuery("SELECT COUNT(PAIS) FROM RVVD_RECLASIF_ZONA WHERE ZONA_R = '" + zonaActual.getZonaR() + "'");
+                resValicacion = queryNativo.list();
+                for (Object object : resValicacion) {
+                    numOcurrencias = Integer.parseInt(object.toString());
+                }
+                if (numOcurrencias == 0) {
+                    session.delete(zonaActual);
+                    error = null;
+                } else {
+                    error = "Can not delete the zone, is already used";
+                    flagOk = false;
+                }
+            }
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
+            error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

@@ -679,7 +679,11 @@ public class DailyCatalogsBean implements Serializable {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Official category saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the official category, " + categoriaOficialDAO.getError());
-            categoriaOficialNueva.setIdCategoriaOficial(null);
+            if (categoriaOficialSelected != null) {
+                selectOfficialCategory();
+            } else {
+                categoriaOficialNueva.setIdCategoriaOficial(null);
+            }
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -715,7 +719,11 @@ public class DailyCatalogsBean implements Serializable {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Category saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the category, " + categoriaDAO.getError());
-            categoriaNueva.setIdCategoria(null);
+            if (categoriaSelected != null) {
+                selectCategory();
+            } else {
+                categoriaNueva.setIdCategoria(null);
+            }
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -751,7 +759,28 @@ public class DailyCatalogsBean implements Serializable {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Channel saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the channel, " + canalDAO.getError());
-            canalNuevo.setIdCanal(null);
+            if (canalSelected != null) {
+                selectChannel();
+            } else {
+                canalNuevo.setIdCanal(null);
+            }
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    /**
+     * Elimina el canal seleccionado en la vista
+     */
+    public void deleteChannel() {
+        FacesMessage message;
+        CatCanalDAO canalDAO = new CatCanalDAO();
+        if (canalDAO.deleteCanal(canalNuevo)) {
+            CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("canal");
+            canalNuevo = null;
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Channel deleted");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while deleting the channel, " + canalDAO.getError());
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -786,7 +815,11 @@ public class DailyCatalogsBean implements Serializable {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Type of Consumption saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the types of Consumption, " + tipoConsumoDAO.getError());
-            tipoConsumoNuevo.setIdTipoConsumo(null);
+            if (tipoConsumoSelected != null) {
+                selectConsumption();
+            } else {
+                tipoConsumoNuevo.setIdTipoConsumo(null);
+            }
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -821,7 +854,11 @@ public class DailyCatalogsBean implements Serializable {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Packing saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the packing, " + empaqueDAO.getError());
-            empaqueNuevo.setIdEmpaque(null);
+            if (empaqueSelected != null) {
+                selectPacking();
+            } else {
+                empaqueNuevo.setIdEmpaque(null);
+            }
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -857,7 +894,11 @@ public class DailyCatalogsBean implements Serializable {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Client type saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the client type, " + gecDAO.getError());
-            gecNuevo.setIdGec(null);
+            if (gecSelected != null) {
+                selectGec();
+            } else {
+                gecNuevo.setIdGec(null);
+            }            
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -892,7 +933,11 @@ public class DailyCatalogsBean implements Serializable {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Bussiness unit saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the bussiness unit, " + unidadNegocioDAO.getError());
-            unidadNueva.setIdUnidadNegocio(null);
+            if (unidadSelected != null) {
+                selectBussinessUnit();
+            } else {
+                unidadNueva.setIdUnidadNegocio(null);
+            }           
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -927,7 +972,11 @@ public class DailyCatalogsBean implements Serializable {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Brand saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Brand, " + marcaDAO.getError());
-            marcaNueva.setIdMarca(null);
+            if (marcaSelected != null) {
+                selectTrademark();
+            } else {
+                marcaNueva.setIdMarca(null);
+            }             
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -962,7 +1011,11 @@ public class DailyCatalogsBean implements Serializable {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Caloric content saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the Caloric content, " + contCaloricoDAO.getError());
-            marcaNueva.setIdMarca(null);
+            if (contenidoSelected != null) {
+                selectCalorie();
+            } else {
+                contenidoNueva.setIdContenidoCalorico(null);
+            }            
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -998,7 +1051,11 @@ public class DailyCatalogsBean implements Serializable {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Subchannel saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the subchannel, " + catSubCanalDAO.getError());
-            marcaNueva.setIdMarca(null);
+            if (subCanalSelected != null) {
+                selectSubCanal();
+            } else {
+                subCanalNuevo.setIdSubCanal(null);
+            }              
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -1033,7 +1090,11 @@ public class DailyCatalogsBean implements Serializable {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Zone saved");
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the zone, " + zonaDAO.getError());
-            zonaNueva.setIdZona(null);
+            if (zonaSelected != null) {
+                selectZona();
+            } else {
+                zonaNueva.setIdZona(null);
+            }            
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }

@@ -54,7 +54,7 @@ public class CatalogLoader {
                 error = catCategoriasDAO.getError();
                 bndOk = false;
             }
-        } else if (proyecto.equalsIgnoreCase("daily")) {
+        } else if (proyecto.equalsIgnoreCase("daily")) {                        
             CatCategoriaDAO categoriaDAO = new CatCategoriaDAO();
             sc.setAttribute("categoria_daily_catalog", categoriaDAO.getCategorias());
 

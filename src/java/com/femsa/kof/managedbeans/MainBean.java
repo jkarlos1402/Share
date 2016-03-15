@@ -2,6 +2,7 @@ package com.femsa.kof.managedbeans;
 
 import com.femsa.kof.daily.util.CheckCatalogs;
 import com.femsa.kof.share.dao.ShareUsuarioDAO;
+import com.femsa.kof.share.pojos.ShareCatProyecto;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import java.io.Serializable;
 import java.util.List;
@@ -27,7 +28,7 @@ public class MainBean implements Serializable {
     private boolean firstSession;
     private Integer porcentajeAvance = 0;
     private Long numRegistrosProcesados = 0L;
-    private Long numRegistrosTotales = 0L;       
+    private Long numRegistrosTotales = 0L;
 
     public Long getNumRegistrosTotales() {
         return numRegistrosTotales;
@@ -42,7 +43,7 @@ public class MainBean implements Serializable {
     }
 
     public void setPorcentajeAvance(Integer porcentajeAvance) {
-        if(porcentajeAvance != null && porcentajeAvance > 100){
+        if (porcentajeAvance != null && porcentajeAvance > 100) {
             porcentajeAvance = 100;
         }
         this.porcentajeAvance = porcentajeAvance;
@@ -198,7 +199,15 @@ public class MainBean implements Serializable {
         saveUser();
     }
 
-    public void status() {
-       // to do
-    }
+    public boolean haveProject(int id) {
+        boolean respuesta = false;
+        if (usuario.getProyectos() != null && !usuario.getProyectos().isEmpty()) {
+            for (ShareCatProyecto proyecto : usuario.getProyectos()) {
+                if (proyecto.getIdProyecto() == id) {
+                    respuesta = true;
+                }
+            }
+        }
+        return respuesta;
+    }    
 }

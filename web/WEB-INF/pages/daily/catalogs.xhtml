@@ -125,10 +125,10 @@
                         </p:selectOneRadio>
                        
                         <f:facet name="footer">
-                            <h:panelGrid columns="2" cellspacing="10px">
+                            <h:panelGrid columns="3" cellspacing="10px">
                                 <p:commandButton value="Save" update="formChannel" actionListener="#{dailyCatalogsBean.saveChannel}">
                                     <p:confirm message="Are you sure?" header="Save Channel"/>
-                                </p:commandButton>
+                                </p:commandButton>                                
                                 <p:commandButton value="New" update="formChannel" actionListener="#{dailyCatalogsBean.newChannel}" rendered="#{dailyCatalogsBean.canalNuevo.idCanal ne null ? true : false}"/>
                             </h:panelGrid>
                         </f:facet>

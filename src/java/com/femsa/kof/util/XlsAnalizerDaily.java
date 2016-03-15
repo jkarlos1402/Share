@@ -18,7 +18,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -206,19 +205,19 @@ public class XlsAnalizerDaily {
                 nombreCatOficiales.add(categoria.getCategoriaOficialEn());
             }
         }
-        RvvdCatCategoriaOficial categoriaOficialTemp = null;
+        RvvdCatCategoriaOficial categoriaOficialTemp;
         Calendar fechaTemp = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        String descPais = "";
-        String zona = "";
-        RvvdReclasifDiasOpTmp diaOp = null;
-        RollingDaily rolling = null;
-        RvvdStRollingTmp stRolling = null;
-        end:
+        String descPais;
+        String zona;
+        RvvdReclasifDiasOpTmp diaOp;
+        RollingDaily rolling;
+        RvvdStRollingTmp stRolling;
+        end:        
         while (rowIterator != null && rowIterator.hasNext()) {
             numCell = 0;
             Row row = rowIterator.next();
-            Cell cell = null;
+            Cell cell;
             if (numRow == 0) {
                 Iterator<Cell> cellIterator = row.cellIterator();
                 while (cellIterator.hasNext()) {
@@ -233,28 +232,34 @@ public class XlsAnalizerDaily {
                     numCell++;
                 }
             } else {
-                //Country
                 cell = row.getCell(0);
-                if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
-                    if ("country".equalsIgnoreCase(cabeceras.get(0).getNameColumn()) && !cell.getStringCellValue().trim().equals("")) {
-                        diaOp = new RvvdReclasifDiasOpTmp();
-                        rolling = new RollingDaily();
-                        rolling.setDiasOperativos(diaOp);
-                        descPais = catPais.getNombre();
-                        zona = cell.getStringCellValue().trim().toUpperCase();
-                        diaOp.setPais(catPais.getClaveCorta());
-                        cargas.add(rolling);
-                    } else {
-                        cargas = null;
-                        errors.add("Column " + cabeceras.get(0).getNameColumn() + " invalid, " + sheetName + " sheet has been omitted.");
+                switch (cell.getCellType()) {
+                    case Cell.CELL_TYPE_STRING:
+                        if ("country".equalsIgnoreCase(cabeceras.get(0).getNameColumn()) && !cell.getStringCellValue().trim().equals("")) {
+                            diaOp = new RvvdReclasifDiasOpTmp();
+                            rolling = new RollingDaily();
+                            rolling.setDiasOperativos(diaOp);
+                            descPais = catPais.getNombre();
+                            zona = cell.getStringCellValue().trim().toUpperCase();
+                            if("CAM".equalsIgnoreCase(catPais.getClaveCorta())){
+                                diaOp.setPais(zona);
+                            }else{
+                                diaOp.setPais(catPais.getClaveCorta());
+                            }
+                            cargas.add(rolling);
+                        } else {
+                            cargas = null;
+                            errors.add("Column " + cabeceras.get(0).getNameColumn() + " invalid, " + sheetName + " sheet has been omitted.");
+                            break end;
+                        }
                         break;
-                    }
-                } else {
-                    cargas = null;
-                    errors.add("Approximately " + Character.toString((char) (65 + 0)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
-                    break;
+                    case Cell.CELL_TYPE_BLANK:
+                        continue;
+                    default:
+                        cargas = null;
+                        errors.add("Approximately " + Character.toString((char) (65 + 0)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
+                        break end;
                 }
-                //Date current year
                 cell = row.getCell(1);
                 if (cell != null && cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
                     if ("Date current year".equalsIgnoreCase(cabeceras.get(1).getNameColumn())) {
@@ -282,7 +287,6 @@ public class XlsAnalizerDaily {
                     cargas = null;
                     errors.add("Approximately " + Character.toString((char) (65 + 1)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
                 }
-                //Date PY
                 cell = row.getCell(3);
                 if (cell != null && cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
                     if ("Date PY".equalsIgnoreCase(cabeceras.get(3).getNameColumn())) {
@@ -306,11 +310,7 @@ public class XlsAnalizerDaily {
                         errors.add("Approximately " + Character.toString((char) (65 + 3)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
                         break;
                     }
-                } else {
-                    cargas = null;
-                    errors.add("Approximately " + Character.toString((char) (65 + 3)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
                 }
-                //CSDs
                 cell = row.getCell(6);
                 if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
                     if (nombreCatOficiales.indexOf(cabeceras.get(6).getNameColumn().toUpperCase()) != -1) {
@@ -344,7 +344,6 @@ public class XlsAnalizerDaily {
                     errors.add("Approximately " + Character.toString((char) (65 + 6)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
                     break;
                 }
-                //NCBs
                 cell = row.getCell(7);
                 if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
                     if (nombreCatOficiales.indexOf(cabeceras.get(7).getNameColumn().toUpperCase()) != -1) {
@@ -378,7 +377,6 @@ public class XlsAnalizerDaily {
                     errors.add("Approximately " + Character.toString((char) (65 + 7)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
                     break;
                 }
-                //Water
                 cell = row.getCell(8);
                 if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
                     if (nombreCatOficiales.indexOf(cabeceras.get(8).getNameColumn().toUpperCase()) != -1) {
@@ -412,7 +410,6 @@ public class XlsAnalizerDaily {
                     errors.add("Approximately " + Character.toString((char) (65 + 8)) + "" + (numRow + 1) + " cell in " + sheetName + " sheet have a invalid value [" + cell + "], the sheet has been omitted.");
                     break;
                 }
-                //Others
                 cell = row.getCell(9);
                 if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
                     if ("Others".equalsIgnoreCase(cabeceras.get(9).getNameColumn().toUpperCase())) {
@@ -470,10 +467,10 @@ public class XlsAnalizerDaily {
         RvvdDistribucionMxTmp distribucionTemp;
         SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyyMMdd");
         String fecha;
-        double porcentaje;
+        float porcentaje;
         while (rowIterator != null && rowIterator.hasNext()) {
             Row row = rowIterator.next();
-            Cell cell = null;
+            Cell cell;
             if (numRow > 0) {
                 distribucionTemp = new RvvdDistribucionMxTmp();
                 distribucionTemp.setPais("MEX");
@@ -482,6 +479,7 @@ public class XlsAnalizerDaily {
                     fecha = (long) cell.getNumericCellValue() + "";
                     try {
                         distribucionTemp.setFechaOrigen(formatoDelTexto.parse(fecha));
+                        distribucionTemp.setIdTiempoFechaOrigen((int) cell.getNumericCellValue());
                     } catch (ParseException ex) {
                         Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
                         cargas = null;
@@ -498,6 +496,7 @@ public class XlsAnalizerDaily {
                     fecha = (long) cell.getNumericCellValue() + "";
                     try {
                         distribucionTemp.setFechaDestino(formatoDelTexto.parse(fecha));
+                        distribucionTemp.setIdTiempoFechaDestino((int) cell.getNumericCellValue());
                     } catch (ParseException ex) {
                         Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
                         cargas = null;
@@ -511,7 +510,7 @@ public class XlsAnalizerDaily {
                 }
                 cell = row.getCell(5);
                 if (cell != null && cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-                    porcentaje = (double) cell.getNumericCellValue();
+                    porcentaje = (float) cell.getNumericCellValue();
                     distribucionTemp.setPorcentaje(porcentaje);
                 } else {
                     cargas = null;
