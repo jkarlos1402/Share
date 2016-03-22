@@ -64,7 +64,7 @@ public class ReclasifEmpaqueDAO {
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            error = e.getMessage();
         } finally {
             session.flush();
             session.clear();
@@ -103,7 +103,7 @@ public class ReclasifEmpaqueDAO {
             CheckCatalogs.checkAllCatalogs();
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            error =  e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }
@@ -138,13 +138,13 @@ public class ReclasifEmpaqueDAO {
         }
         long numNotReclass = 0L;
         try {
-            Query query = session.createQuery("SELECT count(re.idReclasifEmpaque) FROM RvvdReclasifEmpaque re WHERE re.pais IN (" + paises + ") AND (re.tipoConsumoR IS NULL OR re.tipoConsumoEn IS NULL OR re.empaqueR IS NULL OR re.empaqueEn IS NULL)");
+            Query query = session.createQuery("SELECT count(re.idReclasifEmpaque) FROM RvvdReclasifEmpaque re WHERE re.pais IN (" + paises + ") AND (re.tipoConsumoR IS NULL OR re.tipoConsumoEn IS NULL OR re.empaqueR IS NULL OR re.empaqueEn IS NULL OR re.retornabilidadR IS NULL)");
             List<Object> res = query.list();
             numNotReclass = (Long) res.get(0);
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            error = e.getMessage();
         } finally {
             session.flush();
             session.clear();

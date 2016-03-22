@@ -54,4 +54,3 @@ function showLoading(status) {
         PF('statusDialog').hide();
     }
 }
-

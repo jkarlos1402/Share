@@ -67,6 +67,7 @@
         <mapping class="com.femsa.kof.daily.pojos.RvvdCatCategoriaOficial"/>
         <mapping class="com.femsa.kof.daily.pojos.RvvdCatEmpaque"/>
         <mapping class="com.femsa.kof.daily.pojos.RvvdCatTipoConsumo"/>
+        <mapping class="com.femsa.kof.daily.pojos.RvvdCatRetornabilidad"/>
         <mapping class="com.femsa.kof.daily.pojos.RvvdReclasifCanal"/>
         <mapping class="com.femsa.kof.daily.pojos.RvvdReclasifCategoria"/>
         <mapping class="com.femsa.kof.daily.pojos.RvvdReclasifEmpaque"/>

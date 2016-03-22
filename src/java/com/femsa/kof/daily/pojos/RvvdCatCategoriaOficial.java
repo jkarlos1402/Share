@@ -3,8 +3,10 @@ package com.femsa.kof.daily.pojos;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,22 +26,22 @@ public class RvvdCatCategoriaOficial implements Serializable {
 
     @Id
     @Basic(optional = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "RVVD_SEQ_CAT_CATEGORIA_OFICIAL")
-    @SequenceGenerator(name = "RVVD_SEQ_CAT_CATEGORIA_OFICIAL",sequenceName = "RVVD_SEQ_CAT_CATEGORIA_OFICIAL", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_CAT_CATEGORIA_OFICIAL")
+    @SequenceGenerator(name = "RVVD_SEQ_CAT_CATEGORIA_OFICIAL", sequenceName = "RVVD_SEQ_CAT_CATEGORIA_OFICIAL", allocationSize = 1)
     @Column(name = "ID_CATEGORIA_OFICIAL")
     private Integer idCategoriaOficial;
-    
+
     @Column(name = "CATEGORIA_OFICIAL")
     private String categoriaOficial;
-    
+
     @Column(name = "CATEGORIA_OFICIAL_EN")
     private String categoriaOficialEn;
-    
-    @OneToMany(mappedBy = "idCategoriaOficial")
+
+    @OneToMany(mappedBy = "idCategoriaOficial", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<RvvdCatCategoria> rvvdCatCategoriaList;
-    
+
     @Column(name = "STATUS")
-    private boolean status;    
+    private boolean status;
 
     /**
      *
@@ -145,5 +147,5 @@ public class RvvdCatCategoriaOficial implements Serializable {
     public String toString() {
         return categoriaOficial;
     }
-    
+
 }

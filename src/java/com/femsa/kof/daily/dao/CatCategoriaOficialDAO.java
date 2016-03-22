@@ -160,8 +160,14 @@ public class CatCategoriaOficialDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if (getCategoriaOficial(catCategoriaOficial.getCategoriaOficial()) == null) {
-                session.saveOrUpdate(catCategoriaOficial);
+            RvvdCatCategoriaOficial catCategoriaOficialT = (RvvdCatCategoriaOficial) session.get(RvvdCatCategoriaOficial.class, catCategoriaOficial.getIdCategoriaOficial());
+            if (catCategoriaOficialT.getCategoriaOficial().equalsIgnoreCase(catCategoriaOficial.getCategoriaOficialEn()) || getCategoriaOficial(catCategoriaOficial.getCategoriaOficial()) == null) {
+                catCategoriaOficialT.setIdCategoriaOficial(catCategoriaOficial.getIdCategoriaOficial());
+                catCategoriaOficialT.setCategoriaOficial(catCategoriaOficial.getCategoriaOficial());
+                catCategoriaOficialT.setCategoriaOficialEn(catCategoriaOficial.getCategoriaOficialEn());
+                catCategoriaOficialT.setRvvdCatCategoriaList(catCategoriaOficial.getRvvdCatCategoriaList());
+                catCategoriaOficialT.setStatus(catCategoriaOficial.isStatus());
+                session.saveOrUpdate(catCategoriaOficialT);
                 error = null;
             } else {
                 error = "Official category already exists";
@@ -170,7 +176,7 @@ public class CatCategoriaOficialDAO {
             session.getTransaction().commit();
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

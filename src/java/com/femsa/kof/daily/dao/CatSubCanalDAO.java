@@ -157,8 +157,14 @@ public class CatSubCanalDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if (getSubCanal(subCanal.getSubCanalR()) == null) {
-                session.saveOrUpdate(subCanal);
+            RvvdCatSubCanal subCanalT = (RvvdCatSubCanal) session.get(RvvdCatSubCanal.class, subCanal.getIdSubCanal());
+            if (subCanalT.getSubCanalR().equalsIgnoreCase(subCanal.getSubCanalR()) || getSubCanal(subCanal.getSubCanalR()) == null) {
+                subCanalT.setIdSubCanal(subCanal.getIdSubCanal());
+                subCanalT.setSubCanalR(subCanal.getSubCanalR());
+                subCanalT.setSubCanalEn(subCanal.getSubCanalEn());
+                subCanalT.setCanal(subCanal.getCanal());
+                subCanalT.setStatus(subCanal.getStatus());
+                session.saveOrUpdate(subCanalT);
                 error = null;
             } else {
                 error = "Subchannel already exists";
@@ -167,7 +173,7 @@ public class CatSubCanalDAO {
             session.getTransaction().commit();
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

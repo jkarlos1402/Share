@@ -33,7 +33,7 @@
                                     <f:facet name="output"><h:outputText value="#{reclaCategory.categoriaR}"/></f:facet>
                                     <f:facet name="input">
                                         <h:selectOneMenu id="idReclassCate" value="#{dailyReclassCatalogsBean.catCategoriaSelected}" converter="categoryConverterDaily" label="Reclassified Category" immediate="true" required="true" style="width: 100%">                                            
-                                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                            <f:selectItem itemLabel="Select" itemValue="" />
                                             <f:selectItems value="#{dailyReclassCatalogsBean.catCategorias}"/>                           
                                         </h:selectOneMenu>
                                     </f:facet>
@@ -88,7 +88,7 @@
                                     <f:facet name="output"><h:outputText value="#{reclaChannel.canalR}"/></f:facet>
                                     <f:facet name="input">
                                         <h:selectOneMenu id="idReclassChann" value="#{dailyReclassCatalogsBean.catCanalSelected}" converter="channelConverterDaily" label="Reclassified Channel" immediate="true" required="true" style="width: 100%">                                            
-                                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                            <f:selectItem itemLabel="Select" itemValue="" />
                                             <f:selectItems value="#{dailyReclassCatalogsBean.catCanales}"/>                           
                                         </h:selectOneMenu>
                                     </f:facet>
@@ -140,7 +140,7 @@
                                     <f:facet name="output"><h:outputText value="#{reclaGec.unidadNegocioR}"/></f:facet>
                                     <f:facet name="input">
                                         <p:selectOneMenu id="idReclassUnit" value="#{dailyReclassCatalogsBean.unidadSelected}" converter="unidadNegocioConverter" label="Reclassified Bussiness unit" immediate="true" required="true" style="width: 100%">                                            
-                                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                            <f:selectItem itemLabel="Select" itemValue="" />
                                             <f:selectItems value="#{dailyReclassCatalogsBean.catUnidadesNegocio}"/>
                                             <p:ajax event="itemSelect" update="idReclassGec"/>
                                         </p:selectOneMenu>
@@ -155,7 +155,7 @@
                                     <f:facet name="output"><h:outputText value="#{reclaGec.gecR}"/></f:facet>
                                     <f:facet name="input">
                                         <p:selectOneMenu id="idReclassGec" value="#{dailyReclassCatalogsBean.gecSelected}" converter="gecConverter" label="Reclassified Gec" immediate="true" required="true" style="width: 100%">                                            
-                                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                            <f:selectItem itemLabel="Select" itemValue="" />
                                             <f:selectItems value="#{dailyReclassCatalogsBean.unidadSelected.rvvdCatGecList}"/>                           
                                         </p:selectOneMenu>
                                     </f:facet>
@@ -263,29 +263,34 @@
                                     <f:facet name="output"><h:outputText value="#{reclaPacking.tipoConsumoR}"/></f:facet>
                                     <f:facet name="input">
                                         <h:selectOneMenu id="idReclassConsu" value="#{dailyReclassCatalogsBean.tipoConsumoSelected}" converter="consumptionConverter" label="Reclassified Type of consumption" immediate="true" required="true" style="width: 100%">                                            
-                                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                            <f:selectItem itemLabel="Select" itemValue="" />
                                             <f:selectItems value="#{dailyReclassCatalogsBean.catTiposConsumo}"/>                           
                                         </h:selectOneMenu>
                                     </f:facet>
                                 </p:cellEditor>
-                            </p:column>
-                            <p:column headerText="Reclassified Type of consumption (English)" sortBy="#{reclaPacking.tipoConsumoEn}">
-                                <h:outputText value="#{reclaPacking.tipoConsumoEn}"/>
-                            </p:column>                           
+                            </p:column>                                                     
                             <p:column headerText="Reclassified Packing" sortBy="#{reclaPacking.empaqueR}">                                
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{reclaPacking.empaqueR}"/></f:facet>
                                     <f:facet name="input">
                                         <h:selectOneMenu id="idReclassPack" value="#{dailyReclassCatalogsBean.empaqueSelected}" converter="packingConverter" label="Packing" immediate="true" required="true" style="width: 100%">                                            
-                                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                            <f:selectItem itemLabel="Select" itemValue="" />
                                             <f:selectItems value="#{dailyReclassCatalogsBean.catEmpaques}"/>                           
                                         </h:selectOneMenu>
                                     </f:facet>
                                 </p:cellEditor>
-                            </p:column>
-                            <p:column headerText="Reclassified Packing (English)" sortBy="#{reclaPacking.empaqueEn}">
-                                <h:outputText value="#{reclaPacking.empaqueEn}"/>
                             </p:column>                           
+                            <p:column headerText="Reclassified Returnability" sortBy="#{reclaPacking.retornabilidadR}">                                
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{reclaPacking.retornabilidadR}"/></f:facet>
+                                    <f:facet name="input">
+                                        <h:selectOneMenu id="idReclassReturn" value="#{dailyReclassCatalogsBean.retornabilidadSelected}" converter="retornabilidadConverter" label="Returnability" immediate="true" required="true" style="width: 100%">                                            
+                                            <f:selectItem itemLabel="Select" itemValue="" />
+                                            <f:selectItems value="#{dailyReclassCatalogsBean.catRetornabilidades}"/>                           
+                                        </h:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
                             <p:column style="width:25px">
                                 <p:rowEditor />
                             </p:column>                            
@@ -326,7 +331,7 @@
                                     <f:facet name="output"><h:outputText value="#{reclaTrademark.marcaR}"/></f:facet>
                                     <f:facet name="input">
                                         <h:selectOneMenu id="idReclassTrade" value="#{dailyReclassCatalogsBean.marcaSelected}" converter="marcaConverter" label="Reclassified Trademark" immediate="true" required="true" style="width: 100%">                                            
-                                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                            <f:selectItem itemLabel="Select" itemValue="" />
                                             <f:selectItems value="#{dailyReclassCatalogsBean.catMarcas}"/>                           
                                         </h:selectOneMenu>
                                     </f:facet>
@@ -340,7 +345,7 @@
                                     <f:facet name="output"><h:outputText value="#{reclaTrademark.contenidoCaloricoR}"/></f:facet>
                                     <f:facet name="input">
                                         <h:selectOneMenu id="idReclassCalorie" value="#{dailyReclassCatalogsBean.contenidoSelected}" converter="contenidoCaloricoConverter" label="Reclassified Calorie" immediate="true" required="true" style="width: 100%">                                            
-                                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                            <f:selectItem itemLabel="Select" itemValue="" />
                                             <f:selectItems value="#{dailyReclassCatalogsBean.catContenidosCaloricos}"/>                           
                                         </h:selectOneMenu>
                                     </f:facet>
@@ -389,7 +394,7 @@
                                     <f:facet name="output"><h:outputText value="#{zona.zonaR}"/></f:facet>
                                     <f:facet name="input">
                                         <h:selectOneMenu id="idReclassTrade" value="#{dailyReclassCatalogsBean.catZonaSelected}" converter="zonaConverter" label="Reclassified Zone" immediate="true" required="true" style="width: 100%">                                            
-                                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                            <f:selectItem itemLabel="Select" itemValue="" />
                                             <f:selectItems value="#{dailyReclassCatalogsBean.catZonas}"/>                           
                                         </h:selectOneMenu>
                                     </f:facet>

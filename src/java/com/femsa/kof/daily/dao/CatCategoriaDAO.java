@@ -157,8 +157,14 @@ public class CatCategoriaDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if (getCategoria(catCategoria.getCategoria()) == null) {
-                session.saveOrUpdate(catCategoria);
+            RvvdCatCategoria catCategoriaT = (RvvdCatCategoria) session.get(RvvdCatCategoria.class, catCategoria.getIdCategoria());
+            if (catCategoriaT.getCategoria().equalsIgnoreCase(catCategoria.getCategoria()) || getCategoria(catCategoria.getCategoria()) == null) {
+                catCategoriaT.setIdCategoria(catCategoria.getIdCategoria());
+                catCategoriaT.setCategoria(catCategoria.getCategoria());
+                catCategoriaT.setCategoriaEn(catCategoria.getCategoriaEn());
+                catCategoriaT.setIdCategoriaOficial(catCategoria.getIdCategoriaOficial());
+                catCategoriaT.setStatus(catCategoria.isStatus());
+                session.saveOrUpdate(catCategoriaT);
                 error = null;
             } else {
                 error = "Category already exists";

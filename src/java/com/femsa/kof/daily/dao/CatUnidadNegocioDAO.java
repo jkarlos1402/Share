@@ -160,8 +160,14 @@ public class CatUnidadNegocioDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if (getUnidadNeg(unidad.getUnidadNegocioR()) == null) {
-                session.saveOrUpdate(unidad);
+            RvvdCatUnidadNegocio unidadT = (RvvdCatUnidadNegocio) session.get(RvvdCatUnidadNegocio.class, unidad.getIdUnidadNegocio());
+            if (unidadT.getUnidadNegocioR().equalsIgnoreCase(unidad.getUnidadNegocioR()) || getUnidadNeg(unidad.getUnidadNegocioR()) == null) {
+                unidadT.setIdUnidadNegocio(unidad.getIdUnidadNegocio());
+                unidadT.setUnidadNegocioR(unidad.getUnidadNegocioR());
+                unidadT.setUnidadNegocioEn(unidad.getUnidadNegocioEn());
+                unidadT.setRvvdCatGecList(unidad.getRvvdCatGecList());
+                unidadT.setStatus(unidad.getStatus());
+                session.saveOrUpdate(unidadT);
                 error = null;
             } else {
                 error = "Bussiness unit already exists";

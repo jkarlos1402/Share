@@ -157,8 +157,13 @@ public class CatMarcaDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if (getMarca(marca.getMarcaR()) == null) {
-                session.saveOrUpdate(marca);
+            RvvdCatMarca marcaT = (RvvdCatMarca) session.get(RvvdCatMarca.class, marca.getIdMarca());
+            if (marcaT.getMarcaR().equalsIgnoreCase(marca.getMarcaR()) || getMarca(marca.getMarcaR()) == null) {
+                marcaT.setIdMarca(marca.getIdMarca());
+                marcaT.setMarcaR(marca.getMarcaR());
+                marcaT.setMarcaEn(marca.getMarcaEn());
+                marcaT.setStatus(marca.getStatus());
+                session.saveOrUpdate(marcaT);
                 error = null;
             } else {
                 error = "Brand already exists";

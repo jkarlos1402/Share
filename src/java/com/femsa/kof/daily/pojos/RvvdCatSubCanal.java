@@ -30,7 +30,7 @@ public class RvvdCatSubCanal implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_CAT_SUB_CANAL")
     @SequenceGenerator(name = "RVVD_SEQ_CAT_SUB_CANAL", sequenceName = "RVVD_SEQ_CAT_SUB_CANAL", allocationSize = 1)
     @Column(name = "ID_SUB_CANAL")
-    private BigDecimal idSubCanal;
+    private Integer idSubCanal;
     
     @Column(name = "SUB_CANAL_R")
     private String subCanalR;
@@ -45,11 +45,11 @@ public class RvvdCatSubCanal implements Serializable {
     @Column(name = "STATUS")
     private boolean status;
 
-    public BigDecimal getIdSubCanal() {
+    public Integer getIdSubCanal() {
         return idSubCanal;
     }
 
-    public void setIdSubCanal(BigDecimal idSubCanal) {
+    public void setIdSubCanal(Integer idSubCanal) {
         this.idSubCanal = idSubCanal;
     }
 

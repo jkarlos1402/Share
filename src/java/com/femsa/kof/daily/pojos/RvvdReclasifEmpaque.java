@@ -50,13 +50,16 @@ public class RvvdReclasifEmpaque implements Serializable {
     @Column(name = "EMPAQUE_EN")
     private String empaqueEn;
 
+    @Column(name = "RETORNABILIDAD_R")
+    private String retornabilidadR;
+
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "RVVD_SEQ_RECLASIF_EMPAQUE")
-    @SequenceGenerator(name = "RVVD_SEQ_RECLASIF_EMPAQUE",sequenceName = "RVVD_SEQ_RECLASIF_EMPAQUE", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_RECLASIF_EMPAQUE")
+    @SequenceGenerator(name = "RVVD_SEQ_RECLASIF_EMPAQUE", sequenceName = "RVVD_SEQ_RECLASIF_EMPAQUE", allocationSize = 1)
     @Column(name = "ID_RECLASIF_EMPAQUE")
-    private BigDecimal idReclasifEmpaque;    
+    private BigDecimal idReclasifEmpaque;
 
     /**
      *
@@ -234,6 +237,22 @@ public class RvvdReclasifEmpaque implements Serializable {
         this.idReclasifEmpaque = idReclasifEmpaque;
     }
 
+    /**
+     *
+     * @return
+     */
+    public String getRetornabilidadR() {
+        return retornabilidadR;
+    }
+
+    /**
+     *
+     * @param retornabilidadR
+     */
+    public void setRetornabilidadR(String retornabilidadR) {
+        this.retornabilidadR = retornabilidadR;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -258,5 +277,5 @@ public class RvvdReclasifEmpaque implements Serializable {
     public String toString() {
         return "com.femsa.kof.daily.pojos.RvvdReclasifEmpaque[ idReclasifEmpaque=" + idReclasifEmpaque + " ]";
     }
-    
+
 }

@@ -160,8 +160,13 @@ public class CatContCaloricoDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if (getContCal(contenido.getContenidoCaloricoR()) == null) {
-                session.saveOrUpdate(contenido);
+            RvvdCatContenidoCalorico contenidoT = (RvvdCatContenidoCalorico) session.get(RvvdCatContenidoCalorico.class, contenido.getIdContenidoCalorico());
+            if (contenidoT.getContenidoCaloricoR().equalsIgnoreCase(contenido.getContenidoCaloricoR()) || getContCal(contenido.getContenidoCaloricoR()) == null) {
+                contenidoT.setIdContenidoCalorico(contenido.getIdContenidoCalorico());
+                contenidoT.setContenidoCaloricoR(contenido.getContenidoCaloricoR());
+                contenidoT.setContenidoCaloricoEn(contenido.getContenidoCaloricoEn());
+                contenidoT.setStatus(contenido.getStatus());
+                session.saveOrUpdate(contenidoT);
                 error = null;
             } else {
                 error = "Calorie already exists";

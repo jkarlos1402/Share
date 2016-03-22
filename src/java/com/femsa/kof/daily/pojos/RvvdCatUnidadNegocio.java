@@ -3,6 +3,7 @@ package com.femsa.kof.daily.pojos;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -40,8 +41,8 @@ public class RvvdCatUnidadNegocio implements Serializable {
     @Column(name = "STATUS")
     private boolean status;
 
-    @OneToMany(mappedBy = "idUnidadNegocio",fetch = FetchType.EAGER)
-    private List<RvvdCatGec> rvvdCatGecList;    
+    @OneToMany(mappedBy = "idUnidadNegocio", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<RvvdCatGec> rvvdCatGecList;
 
     /**
      *

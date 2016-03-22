@@ -157,8 +157,13 @@ public class CatEmpaqueDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if (getEmpaque(empaque.getEmpaqueR()) == null) {
-                session.saveOrUpdate(empaque);
+            RvvdCatEmpaque empaqueT = (RvvdCatEmpaque) session.get(RvvdCatEmpaque.class, empaque.getIdEmpaque());
+            if (empaqueT.getEmpaqueR().equalsIgnoreCase(empaque.getEmpaqueR()) || getEmpaque(empaque.getEmpaqueR()) == null) {
+                empaqueT.setIdEmpaque(empaque.getIdEmpaque());
+                empaqueT.setEmpaqueR(empaque.getEmpaqueR());
+                empaqueT.setEmpaqueEn(empaque.getEmpaqueEn());
+                empaqueT.setStatus(empaque.getStatus());
+                session.saveOrUpdate(empaqueT);
                 error = null;
             } else {
                 error = "Packing already exists";
@@ -167,7 +172,7 @@ public class CatEmpaqueDAO {
             session.getTransaction().commit();
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

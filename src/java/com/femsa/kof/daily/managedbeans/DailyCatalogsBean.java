@@ -7,6 +7,7 @@ import com.femsa.kof.daily.dao.CatContCaloricoDAO;
 import com.femsa.kof.daily.dao.CatEmpaqueDAO;
 import com.femsa.kof.daily.dao.CatGecDAO;
 import com.femsa.kof.daily.dao.CatMarcaDAO;
+import com.femsa.kof.daily.dao.CatRetornabilidadDAO;
 import com.femsa.kof.daily.dao.CatSubCanalDAO;
 import com.femsa.kof.daily.dao.CatTipoConsumoDAO;
 import com.femsa.kof.daily.dao.CatUnidadNegocioDAO;
@@ -18,6 +19,7 @@ import com.femsa.kof.daily.pojos.RvvdCatContenidoCalorico;
 import com.femsa.kof.daily.pojos.RvvdCatEmpaque;
 import com.femsa.kof.daily.pojos.RvvdCatGec;
 import com.femsa.kof.daily.pojos.RvvdCatMarca;
+import com.femsa.kof.daily.pojos.RvvdCatRetornabilidad;
 import com.femsa.kof.daily.pojos.RvvdCatSubCanal;
 import com.femsa.kof.daily.pojos.RvvdCatTipoConsumo;
 import com.femsa.kof.daily.pojos.RvvdCatUnidadNegocio;
@@ -86,6 +88,10 @@ public class DailyCatalogsBean implements Serializable {
     private RvvdCatZona zonaSelected;
     private List<RvvdCatZona> catZonasAll = new ArrayList<RvvdCatZona>();
 
+    private RvvdCatRetornabilidad retornabilidadNueva = new RvvdCatRetornabilidad();
+    private RvvdCatRetornabilidad retornabilidadSelected;
+    private List<RvvdCatRetornabilidad> catRetornabilidadAll = new ArrayList<RvvdCatRetornabilidad>();
+
     /**
      *
      */
@@ -124,6 +130,33 @@ public class DailyCatalogsBean implements Serializable {
 
         CatZonaDAO zonaDAO = new CatZonaDAO();
         catZonasAll = zonaDAO.getZonasAll();
+
+        CatRetornabilidadDAO catRetornabilidadDAO = new CatRetornabilidadDAO();
+        catRetornabilidadAll = catRetornabilidadDAO.getRetornabilidadesAll();
+    }
+
+    public RvvdCatRetornabilidad getRetornabilidadNueva() {
+        return retornabilidadNueva;
+    }
+
+    public void setRetornabilidadNueva(RvvdCatRetornabilidad retornabilidadNueva) {
+        this.retornabilidadNueva = retornabilidadNueva;
+    }
+
+    public RvvdCatRetornabilidad getRetornabilidadSelected() {
+        return retornabilidadSelected;
+    }
+
+    public void setRetornabilidadSelected(RvvdCatRetornabilidad retornabilidadSelected) {
+        this.retornabilidadSelected = retornabilidadSelected;
+    }
+
+    public List<RvvdCatRetornabilidad> getCatRetornabilidadAll() {
+        return catRetornabilidadAll;
+    }
+
+    public void setCatRetornabilidadAll(List<RvvdCatRetornabilidad> catRetornabilidadAll) {
+        this.catRetornabilidadAll = catRetornabilidadAll;
     }
 
     public RvvdCatZona getZonaNueva() {
@@ -689,6 +722,23 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
+     * Elimina la categoria oficial seleccionada en la vista
+     */
+    public void deleteOfficialCategory() {
+        FacesMessage message;
+        CatCategoriaOficialDAO categoriaOficialDAO = new CatCategoriaOficialDAO();
+        if (categoriaOficialDAO.deleteCategoriaOficial(categoriaOficialNueva)) {
+            CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("categoriaOficial");
+            categoriaOficialNueva = null;
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Official category deleted");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while deleting the Official category, " + categoriaOficialDAO.getError());
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    /**
      *
      */
     public void newCategory() {
@@ -724,6 +774,23 @@ public class DailyCatalogsBean implements Serializable {
             } else {
                 categoriaNueva.setIdCategoria(null);
             }
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    /**
+     * Elimina la categoria seleccionada en la vista
+     */
+    public void deleteCategory() {
+        FacesMessage message;
+        CatCategoriaDAO categoriaDAO = new CatCategoriaDAO();
+        if (categoriaDAO.deleteCategoria(categoriaNueva)) {
+            CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("categoria");
+            categoriaNueva = null;
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Category deleted");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while deleting the category, " + categoriaDAO.getError());
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -825,6 +892,23 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
+     * Elimina el tipo de consumo seleccionado en la vista
+     */
+    public void deleteConsumption() {
+        FacesMessage message;
+        CatTipoConsumoDAO catTipoConsumoDAO = new CatTipoConsumoDAO();
+        if (catTipoConsumoDAO.deleteTipoConsumo(tipoConsumoNuevo)) {
+            CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("tipoConsumo");
+            tipoConsumoNuevo = null;
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Type of Consumption deleted");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while deleting the Type of Consumption, " + catTipoConsumoDAO.getError());
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    /**
      *
      */
     public void newPacking() {
@@ -864,6 +948,23 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
+     * Elimina el empaque seleccionado en la vista
+     */
+    public void deletePacking() {
+        FacesMessage message;
+        CatEmpaqueDAO catEmpaqueDAO = new CatEmpaqueDAO();
+        if (catEmpaqueDAO.deleteEmpaque(empaqueNuevo)) {
+            CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("empaque");
+            empaqueNuevo = null;
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Packing deleted");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while deleting the Packing, " + catEmpaqueDAO.getError());
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    /**
      *
      */
     public void newGec() {
@@ -898,7 +999,24 @@ public class DailyCatalogsBean implements Serializable {
                 selectGec();
             } else {
                 gecNuevo.setIdGec(null);
-            }            
+            }
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    /**
+     * Elimina el tipo de cliente seleccionado en la vista
+     */
+    public void deleteGec() {
+        FacesMessage message;
+        CatGecDAO catGecDAO = new CatGecDAO();
+        if (catGecDAO.deleteGec(gecNuevo)) {
+            CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("gec");
+            gecNuevo = null;
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Client type deleted");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while deleting the Client type, " + catGecDAO.getError());
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -937,7 +1055,24 @@ public class DailyCatalogsBean implements Serializable {
                 selectBussinessUnit();
             } else {
                 unidadNueva.setIdUnidadNegocio(null);
-            }           
+            }
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    /**
+     * Elimina la unidad de negocio seleccionada en la vista
+     */
+    public void deleteBussinessUnit() {
+        FacesMessage message;
+        CatUnidadNegocioDAO catUnidadNegocioDAO = new CatUnidadNegocioDAO();
+        if (catUnidadNegocioDAO.deleteUnidadNegocio(unidadNueva)) {
+            CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("unidad");
+            unidadNueva = null;
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Bussiness unit deleted");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while deleting the Bussiness unit, " + catUnidadNegocioDAO.getError());
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -976,7 +1111,24 @@ public class DailyCatalogsBean implements Serializable {
                 selectTrademark();
             } else {
                 marcaNueva.setIdMarca(null);
-            }             
+            }
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    /**
+     * Elimina la marca seleccionada en la vista
+     */
+    public void deleteTrademark() {
+        FacesMessage message;
+        CatMarcaDAO catMarcaDAO = new CatMarcaDAO();
+        if (catMarcaDAO.deleteMarca(marcaNueva)) {
+            CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("marca");
+            marcaNueva = null;
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Brand deleted");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while deleting the Brand, " + catMarcaDAO.getError());
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -1015,7 +1167,24 @@ public class DailyCatalogsBean implements Serializable {
                 selectCalorie();
             } else {
                 contenidoNueva.setIdContenidoCalorico(null);
-            }            
+            }
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    /**
+     * Elimina el contenido calórico seleccionado en la vista
+     */
+    public void deleteCalorie() {
+        FacesMessage message;
+        CatContCaloricoDAO catContCaloricoDAO = new CatContCaloricoDAO();
+        if (catContCaloricoDAO.deleteContenidoCalorico(contenidoNueva)) {
+            CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("calorico");
+            contenidoNueva = null;
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Caloric content deleted");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while deleting the Caloric content, " + catContCaloricoDAO.getError());
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -1055,7 +1224,24 @@ public class DailyCatalogsBean implements Serializable {
                 selectSubCanal();
             } else {
                 subCanalNuevo.setIdSubCanal(null);
-            }              
+            }
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    /**
+     * Elimina el subcanal seleccionado en la vista
+     */
+    public void deleteSubCanal() {
+        FacesMessage message;
+        CatSubCanalDAO catSubCanalDAO = new CatSubCanalDAO();
+        if (catSubCanalDAO.deleteSubCanal(subCanalNuevo)) {
+            CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("subCanal");
+            subCanalNuevo = null;
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Subchannel deleted");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while deleting the Subchannel, " + catSubCanalDAO.getError());
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -1094,7 +1280,79 @@ public class DailyCatalogsBean implements Serializable {
                 selectZona();
             } else {
                 zonaNueva.setIdZona(null);
-            }            
+            }
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    /**
+     * Elimina la zona seleccionada en la vista
+     */
+    public void deleteZona() {
+        FacesMessage message;
+        CatZonaDAO catZonaDAO = new CatZonaDAO();
+        if (catZonaDAO.deleteZona(zonaNueva)) {
+            CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("zona");
+            zonaNueva = null;
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Zone deleted");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while deleting the Zone, " + catZonaDAO.getError());
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    /**
+     *
+     */
+    public void newRetornabilidad() {
+        retornabilidadNueva = new RvvdCatRetornabilidad();
+        retornabilidadSelected = null;
+    }
+
+    /**
+     *
+     */
+    public void selectRetornabilidad() {
+        retornabilidadNueva.setIdRetornabilidad(retornabilidadSelected.getIdRetornabilidad());
+        retornabilidadNueva.setRetornabilidadR(retornabilidadSelected.getRetornabilidadR());
+        retornabilidadNueva.setStatus(retornabilidadSelected.getStatus());
+    }
+
+    /**
+     *
+     */
+    public void saveRetornabilidad() {
+        FacesMessage message;
+        CatRetornabilidadDAO catRetornabilidadDAO = new CatRetornabilidadDAO();
+        if (catRetornabilidadDAO.saveRetornabilidad(retornabilidadNueva)) {
+            CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("retornabilidad");
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Returnability saved");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while saving the returnability, " + catRetornabilidadDAO.getError());
+            if (retornabilidadSelected != null) {
+                selectRetornabilidad();
+            } else {
+                retornabilidadNueva.setIdRetornabilidad(null);
+            }
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    /**
+     * Elimina la la retornabilidad seleccionada en la vista
+     */
+    public void deleteRetornabilidad() {
+        FacesMessage message;
+        CatRetornabilidadDAO catRetornabilidadDAO = new CatRetornabilidadDAO();
+        if (catRetornabilidadDAO.deleteRetornabilidad(retornabilidadNueva)) {
+            CatalogLoader.loadCatalogs("daily");
+            refreshCatalog("retornabilidad");
+            retornabilidadNueva = null;
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Returnability deleted");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while deleting the returnability, " + catRetornabilidadDAO.getError());
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -1135,6 +1393,9 @@ public class DailyCatalogsBean implements Serializable {
         } else if ("zona".equalsIgnoreCase(catalog)) {
             CatZonaDAO zonaDAO = new CatZonaDAO();
             catZonasAll = zonaDAO.getZonasAll();
+        } else if ("retornabilidad".equalsIgnoreCase(catalog)) {
+            CatRetornabilidadDAO catRetornabilidadDAO = new CatRetornabilidadDAO();
+            catRetornabilidadAll = catRetornabilidadDAO.getRetornabilidadesAll();
         }
     }
 }

@@ -29,9 +29,12 @@
                         </p:selectOneRadio>
                        
                         <f:facet name="footer">
-                            <h:panelGrid columns="2" cellspacing="10px">
+                            <h:panelGrid columns="3" cellspacing="10px">
                                 <p:commandButton value="Save" update="formOfficialCategory" actionListener="#{dailyCatalogsBean.saveOfficialCategory}">
                                     <p:confirm message="Are you sure?" header="Save Official category"/>
+                                </p:commandButton>
+                                <p:commandButton value="Delete" update="formOfficialCategory" actionListener="#{dailyCatalogsBean.deleteOfficialCategory}" rendered="#{dailyCatalogsBean.categoriaOficialNueva.idCategoriaOficial ne null ? true : false}">
+                                    <p:confirm message="Are you sure?" header="Delete Official category"/>
                                 </p:commandButton>
                                 <p:commandButton value="New" update="formOfficialCategory" actionListener="#{dailyCatalogsBean.newOfficialCategory}" rendered="#{dailyCatalogsBean.categoriaOficialNueva.idCategoriaOficial ne null ? true : false}"/>
                             </h:panelGrid>
@@ -68,7 +71,7 @@
                         
                         <p:outputLabel for="idOfficCate" value="Official category:" />
                         <p:selectOneMenu id="idOfficCate" value="#{dailyCatalogsBean.categoriaNueva.idCategoriaOficial}" converter="officialCategoryConverter" required="true" label="Offcial Category" immediate="true">
-                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItem itemLabel="Select" itemValue="" />
                             <f:selectItems value="#{dailyCatalogsBean.catCategoriaOficial}"/>                           
                         </p:selectOneMenu>
                         
@@ -79,9 +82,12 @@
                         </p:selectOneRadio>
                        
                         <f:facet name="footer">
-                            <h:panelGrid columns="2" cellspacing="10px">
+                            <h:panelGrid columns="3" cellspacing="10px">
                                 <p:commandButton value="Save" update="formCategory" actionListener="#{dailyCatalogsBean.saveCategory}">
                                     <p:confirm message="Are you sure?" header="Save Category"/>
+                                </p:commandButton>
+                                <p:commandButton value="Delete" update="formCategory" actionListener="#{dailyCatalogsBean.deleteCategory}" rendered="#{dailyCatalogsBean.categoriaNueva.idCategoria ne null ? true : false}">
+                                    <p:confirm message="Are you sure?" header="Delete Category"/>
                                 </p:commandButton>
                                 <p:commandButton value="New" update="formCategory" actionListener="#{dailyCatalogsBean.newCategory}" rendered="#{dailyCatalogsBean.categoriaNueva.idCategoria ne null ? true : false}"/>
                             </h:panelGrid>
@@ -128,7 +134,10 @@
                             <h:panelGrid columns="3" cellspacing="10px">
                                 <p:commandButton value="Save" update="formChannel" actionListener="#{dailyCatalogsBean.saveChannel}">
                                     <p:confirm message="Are you sure?" header="Save Channel"/>
-                                </p:commandButton>                                
+                                </p:commandButton>
+                                <p:commandButton value="Delete" update="formChannel" actionListener="#{dailyCatalogsBean.deleteChannel}" rendered="#{dailyCatalogsBean.canalNuevo.idCanal ne null ? true : false}">
+                                    <p:confirm message="Are you sure?" header="Delete Channel"/>
+                                </p:commandButton>
                                 <p:commandButton value="New" update="formChannel" actionListener="#{dailyCatalogsBean.newChannel}" rendered="#{dailyCatalogsBean.canalNuevo.idCanal ne null ? true : false}"/>
                             </h:panelGrid>
                         </f:facet>
@@ -163,7 +172,7 @@
                         
                         <p:outputLabel for="idChannel" value="Channel:" />
                         <p:selectOneMenu id="idChannel" value="#{dailyCatalogsBean.subCanalNuevo.canal}" converter="channelConverterDaily" required="true" label="Bussiness Unit" immediate="true">
-                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItem itemLabel="Select" itemValue="" />
                             <f:selectItems value="#{dailyCatalogsBean.catCanales}"/>                           
                         </p:selectOneMenu>                                                
                         
@@ -174,11 +183,14 @@
                         </p:selectOneRadio>
                        
                         <f:facet name="footer">
-                            <h:panelGrid columns="2" cellspacing="10px">
+                            <h:panelGrid columns="3" cellspacing="10px">
                                 <p:commandButton value="Save" update="formSubchannel" actionListener="#{dailyCatalogsBean.saveSubCanal}">
                                     <p:confirm message="Are you sure?" header="Save Subchannel"/>
                                 </p:commandButton>
-                                <p:commandButton value="New" update="formSubchannel" actionListener="#{dailyCatalogsBean.newSubCanal}" rendered="#{dailyCatalogsBean.subCanalNuevo.canal ne null ? true : false}"/>
+                                <p:commandButton value="Delete" update="formSubchannel" actionListener="#{dailyCatalogsBean.deleteSubCanal}" rendered="#{dailyCatalogsBean.subCanalNuevo.idSubCanal ne null ? true : false}">
+                                    <p:confirm message="Are you sure?" header="Delete Subchannel"/>
+                                </p:commandButton>
+                                <p:commandButton value="New" update="formSubchannel" actionListener="#{dailyCatalogsBean.newSubCanal}" rendered="#{dailyCatalogsBean.subCanalNuevo.idSubCanal ne null ? true : false}"/>
                             </h:panelGrid>
                         </f:facet>
                     </h:panelGrid>
@@ -221,9 +233,12 @@
                         </p:selectOneRadio>
                        
                         <f:facet name="footer">
-                            <h:panelGrid columns="2" cellspacing="10px">
+                            <h:panelGrid columns="3" cellspacing="10px">
                                 <p:commandButton value="Save" update="formConsumption" actionListener="#{dailyCatalogsBean.saveConsumption}">
                                     <p:confirm message="Are you sure?" header="Save Type of Consumption"/>
+                                </p:commandButton>
+                                <p:commandButton value="Delete" update="formConsumption" actionListener="#{dailyCatalogsBean.deleteConsumption}" rendered="#{dailyCatalogsBean.tipoConsumoNuevo.idTipoConsumo ne null ? true : false}">
+                                    <p:confirm message="Are you sure?" header="Delete Type of Consumption"/>
                                 </p:commandButton>
                                 <p:commandButton value="New" update="formConsumption" actionListener="#{dailyCatalogsBean.newConsumption}" rendered="#{dailyCatalogsBean.tipoConsumoNuevo.idTipoConsumo ne null ? true : false}"/>
                             </h:panelGrid>
@@ -265,9 +280,12 @@
                         </p:selectOneRadio>
                        
                         <f:facet name="footer">
-                            <h:panelGrid columns="2" cellspacing="10px">
+                            <h:panelGrid columns="3" cellspacing="10px">
                                 <p:commandButton value="Save" update="formPacking" actionListener="#{dailyCatalogsBean.savePacking}">
                                     <p:confirm message="Are you sure?" header="Save Packing"/>
+                                </p:commandButton>
+                                <p:commandButton value="Delete" update="formPacking" actionListener="#{dailyCatalogsBean.deletePacking}" rendered="#{dailyCatalogsBean.empaqueNuevo.idEmpaque ne null ? true : false}">
+                                    <p:confirm message="Are you sure?" header="Delete Packing"/>
                                 </p:commandButton>
                                 <p:commandButton value="New" update="formPacking" actionListener="#{dailyCatalogsBean.newPacking}" rendered="#{dailyCatalogsBean.empaqueNuevo.idEmpaque ne null ? true : false}"/>
                             </h:panelGrid>
@@ -291,6 +309,47 @@
                 </p:panel>
             </h:form> 
             
+            <h:form id="formReturn" rendered="#{mainBean.catalog eq 'returnDaily' ? true : false}">
+                <p:growl id="msgsReturn" showDetail="true"/>
+                <p:messages showDetail="true" closable="true"/>
+                <p:panel header="Returnability catalog" id="panelReturn">                    
+                    <h:panelGrid columns="4" cellpadding="5px" >
+                        <p:outputLabel for="nameReturn" value="Returnability:" />
+                        <p:inputText id="nameReturn" required="true" value="#{dailyCatalogsBean.retornabilidadNueva.retornabilidadR}" maxlength="60"/>                                              
+                        
+                        <p:outputLabel for="statusReturn" value="Status:" />
+                        <p:selectOneRadio id="statusReturn" layout="pageDirection" required="true" value="#{dailyCatalogsBean.retornabilidadNueva.status}">
+                            <f:selectItem itemLabel="Enable" itemValue="true" />
+                            <f:selectItem itemLabel="Disable" itemValue="false" />                            
+                        </p:selectOneRadio>
+                       
+                        <f:facet name="footer">
+                            <h:panelGrid columns="3" cellspacing="10px">
+                                <p:commandButton value="Save" update="formReturn" actionListener="#{dailyCatalogsBean.saveRetornabilidad}">
+                                    <p:confirm message="Are you sure?" header="Save Returnability"/>
+                                </p:commandButton>
+                                <p:commandButton value="Delete" update="formReturn" actionListener="#{dailyCatalogsBean.deleteRetornabilidad}" rendered="#{dailyCatalogsBean.retornabilidadNueva.idRetornabilidad ne null ? true : false}">
+                                    <p:confirm message="Are you sure?" header="Delete Returnability"/>
+                                </p:commandButton>
+                                <p:commandButton value="New" update="formReturn" actionListener="#{dailyCatalogsBean.newRetornabilidad}" rendered="#{dailyCatalogsBean.retornabilidadNueva.idRetornabilidad ne null ? true : false}"/>
+                            </h:panelGrid>
+                        </f:facet>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <h:panelGrid columns="1">
+                        <p:dataTable id="tableReturn" var="returnability" value="#{dailyCatalogsBean.catRetornabilidadAll}" rowKey="#{returnability.idRetornabilidad}" selection="#{dailyCatalogsBean.retornabilidadSelected}" selectionMode="single" paginator="true" rows="10">
+                            <p:column headerText="Returnability">
+                                <h:outputText value="#{returnability.retornabilidadR}"/>
+                            </p:column>                                                                                                                                                                   
+                            <p:column headerText="Status">
+                                <h:outputText value="#{returnability.status ? 'ENABLED' : 'DISABLED'}"/>
+                            </p:column>
+                            <p:ajax event="rowSelect" update=":formReturn:panelReturn" listener="#{dailyCatalogsBean.selectRetornabilidad}"/>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </p:panel>
+            </h:form> 
+            
             <h:form id="formTrademark" rendered="#{mainBean.catalog eq 'trademarkDaily' ? true : false}">
                 <p:growl id="msgsTrademark" showDetail="true"/>
                 <p:messages showDetail="true" closable="true"/>
@@ -309,9 +368,12 @@
                         </p:selectOneRadio>
                        
                         <f:facet name="footer">
-                            <h:panelGrid columns="2" cellspacing="10px">
+                            <h:panelGrid columns="3" cellspacing="10px">
                                 <p:commandButton value="Save" update="formTrademark" actionListener="#{dailyCatalogsBean.saveTrademark}">
                                     <p:confirm message="Are you sure?" header="Save Packing"/>
+                                </p:commandButton>
+                                <p:commandButton value="Delete" update="formTrademark" actionListener="#{dailyCatalogsBean.deleteTrademark}" rendered="#{dailyCatalogsBean.marcaNueva.idMarca ne null ? true : false}">
+                                    <p:confirm message="Are you sure?" header="Delete Packing"/>
                                 </p:commandButton>
                                 <p:commandButton value="New" update="formTrademark" actionListener="#{dailyCatalogsBean.newTrademark}" rendered="#{dailyCatalogsBean.marcaNueva.idMarca ne null ? true : false}"/>
                             </h:panelGrid>
@@ -353,9 +415,12 @@
                         </p:selectOneRadio>
                        
                         <f:facet name="footer">
-                            <h:panelGrid columns="2" cellspacing="10px">
+                            <h:panelGrid columns="3" cellspacing="10px">
                                 <p:commandButton value="Save" update="formCalorie" actionListener="#{dailyCatalogsBean.saveCalorie}">
                                     <p:confirm message="Are you sure?" header="Save Caloric content"/>
+                                </p:commandButton>
+                                <p:commandButton value="Delete" update="formCalorie" actionListener="#{dailyCatalogsBean.deleteCalorie}" rendered="#{dailyCatalogsBean.contenidoNueva.idContenidoCalorico ne null ? true : false}">
+                                    <p:confirm message="Are you sure?" header="Delete Caloric content"/>
                                 </p:commandButton>
                                 <p:commandButton value="New" update="formCalorie" actionListener="#{dailyCatalogsBean.newCalorie}" rendered="#{dailyCatalogsBean.contenidoNueva.idContenidoCalorico ne null ? true : false}"/>
                             </h:panelGrid>
@@ -392,7 +457,7 @@
                         
                         <p:outputLabel for="idUnidadNegocio" value="Bussiness Unit:" />
                         <p:selectOneMenu id="idUnidadNegocio" value="#{dailyCatalogsBean.gecNuevo.idUnidadNegocio}" converter="unidadNegocioConverter" required="true" label="Bussiness Unit" immediate="true">
-                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItem itemLabel="Select" itemValue="" />
                             <f:selectItems value="#{dailyCatalogsBean.catUnidades}"/>                           
                         </p:selectOneMenu>
                         
@@ -403,9 +468,12 @@
                         </p:selectOneRadio>
                        
                         <f:facet name="footer">
-                            <h:panelGrid columns="2" cellspacing="10px">
+                            <h:panelGrid columns="3" cellspacing="10px">
                                 <p:commandButton value="Save" update="formGec" actionListener="#{dailyCatalogsBean.saveGec}">
                                     <p:confirm message="Are you sure?" header="Save Client type"/>
+                                </p:commandButton>
+                                <p:commandButton value="Delete" update="formGec" actionListener="#{dailyCatalogsBean.deleteGec}" rendered="#{dailyCatalogsBean.gecNuevo.idGec ne null ? true : false}">
+                                    <p:confirm message="Are you sure?" header="Delete Client type"/>
                                 </p:commandButton>
                                 <p:commandButton value="New" update="formGec" actionListener="#{dailyCatalogsBean.newGec}" rendered="#{dailyCatalogsBean.gecNuevo.idGec ne null ? true : false}"/>
                             </h:panelGrid>
@@ -450,9 +518,12 @@
                         </p:selectOneRadio>
                        
                         <f:facet name="footer">
-                            <h:panelGrid columns="2" cellspacing="10px">
+                            <h:panelGrid columns="3" cellspacing="10px">
                                 <p:commandButton value="Save" update="formUnidad" actionListener="#{dailyCatalogsBean.saveBussinessUnit}">
                                     <p:confirm message="Are you sure?" header="Save Bussiness unit"/>
+                                </p:commandButton>
+                                <p:commandButton value="Delete" update="formUnidad" actionListener="#{dailyCatalogsBean.deleteBussinessUnit}" rendered="#{dailyCatalogsBean.unidadNueva.idUnidadNegocio ne null ? true : false}">
+                                    <p:confirm message="Are you sure?" header="Delete Bussiness unit"/>
                                 </p:commandButton>
                                 <p:commandButton value="New" update="formUnidad" actionListener="#{dailyCatalogsBean.newBussinessUnit}" rendered="#{dailyCatalogsBean.unidadNueva.idUnidadNegocio ne null ? true : false}"/>
                             </h:panelGrid>
@@ -494,9 +565,12 @@
                         </p:selectOneRadio>
                        
                         <f:facet name="footer">
-                            <h:panelGrid columns="2" cellspacing="10px">
+                            <h:panelGrid columns="3" cellspacing="10px">
                                 <p:commandButton value="Save" update="formZona" actionListener="#{dailyCatalogsBean.saveZona}">
                                     <p:confirm message="Are you sure?" header="Save Zone"/>
+                                </p:commandButton>
+                                <p:commandButton value="Delete" update="formZona" actionListener="#{dailyCatalogsBean.deleteZona}" rendered="#{dailyCatalogsBean.zonaNueva.idZona ne null ? true : false}">
+                                    <p:confirm message="Are you sure?" header="Delete Zone"/>
                                 </p:commandButton>
                                 <p:commandButton value="New" update="formZona" actionListener="#{dailyCatalogsBean.newZona}" rendered="#{dailyCatalogsBean.zonaNueva.idZona ne null ? true : false}"/>
                             </h:panelGrid>

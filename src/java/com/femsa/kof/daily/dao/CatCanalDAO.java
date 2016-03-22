@@ -161,8 +161,14 @@ public class CatCanalDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if (getCanal(canal.getCanalR()) == null) {
-                session.saveOrUpdate(canal);
+            RvvdCatCanal canalT = (RvvdCatCanal) session.get(RvvdCatCanal.class, canal.getIdCanal());
+            if (canalT.getCanalR().equalsIgnoreCase(canal.getCanalR()) || getCanal(canal.getCanalR()) == null) {
+                canalT.setIdCanal(canal.getIdCanal());
+                canalT.setCanalR(canal.getCanalR());
+                canalT.setCanalEn(canal.getCanalEn());
+                canalT.setStatus(canal.getStatus());
+                canalT.setSubCanalesList(canal.getSubCanalesList());
+                session.saveOrUpdate(canalT);
                 error = null;
             } else {
                 error = "Channel already exists";

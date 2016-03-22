@@ -161,8 +161,13 @@ public class CatZonaDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if (getZona(zona.getZonaR()) == null) {
-                session.saveOrUpdate(zona);
+            RvvdCatZona zonaT = (RvvdCatZona) session.get(RvvdCatZona.class, zona.getIdZona());
+            if (zonaT.getZonaR().equalsIgnoreCase(zona.getZonaR()) || getZona(zona.getZonaR()) == null) {
+                zonaT.setIdZona(zona.getIdZona());
+                zonaT.setZonaR(zona.getZonaR());
+                zonaT.setZonaEn(zona.getZonaEn());
+                zonaT.setStatus(zona.getStatus());
+                session.saveOrUpdate(zonaT);
                 error = null;
             } else {
                 error = "Zone already exists";
@@ -171,7 +176,7 @@ public class CatZonaDAO {
             session.getTransaction().commit();
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

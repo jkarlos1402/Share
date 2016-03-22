@@ -29,7 +29,7 @@
                         </h:panelGrid>
                         <p:separator />
                         <p:fileUpload fileUploadListener="#{shareLoadBean.handleFileUpload}" mode="advanced" dragDropSupport="true" 
-                                      update="messagesLoad,panelLoad" sizeLimit="1000000" fileLimit="1" allowTypes="/(\.|\/)(xls|xlsx|XLS|XLSX)$/" 
+                                      update="messagesLoad,panelLoad" sizeLimit="10000000" fileLimit="1" allowTypes="/(\.|\/)(xlsx|XLSX)$/" 
                                       onstart="handleResponse(1)" oncomplete="handleResponse(2)"/>
                         <p:separator />
                         <h3>Preview</h3>

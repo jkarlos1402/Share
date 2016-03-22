@@ -157,8 +157,14 @@ public class CatGecDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            if (getGec(gec.getGecR()) == null) {
-                session.saveOrUpdate(gec);
+            RvvdCatGec gecT = (RvvdCatGec) session.get(RvvdCatGec.class, gec.getIdGec());
+            if (gecT.getGecR().equalsIgnoreCase(gec.getGecR()) || getGec(gec.getGecR()) == null) {
+                gecT.setIdGec(gec.getIdGec());
+                gecT.setGecR(gec.getGecR());
+                gecT.setGecEn(gec.getGecEn());
+                gecT.setIdUnidadNegocio(gec.getIdUnidadNegocio());
+                gecT.setStatus(gec.getStatus());
+                session.saveOrUpdate(gecT);
                 error = null;
             } else {
                 error = "Client type already exists";
@@ -167,7 +173,7 @@ public class CatGecDAO {
             session.getTransaction().commit();
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            error = e.getMessage();
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

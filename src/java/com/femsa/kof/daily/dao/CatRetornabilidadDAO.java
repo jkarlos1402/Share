@@ -1,6 +1,7 @@
 package com.femsa.kof.daily.dao;
 
-import com.femsa.kof.daily.pojos.RvvdCatTipoConsumo;
+import com.femsa.kof.daily.pojos.RvvdCatCanal;
+import com.femsa.kof.daily.pojos.RvvdCatRetornabilidad;
 import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
 import java.util.logging.Level;
@@ -10,13 +11,15 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 /**
- * Permite la manipulación del catálogo de tipo de consumo
+ * Clase que permite la manipulación del catálogo de canales pertenecientes a
+ * Daily Dashboard
  *
  * @author TMXIDSJPINAM
  */
-public class CatTipoConsumoDAO {
+public class CatRetornabilidadDAO {
 
     private String error;
+
     private static final String MSG_ERROR_TITULO = "Mensaje de error...";
 
     /**
@@ -36,137 +39,139 @@ public class CatTipoConsumoDAO {
     }
 
     /**
-     * Obtiene los tipos de consumo sin importar su estatus
+     * Obtiene la lista completa de retornabilidades
      *
-     * @return Regresa una lista con los tipos de consumo sin filtrar
+     * @return Regresa una lista de retornabilidades
      */
-    public List<RvvdCatTipoConsumo> getTiposConsumoAll() {
+    public List<RvvdCatRetornabilidad> getRetornabilidadesAll() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        List<RvvdCatTipoConsumo> tiposConsumo = null;
+        List<RvvdCatRetornabilidad> retornabilidades = null;
         try {
-            Query query = session.createQuery("SELECT tc FROM RvvdCatTipoConsumo tc ORDER BY tc.tipoConsumoR ASC");
-            tiposConsumo = query.list();
+            Query query = session.createQuery("SELECT r FROM RvvdCatRetornabilidad r ORDER BY r.retornabilidadR ASC");
+            retornabilidades = query.list();
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            error = e.getMessage();
         } finally {
             session.flush();
             session.clear();
             session.close();
             hibernateUtil.closeSessionFactory();
         }
-        return tiposConsumo;
+        return retornabilidades;
     }
 
     /**
-     * Obtiene los tipos de consumo donde el estaus es igual a 1
+     * Obtiene el catálogo de retornabilidades activas
      *
-     * @return Regresa una lista con los tipos de consumo filtrados
+     * @return Regresa una lista de retornabilidades donde el estatus es igual a
+     * 1
      */
-    public List<RvvdCatTipoConsumo> getTiposConsumo() {
+    public List<RvvdCatRetornabilidad> getRetornabilidades() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        List<RvvdCatTipoConsumo> tiposConsumo = null;
+        List<RvvdCatRetornabilidad> retornabilidades = null;
         try {
-            Query query = session.createQuery("SELECT tc FROM RvvdCatTipoConsumo tc WHERE tc.status = 1 ORDER BY tc.tipoConsumoR ASC");
-            tiposConsumo = query.list();
+            Query query = session.createQuery("SELECT r FROM RvvdCatRetornabilidad r WHERE r.status = 1 ORDER BY r.retornabilidadR ASC");
+            retornabilidades = query.list();
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            error = e.getMessage();
         } finally {
             session.flush();
             session.clear();
             session.close();
             hibernateUtil.closeSessionFactory();
         }
-        return tiposConsumo;
+        return retornabilidades;
     }
 
     /**
-     * Obtiene un tipo de consumo en específico
+     * Obtiene una retornabilidad en específico
      *
-     * @param id El identificador del tipo de consumo a buscar
-     * @return El tipo de consumo buscado, en caso de no existir se regresa nulo
+     * @param id El identificador de la retornabilidad a buscar
+     * @return Regresa la retornabilidad obtenida, si esxiste, en caso de no
+     * existir se regresa nulo
      */
-    public RvvdCatTipoConsumo getTipoConsumo(Integer id) {
+    public RvvdCatRetornabilidad getRetornabilidad(Integer id) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        RvvdCatTipoConsumo tipoConsumo = null;
+        RvvdCatRetornabilidad retornabilidad = null;
         try {
-            tipoConsumo = (RvvdCatTipoConsumo) session.get(RvvdCatTipoConsumo.class, id);
+            retornabilidad = (RvvdCatRetornabilidad) session.get(RvvdCatRetornabilidad.class, id);
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            error = e.getMessage();
         } finally {
             session.flush();
             session.clear();
             session.close();
             hibernateUtil.closeSessionFactory();
         }
-        return tipoConsumo;
+        return retornabilidad;
     }
 
     /**
-     * Obtiene un tipo de consumo en específico
+     * Obtenio una retornabilidad en específico
      *
-     * @param tipoConsumo El nombre del tipo de consumo a buscar
-     * @return El tipo de consumo buscado, en caso de no existir se regresa nulo
+     * @param retornabilidad nombre de la retornabilidad a buscar
+     * @return Regresa el canal buscado, en caso de no existir se regresa nulo
      */
-    public RvvdCatTipoConsumo getTipoConsumo(String tipoConsumo) {
+    public RvvdCatRetornabilidad getRetornabilidad(String retornabilidad) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        RvvdCatTipoConsumo tipoConsumoT = null;
+        RvvdCatRetornabilidad retornabilidadT = null;
         try {
-            Query query = session.createQuery("SELECT tc FROM RvvdCatTipoConsumo tc WHERE tc.tipoConsumoR = '" + tipoConsumo.toUpperCase() + "' OR tc.tipoConsumoEn = '" + tipoConsumo.toUpperCase() + "'");
-            List<RvvdCatTipoConsumo> tiposConsumo = query.list();
-            if (tiposConsumo != null && !tiposConsumo.isEmpty()) {
-                tipoConsumoT = tiposConsumo.get(0);
+            Query query = session.createQuery("SELECT r FROM RvvdCatRetornabilidad r WHERE r.retornabilidadR = '" + retornabilidad.toUpperCase() + "'");
+            List<RvvdCatRetornabilidad> retornabilidades = query.list();
+
+            if (retornabilidades != null && !retornabilidades.isEmpty()) {
+                retornabilidadT = retornabilidades.get(0);
             }
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            error = e.getMessage();
         } finally {
             session.flush();
             session.clear();
             session.close();
             hibernateUtil.closeSessionFactory();
         }
-        return tipoConsumoT;
+        return retornabilidadT;
     }
 
     /**
-     * Guarda o actualiza un tipo de consumo
+     * Guarda o actualiza una retornabilidad
      *
-     * @param tipoConsumo El tipo de consumo a guardar o actualizar
-     * @return En caso de éxito se regresa verdadero, de lo contrario se regresa
-     * falso y el error es almacenado en el atributo error
+     * @param retornabilidad Retornabilidad a guardar
+     * @return Si el guardado concluyo con éxito se regresa verdadero, en caso
+     * contrario se regresa falso y el error es almacenado en el atributo error
      */
-    public boolean saveTipoConsumo(RvvdCatTipoConsumo tipoConsumo) {
+    public boolean saveRetornabilidad(RvvdCatRetornabilidad retornabilidad) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            RvvdCatTipoConsumo tipoConsumoT = (RvvdCatTipoConsumo) session.get(RvvdCatTipoConsumo.class, tipoConsumo.getIdTipoConsumo());
-            if (tipoConsumoT.getTipoConsumoR().equalsIgnoreCase(tipoConsumo.getTipoConsumoR()) || getTipoConsumo(tipoConsumo.getTipoConsumoR()) == null) {
-                tipoConsumoT.setIdTipoConsumo(tipoConsumo.getIdTipoConsumo());
-                tipoConsumoT.setTipoConsumoR(tipoConsumo.getTipoConsumoR());
-                tipoConsumoT.setTipoConsumoEn(tipoConsumo.getTipoConsumoEn());
-                tipoConsumoT.setStatus(tipoConsumo.getStatus());
-                session.saveOrUpdate(tipoConsumoT);
+            RvvdCatRetornabilidad returnT = (RvvdCatRetornabilidad) session.get(RvvdCatRetornabilidad.class, retornabilidad.getIdRetornabilidad());
+            if (returnT.getRetornabilidadR().equalsIgnoreCase(retornabilidad.getRetornabilidadR()) || getRetornabilidad(retornabilidad.getRetornabilidadR()) == null) {
+                returnT.setIdRetornabilidad(retornabilidad.getIdRetornabilidad()); 
+                returnT.setRetornabilidadR(retornabilidad.getRetornabilidadR());
+                returnT.setStatus(retornabilidad.getStatus());
+                session.saveOrUpdate(returnT);
                 error = null;
             } else {
-                error = "Type of consumption already exists";
+                error = "Returnability already exists";
                 flagOk = false;
             }
             session.getTransaction().commit();
@@ -187,14 +192,14 @@ public class CatTipoConsumoDAO {
     }
 
     /**
-     * Elimina un tipo de consumo
+     * Elimina una retornabilidad
      *
-     * @param tipoConsumo Tipo de consumo a eliminar
+     * @param retornabilidad Retornabilidad a eliminar
      * @return Si la eliminación concluyó con éxito se regresa verdadero, en
      * caso contrario se regresa falso y el error es almacenado en el atributo
      * error
      */
-    public boolean deleteTipoConsumo(RvvdCatTipoConsumo tipoConsumo) {
+    public boolean deleteRetornabilidad(RvvdCatRetornabilidad retornabilidad) {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
@@ -202,20 +207,20 @@ public class CatTipoConsumoDAO {
         List<Object> resValicacion;
         int numOcurrencias = 0;
         boolean flagOk = true;
-        RvvdCatTipoConsumo tipoConsumoActual = (RvvdCatTipoConsumo) session.get(RvvdCatTipoConsumo.class, tipoConsumo.getIdTipoConsumo());
+        RvvdCatRetornabilidad retornabilidadActual = (RvvdCatRetornabilidad) session.get(RvvdCatRetornabilidad.class, retornabilidad.getIdRetornabilidad());
         try {
             session.beginTransaction();
-            if (tipoConsumo.getIdTipoConsumo() != null) {
-                queryNativo = session.createSQLQuery("SELECT COUNT(PAIS) FROM RVVD_RECLASIF_EMPAQUE WHERE TIPO_CONSUMO_R = '" + tipoConsumoActual.getTipoConsumoR() + "'");
+            if (retornabilidad.getIdRetornabilidad() != null) {
+                queryNativo = session.createSQLQuery("SELECT COUNT(PAIS) FROM RVVD_RECLASIF_EMPAQUE WHERE RETORNABILIDAD_R = '" + retornabilidadActual.getRetornabilidadR() + "'");
                 resValicacion = queryNativo.list();
                 for (Object object : resValicacion) {
                     numOcurrencias = Integer.parseInt(object.toString());
                 }
                 if (numOcurrencias == 0) {
-                    session.delete(tipoConsumoActual);
+                    session.delete(retornabilidadActual);
                     error = null;
                 } else {
-                    error = "Can not delete the type of consumption, is already used";
+                    error = "Can not delete the returnability, is already used";
                     flagOk = false;
                 }
             }

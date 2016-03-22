@@ -3,6 +3,7 @@ package com.femsa.kof.daily.pojos;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -39,7 +40,7 @@ public class RvvdCatCanal implements Serializable {
     @Column(name = "STATUS")
     private boolean status;
 
-    @OneToMany(mappedBy = "canal", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "canal", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<RvvdCatSubCanal> subCanalesList;
 
     public List<RvvdCatSubCanal> getSubCanalesList() {

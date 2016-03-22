@@ -13,6 +13,7 @@ import com.femsa.kof.daily.pojos.RvvdCatContenidoCalorico;
 import com.femsa.kof.daily.pojos.RvvdCatEmpaque;
 import com.femsa.kof.daily.pojos.RvvdCatGec;
 import com.femsa.kof.daily.pojos.RvvdCatMarca;
+import com.femsa.kof.daily.pojos.RvvdCatRetornabilidad;
 import com.femsa.kof.daily.pojos.RvvdCatTipoConsumo;
 import com.femsa.kof.daily.pojos.RvvdCatUnidadNegocio;
 import com.femsa.kof.daily.pojos.RvvdCatZona;
@@ -58,6 +59,8 @@ public class DailyReclassCatalogsBean implements Serializable {
     private RvvdCatTipoConsumo tipoConsumoSelected;
     private List<RvvdCatEmpaque> catEmpaques;
     private RvvdCatEmpaque empaqueSelected;
+    private List<RvvdCatRetornabilidad> catRetornabilidades;
+    private RvvdCatRetornabilidad retornabilidadSelected;
 
     private SimpleDateFormat formatDay = new SimpleDateFormat("dd/MM/yy");
 
@@ -124,6 +127,8 @@ public class DailyReclassCatalogsBean implements Serializable {
         catCanales = (List<RvvdCatCanal>) context.getAttribute("canal_daily_catalog");
 
         catZonas = (List<RvvdCatZona>) context.getAttribute("zona_daily_catalog");
+        
+        catRetornabilidades = (List<RvvdCatRetornabilidad>) context.getAttribute("retornabilidad_daily_catalog");
     }
 
     public List<RvvdReclasifZona> getZonasReclasificadas() {
@@ -436,6 +441,22 @@ public class DailyReclassCatalogsBean implements Serializable {
         this.empaqueSelected = empaqueSelected;
     }
 
+    public List<RvvdCatRetornabilidad> getCatRetornabilidades() {
+        return catRetornabilidades;
+    }
+
+    public void setCatRetornabilidades(List<RvvdCatRetornabilidad> catRetornabilidades) {
+        this.catRetornabilidades = catRetornabilidades;
+    }
+
+    public RvvdCatRetornabilidad getRetornabilidadSelected() {
+        return retornabilidadSelected;
+    }
+
+    public void setRetornabilidadSelected(RvvdCatRetornabilidad retornabilidadSelected) {
+        this.retornabilidadSelected = retornabilidadSelected;
+    }
+
     /**
      *
      * @return
@@ -620,8 +641,10 @@ public class DailyReclassCatalogsBean implements Serializable {
         empaque.setEmpaqueEn(empaqueSelected.getEmpaqueEn());
         empaque.setTipoConsumoR(tipoConsumoSelected.getTipoConsumoR());
         empaque.setTipoConsumoEn(tipoConsumoSelected.getTipoConsumoEn());
+        empaque.setRetornabilidadR(retornabilidadSelected.getRetornabilidadR());
         empaqueSelected = null;
         tipoConsumoSelected = null;
+        retornabilidadSelected = null;
     }
 
     /**

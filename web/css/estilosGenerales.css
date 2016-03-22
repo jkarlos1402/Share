@@ -471,4 +471,5 @@ span.ui-radiobutton-icon.ui-icon.ui-c.ui-icon-bullet{
 
 .dropdown-menu-sub-indicator > ul li a{
     padding-left: 20px !important;
+    margin: -7px !important;
 }
