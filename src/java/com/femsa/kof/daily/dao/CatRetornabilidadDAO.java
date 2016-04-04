@@ -163,8 +163,9 @@ public class CatRetornabilidadDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            RvvdCatRetornabilidad returnT = (RvvdCatRetornabilidad) session.get(RvvdCatRetornabilidad.class, retornabilidad.getIdRetornabilidad());
-            if (returnT.getRetornabilidadR().equalsIgnoreCase(retornabilidad.getRetornabilidadR()) || getRetornabilidad(retornabilidad.getRetornabilidadR()) == null) {
+            RvvdCatRetornabilidad returnT =  retornabilidad.getIdRetornabilidad() != null ? (RvvdCatRetornabilidad) session.get(RvvdCatRetornabilidad.class, retornabilidad.getIdRetornabilidad()) : null;
+            if ((returnT != null && returnT.getRetornabilidadR().equalsIgnoreCase(retornabilidad.getRetornabilidadR())) || getRetornabilidad(retornabilidad.getRetornabilidadR()) == null) {
+                returnT = returnT != null ? returnT : new RvvdCatRetornabilidad();
                 returnT.setIdRetornabilidad(retornabilidad.getIdRetornabilidad()); 
                 returnT.setRetornabilidadR(retornabilidad.getRetornabilidadR());
                 returnT.setStatus(retornabilidad.getStatus());

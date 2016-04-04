@@ -160,8 +160,9 @@ public class CatUnidadNegocioDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            RvvdCatUnidadNegocio unidadT = (RvvdCatUnidadNegocio) session.get(RvvdCatUnidadNegocio.class, unidad.getIdUnidadNegocio());
-            if (unidadT.getUnidadNegocioR().equalsIgnoreCase(unidad.getUnidadNegocioR()) || getUnidadNeg(unidad.getUnidadNegocioR()) == null) {
+            RvvdCatUnidadNegocio unidadT = unidad.getIdUnidadNegocio() != null ? (RvvdCatUnidadNegocio) session.get(RvvdCatUnidadNegocio.class, unidad.getIdUnidadNegocio()) : null;
+            if ((unidadT != null && unidadT.getUnidadNegocioR().equalsIgnoreCase(unidad.getUnidadNegocioR())) || getUnidadNeg(unidad.getUnidadNegocioR()) == null) {
+                unidadT = unidadT != null ? unidadT : new RvvdCatUnidadNegocio();
                 unidadT.setIdUnidadNegocio(unidad.getIdUnidadNegocio());
                 unidadT.setUnidadNegocioR(unidad.getUnidadNegocioR());
                 unidadT.setUnidadNegocioEn(unidad.getUnidadNegocioEn());

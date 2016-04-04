@@ -17,7 +17,7 @@
             <h:form id="formLoad">
                 <p:panel id="panelLoad">  
                     <p:growl id="messagesLoad" showDetail="true"/>
-                    <h:panelGrid columns="1" cellspacing="5px">
+                    <h:panelGrid columns="1" cellspacing="5px" style="width: 100%;">
                         <p:messages showDetail="true" closable="true"/>
                         <h:panelGrid columns="2" cellpadding="5px">
                             <p:outputLabel for="countryLoad" value="Country:" />
@@ -29,46 +29,17 @@
                         </h:panelGrid>
                         <p:separator />
                         <p:fileUpload fileUploadListener="#{shareLoadBean.handleFileUpload}" mode="advanced" dragDropSupport="true" 
-                                      update="messagesLoad,panelLoad" sizeLimit="10000000" fileLimit="1" allowTypes="/(\.|\/)(xlsx|XLSX)$/" 
+                                      update="messagesLoad,panelLoad" sizeLimit="601295421440" fileLimit="1" allowTypes="/(\.|\/)(xlsx|XLSX)$/" 
                                       onstart="handleResponse(1)" oncomplete="handleResponse(2)"/>
                         <p:separator />
-                        <h3>Preview</h3>
-                        <p:dataTable var="infoCarga" value="#{shareLoadBean.listInfoCarga}" id="tableInfo" reflow="true" rows="20" paginator="true" widgetVar="tableInfCarga">                    
-                            <f:facet name="header">
-                                <p:outputLabel value="#{shareLoadBean.listInfoCarga.size()} records found." rendered="#{shareLoadBean.listInfoCarga != null ? true : false}" styleClass="imgLoad"/>                                
-                            </f:facet>
-                            <p:column headerText="Country">
-                                <h:outputText value="#{infoCarga.pais}" />
-                            </p:column>
-
-                            <p:column headerText="Channel">
-                                <h:outputText value="#{infoCarga.canal}" />
-                            </p:column>
-
-                            <p:column headerText="Date" filterBy="#{infoCarga.fecha}" filterMatchMode="contains" id="columDate">
-                                <h:outputText value="#{infoCarga.fecha}" />
-                            </p:column>
-
-                            <p:column headerText="Group Category">
-                                <h:outputText value="#{infoCarga.grupoCategoria}" />
-                            </p:column>
-
-                            <p:column headerText="Category" filterBy="#{infoCarga.categoria}" filterMatchMode="contains" id="columCategory">
-                                <h:outputText value="#{infoCarga.categoria}" />
-                            </p:column>
-
-                            <p:column headerText="Manufacturer" filterBy="#{infoCarga.fabricante}" filterMatchMode="contains">
-                                <h:outputText value="#{infoCarga.fabricante}" />
-                            </p:column>
-
-                            <p:column headerText="Volume">
-                                <h:outputText value="#{infoCarga.volumenMes}" />
-                            </p:column>
-
-                            <p:column headerText="Value">
-                                <h:outputText value="#{infoCarga.ventaMes}" />
-                            </p:column>                        
-                        </p:dataTable>
+                        <h3>Resume</h3>
+                        <p:panel>
+                            <h:panelGrid columns="2">
+                                <h:outputText value="No records found." rendered="#{shareLoadBean.numEntriesSaved == 0 ? true : false}"/>
+                                <h:outputText value="Records found: " rendered="#{shareLoadBean.numEntriesSaved > 0 ? true : false}"/>
+                                <h:outputText value="#{shareLoadBean.numEntriesSaved}" rendered="#{shareLoadBean.numEntriesSaved > 0 ? true : false}"/>                                
+                            </h:panelGrid>
+                        </p:panel>
                         <p:panel>
                             <h:panelGrid columns="3" cellspacing="5px" style="width: 100%;" columnClasses="topElemsClass,topElemsClass,topElemsClass">
                                 <p:dataList value="#{shareLoadBean.omittedSheets}" var="omittedSheet" type="ordered">
@@ -81,7 +52,7 @@
                                     <f:facet name="header">
                                         Loaded Sheets
                                     </f:facet>
-                                    <p:commandLink value="#{loadedSheet}" onclick="setFilter('#{loadedSheet}')" update=":formLoad:tableInfo"/>
+                                    #{loadedSheet}
                                 </p:dataList>
                                 <p:dataList value="#{shareLoadBean.errors}" var="errorSheet" type="ordered">
                                     <f:facet name="header">
@@ -92,7 +63,7 @@
                             </h:panelGrid>
                         </p:panel>
                         <f:facet name="footer">
-                            <p:commandButton value="Save" actionListener="#{shareLoadBean.saveInfoCarga}" update=":formLoad" rendered="#{shareLoadBean.listInfoCarga.size() > 0 ? true : false}">
+                            <p:commandButton value="Save" actionListener="#{shareLoadBean.saveInfoCarga}" update=":formLoad" rendered="#{shareLoadBean.numEntriesSaved > 0 ? true : false}">
                                 <p:confirm message="Are you sure?" header="Save records"/>
                             </p:commandButton>                        
                         </f:facet>

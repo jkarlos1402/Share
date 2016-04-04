@@ -157,8 +157,9 @@ public class CatSubCanalDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            RvvdCatSubCanal subCanalT = (RvvdCatSubCanal) session.get(RvvdCatSubCanal.class, subCanal.getIdSubCanal());
-            if (subCanalT.getSubCanalR().equalsIgnoreCase(subCanal.getSubCanalR()) || getSubCanal(subCanal.getSubCanalR()) == null) {
+            RvvdCatSubCanal subCanalT = subCanal.getIdSubCanal() != null ? (RvvdCatSubCanal) session.get(RvvdCatSubCanal.class, subCanal.getIdSubCanal()) : null;
+            if ((subCanalT != null && subCanalT.getSubCanalR().equalsIgnoreCase(subCanal.getSubCanalR())) || getSubCanal(subCanal.getSubCanalR()) == null) {
+                subCanalT = subCanalT != null ? subCanalT : new RvvdCatSubCanal();
                 subCanalT.setIdSubCanal(subCanal.getIdSubCanal());
                 subCanalT.setSubCanalR(subCanal.getSubCanalR());
                 subCanalT.setSubCanalEn(subCanal.getSubCanalEn());

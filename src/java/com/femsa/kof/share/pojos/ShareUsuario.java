@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,11 +15,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 /**
  *
@@ -34,8 +36,8 @@ public class ShareUsuario implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "SHARE_SEQ_USER")
-    @SequenceGenerator(name = "SHARE_SEQ_USER",sequenceName = "SHARE_SEQ_USER", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SHARE_SEQ_USER")
+    @SequenceGenerator(name = "SHARE_SEQ_USER", sequenceName = "SHARE_SEQ_USER", allocationSize = 1)
     @Column(name = "PK_USUARIO")
     private Integer pkUsuario;
 
@@ -60,30 +62,42 @@ public class ShareUsuario implements Serializable {
     private boolean estatus;
 
     @JoinColumn(name = "FK_ID_ROL")
-    @OneToOne(optional = false, cascade = CascadeType.MERGE)
+    @OneToOne(optional = false)
     private ShareCatRol rol;
-    
+
     @Column(name = "INTENTOS")
     private Integer intentos;
-    
+
     @Column(name = "LASTLOGIN")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastLogin;
-    
+
     @Column(name = "PASSRESET")
     private boolean passReset;
 
-    @ManyToMany(fetch = FetchType.EAGER)    
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "SHARE_USUARIO_PAIS", joinColumns = {
         @JoinColumn(name = "FK_USUARIO")}, inverseJoinColumns = {
         @JoinColumn(name = "FK_PAIS")})
     private List<ShareCatPais> paises = new ArrayList<ShareCatPais>();
-    
-    @ManyToMany(fetch = FetchType.EAGER)    
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "SHARE_USUARIO_PROYECTO", joinColumns = {
         @JoinColumn(name = "ID_USER")}, inverseJoinColumns = {
         @JoinColumn(name = "ID_PROYECTO")})
-    private List<ShareCatProyecto> proyectos = new ArrayList<ShareCatProyecto>();    
+    private List<ShareCatProyecto> proyectos = new ArrayList<ShareCatProyecto>();
+
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER)
+    @Cascade(CascadeType.DELETE)
+    private List<ShareLoadLog> logsCargas = new ArrayList<ShareLoadLog>();
+
+    public List<ShareLoadLog> getLogsCargas() {
+        return logsCargas;
+    }
+
+    public void setLogsCargas(List<ShareLoadLog> logsCargas) {
+        this.logsCargas = logsCargas;
+    }
 
     /**
      *
@@ -235,7 +249,7 @@ public class ShareUsuario implements Serializable {
      *
      * @return
      */
-    public String getNombre() {        
+    public String getNombre() {
         return nombre;
     }
 
@@ -294,7 +308,7 @@ public class ShareUsuario implements Serializable {
     public void setEstatus(boolean estatus) {
         this.estatus = estatus;
     }
-    
+
     public String listProjects(boolean nombre) {
         String proyectosCadena = "";
         if (proyectos != null && !proyectos.isEmpty() && !nombre) {
@@ -302,7 +316,7 @@ public class ShareUsuario implements Serializable {
                 proyectosCadena += "," + proyecto.getIdProyecto();
             }
             proyectosCadena = proyectosCadena.replaceFirst(",", "");
-        }else if(proyectos != null && !proyectos.isEmpty() && nombre){
+        } else if (proyectos != null && !proyectos.isEmpty() && nombre) {
             for (ShareCatProyecto proyecto : proyectos) {
                 proyectosCadena += ", " + proyecto.getNombreProyecto();
             }
@@ -335,19 +349,19 @@ public class ShareUsuario implements Serializable {
     public String toString() {
         return nombre;
     }
-   
+
     /**
      *
      * @param shortNameCountry
      * @return
      */
-    public boolean haveCountry(String shortNameCountry){
-        if(paises != null){
+    public boolean haveCountry(String shortNameCountry) {
+        if (paises != null) {
             for (ShareCatPais pais : paises) {
-                if(pais.getClaveCorta().equalsIgnoreCase(shortNameCountry)){
+                if (pais.getClaveCorta().equalsIgnoreCase(shortNameCountry)) {
                     return true;
                 }
-            }            
+            }
         }
         return false;
     }

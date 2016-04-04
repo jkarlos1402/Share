@@ -157,8 +157,9 @@ public class CatTipoConsumoDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            RvvdCatTipoConsumo tipoConsumoT = (RvvdCatTipoConsumo) session.get(RvvdCatTipoConsumo.class, tipoConsumo.getIdTipoConsumo());
-            if (tipoConsumoT.getTipoConsumoR().equalsIgnoreCase(tipoConsumo.getTipoConsumoR()) || getTipoConsumo(tipoConsumo.getTipoConsumoR()) == null) {
+            RvvdCatTipoConsumo tipoConsumoT = tipoConsumo.getIdTipoConsumo() != null ? (RvvdCatTipoConsumo) session.get(RvvdCatTipoConsumo.class, tipoConsumo.getIdTipoConsumo()) : null;
+            if ((tipoConsumoT != null && tipoConsumoT.getTipoConsumoR().equalsIgnoreCase(tipoConsumo.getTipoConsumoR())) || getTipoConsumo(tipoConsumo.getTipoConsumoR()) == null) {
+                tipoConsumoT = tipoConsumoT != null ? tipoConsumoT : new RvvdCatTipoConsumo();
                 tipoConsumoT.setIdTipoConsumo(tipoConsumo.getIdTipoConsumo());
                 tipoConsumoT.setTipoConsumoR(tipoConsumo.getTipoConsumoR());
                 tipoConsumoT.setTipoConsumoEn(tipoConsumo.getTipoConsumoEn());

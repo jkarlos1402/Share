@@ -19,7 +19,7 @@
                     <p:messages showDetail="true" closable="true"/>
                     <h:panelGrid columns="6" cellpadding="5px">                        
                         <p:outputLabel for="userLogin" value="User:" />
-                        <p:inputText id="userLogin" required="true" value="#{userBean.usuarioNuevo.usuario}" maxlength="15"/>
+                        <p:inputText id="userLogin" required="true" value="#{userBean.usuarioNuevo.usuario}" maxlength="1024"/>
 
                         <p:outputLabel for="passLogin" value="Password:" />                                               
                         <p:inputText id="passLogin" value="#{userBean.usuarioNuevo.password}" type="password"  required="true" label="Password" maxlength="80"/>                     
@@ -53,9 +53,12 @@
                             <f:selectItem itemLabel="Disable" itemValue="false" />                            
                         </p:selectOneRadio>                        
                         <f:facet name="footer">
-                            <h:panelGrid columns="2" cellspacing="10px">
+                            <h:panelGrid columns="3" cellspacing="10px">
                                 <p:commandButton value="Save" update=":formUsers,:formTableUsers" actionListener="#{userBean.saveUser}">
                                     <p:confirm message="Are you sure?" header="Save user"/>
+                                </p:commandButton>
+                                <p:commandButton value="Delete" update=":formUsers,:formTableUsers" actionListener="#{userBean.deleteUser}" rendered="#{userBean.usuarioNuevo.pkUsuario ne null and !userBean.usuarioNuevo.equals(mainBean.usuario) ? true : false}">
+                                    <p:confirm message="#{userBean.usuarioNuevo.estatus ? 'The user is active,' : ''} Are you sure?" header="Delete user"/>
                                 </p:commandButton>
                                 <p:commandButton value="New" update=":formUsers,:formTableUsers" actionListener="#{userBean.newUser}" rendered="#{userBean.usuarioNuevo.pkUsuario ne null ? true : false}"/>                                
                             </h:panelGrid>

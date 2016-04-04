@@ -161,8 +161,9 @@ public class CatZonaDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            RvvdCatZona zonaT = (RvvdCatZona) session.get(RvvdCatZona.class, zona.getIdZona());
-            if (zonaT.getZonaR().equalsIgnoreCase(zona.getZonaR()) || getZona(zona.getZonaR()) == null) {
+            RvvdCatZona zonaT = zona.getIdZona() != null ? (RvvdCatZona) session.get(RvvdCatZona.class, zona.getIdZona()) : null;
+            if ((zonaT != null && zonaT.getZonaR().equalsIgnoreCase(zona.getZonaR())) || getZona(zona.getZonaR()) == null) {
+                zonaT = zonaT != null ? zonaT : new RvvdCatZona();
                 zonaT.setIdZona(zona.getIdZona());
                 zonaT.setZonaR(zona.getZonaR());
                 zonaT.setZonaEn(zona.getZonaEn());

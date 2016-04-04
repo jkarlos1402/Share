@@ -2,33 +2,37 @@ package com.femsa.kof.share.managedbeans;
 
 import com.femsa.kof.managedbeans.MainBean;
 import com.femsa.kof.share.dao.ShareLoadLogDAO;
-import com.femsa.kof.share.dao.ShareTmpAllInfoCargaDAO;
 import com.femsa.kof.share.pojos.ShareCatPais;
 import com.femsa.kof.share.pojos.ShareLoadLog;
 import com.femsa.kof.share.pojos.ShareTmpAllInfoCarga;
 import com.femsa.kof.share.pojos.ShareUsuario;
 import com.femsa.kof.util.ScriptAnalizer;
 import com.femsa.kof.util.XlsAnalizer;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
  * @author TMXIDSJPINAM
  */
 @ManagedBean(name = "shareLoadBean")
-@SessionScoped
+@ViewScoped
 public class ShareLoadBean implements Serializable {
 
     private List<ShareTmpAllInfoCarga> listInfoCarga;
@@ -41,13 +45,19 @@ public class ShareLoadBean implements Serializable {
     private ShareUsuario usuario;
     private String nameFile;
 
-    private Integer numEntriesSaved = 0;
+    private long numEntriesSaved = 0L;
+    private List<Long> registrosPorPagina;
     private Date dateExecution;
     private Date dateEndExecution;
-    
+
     @ManagedProperty("#{mainBean}")
     private MainBean beanPrincipal;
-    
+
+    private UploadedFile uploadedFile;
+    private InputStream stream;
+
+    private static final String MSG_ERROR_TITULO = "Mensaje de error...";
+
     /**
      *
      */
@@ -82,7 +92,7 @@ public class ShareLoadBean implements Serializable {
      */
     public void setErrorsScript(List<String> errorsScript) {
         this.errorsScript = errorsScript;
-    }    
+    }
 
     /**
      *
@@ -120,7 +130,7 @@ public class ShareLoadBean implements Serializable {
      *
      * @return
      */
-    public Integer getNumEntriesSaved() {
+    public long getNumEntriesSaved() {
         return numEntriesSaved;
     }
 
@@ -128,7 +138,7 @@ public class ShareLoadBean implements Serializable {
      *
      * @param numEntriesSaved
      */
-    public void setNumEntriesSaved(Integer numEntriesSaved) {
+    public void setNumEntriesSaved(long numEntriesSaved) {
         this.numEntriesSaved = numEntriesSaved;
     }
 
@@ -252,25 +262,38 @@ public class ShareLoadBean implements Serializable {
      * @param event
      */
     public void handleFileUpload(FileUploadEvent event) {
-        beanPrincipal.setPorcentajeAvance(50);
+        numEntriesSaved = 0L;
+        beanPrincipal.setPorcentajeAvance(20);
         FacesMessage message;
+        uploadedFile = event.getFile();
+        try {
+            stream = uploadedFile.getInputstream();
+        } catch (IOException e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
+            errors.add(e.getMessage());
+        }
         if (countrySelected != null) {
             XlsAnalizer analizer = new XlsAnalizer();
-            listInfoCarga = analizer.analizeXls(event.getFile(), countrySelected, usuario);
+            analizer.analizeXls(event.getFile(), countrySelected, usuario, beanPrincipal, registrosPorPagina);
+            beanPrincipal.setPorcentajeAvance(50);
             omittedSheets = analizer.getOmittedSheets();
             loadedSheets = analizer.getLoadedSheets();
             errors = analizer.getErrors();
-            if (listInfoCarga != null && !listInfoCarga.isEmpty()) {
+            registrosPorPagina = analizer.getNumRegistrosPorHoja();
+            for (Long numReg : registrosPorPagina) {
+                numEntriesSaved += numReg;
+            }
+            if (errors.isEmpty()) {
                 nameFile = event.getFile().getFileName();
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", event.getFile().getFileName() + " is uploaded.");
             } else {
-                message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", event.getFile().getFileName() + " is empity or corrupt.");
+                message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", event.getFile().getFileName() + " is empty or corrupt.");
             }
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", "Select a country");
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
-        beanPrincipal.setPorcentajeAvance(0);
+        beanPrincipal.setPorcentajeAvance(100);
     }
 
     /**
@@ -281,6 +304,7 @@ public class ShareLoadBean implements Serializable {
         ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         Boolean flagLoadInfShare = (Boolean) context.getAttribute("flag_load_share");
         ShareLoadLogDAO logDAO = new ShareLoadLogDAO();
+        XlsAnalizer analizer = new XlsAnalizer();
         if (!flagLoadInfShare) {
             flagLoadInfShare = true;
             context.setAttribute("flag_load_share", flagLoadInfShare);
@@ -291,38 +315,32 @@ public class ShareLoadBean implements Serializable {
             record.setInicioEjecucion(new Date());
             record.setNombreProyecto("SHARE");
             record.setPais(countrySelected.getNombre());
-            if (countrySelected.getNombre().toUpperCase().equals(listInfoCarga.get(0).getPais().toUpperCase())) {
-                ShareTmpAllInfoCargaDAO cargaDAO = new ShareTmpAllInfoCargaDAO();
-                if (cargaDAO.saveInfoCarga(listInfoCarga, countrySelected, usuario,beanPrincipal,ScriptAnalizer.obtieneNumSentencias(errorsScript, countrySelected))) {
-                    record.setRegistrosProcesados(listInfoCarga.size());
-                    if (ScriptAnalizer.executeScritsShare(errorsScript, countrySelected)) {
-                        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Records saved.");
-                    } else {
-                        String cadenaError = "";
-                        for (String error : errorsScript) {
-                            cadenaError += error + ", ";
-                        }
-                        message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", "Records saved, but post-process FAILED, please contact whith the page administrator, [ERROR: " + cadenaError + "]");
-                    }
+            if (analizer.saveExcel(stream, registrosPorPagina, countrySelected, beanPrincipal)) {
+                if (true/*ScriptAnalizer.executeScritsShare(errorsScript, countrySelected)*/) {
+                    message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "Records saved.");
                 } else {
-                    errors = cargaDAO.getErrors();
                     String cadenaError = "";
-                    for (String error : errors) {
-                        cadenaError += error + ", ";
+                    for (String error : errorsScript) {
+                        cadenaError += ", " + error;
                     }
-                    message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "An error ocurred while saving records [" + cadenaError + "]");
+                    cadenaError = cadenaError.replaceFirst(", ", "");
+                    message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", "Records saved, but post-process FAILED, please contact whith the page administrator, [ERROR: " + cadenaError + "]");
                 }
-                listInfoCarga.clear();
-                listInfoCarga = null;
-                omittedSheets.clear();
-                loadedSheets.clear();
-                errors.clear();
-                countrySelected = null;
             } else {
-                message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "Wrong country selected");
+                errors = analizer.getErrors();
+                String cadenaError = "";
+                for (String error : errors) {
+                    cadenaError += error + ", ";
+                }
+                message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "An error ocurred while saving records [" + cadenaError + "]");
             }
+            omittedSheets.clear();
+            loadedSheets.clear();
+            errors.clear();
+            countrySelected = null;
+            numEntriesSaved = 0L;
             record.setFinEjecucion(new Date());
-            record.setIdUsuario(usuario);            
+            record.setIdUsuario(usuario);
             logDAO.saveLog(record);
             errorsScript.clear();
             flagLoadInfShare = false;

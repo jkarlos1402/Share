@@ -160,8 +160,9 @@ public class CatContCaloricoDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            RvvdCatContenidoCalorico contenidoT = (RvvdCatContenidoCalorico) session.get(RvvdCatContenidoCalorico.class, contenido.getIdContenidoCalorico());
-            if (contenidoT.getContenidoCaloricoR().equalsIgnoreCase(contenido.getContenidoCaloricoR()) || getContCal(contenido.getContenidoCaloricoR()) == null) {
+            RvvdCatContenidoCalorico contenidoT = contenido.getIdContenidoCalorico() != null ? (RvvdCatContenidoCalorico) session.get(RvvdCatContenidoCalorico.class, contenido.getIdContenidoCalorico()):null;
+            if ((contenidoT != null && contenidoT.getContenidoCaloricoR().equalsIgnoreCase(contenido.getContenidoCaloricoR())) || getContCal(contenido.getContenidoCaloricoR()) == null) {
+                contenidoT = contenidoT != null ? contenidoT : new RvvdCatContenidoCalorico();
                 contenidoT.setIdContenidoCalorico(contenido.getIdContenidoCalorico());
                 contenidoT.setContenidoCaloricoR(contenido.getContenidoCaloricoR());
                 contenidoT.setContenidoCaloricoEn(contenido.getContenidoCaloricoEn());

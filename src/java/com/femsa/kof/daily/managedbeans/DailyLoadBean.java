@@ -412,7 +412,7 @@ public class DailyLoadBean {
                 nameFile = event.getFile().getFileName();
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", event.getFile().getFileName() + " is uploaded.");
             } else {
-                message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", event.getFile().getFileName() + " is empity or corrupt.");
+                message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", event.getFile().getFileName() + " is empty or corrupt.");
             }
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", "Select a country");
@@ -437,7 +437,7 @@ public class DailyLoadBean {
             nameFile = event.getFile().getFileName();
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", event.getFile().getFileName() + " is uploaded.");
         } else {
-            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", event.getFile().getFileName() + " is empity or corrupt.");
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", event.getFile().getFileName() + " is empty or corrupt.");
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
         beanPrincipal.setPorcentajeAvance(null);
@@ -470,7 +470,7 @@ public class DailyLoadBean {
             nameFile = event.getFile().getFileName();
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", event.getFile().getFileName() + " is uploaded.");
         } else {
-            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", event.getFile().getFileName() + " is empity or corrupt.");
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alert", event.getFile().getFileName() + " is empty or corrupt.");
         }
         FacesContext.getCurrentInstance().addMessage(null, message);
         beanPrincipal.setPorcentajeAvance(null);
@@ -493,7 +493,7 @@ public class DailyLoadBean {
             record.setNombreArchivo(nameFile);
             record.setNombreProceso("LOAD ROLLING");
             record.setInicioEjecucion(new Date());
-            record.setNombreProceso("DAILY DASHBOARD");
+            record.setNombreProyecto("DAILY DASHBOARD");
             record.setPais(countrySelected.getNombre());
             if (countrySelected.getClaveCorta().equalsIgnoreCase(listInfoCargaRolling.get(0).getDiasOperativos().getPais()) || "CAM".equalsIgnoreCase(countrySelected.getClaveCorta())) {
                 RollingDAO rollingDAO = new RollingDAO();
@@ -595,12 +595,12 @@ public class DailyLoadBean {
     public void saveInfoPh() {
         FacesMessage message;
         ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
-        Boolean flagLoadSalesDayly = (Boolean) context.getAttribute("flag_load_sales_daily");
+        Boolean flagLoadSalesDaily = (Boolean) context.getAttribute("flag_load_sales_daily");
         ShareLoadLogDAO logDAO = new ShareLoadLogDAO();
         XlsAnalizerSalesPh salesPh = new XlsAnalizerSalesPh();
-        if (!flagLoadSalesDayly) {
-            flagLoadSalesDayly = true;
-            context.setAttribute("flag_load_sales_daily", flagLoadSalesDayly);
+        if (!flagLoadSalesDaily) {
+            flagLoadSalesDaily = true;
+            context.setAttribute("flag_load_sales_daily", flagLoadSalesDaily);
             ShareLoadLog record = new ShareLoadLog();
             record.setFechaEjecucion(new Date());
             record.setNombreArchivo(nameFile);
@@ -628,8 +628,8 @@ public class DailyLoadBean {
             record.setFinEjecucion(new Date());
             record.setIdUsuario(usuario);
             logDAO.saveLog(record);
-            flagLoadSalesDayly = false;
-            context.setAttribute("flag_load_sales_daily", flagLoadSalesDayly);
+            flagLoadSalesDaily = false;
+            context.setAttribute("flag_load_sales_daily", flagLoadSalesDaily);
         } else {
             message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Sorry", "Other country is loading, try again later");
         }

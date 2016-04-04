@@ -145,13 +145,45 @@ public class ShareUsuarioDAO {
                 flagOk = false;
             }
             session.getTransaction().commit();
-        } catch (Exception e) {            
+        } catch (Exception e) {
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }
             flagOk = false;
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
+        return flagOk;
+    }
+
+    /**
+     * elimina un usuario
+     *
+     * @param usuario
+     * @return
+     */
+    public boolean deleteUser(ShareUsuario usuario) {
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        boolean flagOk = true;
+        try {
+            session.beginTransaction();
+            session.delete(usuario);
+            error = null;
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            if (session.getTransaction().isActive()) {
+                session.getTransaction().rollback();
+            }
+            flagOk = false;
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
+            error = e.getMessage();
         } finally {
             session.flush();
             session.clear();

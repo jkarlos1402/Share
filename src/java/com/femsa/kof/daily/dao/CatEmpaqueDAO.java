@@ -157,8 +157,9 @@ public class CatEmpaqueDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            RvvdCatEmpaque empaqueT = (RvvdCatEmpaque) session.get(RvvdCatEmpaque.class, empaque.getIdEmpaque());
-            if (empaqueT.getEmpaqueR().equalsIgnoreCase(empaque.getEmpaqueR()) || getEmpaque(empaque.getEmpaqueR()) == null) {
+            RvvdCatEmpaque empaqueT = empaque.getIdEmpaque() != null ? (RvvdCatEmpaque) session.get(RvvdCatEmpaque.class, empaque.getIdEmpaque()) : null;
+            if ((empaqueT != null && empaqueT.getEmpaqueR().equalsIgnoreCase(empaque.getEmpaqueR())) || getEmpaque(empaque.getEmpaqueR()) == null) {
+                empaqueT = empaqueT != null ? empaqueT : new RvvdCatEmpaque();
                 empaqueT.setIdEmpaque(empaque.getIdEmpaque());
                 empaqueT.setEmpaqueR(empaque.getEmpaqueR());
                 empaqueT.setEmpaqueEn(empaque.getEmpaqueEn());

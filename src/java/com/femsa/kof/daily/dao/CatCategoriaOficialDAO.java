@@ -160,8 +160,9 @@ public class CatCategoriaOficialDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            RvvdCatCategoriaOficial catCategoriaOficialT = (RvvdCatCategoriaOficial) session.get(RvvdCatCategoriaOficial.class, catCategoriaOficial.getIdCategoriaOficial());
-            if (catCategoriaOficialT.getCategoriaOficial().equalsIgnoreCase(catCategoriaOficial.getCategoriaOficialEn()) || getCategoriaOficial(catCategoriaOficial.getCategoriaOficial()) == null) {
+            RvvdCatCategoriaOficial catCategoriaOficialT = catCategoriaOficial.getIdCategoriaOficial() != null ? (RvvdCatCategoriaOficial) session.get(RvvdCatCategoriaOficial.class, catCategoriaOficial.getIdCategoriaOficial()) : null;
+            if ((catCategoriaOficialT != null && catCategoriaOficialT.getCategoriaOficial().equalsIgnoreCase(catCategoriaOficial.getCategoriaOficialEn())) || getCategoriaOficial(catCategoriaOficial.getCategoriaOficial()) == null) {
+                catCategoriaOficialT = catCategoriaOficialT != null ? catCategoriaOficialT : new RvvdCatCategoriaOficial();
                 catCategoriaOficialT.setIdCategoriaOficial(catCategoriaOficial.getIdCategoriaOficial());
                 catCategoriaOficialT.setCategoriaOficial(catCategoriaOficial.getCategoriaOficial());
                 catCategoriaOficialT.setCategoriaOficialEn(catCategoriaOficial.getCategoriaOficialEn());

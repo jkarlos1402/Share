@@ -161,8 +161,9 @@ public class CatCanalDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            RvvdCatCanal canalT = (RvvdCatCanal) session.get(RvvdCatCanal.class, canal.getIdCanal());
-            if (canalT.getCanalR().equalsIgnoreCase(canal.getCanalR()) || getCanal(canal.getCanalR()) == null) {
+            RvvdCatCanal canalT = canal.getIdCanal() != null ? (RvvdCatCanal) session.get(RvvdCatCanal.class, canal.getIdCanal()) : null;
+            if ((canalT != null && canalT.getCanalR().equalsIgnoreCase(canal.getCanalR())) || getCanal(canal.getCanalR()) == null) {
+                canalT = canalT != null ? canalT : new RvvdCatCanal();
                 canalT.setIdCanal(canal.getIdCanal());
                 canalT.setCanalR(canal.getCanalR());
                 canalT.setCanalEn(canal.getCanalEn());
@@ -207,16 +208,16 @@ public class CatCanalDAO {
         List<Object> resValicacion;
         int numOcurrencias = 0;
         boolean flagOk = true;
-        RvvdCatCanal canalActual = (RvvdCatCanal)session.get(RvvdCatCanal.class, canal.getIdCanal());
+        RvvdCatCanal canalActual = (RvvdCatCanal) session.get(RvvdCatCanal.class, canal.getIdCanal());
         try {
-            session.beginTransaction();            
-            if (canal.getIdCanal() != null) {                
+            session.beginTransaction();
+            if (canal.getIdCanal() != null) {
                 queryNativo = session.createSQLQuery("SELECT COUNT(PAIS) FROM RVVD_RECLASIF_CANAL WHERE CANAL_R = '" + canalActual.getCanalR() + "'");
                 resValicacion = queryNativo.list();
-                for (Object object : resValicacion) {                    
+                for (Object object : resValicacion) {
                     numOcurrencias = Integer.parseInt(object.toString());
-                }                
-                if (numOcurrencias == 0) {                    
+                }
+                if (numOcurrencias == 0) {
                     session.delete(canalActual);
                     error = null;
                 } else {

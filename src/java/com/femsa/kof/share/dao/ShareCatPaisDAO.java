@@ -104,7 +104,7 @@ public class ShareCatPaisDAO {
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            error = e.getMessage();
         } finally {
             session.flush();
             session.clear();
@@ -131,9 +131,16 @@ public class ShareCatPaisDAO {
                 session.update(pais);
                 error = null;
             } else if (getCatPais(pais.getNombre()) == null) {
-                query = session.createSQLQuery("CREATE TABLE " + pais.getNombreTabla() + " (PAIS VARCHAR2(50 BYTE),CANAL VARCHAR2(50 BYTE), "
-                        + "FECHA VARCHAR2(50 BYTE), GRUPO_CATEGORIA VARCHAR2(50 BYTE), CATEGORIA VARCHAR2(50 BYTE), "
-                        + "FABRICANTE VARCHAR2(100 BYTE), VOLUMEN_MES NUMBER, VENTA_MES NUMBER)");
+                query = session.createSQLQuery("CREATE TABLE " + pais.getNombreTabla() + " (FECHA VARCHAR2(50 BYTE), ANIO NUMBER(4,0), "
+                        + "MES NUMBER(2,0), TIEMPO NUMBER(6,0), PAIS  VARCHAR2(255 BYTE), "
+                        + "UNIDAD_NEGOCIO VARCHAR2(255 BYTE), CANAL VARCHAR2(255 BYTE), "
+                        + "SUBCANAL VARCHAR2(255 BYTE), UNIDAD_OPERATIVA VARCHAR2(255 BYTE), "
+                        + "REGION VARCHAR2(255 BYTE), ZONA VARCHAR2(255 BYTE), "
+                        + "GRUPO_CATEGORIA VARCHAR2(255 BYTE), CATEGORIA VARCHAR2(255 BYTE), "
+                        + "FABRICANTE VARCHAR2(255 BYTE), MARCA VARCHAR2(255 BYTE), "
+                        + "SABOR VARCHAR2(255 BYTE), TAMANO VARCHAR2(255 BYTE), "
+                        + "EMPAQUE VARCHAR2(255 BYTE), RETORNABILIDAD VARCHAR2(255 BYTE), "
+                        + "VOLUMEN_MES NUMBER, VENTA_MES NUMBER)");
                 query.executeUpdate();
                 session.save(pais);
                 error = null;
@@ -148,7 +155,7 @@ public class ShareCatPaisDAO {
             }
             flagOk = false;
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            error = e.getMessage();
         } finally {
             session.flush();
             session.clear();

@@ -157,8 +157,9 @@ public class CatGecDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            RvvdCatGec gecT = (RvvdCatGec) session.get(RvvdCatGec.class, gec.getIdGec());
-            if (gecT.getGecR().equalsIgnoreCase(gec.getGecR()) || getGec(gec.getGecR()) == null) {
+            RvvdCatGec gecT = gec.getIdGec() != null ? (RvvdCatGec) session.get(RvvdCatGec.class, gec.getIdGec()) : null;
+            if ((gecT != null && gecT.getGecR().equalsIgnoreCase(gec.getGecR())) || getGec(gec.getGecR()) == null) {
+                gecT = gecT != null ? gecT : new RvvdCatGec();
                 gecT.setIdGec(gec.getIdGec());
                 gecT.setGecR(gec.getGecR());
                 gecT.setGecEn(gec.getGecEn());

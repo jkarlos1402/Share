@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -28,7 +29,7 @@ import org.primefaces.model.DualListModel;
  * @author TMXIDSJPINAM
  */
 @ManagedBean(name = "userBean")
-@SessionScoped
+@ViewScoped
 public class UserBean implements Serializable {
 
     private String user;
@@ -39,7 +40,7 @@ public class UserBean implements Serializable {
 
     private List<ShareUsuario> usuariosAll;
 
-    private DualListModel<ShareCatPais> paisesAll;    
+    private DualListModel<ShareCatPais> paisesAll;
 
     private List<ShareCatRol> catRoles = new ArrayList<ShareCatRol>();
     private ShareCatRol rolSelected;
@@ -134,7 +135,6 @@ public class UserBean implements Serializable {
 //    public void setProyectoSelected(ShareCatProyecto proyectoSelected) {
 //        this.proyectoSelected = proyectoSelected;
 //    }
-
     /**
      *
      * @return
@@ -357,7 +357,7 @@ public class UserBean implements Serializable {
         for (int i = 0; i < catProyectos.getTarget().size(); i++) {
             usuarioNuevo.getProyectos().add(catProyectos.getTarget().get(i));
         }
-        usuarioNuevo.setPassword(usuarioNuevo.getPassword());       
+        usuarioNuevo.setPassword(usuarioNuevo.getPassword());
         if (usuarioNuevo.getIntentos() != null && usuarioNuevo.getIntentos() == 3) {
             usuarioNuevo.setPassReset(true);
         }
@@ -405,6 +405,7 @@ public class UserBean implements Serializable {
         usuarioNuevo.setProyectos(usuarioSelected.getProyectos());
         usuarioNuevo.setIntentos(usuarioSelected.getIntentos());
         usuarioNuevo.setLastLogin(usuarioSelected.getLastLogin());
+        usuarioNuevo.setLogsCargas(usuarioSelected.getLogsCargas());
         paisesAll.getTarget().clear();
         catProyectos.getTarget().clear();
         if (usuarioSelected.getPaises() != null && !usuarioSelected.getPaises().isEmpty()) {
@@ -427,8 +428,24 @@ public class UserBean implements Serializable {
     /**
      *
      */
+    public void deleteUser() {
+        FacesMessage message;
+        ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();
+        if (usuarioDAO.deleteUser(usuarioNuevo)) {
+            refreshUsers();
+            newUser();
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "User deleted");
+        } else {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error", "There was a error while deleting the user, " + usuarioDAO.getError());           
+        }
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    /**
+     *
+     */
     public void refreshUsers() {
         ShareUsuarioDAO usuarioDAO = new ShareUsuarioDAO();
         usuariosAll = usuarioDAO.getAllUsers();
-    }       
+    }
 }

@@ -157,8 +157,9 @@ public class CatCategoriaDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            RvvdCatCategoria catCategoriaT = (RvvdCatCategoria) session.get(RvvdCatCategoria.class, catCategoria.getIdCategoria());
-            if (catCategoriaT.getCategoria().equalsIgnoreCase(catCategoria.getCategoria()) || getCategoria(catCategoria.getCategoria()) == null) {
+            RvvdCatCategoria catCategoriaT = catCategoria.getIdCategoria() != null ? (RvvdCatCategoria) session.get(RvvdCatCategoria.class, catCategoria.getIdCategoria()) : null;
+            if ((catCategoriaT != null && catCategoriaT.getCategoria().equalsIgnoreCase(catCategoria.getCategoria())) || getCategoria(catCategoria.getCategoria()) == null) {
+                catCategoriaT = catCategoriaT != null ? catCategoriaT : new RvvdCatCategoria();
                 catCategoriaT.setIdCategoria(catCategoria.getIdCategoria());
                 catCategoriaT.setCategoria(catCategoria.getCategoria());
                 catCategoriaT.setCategoriaEn(catCategoria.getCategoriaEn());

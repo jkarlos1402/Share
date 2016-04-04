@@ -487,9 +487,7 @@ public class XlsAnalizerSalesPh {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, ex);
             errors.add(ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
             queryNativo = session.createSQLQuery("ROLLBACK");
-            queryNativo.executeUpdate();
-            queryNativo = session.createSQLQuery("COMMIT");
-            queryNativo.executeUpdate();
+            queryNativo.executeUpdate();           
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }

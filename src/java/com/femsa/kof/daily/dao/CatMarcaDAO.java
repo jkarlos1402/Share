@@ -157,8 +157,9 @@ public class CatMarcaDAO {
         boolean flagOk = true;
         try {
             session.beginTransaction();
-            RvvdCatMarca marcaT = (RvvdCatMarca) session.get(RvvdCatMarca.class, marca.getIdMarca());
-            if (marcaT.getMarcaR().equalsIgnoreCase(marca.getMarcaR()) || getMarca(marca.getMarcaR()) == null) {
+            RvvdCatMarca marcaT = marca.getIdMarca() != null ? (RvvdCatMarca) session.get(RvvdCatMarca.class, marca.getIdMarca()) : null;
+            if ((marcaT != null && marcaT.getMarcaR().equalsIgnoreCase(marca.getMarcaR())) || getMarca(marca.getMarcaR()) == null) {
+                marcaT = marcaT != null ? marcaT : new RvvdCatMarca();
                 marcaT.setIdMarca(marca.getIdMarca());
                 marcaT.setMarcaR(marca.getMarcaR());
                 marcaT.setMarcaEn(marca.getMarcaEn());
