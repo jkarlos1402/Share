@@ -31,17 +31,17 @@ public class RvvdCatSubCanal implements Serializable {
     @SequenceGenerator(name = "RVVD_SEQ_CAT_SUB_CANAL", sequenceName = "RVVD_SEQ_CAT_SUB_CANAL", allocationSize = 1)
     @Column(name = "ID_SUB_CANAL")
     private Integer idSubCanal;
-    
+
     @Column(name = "SUB_CANAL_R")
     private String subCanalR;
-   
+
     @Column(name = "SUB_CANAL_EN")
     private String subCanalEn;
-    
+
     @JoinColumn(name = "ID_CANAL", referencedColumnName = "ID_CANAL")
-    @ManyToOne(fetch = FetchType.EAGER)    
+    @ManyToOne(fetch = FetchType.EAGER)
     private RvvdCatCanal canal;
-    
+
     @Column(name = "STATUS")
     private boolean status;
 
@@ -107,7 +107,7 @@ public class RvvdCatSubCanal implements Serializable {
 
     @Override
     public String toString() {
-        return "com.femsa.kof.daily.pojos.RvvdCatSubCanal[ idSubCanal=" + idSubCanal + " ]";
+        return subCanalR;
     }
 
 }

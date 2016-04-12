@@ -17,6 +17,11 @@ import javax.persistence.Table;
 public class RvvdReclasifUnGec implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Id
+    @Basic(optional = false)
+    @Column(name = "ID_RECLASIF_UN_GEC")
+    private BigDecimal idReclasifUnGec;   
     
     @Column(name = "PAIS")
     private String pais;
@@ -39,11 +44,16 @@ public class RvvdReclasifUnGec implements Serializable {
     @Column(name = "UNIDAD_NEGOCIO_EN")
     private String unidadNegocioEn;
     
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Id
-    @Basic(optional = false)
-    @Column(name = "ID_RECLASIF_UN_GEC")
-    private BigDecimal idReclasifUnGec;    
+    @Column(name = "SEDE")
+    private String sede;         
+
+    public String getSede() {
+        return sede;
+    }
+
+    public void setSede(String sede) {
+        this.sede = sede;
+    }
 
     /**
      *

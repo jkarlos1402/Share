@@ -87,15 +87,30 @@
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{reclaChannel.canalR}"/></f:facet>
                                     <f:facet name="input">
-                                        <h:selectOneMenu id="idReclassChann" value="#{dailyReclassCatalogsBean.catCanalSelected}" converter="channelConverterDaily" label="Reclassified Channel" immediate="true" required="true" style="width: 100%">                                            
+                                        <p:selectOneMenu id="idReclassChann" value="#{dailyReclassCatalogsBean.catCanalSelected}" converter="channelConverterDaily" label="Reclassified Channel" immediate="true" required="true" style="width: 100%">                                            
                                             <f:selectItem itemLabel="Select" itemValue="" />
-                                            <f:selectItems value="#{dailyReclassCatalogsBean.catCanales}"/>                           
-                                        </h:selectOneMenu>
+                                            <f:selectItems value="#{dailyReclassCatalogsBean.catCanales}"/>  
+                                            <p:ajax event="itemSelect" update="idReclassSubChann"/>
+                                        </p:selectOneMenu>
                                     </f:facet>
                                 </p:cellEditor>
                             </p:column>
-                            <p:column headerText="Reclassified channel(English)" sortBy="#{reclaChannel.canalEn}">
+                            <p:column headerText="Reclassified channel (English)" sortBy="#{reclaChannel.canalEn}">
                                 <h:outputText value="#{reclaChannel.canalEn}"/>
+                            </p:column>                           
+                            <p:column headerText="Reclassified subchannel" sortBy="#{reclaChannel.subCanalR}">                                
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{reclaChannel.subCanalR}"/></f:facet>
+                                    <f:facet name="input">
+                                        <p:selectOneMenu id="idReclassSubChann" value="#{dailyReclassCatalogsBean.catSubCanalSelected}" converter="subChannelConverterDaily" label="Reclassified Subchannel" immediate="true" required="true" style="width: 100%">                                            
+                                            <f:selectItem itemLabel="Select" itemValue="" />
+                                            <f:selectItems value="#{dailyReclassCatalogsBean.catCanalSelected.subCanalesList}"/>                           
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Reclassified subchannel (English)" sortBy="#{reclaChannel.subCanalEn}">
+                                <h:outputText value="#{reclaChannel.subCanalEn}"/>
                             </p:column>                           
                             <p:column style="width:25px">
                                 <p:rowEditor />
@@ -132,8 +147,11 @@
                             <p:column headerText="Bussiness unit" filterBy="#{reclaGec.unidadNegocio}" filterMatchMode="contains">
                                 <h:outputText value="#{reclaGec.unidadNegocio}"/>
                             </p:column> 
-                            <p:column headerText="Client type" filterBy="##{reclaGec.gec}" filterMatchMode="contains">
+                            <p:column headerText="Client type" filterBy="#{reclaGec.gec}" filterMatchMode="contains">
                                 <h:outputText value="#{reclaGec.gec}"/>
+                            </p:column>  
+                            <p:column headerText="SEDE" >
+                                <h:outputText value="#{reclaGec.sede}"/>
                             </p:column>  
                             <p:column headerText="Reclassified Bussiness unit" sortBy="#{reclaGec.unidadNegocioR}">                                
                                 <p:cellEditor>

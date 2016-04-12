@@ -14,6 +14,7 @@ import com.femsa.kof.daily.pojos.RvvdCatEmpaque;
 import com.femsa.kof.daily.pojos.RvvdCatGec;
 import com.femsa.kof.daily.pojos.RvvdCatMarca;
 import com.femsa.kof.daily.pojos.RvvdCatRetornabilidad;
+import com.femsa.kof.daily.pojos.RvvdCatSubCanal;
 import com.femsa.kof.daily.pojos.RvvdCatTipoConsumo;
 import com.femsa.kof.daily.pojos.RvvdCatUnidadNegocio;
 import com.femsa.kof.daily.pojos.RvvdCatZona;
@@ -52,7 +53,9 @@ public class DailyReclassCatalogsBean implements Serializable {
 
     private List<RvvdReclasifCanal> canalesReclasificados = new ArrayList<RvvdReclasifCanal>();
     private List<RvvdCatCanal> catCanales;
-    private RvvdCatCanal catCanalSelected;
+    private RvvdCatCanal catCanalSelected;    
+    private List<RvvdCatSubCanal> catSubCanales;
+    private RvvdCatSubCanal catSubCanalSelected;
 
     private List<RvvdReclasifEmpaque> empaquesReclasificados = new ArrayList<RvvdReclasifEmpaque>();
     private List<RvvdCatTipoConsumo> catTiposConsumo;
@@ -129,6 +132,22 @@ public class DailyReclassCatalogsBean implements Serializable {
         catZonas = (List<RvvdCatZona>) context.getAttribute("zona_daily_catalog");
         
         catRetornabilidades = (List<RvvdCatRetornabilidad>) context.getAttribute("retornabilidad_daily_catalog");
+    }
+
+    public List<RvvdCatSubCanal> getCatSubCanales() {
+        return catSubCanales;
+    }
+
+    public void setCatSubCanales(List<RvvdCatSubCanal> catSubCanales) {
+        this.catSubCanales = catSubCanales;
+    }
+
+    public RvvdCatSubCanal getCatSubCanalSelected() {
+        return catSubCanalSelected;
+    }
+
+    public void setCatSubCanalSelected(RvvdCatSubCanal catSubCanalSelected) {
+        this.catSubCanalSelected = catSubCanalSelected;
     }
 
     public List<RvvdReclasifZona> getZonasReclasificadas() {
@@ -603,7 +622,10 @@ public class DailyReclassCatalogsBean implements Serializable {
         RvvdReclasifCanal canal = (RvvdReclasifCanal) event.getObject();
         canal.setCanalR(catCanalSelected.getCanalR());
         canal.setCanalEn(catCanalSelected.getCanalEn());
+        canal.setSubCanalR(catSubCanalSelected.getSubCanalR());
+        canal.setSubCanalEn(catSubCanalSelected.getSubCanalEn());
         catCanalSelected = null;
+        catSubCanalSelected = null;
     }
 
     /**

@@ -139,7 +139,7 @@ public class ReclasifCanalDAO {
         }
         long numNotReclass = 0L;
         try {
-            Query query = session.createQuery("SELECT count(rc.idReclasifCanal) FROM RvvdReclasifCanal rc WHERE rc.pais IN (" + paises + ") AND (rc.canalR IS NULL OR rc.canalEn IS NULL)");
+            Query query = session.createQuery("SELECT count(rc.idReclasifCanal) FROM RvvdReclasifCanal rc WHERE rc.pais IN (" + paises + ") AND (rc.canalR IS NULL OR rc.canalEn IS NULL OR rc.subCanalR IS NULL OR rc.subCanalEn IS NULL)");
             List<Object> res = query.list();
             numNotReclass = (Long) res.get(0);
             error = null;

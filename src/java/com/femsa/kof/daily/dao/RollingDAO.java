@@ -67,6 +67,9 @@ public class RollingDAO {
                 mainBean.setPorcentajeAvance((int) ((cont * 100) / ((carga.getStRollings() != null ? carga.getStRollings().size() : 0) + dailys.size() + (distribuciones != null ? distribuciones.size() : 0))));
                 for (RvvdStRollingTmp rolling : carga.getStRollings() != null ? carga.getStRollings() : new ArrayList<RvvdStRollingTmp>()) {
                     zona = rolling.getZona();
+                    if ("CAM".equalsIgnoreCase(rolling.getPais())) {
+                        pais = rolling.getPais();
+                    }
                     mainBean.setNumRegistrosProcesados(cont);
                     mainBean.setPorcentajeAvance((int) ((cont * 100) / ((carga.getStRollings() != null ? carga.getStRollings().size() : 0) + dailys.size() + (distribuciones != null ? distribuciones.size() : 0))));
                     session.save(rolling);

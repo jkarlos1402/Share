@@ -22,23 +22,29 @@ public class RvvdReclasifCanal implements Serializable {
     private static final long serialVersionUID = 1L;
     @Column(name = "PAIS")
     private String pais;
-    
+
     @Column(name = "CANAL")
     private String canal;
-    
+
     @Column(name = "CANAL_R")
     private String canalR;
-    
+
     @Column(name = "CANAL_EN")
     private String canalEn;
-    
+
+    @Column(name = "SUB_CANAL_R")
+    private String subCanalR;
+
+    @Column(name = "SUB_CANAL_EN")
+    private String subCanalEn;
+
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_RECLASIF_CANAL")
     @SequenceGenerator(name = "RVVD_SEQ_RECLASIF_CANAL", sequenceName = "RVVD_SEQ_RECLASIF_CANAL", allocationSize = 1)
     @Column(name = "ID_RECLASIF_CANAL")
-    private BigDecimal idReclasifCanal;    
+    private BigDecimal idReclasifCanal;
 
     /**
      *
@@ -120,6 +126,22 @@ public class RvvdReclasifCanal implements Serializable {
         this.idReclasifCanal = idReclasifCanal;
     }
 
+    public String getSubCanalR() {
+        return subCanalR;
+    }
+
+    public void setSubCanalR(String subCanalR) {
+        this.subCanalR = subCanalR;
+    }
+
+    public String getSubCanalEn() {
+        return subCanalEn;
+    }
+
+    public void setSubCanalEn(String subCanalEn) {
+        this.subCanalEn = subCanalEn;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -144,5 +166,5 @@ public class RvvdReclasifCanal implements Serializable {
     public String toString() {
         return "com.femsa.kof.daily.pojos.RvvdReclasifCanal[ idReclasifCanal=" + idReclasifCanal + " ]";
     }
-    
+
 }
