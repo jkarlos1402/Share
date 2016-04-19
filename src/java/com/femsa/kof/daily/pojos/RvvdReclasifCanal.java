@@ -32,10 +32,10 @@ public class RvvdReclasifCanal implements Serializable {
     @Column(name = "CANAL_EN")
     private String canalEn;
 
-    @Column(name = "SUB_CANAL_R")
+    @Column(name = "SUBCANAL_R")
     private String subCanalR;
 
-    @Column(name = "SUB_CANAL_EN")
+    @Column(name = "SUBCANAL_EN")
     private String subCanalEn;
 
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation

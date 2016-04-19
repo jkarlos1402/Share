@@ -473,3 +473,11 @@ span.ui-radiobutton-icon.ui-icon.ui-c.ui-icon-bullet{
     padding-left: 20px !important;
     margin: -7px !important;
 }
+
+.botonIzq{
+    text-align: left;
+}
+
+.botonDer{
+    text-align: right;
+}

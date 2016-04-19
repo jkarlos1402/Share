@@ -16,7 +16,7 @@
                 <p:messages showDetail="true" closable="true"/>
                 <p:panel header="Category" id="panelReclaCategory">                                        
                     <h:panelGrid columns="1">
-                        <p:dataTable id="tableReclaCategory" var="reclaCategory" value="#{dailyReclassCatalogsBean.categoriasReclasificadas}" editable="true" paginator="true" rows="10" 
+                        <p:dataTable widgetVar="tableReclaCategory" id="tableReclaCategory" var="reclaCategory" value="#{dailyReclassCatalogsBean.categoriasReclasificadas}" editable="true" paginator="true" rows="10" 
                                      rowStyleClass="#{reclaCategory.categoriaR eq null || reclaCategory.categoriaR eq '' || reclaCategory.categoriaEn eq null || reclaCategory.categoriaEn eq '' || reclaCategory.categoriaOficialR eq null || reclaCategory.categoriaOficialR eq '' || reclaCategory.categoriaOficialEn eq '' || reclaCategory.categoriaOficialEn eq null ? 'ui-state-error' : null}">
                             <p:ajax event="rowEdit" listener="#{dailyReclassCatalogsBean.onRowEdit}" />
                             <f:facet name="header">
@@ -54,11 +54,11 @@
                         </p:dataTable>
                     </h:panelGrid>
                     <f:facet name="footer">
-                        <h:panelGrid columns="2" cellspacing="5px">
+                        <h:panelGrid columns="2" cellspacing="5px" columnClasses="botonIzq,botonDer" width="100%">
                             <p:commandButton value="Save" update=":formReclaCategory,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.saveCategoriasReclasificadas}">
                                 <p:confirm header="Save changes" message="Are you Sure?" />
                             </p:commandButton>
-                            <p:commandButton value="Refresh" update=":formReclaCategory,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.refreshCategoriasReclasificadas}">
+                            <p:commandButton value="Refresh" update=":formReclaCategory,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.refreshCategoriasReclasificadas}" oncomplete="$('.ui-column-filter.ui-inputfield').val(''); PF('tableReclaCategory').filter();">
                                 <p:confirm header="Refresh table" message="Unsaved changes will be lost, are you Sure?" />
                             </p:commandButton>
                         </h:panelGrid>                        
@@ -71,8 +71,8 @@
                 <p:messages showDetail="true" closable="true"/>
                 <p:panel header="Channel" id="panelReclaChannel">                                        
                     <h:panelGrid columns="1">
-                        <p:dataTable id="tableReclaChannel" var="reclaChannel" value="#{dailyReclassCatalogsBean.canalesReclasificados}" editable="true" paginator="true" rows="10" 
-                                     rowStyleClass="#{reclaChannel.canalR eq null || reclaChannel.canalR eq '' || reclaChannel.canalEn eq null || reclaChannel.canalEn eq '' ? 'ui-state-error' : null}">
+                        <p:dataTable widgetVar="tableReclaChannel" id="tableReclaChannel" var="reclaChannel" value="#{dailyReclassCatalogsBean.canalesReclasificados}" editable="true" paginator="true" rows="10" 
+                                     rowStyleClass="#{reclaChannel.canalR eq null || reclaChannel.canalR eq '' || reclaChannel.canalEn eq null || reclaChannel.canalEn eq '' || reclaChannel.subCanalR eq null || reclaChannel.subCanalR eq '' || reclaChannel.subCanalEn eq null || reclaChannel.subCanalEn eq '' ? 'ui-state-error' : null}">
                             <p:ajax event="rowEdit" listener="#{dailyReclassCatalogsBean.onRowEditCanal}" />
                             <f:facet name="header">
                                 #{dailyReclassCatalogsBean.canalesReclasificados.size()} entries found.
@@ -118,11 +118,11 @@
                         </p:dataTable>
                     </h:panelGrid>
                     <f:facet name="footer">
-                        <h:panelGrid columns="2" cellspacing="5px">
+                        <h:panelGrid columns="2" cellspacing="5px" columnClasses="botonIzq,botonDer" width="100%">
                             <p:commandButton value="Save" update=":formReclaChannel,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.saveCanalesReclasificados}">
                                 <p:confirm header="Save changes" message="Are you Sure?" />
                             </p:commandButton>
-                            <p:commandButton value="Refresh" update=":formReclaChannel,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.refreshCanalesReclasificados}">
+                            <p:commandButton value="Refresh" update=":formReclaChannel,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.refreshCanalesReclasificados}"  oncomplete="$('.ui-column-filter.ui-inputfield').val(''); PF('tableReclaChannel').filter();">
                                 <p:confirm header="Refresh table" message="Unsaved changes will be lost, are you Sure?" />
                             </p:commandButton>
                         </h:panelGrid>                        
@@ -135,7 +135,7 @@
                 <p:messages showDetail="true" closable="true"/>
                 <p:panel header="Client type" id="panelReclaGec">                                        
                     <h:panelGrid columns="1">
-                        <p:dataTable id="tableReclaGec" var="reclaGec" value="#{dailyReclassCatalogsBean.gecsReclasificados}" editable="true" paginator="true" rows="10" 
+                        <p:dataTable widgetVar="tableReclaGec" id="tableReclaGec" var="reclaGec" value="#{dailyReclassCatalogsBean.gecsReclasificados}" editable="true" paginator="true" rows="10" 
                                      rowStyleClass="#{reclaGec.gecR eq null || reclaGec.gecR eq '' || reclaGec.gecEn eq null || reclaGec.gecEn eq '' || reclaGec.unidadNegocioR eq null || reclaGec.unidadNegocioR eq '' || reclaGec.unidadNegocioEn eq null || reclaGec.unidadNegocioEn eq '' ? 'ui-state-error' : null}">
                             <p:ajax event="rowEdit" listener="#{dailyReclassCatalogsBean.onRowEditGec}" />
                             <f:facet name="header">
@@ -150,9 +150,7 @@
                             <p:column headerText="Client type" filterBy="#{reclaGec.gec}" filterMatchMode="contains">
                                 <h:outputText value="#{reclaGec.gec}"/>
                             </p:column>  
-                            <p:column headerText="SEDE" >
-                                <h:outputText value="#{reclaGec.sede}"/>
-                            </p:column>  
+                            <!--AQUI VA LO DE SEDE-->
                             <p:column headerText="Reclassified Bussiness unit" sortBy="#{reclaGec.unidadNegocioR}">                                
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{reclaGec.unidadNegocioR}"/></f:facet>
@@ -188,11 +186,11 @@
                         </p:dataTable>
                     </h:panelGrid>
                     <f:facet name="footer">
-                        <h:panelGrid columns="2" cellspacing="5px">
+                        <h:panelGrid columns="2" cellspacing="5px" columnClasses="botonIzq,botonDer" width="100%">
                             <p:commandButton value="Save" update=":formReclaGec,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.saveGecsReclasificados}">
                                 <p:confirm header="Save changes" message="Are you Sure?" />
                             </p:commandButton>
-                            <p:commandButton value="Refresh" update=":formReclaGec,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.refreshGecsReclasificados}">
+                            <p:commandButton value="Refresh" update=":formReclaGec,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.refreshGecsReclasificados}" oncomplete="$('.ui-column-filter.ui-inputfield').val(''); PF('tableReclaGec').filter();">
                                 <p:confirm header="Refresh table" message="Unsaved changes will be lost, are you Sure?" />
                             </p:commandButton>
                         </h:panelGrid>                        
@@ -205,7 +203,7 @@
                 <p:messages showDetail="true" closable="true"/>
                 <p:panel header="Operative days" id="panelReclaOperative">                                        
                     <h:panelGrid columns="1">
-                        <p:dataTable id="tableReclaOperative" var="operativeDay" value="#{dailyReclassCatalogsBean.diasOpReclasificados}" editable="true" paginator="true" rows="10" 
+                        <p:dataTable widgetVar="tableReclaOperative" id="tableReclaOperative" var="operativeDay" value="#{dailyReclassCatalogsBean.diasOpReclasificados}" editable="true" paginator="true" rows="10" 
                                      rowStyleClass="#{operativeDay.fechaR eq null || operativeDay.fechaR eq '' ? 'ui-state-error' : null}">                            
                             <f:facet name="header">
                                 #{dailyReclassCatalogsBean.diasOpReclasificados.size()} entries found.
@@ -231,11 +229,11 @@
                         </p:dataTable>
                     </h:panelGrid>
                     <f:facet name="footer">
-                        <h:panelGrid columns="2" cellspacing="5px">
+                        <h:panelGrid columns="2" cellspacing="5px" columnClasses="botonIzq,botonDer" width="100%">
                             <p:commandButton value="Save" update=":formReclaOperative,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.saveDiasOpReclasificados}">
                                 <p:confirm header="Save changes" message="Are you Sure?" />
                             </p:commandButton>
-                            <p:commandButton value="Refresh" update=":formReclaOperative,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.refreshDiasOpReclasificados}">
+                            <p:commandButton value="Refresh" update=":formReclaOperative,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.refreshDiasOpReclasificados}" oncomplete="$('.ui-column-filter.ui-inputfield').val(''); PF('tableReclaOperative').filter();">
                                 <p:confirm header="Refresh table" message="Unsaved changes will be lost, are you Sure?" />
                             </p:commandButton>
                         </h:panelGrid>                        
@@ -248,7 +246,7 @@
                 <p:messages showDetail="true" closable="true"/>
                 <p:panel header="Packing" id="panelReclaPacking">                                        
                     <h:panelGrid columns="1">
-                        <p:dataTable id="tableReclaPacking" var="reclaPacking" value="#{dailyReclassCatalogsBean.empaquesReclasificados}" editable="true" paginator="true" rows="10" 
+                        <p:dataTable widgetVar="tableReclaPacking" id="tableReclaPacking" var="reclaPacking" value="#{dailyReclassCatalogsBean.empaquesReclasificados}" editable="true" paginator="true" rows="10" 
                                      rowStyleClass="#{reclaPacking.empaqueR eq null || reclaPacking.empaqueR eq '' || reclaPacking.empaqueEn eq null || reclaPacking.empaqueEn eq '' || reclaPacking.tipoConsumoR eq null || reclaPacking.tipoConsumoR eq '' || reclaPacking.tipoConsumoEn eq null || reclaPacking.tipoConsumoEn eq ''? 'ui-state-error' : null}"
                                      >
                             <p:ajax event="rowEdit" listener="#{dailyReclassCatalogsBean.onRowEditEmpaque}" />
@@ -315,11 +313,11 @@
                         </p:dataTable>
                     </h:panelGrid>
                     <f:facet name="footer">
-                        <h:panelGrid columns="2" cellspacing="5px">
+                        <h:panelGrid columns="2" cellspacing="5px" columnClasses="botonIzq,botonDer" width="100%">
                             <p:commandButton value="Save" update=":formReclaPacking,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.saveEmpaquesReclasificados}">
                                 <p:confirm header="Save changes" message="Are you Sure?" />
                             </p:commandButton>
-                            <p:commandButton value="Refresh" update=":formReclaPacking,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.refreshEmpaquesReclasificados}">
+                            <p:commandButton value="Refresh" update=":formReclaPacking,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.refreshEmpaquesReclasificados}" oncomplete="$('.ui-column-filter.ui-inputfield').val(''); PF('tableReclaPacking').filter();">
                                 <p:confirm header="Refresh table" message="Unsaved changes will be lost, are you Sure?" />
                             </p:commandButton>
                         </h:panelGrid>                        
@@ -332,14 +330,17 @@
                 <p:messages showDetail="true" closable="true"/>
                 <p:panel header="Brand" id="panelReclaTrademark">                                        
                     <h:panelGrid columns="1">
-                        <p:dataTable id="tableReclaTrademark" var="reclaTrademark" value="#{dailyReclassCatalogsBean.marcasReclasificados}" editable="true" paginator="true" rows="10" 
-                                     rowStyleClass="#{reclaTrademark.marcaR eq null || reclaTrademark.marcaR eq '' || reclaTrademark.marcaEn eq null || reclaTrademark.marcaEn eq '' || reclaTrademark.contenidoCaloricoR eq null || reclaTrademark.contenidoCaloricoR eq '' || reclaTrademark.contenidoCaloricoEn eq null || reclaTrademark.contenidoCaloricoEn eq ''? 'ui-state-error' : null}">
+                        <p:dataTable widgetVar="tableReclaTrademark" id="tableReclaTrademark" var="reclaTrademark" value="#{dailyReclassCatalogsBean.marcasReclasificados}" editable="true" paginator="true" rows="10" 
+                                     rowStyleClass="#{reclaTrademark.marcaR eq null || reclaTrademark.marcaR eq '' || reclaTrademark.marcaEn eq null || reclaTrademark.marcaEn eq '' || reclaTrademark.contenidoCaloricoR eq null || reclaTrademark.contenidoCaloricoR eq '' || reclaTrademark.contenidoCaloricoEn eq null || reclaTrademark.contenidoCaloricoEn eq ''|| reclaTrademark.categoriaR eq null || reclaTrademark.categoriaR eq '' || reclaTrademark.categoriaEn eq null || reclaTrademark.categoriaEn eq '' ? 'ui-state-error' : null}">
                             <p:ajax event="rowEdit" listener="#{dailyReclassCatalogsBean.onRowEditMarca}" />
                             <f:facet name="header">
                                 <h:outputText value="#{dailyReclassCatalogsBean.marcasReclasificados.size()} entries found."/>                                                                
                             </f:facet>
                             <p:column headerText="Country" filterBy="#{reclaTrademark.pais}" filterMatchMode="contains">
                                 <h:outputText value="#{reclaTrademark.pais}"/>
+                            </p:column>
+                            <p:column headerText="Category" filterBy="#{reclaTrademark.categoria}" filterMatchMode="contains">
+                                <h:outputText value="#{reclaTrademark.categoria}"/>
                             </p:column>
                             <p:column headerText="Brand" filterBy="#{reclaTrademark.marca}" filterMatchMode="contains">
                                 <h:outputText value="#{reclaTrademark.marca}"/>
@@ -372,17 +373,31 @@
                             <p:column headerText="Reclassified Caloric content (English)" sortBy="#{reclaTrademark.contenidoCaloricoEn}">
                                 <h:outputText value="#{reclaTrademark.contenidoCaloricoEn}"/>
                             </p:column>                           
+                            <p:column headerText="Reclassified category - official category" sortBy="#{reclaTrademark.categoriaR}">                                
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{reclaTrademark.categoriaR} - #{reclaTrademark.categoriaOficialR}"/></f:facet>
+                                    <f:facet name="input">
+                                        <h:selectOneMenu id="idReclassCategoryMarca" value="#{dailyReclassCatalogsBean.categoriaMarcaSelected}" converter="categoryConverterDaily" label="Reclassified category - official category" immediate="true" required="true" style="width: 100%">                                            
+                                            <f:selectItem itemLabel="Select" itemValue="" />
+                                            <f:selectItems value="#{dailyReclassCatalogsBean.catCategoriasMarca}"/>                           
+                                        </h:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Reclassified category - official category (English)" sortBy="#{reclaTrademark.categoriaEn}">
+                                <h:outputText value="#{reclaTrademark.categoriaEn} - #{reclaTrademark.categoriaOficialEn}"/>
+                            </p:column>                           
                             <p:column style="width:25px">
                                 <p:rowEditor />
                             </p:column>                            
                         </p:dataTable>
                     </h:panelGrid>
                     <f:facet name="footer">
-                        <h:panelGrid columns="2" cellspacing="5px">
+                        <h:panelGrid columns="2" cellspacing="5px" columnClasses="botonIzq,botonDer" width="100%">
                             <p:commandButton value="Save" update=":formReclaTrademark,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.saveMarcasReclasificados}">
                                 <p:confirm header="Save changes" message="Are you Sure?" />
                             </p:commandButton>
-                            <p:commandButton value="Refresh" update=":formReclaTrademark,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.refreshMarcasReclasificados}">
+                            <p:commandButton value="Refresh" update=":formReclaTrademark,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.refreshMarcasReclasificados}" oncomplete="$('.ui-column-filter.ui-inputfield').val(''); PF('tableReclaTrademark').filter();">
                                 <p:confirm header="Refresh table" message="Unsaved changes will be lost, are you Sure?" />
                             </p:commandButton>
                         </h:panelGrid>                        
@@ -395,7 +410,7 @@
                 <p:messages showDetail="true" closable="true"/>
                 <p:panel header="Zone" id="panelReclaZona">                                        
                     <h:panelGrid columns="1">
-                        <p:dataTable id="tableReclaZona" var="zona" value="#{dailyReclassCatalogsBean.zonasReclasificadas}" editable="true" paginator="true" rows="10" 
+                        <p:dataTable widgetVar="tableReclaZona" id="tableReclaZona" var="zona" value="#{dailyReclassCatalogsBean.zonasReclasificadas}" editable="true" paginator="true" rows="10" 
                                      rowStyleClass="#{zona.zonaR eq null || zona.zonaR eq '' || zona.zonaEn eq null || zona.zonaEn eq '' ? 'ui-state-error' : null}">
                             <p:ajax event="rowEdit" listener="#{dailyReclassCatalogsBean.onRowEditZona}" />
                             <f:facet name="header">
@@ -427,11 +442,11 @@
                         </p:dataTable>
                     </h:panelGrid>
                     <f:facet name="footer">
-                        <h:panelGrid columns="2" cellspacing="5px">
+                        <h:panelGrid columns="2" cellspacing="5px" columnClasses="botonIzq,botonDer" width="100%">
                             <p:commandButton value="Save" update=":formReclaZona,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.saveZonasReclasificados}">
                                 <p:confirm header="Save changes" message="Are you Sure?" />
                             </p:commandButton>
-                            <p:commandButton value="Refresh" update=":formReclaZona,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.refreshZonasReclasificadas}">
+                            <p:commandButton value="Refresh" update=":formReclaZona,:formNotificaciones:overNotificaciones" actionListener="#{dailyReclassCatalogsBean.refreshZonasReclasificadas}" oncomplete="$('.ui-column-filter.ui-inputfield').val(''); PF('tableReclaZona').filter();">
                                 <p:confirm header="Refresh table" message="Unsaved changes will be lost, are you Sure?" />
                             </p:commandButton>
                         </h:panelGrid>                        

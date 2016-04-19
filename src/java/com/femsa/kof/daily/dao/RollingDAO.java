@@ -121,7 +121,7 @@ public class RollingDAO {
 
             mainBean.setPorcentajeAvance((int) ((++cont * 100) / (dailys.size() + (distribuciones != null ? distribuciones.size() : 0))));
             if (distribuciones != null) {
-                queryNativo = session.createSQLQuery("DELETE FROM RVVD_DISTRIBUCION_MX WHERE PAIS = '" + pais + "' AND FECHA_ORIGEN IN (SELECT DISTINCT(FECHA_ORIGEN) FROM RVVD_DISTRIBUCION_MX_TMP)");
+                queryNativo = session.createSQLQuery("DELETE FROM RVVD_DISTRIBUCION_MX WHERE PAIS = '" + pais + "' AND ID_TIEMPO_FECHA_ORIGEN IN (SELECT DISTINCT(ID_TIEMPO_FECHA_ORIGEN) FROM RVVD_DISTRIBUCION_MX_TMP)");
                 queryNativo.executeUpdate();
                 mainBean.setPorcentajeAvance((int) ((++cont * 100) / (dailys.size() + distribuciones.size())));
                 queryNativo = session.createSQLQuery("INSERT INTO RVVD_DISTRIBUCION_MX(PAIS,FECHA_ORIGEN,ID_TIEMPO_FECHA_ORIGEN,FECHA_DESTINO,ID_TIEMPO_FECHA_DESTINO,PORCENTAJE) SELECT PAIS,FECHA_ORIGEN,ID_TIEMPO_FECHA_ORIGEN,FECHA_DESTINO,ID_TIEMPO_FECHA_DESTINO,PORCENTAJE FROM RVVD_DISTRIBUCION_MX_TMP");

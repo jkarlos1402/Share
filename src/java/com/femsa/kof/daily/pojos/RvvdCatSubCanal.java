@@ -15,27 +15,27 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
- * Mapea la tabla RVVD_CAT_SUB_CANAL para el manejo de persistencia
+ * Mapea la tabla RVVD_CAT_SUBCANAL para el manejo de persistencia
  *
  * @author TMXIDSJPINAM
  */
 @Entity
-@Table(name = "RVVD_CAT_SUB_CANAL")
+@Table(name = "RVVD_CAT_SUBCANAL")
 public class RvvdCatSubCanal implements Serializable {
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_CAT_SUB_CANAL")
-    @SequenceGenerator(name = "RVVD_SEQ_CAT_SUB_CANAL", sequenceName = "RVVD_SEQ_CAT_SUB_CANAL", allocationSize = 1)
-    @Column(name = "ID_SUB_CANAL")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_CAT_SUBCANAL")
+    @SequenceGenerator(name = "RVVD_SEQ_CAT_SUBCANAL", sequenceName = "RVVD_SEQ_CAT_SUBCANAL", allocationSize = 1)
+    @Column(name = "ID_SUBCANAL")
     private Integer idSubCanal;
 
-    @Column(name = "SUB_CANAL_R")
+    @Column(name = "SUBCANAL_R")
     private String subCanalR;
 
-    @Column(name = "SUB_CANAL_EN")
+    @Column(name = "SUBCANAL_EN")
     private String subCanalEn;
 
     @JoinColumn(name = "ID_CANAL", referencedColumnName = "ID_CANAL")

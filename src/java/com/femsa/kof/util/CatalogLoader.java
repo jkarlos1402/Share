@@ -84,7 +84,7 @@ public class CatalogLoader {
             sc.setAttribute("canal_daily_catalog", canalDAO.getCanales());
             
             CatSubCanalDAO subCanalDAO = new CatSubCanalDAO();
-            sc.setAttribute("sub_canal_daily_catalog", subCanalDAO.getSubCanales());
+            sc.setAttribute("subcanal_daily_catalog", subCanalDAO.getSubCanales());
             
             CatZonaDAO zonaDAO = new CatZonaDAO();
             sc.setAttribute("zona_daily_catalog", zonaDAO.getZonas());

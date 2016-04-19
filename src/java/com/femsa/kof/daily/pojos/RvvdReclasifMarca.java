@@ -20,32 +20,87 @@ import javax.persistence.Table;
 public class RvvdReclasifMarca implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
-    @Column(name = "PAIS")
-    private String pais;
-    
-    @Column(name = "MARCA")
-    private String marca;
-    
-    @Column(name = "MARCA_R")
-    private String marcaR;
-    
-    @Column(name = "MARCA_EN")
-    private String marcaEn;
-    
-    @Column(name = "CONTENIDO_CALORICO_R")
-    private String contenidoCaloricoR;
-    
-    @Column(name = "CONTENIDO_CALORICO_EN")
-    private String contenidoCaloricoEn;
-    
+
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RVVD_SEQ_RECLASIF_MARCA")
     @SequenceGenerator(name = "RVVD_SEQ_RECLASIF_MARCA", sequenceName = "RVVD_SEQ_RECLASIF_MARCA", allocationSize = 1)
     @Column(name = "ID_RECLASIF_MARCA")
-    private BigDecimal idReclasifMarca;    
+    private BigDecimal idReclasifMarca;
+
+    @Column(name = "PAIS")
+    private String pais;
+    
+    @Column(name = "CATEGORIA")
+    private String categoria;
+
+    @Column(name = "MARCA")
+    private String marca;
+
+    @Column(name = "MARCA_R")
+    private String marcaR;
+
+    @Column(name = "MARCA_EN")
+    private String marcaEn;
+
+    @Column(name = "CONTENIDO_CALORICO_R")
+    private String contenidoCaloricoR;
+
+    @Column(name = "CONTENIDO_CALORICO_EN")
+    private String contenidoCaloricoEn;
+
+    @Column(name = "CATEGORIA_R")
+    private String categoriaR;
+
+    @Column(name = "CATEGORIA_EN")
+    private String categoriaEn;
+
+    @Column(name = "CATEGORIA_OFICIAL_R")
+    private String categoriaOficialR;
+
+    @Column(name = "CATEGORIA_OFICIAL_EN")
+    private String categoriaOficialEn;
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public String getCategoriaR() {
+        return categoriaR;
+    }
+
+    public void setCategoriaR(String categoriaR) {
+        this.categoriaR = categoriaR;
+    }
+
+    public String getCategoriaEn() {
+        return categoriaEn;
+    }
+
+    public void setCategoriaEn(String categoriaEn) {
+        this.categoriaEn = categoriaEn;
+    }
+
+    public String getCategoriaOficialR() {
+        return categoriaOficialR;
+    }
+
+    public void setCategoriaOficialR(String categoriaOficialR) {
+        this.categoriaOficialR = categoriaOficialR;
+    }
+
+    public String getCategoriaOficialEn() {
+        return categoriaOficialEn;
+    }
+
+    public void setCategoriaOficialEn(String categoriaOficialEn) {
+        this.categoriaOficialEn = categoriaOficialEn;
+    }
 
     /**
      *
@@ -183,5 +238,5 @@ public class RvvdReclasifMarca implements Serializable {
     public String toString() {
         return "com.femsa.kof.daily.pojos.RvvdReclasifMarca[ idReclasifMarca=" + idReclasifMarca + " ]";
     }
-    
+
 }

@@ -78,6 +78,8 @@ public class DailyReclassCatalogsBean implements Serializable {
     private RvvdCatMarca marcaSelected;
     private List<RvvdCatContenidoCalorico> catContenidosCaloricos;
     private RvvdCatContenidoCalorico contenidoSelected;
+    private List<RvvdCatCategoria> catCategoriasMarca;
+    private RvvdCatCategoria categoriaMarcaSelected;
 
     private List<RvvdReclasifDiasOp> diasOpReclasificados = new ArrayList<RvvdReclasifDiasOp>();
 
@@ -114,6 +116,8 @@ public class DailyReclassCatalogsBean implements Serializable {
         zonasReclasificadas = reclasifZonaDAO.getReclasifZonasAll(usuario);
 
         catCategorias = (List<RvvdCatCategoria>) context.getAttribute("categoria_daily_catalog");
+        
+        catCategoriasMarca = (List<RvvdCatCategoria>) context.getAttribute("categoria_daily_catalog");
 
         catMarcas = (List<RvvdCatMarca>) context.getAttribute("marca_daily_catalog");
 
@@ -132,6 +136,22 @@ public class DailyReclassCatalogsBean implements Serializable {
         catZonas = (List<RvvdCatZona>) context.getAttribute("zona_daily_catalog");
         
         catRetornabilidades = (List<RvvdCatRetornabilidad>) context.getAttribute("retornabilidad_daily_catalog");
+    }
+
+    public List<RvvdCatCategoria> getCatCategoriasMarca() {
+        return catCategoriasMarca;
+    }
+
+    public void setCatCategoriasMarca(List<RvvdCatCategoria> catCategoriasMarca) {
+        this.catCategoriasMarca = catCategoriasMarca;
+    }
+
+    public RvvdCatCategoria getCategoriaMarcaSelected() {
+        return categoriaMarcaSelected;
+    }
+
+    public void setCategoriaMarcaSelected(RvvdCatCategoria categoriaMarcaSelected) {
+        this.categoriaMarcaSelected = categoriaMarcaSelected;
     }
 
     public List<RvvdCatSubCanal> getCatSubCanales() {
@@ -704,8 +724,13 @@ public class DailyReclassCatalogsBean implements Serializable {
         marca.setMarcaEn(marcaSelected.getMarcaEn());
         marca.setContenidoCaloricoR(contenidoSelected.getContenidoCaloricoR());
         marca.setContenidoCaloricoEn(contenidoSelected.getContenidoCaloricoEn());
+        marca.setCategoriaR(categoriaMarcaSelected.getCategoria());
+        marca.setCategoriaEn(categoriaMarcaSelected.getCategoriaEn());
+        marca.setCategoriaOficialR(categoriaMarcaSelected.getIdCategoriaOficial().getCategoriaOficial());
+        marca.setCategoriaOficialEn(categoriaMarcaSelected.getIdCategoriaOficial().getCategoriaOficialEn());
         marcaSelected = null;
         contenidoSelected = null;
+        categoriaMarcaSelected = null;
     }
 
     /**
