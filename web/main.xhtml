@@ -145,6 +145,12 @@
                                                                 Upload Status 
                                                             </p:commandLink>                                                                                                  
                                                         </li>
+                                                        <li>
+                                                            <p:commandLink onclick="PF('validateInformationDialog').show();">
+                                                                <img src="images/BG9-33.png"/>
+                                                                Validate Information
+                                                            </p:commandLink>                                                                                                  
+                                                        </li>
                                                         <li >
                                                             <a  href="#" onclick="return false;">
                                                                 <img src="images/BG9-25.png"/> Reclassification
@@ -341,6 +347,10 @@
                     </f:facet>
                 </h:panelGrid>
             </h:form>
+        </p:dialog>
+        <p:dialog closeOnEscape="true" appendTo="@(body)" id="validateInformationDialog" minimizable="true" maximizable="true" header="Validate Information" widgetVar="validateInformationDialog" minHeight="400" height="400" width="50%" minWidth="400" showEffect="fade" hideEffect="fade" dynamic="true">
+            <p:dashboard id="boardValidate" model="#{dailyValidateBean.model}">                                                            
+            </p:dashboard>
         </p:dialog>
     </h:body>
 </html>

@@ -5,6 +5,7 @@ import com.femsa.kof.util.HibernateUtil;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -104,7 +105,7 @@ public class ShareCatPaisDAO {
             error = null;
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
         } finally {
             session.flush();
             session.clear();
@@ -131,16 +132,9 @@ public class ShareCatPaisDAO {
                 session.update(pais);
                 error = null;
             } else if (getCatPais(pais.getNombre()) == null) {
-                query = session.createSQLQuery("CREATE TABLE " + pais.getNombreTabla() + " (FECHA VARCHAR2(50 BYTE), ANIO NUMBER(4,0), "
-                        + "MES NUMBER(2,0), TIEMPO NUMBER(6,0), PAIS  VARCHAR2(255 BYTE), "
-                        + "UNIDAD_NEGOCIO VARCHAR2(255 BYTE), CANAL VARCHAR2(255 BYTE), "
-                        + "SUBCANAL VARCHAR2(255 BYTE), UNIDAD_OPERATIVA VARCHAR2(255 BYTE), "
-                        + "REGION VARCHAR2(255 BYTE), ZONA VARCHAR2(255 BYTE), "
-                        + "GRUPO_CATEGORIA VARCHAR2(255 BYTE), CATEGORIA VARCHAR2(255 BYTE), "
-                        + "FABRICANTE VARCHAR2(255 BYTE), MARCA VARCHAR2(255 BYTE), "
-                        + "SABOR VARCHAR2(255 BYTE), TAMANO VARCHAR2(255 BYTE), "
-                        + "EMPAQUE VARCHAR2(255 BYTE), RETORNABILIDAD VARCHAR2(255 BYTE), "
-                        + "VOLUMEN_MES NUMBER, VENTA_MES NUMBER)");
+                query = session.createSQLQuery("CREATE TABLE " + pais.getNombreTabla() + " (PAIS VARCHAR2(50 BYTE),CANAL VARCHAR2(50 BYTE), "
+                        + "FECHA VARCHAR2(50 BYTE), GRUPO_CATEGORIA VARCHAR2(50 BYTE), CATEGORIA VARCHAR2(50 BYTE), "
+                        + "FABRICANTE VARCHAR2(100 BYTE), VOLUMEN_MES NUMBER, VENTA_MES NUMBER)");
                 query.executeUpdate();
                 session.save(pais);
                 error = null;
@@ -155,7 +149,7 @@ public class ShareCatPaisDAO {
             }
             flagOk = false;
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            error = e.getMessage();
+            error = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
         } finally {
             session.flush();
             session.clear();
@@ -163,5 +157,34 @@ public class ShareCatPaisDAO {
             hibernateUtil.closeSessionFactory();
         }
         return flagOk;
+    }
+    
+    public boolean getStatusInfoPais(ShareCatPais pais) throws IllegalArgumentException{
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query query = null;
+        List<Object> listaRes;
+        boolean bndOk = true;
+        try{
+            query = session.createSQLQuery("SELECT ESTATUS FROM RVVD_CONF_PAISES WHERE PAIS = '"+pais.getNombre()+"'");
+            listaRes = query.list();            
+            if(listaRes.isEmpty()){
+                throw new IllegalArgumentException("Country not found.");
+            }
+            if("CONFIRMADA".equalsIgnoreCase(listaRes.get(0).toString())){
+                bndOk = true;
+            }else{
+                bndOk = false;
+            }
+        }catch(HibernateException ex){
+            throw new IllegalArgumentException("Country not found");
+        }finally{
+             session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
+        return bndOk;
     }
 }

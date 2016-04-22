@@ -481,3 +481,25 @@ span.ui-radiobutton-icon.ui-icon.ui-c.ui-icon-bullet{
 .botonDer{
     text-align: right;
 }
+.etiqueta{
+    text-align: right;
+}
+
+.valor{
+    text-align: left;
+}
+
+#boardValidate .ui-panel.ui-widget.ui-widget-content.ui-corner-all{
+    margin: 10px;    
+}
+
+#boardValidate .ui-widget-content,#boardValidate .ui-panelgrid-cell{
+    border-style: none;    
+}
+
+#boardValidate .ui-panelgrid-cell.valor{
+    padding-left: 0px;
+}
+#boardValidate .ui-panelgrid-cell.etiqueta{
+    padding-right: 0px;
+}

@@ -129,7 +129,7 @@ public class ReclasifMarcaDAO {
         }
         long numNotReclass = 0L;
         try {
-            Query query = session.createQuery("SELECT count(rm.idReclasifMarca) FROM RvvdReclasifMarca rm WHERE rm.pais IN (" + paises + ") AND (rm.contenidoCaloricoR IS NULL OR rm.contenidoCaloricoEn IS NULL OR rm.marcaR IS NULL OR rm.marcaEn IS NULL OR rm.categoriaR IS NULL OR rm.categoriaEn IS NULL OR rm.categoriaOficialR IS NULL OR rm.cateforiaOficialEn IS NULL)");
+            Query query = session.createQuery("SELECT count(rm.idReclasifMarca) FROM RvvdReclasifMarca rm WHERE rm.pais IN (" + paises + ") AND (rm.contenidoCaloricoR IS NULL OR rm.contenidoCaloricoEn IS NULL OR rm.marcaR IS NULL OR rm.marcaEn IS NULL OR rm.categoriaR IS NULL OR rm.categoriaEn IS NULL OR rm.categoriaOficialR IS NULL OR rm.categoriaOficialEn IS NULL)");
             List<Object> res = query.list();
             numNotReclass = (Long) res.get(0);
             error = null;
