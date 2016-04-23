@@ -143,7 +143,7 @@ public class ShareCatPaisDAO {
                 flagOk = false;
             }
             session.getTransaction().commit();
-        } catch (Exception e) {            
+        } catch (Exception e) {
             if (session.getTransaction().isActive()) {
                 session.getTransaction().rollback();
             }
@@ -158,33 +158,54 @@ public class ShareCatPaisDAO {
         }
         return flagOk;
     }
-    
-    public boolean getStatusInfoPais(ShareCatPais pais) throws IllegalArgumentException{
+
+    public boolean getStatusInfoPais(ShareCatPais pais) throws IllegalArgumentException {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
-        Query query = null;
+        Query query;
         List<Object> listaRes;
         boolean bndOk = true;
-        try{
-            query = session.createSQLQuery("SELECT ESTATUS FROM RVVD_CONF_PAISES WHERE PAIS = '"+pais.getNombre()+"'");
-            listaRes = query.list();            
-            if(listaRes.isEmpty()){
+        try {
+            query = session.createSQLQuery("SELECT ESTATUS FROM RVVD_CONF_PAISES WHERE PAIS = '" + pais.getNombre() + "'");
+            listaRes = query.list();
+            if (listaRes.isEmpty()) {
                 throw new IllegalArgumentException("Country not found.");
             }
-            if("CONFIRMADA".equalsIgnoreCase(listaRes.get(0).toString())){
+            if ("CONFIRMADA".equalsIgnoreCase(listaRes.get(0).toString())) {
                 bndOk = true;
-            }else{
+            } else {
                 bndOk = false;
             }
-        }catch(HibernateException ex){
+        } catch (HibernateException ex) {
             throw new IllegalArgumentException("Country not found");
-        }finally{
-             session.flush();
+        } finally {
+            session.flush();
             session.clear();
             session.close();
             hibernateUtil.closeSessionFactory();
         }
         return bndOk;
+    }
+
+    public void setStatusInfoPais(String pais) throws IllegalArgumentException {
+        HibernateUtil hibernateUtil = new HibernateUtil();
+        SessionFactory sessionFactory = hibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Query query;
+        try {
+            query = session.createSQLQuery("UPDATE RVVD_CONF_PAISES SET ESTATUS = 'DECLINADA' WHERE PAIS = '" + pais + "'");
+            query.executeUpdate();
+            query = session.createSQLQuery("COMMIT");
+            query.executeUpdate();
+
+        } catch (HibernateException ex) {
+            throw new IllegalArgumentException("ERROR, " + ex.getMessage());
+        } finally {
+            session.flush();
+            session.clear();
+            session.close();
+            hibernateUtil.closeSessionFactory();
+        }
     }
 }

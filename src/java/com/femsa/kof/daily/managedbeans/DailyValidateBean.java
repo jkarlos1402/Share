@@ -58,17 +58,18 @@ public class DailyValidateBean {
         ELContext eLContext = fc.getELContext();
         model = new DefaultDashboardModel();
         DashboardColumn column1 = new DefaultDashboardColumn();
-        DashboardColumn column2 = new DefaultDashboardColumn();
-        DashboardColumn column3 = new DefaultDashboardColumn();
+        DashboardColumn column2 = new DefaultDashboardColumn();        
         ShareCatPaisDAO catPaisDAO = new ShareCatPaisDAO();
         boolean status;
+        Dashboard dashboard = (Dashboard) fc.getViewRoot().findComponent("boardValidate");
+        dashboard.getChildren().clear();
         if (usuario != null) {
             int i = 1;
             for (ShareCatPais pais : usuario.getPaises()) {
                 try {
                     status = catPaisDAO.getStatusInfoPais(pais);
                     Panel panel = (Panel) fc.getApplication().createComponent(Panel.COMPONENT_TYPE);
-                    Dashboard dashboard = (Dashboard) fc.getViewRoot().findComponent("boardValidate");
+                    
                     panel.setId("panel" + pais.getNombre().replaceAll(" ", "") + System.currentTimeMillis());
                     panel.setHeader(pais.getNombre());
                     HtmlOutputText outputText = (HtmlOutputText) fc.getApplication().createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -82,9 +83,8 @@ public class DailyValidateBean {
                         CommandButton button = (CommandButton) fc.getApplication().createComponent(CommandButton.COMPONENT_TYPE);
                         button.setValue("DECLINE");
                         button.setActionExpression(ef.createMethodExpression(eLContext, "#{dailyValidateBean.declinarInfoPais('" + pais.getNombre() + "')}", null, new Class[]{String.class}));
-                        ConfirmBehavior  cb = new ConfirmBehavior();
-                        cb.setHeader("Decline information of "+pais.getNombre()+" country");
-                        cb.setMessage("Are you sure?");                          
+                        button.setConfirmationScript("PrimeFaces.confirm({source:this, header:'Decline information of "+pais.getNombre()+"', message:'Are you sure?', icon:'ui-icon-alert'});return false;");
+                        button.setUpdate("boardValidate");
                         panelGrid.getChildren().add(textAceptado);
                         panelGrid.getChildren().add(button);
                         panel.getChildren().add(panelGrid);
@@ -104,7 +104,7 @@ public class DailyValidateBean {
                     }
                     i++;
                 } catch (IllegalArgumentException ex) {
-                    ex.printStackTrace();
+                    
                 }
             }
         }
@@ -123,6 +123,8 @@ public class DailyValidateBean {
     }
 
     public void declinarInfoPais(String nombrePais) {
-        System.out.println("llego:" + nombrePais);
+        ShareCatPaisDAO paisDAO = new ShareCatPaisDAO();
+        paisDAO.setStatusInfoPais(nombrePais);
+        init();
     }
 }
