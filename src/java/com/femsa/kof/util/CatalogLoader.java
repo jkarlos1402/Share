@@ -32,9 +32,13 @@ public class CatalogLoader {
     public static String error = "";
 
     /**
+     * Carga en memoria los catálogos correspondientes al proyecto seleccionado,
+     * éstos catálogos estan a nivel aplicación por lo que todas las sesiones
+     * tienes accesoa ellos
      *
-     * @param proyecto
-     * @return
+     * @param proyecto Nombre del proyecto
+     * @return en caso de éxito regresa verdadero, en caso contrario regresa
+     * falso
      */
     public static boolean loadCatalogs(String proyecto) {
         boolean bndOk = true;
@@ -51,11 +55,11 @@ public class CatalogLoader {
                 ShareCatPaisDAO catPaisDAO = new ShareCatPaisDAO();
                 sc.setAttribute("countries_catalog", catPaisDAO.getCatPais());
                 error = "";
-            }else{
+            } else {
                 error = catCategoriasDAO.getError();
                 bndOk = false;
             }
-        } else if (proyecto.equalsIgnoreCase("daily")) {                        
+        } else if (proyecto.equalsIgnoreCase("daily")) {
             CatCategoriaDAO categoriaDAO = new CatCategoriaDAO();
             sc.setAttribute("categoria_daily_catalog", categoriaDAO.getCategorias());
 
@@ -82,13 +86,13 @@ public class CatalogLoader {
 
             CatCanalDAO canalDAO = new CatCanalDAO();
             sc.setAttribute("canal_daily_catalog", canalDAO.getCanales());
-            
+
             CatSubCanalDAO subCanalDAO = new CatSubCanalDAO();
             sc.setAttribute("subcanal_daily_catalog", subCanalDAO.getSubCanales());
-            
+
             CatZonaDAO zonaDAO = new CatZonaDAO();
             sc.setAttribute("zona_daily_catalog", zonaDAO.getZonas());
-            
+
             CatRetornabilidadDAO catRetornabilidadDAO = new CatRetornabilidadDAO();
             sc.setAttribute("retornabilidad_daily_catalog", catRetornabilidadDAO.getRetornabilidades());
         }

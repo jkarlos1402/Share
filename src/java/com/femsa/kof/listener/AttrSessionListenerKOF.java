@@ -13,14 +13,16 @@ import javax.servlet.http.HttpSessionBindingEvent;
 public class AttrSessionListenerKOF implements HttpSessionAttributeListener {
 
     /**
+     * Cuando un usuario inicia sesion se checan los catalogos para indicar si
+     * tiene acciones pendites a realizar, como la reclasificación de catálogos
      *
      * @param event
      */
     @Override
     public void attributeAdded(HttpSessionBindingEvent event) {
-        if ("session_user".equalsIgnoreCase(event.getName())) {           
-            CheckCatalogs.checkAllCatalogs();            
-        }        
+        if ("session_user".equalsIgnoreCase(event.getName())) {
+            CheckCatalogs.checkAllCatalogs();
+        }
     }
 
     /**
@@ -28,7 +30,7 @@ public class AttrSessionListenerKOF implements HttpSessionAttributeListener {
      * @param event
      */
     @Override
-    public void attributeRemoved(HttpSessionBindingEvent event) { 
+    public void attributeRemoved(HttpSessionBindingEvent event) {
         //comentario
     }
 

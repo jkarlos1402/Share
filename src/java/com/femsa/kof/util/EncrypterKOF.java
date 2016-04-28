@@ -34,6 +34,7 @@ public class EncrypterKOF {
 
     /**
      *
+     *
      * @param key
      * @param algorithm
      */
@@ -94,8 +95,10 @@ public class EncrypterKOF {
     }
 
     /**
+     * Permite encriptar una cadena de texto, utilizada principalmente para los
+     * password, utiliza BASE64 para el encriptamiento
      *
-     * @param str
+     * @param str cadena a ser encriptada
      * @return
      */
     public String encrypt(String str) {
@@ -122,9 +125,10 @@ public class EncrypterKOF {
     }
 
     /**
+     * Desencripta una cadena utilizando el mismo método que es BASE64
      *
-     * @param str
-     * @return
+     * @param str Cadena a desencriptar
+     * @return Regresa el resultado de la encriptación
      */
     public String decrypt(String str) {
 

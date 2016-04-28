@@ -1,10 +1,13 @@
 package com.femsa.kof.util;
 
 /**
+ * clase que representa una columna de un archivo de excel, en ella se almacena
+ * el nombre de la commna así como el ídice dentro de la hoja para su valicaión
  *
  * @author TMXIDSJPINAM
  */
 public class Columnas {
+
     private String nameColumn;
     private int indexColumn;
 
@@ -54,5 +57,5 @@ public class Columnas {
     public String toString() {
         return "Columnas{" + "nameColumn=" + nameColumn + ", indexColumn=" + indexColumn + '}';
     }
-    
+
 }

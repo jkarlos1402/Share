@@ -8,6 +8,7 @@ package com.femsa.kof.daily.managedbeans;
 import com.femsa.kof.share.dao.ShareCatPaisDAO;
 import com.femsa.kof.share.pojos.ShareCatPais;
 import com.femsa.kof.share.pojos.ShareUsuario;
+import java.util.Calendar;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -58,35 +59,38 @@ public class DailyValidateBean {
         ELContext eLContext = fc.getELContext();
         model = new DefaultDashboardModel();
         DashboardColumn column1 = new DefaultDashboardColumn();
-        DashboardColumn column2 = new DefaultDashboardColumn();        
+        DashboardColumn column2 = new DefaultDashboardColumn();
         ShareCatPaisDAO catPaisDAO = new ShareCatPaisDAO();
         boolean status;
         Dashboard dashboard = (Dashboard) fc.getViewRoot().findComponent("boardValidate");
         dashboard.getChildren().clear();
+        Calendar calendario = Calendar.getInstance();
+        calendario.set(Calendar.HOUR, 10);
+        calendario.set(Calendar.MINUTE, 50);
         if (usuario != null) {
             int i = 1;
             for (ShareCatPais pais : usuario.getPaises()) {
                 try {
                     status = catPaisDAO.getStatusInfoPais(pais);
                     Panel panel = (Panel) fc.getApplication().createComponent(Panel.COMPONENT_TYPE);
-                    
+
                     panel.setId("panel" + pais.getNombre().replaceAll(" ", "") + System.currentTimeMillis());
                     panel.setHeader(pais.getNombre());
-                    HtmlOutputText outputText = (HtmlOutputText) fc.getApplication().createComponent(HtmlOutputText.COMPONENT_TYPE);
-                    SelectBooleanCheckbox checkbox = null;
-                    HtmlOutputText textoDeclinar = null;
+                    HtmlOutputText outputText = (HtmlOutputText) fc.getApplication().createComponent(HtmlOutputText.COMPONENT_TYPE);                    
                     if (status) {
                         PanelGrid panelGrid = (PanelGrid) fc.getApplication().createComponent(PanelGrid.COMPONENT_TYPE);
                         panelGrid.setColumns(2);
                         HtmlOutputText textAceptado = (HtmlOutputText) fc.getApplication().createComponent(HtmlOutputText.COMPONENT_TYPE);
                         textAceptado.setValue("CONFIRMED");
-                        CommandButton button = (CommandButton) fc.getApplication().createComponent(CommandButton.COMPONENT_TYPE);
-                        button.setValue("DECLINE");
-                        button.setActionExpression(ef.createMethodExpression(eLContext, "#{dailyValidateBean.declinarInfoPais('" + pais.getNombre() + "')}", null, new Class[]{String.class}));
-                        button.setConfirmationScript("PrimeFaces.confirm({source:this, header:'Decline information of "+pais.getNombre()+"', message:'Are you sure?', icon:'ui-icon-alert'});return false;");
-                        button.setUpdate("boardValidate");
                         panelGrid.getChildren().add(textAceptado);
-                        panelGrid.getChildren().add(button);
+//                        if (Calendar.getInstance().compareTo(calendario) <= 0) {
+                            CommandButton button = (CommandButton) fc.getApplication().createComponent(CommandButton.COMPONENT_TYPE);
+                            button.setValue("DECLINE");
+                            button.setActionExpression(ef.createMethodExpression(eLContext, "#{dailyValidateBean.declinarInfoPais('" + pais.getNombre() + "')}", null, new Class[]{String.class}));
+                            button.setConfirmationScript("PrimeFaces.confirm({source:this, header:'Decline information of " + pais.getNombre() + "', message:'Are you sure?', icon:'ui-icon-alert'});return false;");
+                            button.setUpdate("boardValidate");
+                            panelGrid.getChildren().add(button);
+//                        }
                         panel.getChildren().add(panelGrid);
                     } else {
                         outputText.setValue("DECLINED");
@@ -104,7 +108,7 @@ public class DailyValidateBean {
                     }
                     i++;
                 } catch (IllegalArgumentException ex) {
-                    
+
                 }
             }
         }

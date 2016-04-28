@@ -30,10 +30,13 @@ public class ScriptAnalizer {
     }
 
     /**
+     * Permite la ejecución de los scripts posteriores a la carga de información
      *
-     * @param errors
-     * @param pais
-     * @return
+     * @param errors En el se almacenan los errores encontrados al ejecutar los
+     * scripts
+     * @param pais Pais a ejecutar
+     * @return en caso de éxito regresa verdadero, en caso contrario regresa
+     * falso
      */
     public static boolean executeScritsShare(List<String> errors, ShareCatPais pais) {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -59,7 +62,7 @@ public class ScriptAnalizer {
                     }
                 }
             }
-        } catch (Exception e) {            
+        } catch (Exception e) {
             flagOk = false;
             Logger.getLogger(ScriptAnalizer.class.getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
             errors.add("Error running script: " + e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
@@ -72,6 +75,13 @@ public class ScriptAnalizer {
         return flagOk;
     }
 
+    /**
+     * Obtiene el número de sentencias sql contenidas en los scripts
+     *
+     * @param errors Almacena los errores encontrados
+     * @param pais Pais a ejecutar
+     * @return regresa el número de sentencias encontradas
+     */
     public static int obtieneNumSentencias(List<String> errors, ShareCatPais pais) {
         int numInstrucciones = 0;
         ServletContext sc = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
@@ -87,11 +97,20 @@ public class ScriptAnalizer {
             }
         } catch (Exception e) {
             Logger.getLogger(ScriptAnalizer.class.getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-
         }
         return numInstrucciones;
     }
 
+    /**
+     * Obtiene una lista con las instrucciones sql encontradas en un archivo sql
+     *
+     * @param scritpSQL Archivo sql a leer
+     * @param errors se almacenan los errores encontrados al leer el archivo sql
+     * @param pais Pais a ejecutar
+     * @return Regresa una lista con las sentencias sql encontradas
+     * @throws IOException lanza excepción en caso de error de lectura/escritura
+     *
+     */
     public static List<String> getInstructionsSQL(File scritpSQL, List<String> errors, ShareCatPais pais) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
         FileReader f = null;
@@ -142,6 +161,12 @@ public class ScriptAnalizer {
         return statements;
     }
 
+    /**
+     * Obtiene la extensión de un archivo
+     *
+     * @param filename nombre del archivo
+     * @return Regresda la extensión del archivo
+     */
     private static String getExtension(String filename) {
         int index = filename.lastIndexOf('.');
         if (index == -1) {

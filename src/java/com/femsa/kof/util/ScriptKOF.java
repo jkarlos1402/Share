@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 /**
+ * Clase que permite el manejo de archivos sql
  *
  * @author TMXIDSJPINAM
  */

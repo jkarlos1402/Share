@@ -16,14 +16,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- *
+ * Calse que permite la administración de los accesos a las páginas
  * @author TMXIDSJPINAM
  */
 @WebFilter(filterName = "AccessFilter", urlPatterns = {"/faces/index.xhtml", "/faces/main.xhtml"}, dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ERROR, DispatcherType.INCLUDE})
 public class AccessFilter implements Filter {  
 
     /**
-     *
+     * Realiza el filtro, redireccionando a las páginas correspondientes
      * @param request
      * @param response
      * @param chain

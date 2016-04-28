@@ -4,19 +4,19 @@ import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.SessionFactory;
 
 /**
+ * Clase que permite la conexión con la base de datos
  *
- * @author TMXIDSJPINAM
  */
 public class HibernateUtil {
 
     private SessionFactory sessionFactory;
     private boolean connectionOk;
     private String error;
-    
+
     /**
      *
      */
-    public HibernateUtil(){
+    public HibernateUtil() {
         try {
             // Create the SessionFactory from standard (hibernate.cfg.xml) 
             // config file.
@@ -27,7 +27,7 @@ public class HibernateUtil {
             error = "Initial SessionFactory creation failed." + ex;
             connectionOk = false;
         }
-    }    
+    }
 
     /**
      *
@@ -60,7 +60,7 @@ public class HibernateUtil {
     public void setError(String error) {
         this.error = error;
     }
-    
+
     /**
      *
      * @return
@@ -68,11 +68,11 @@ public class HibernateUtil {
     public SessionFactory getSessionFactory() {
         return sessionFactory;
     }
-    
+
     /**
-     *
+     * Cierra el pool de conexiones
      */
-    public void closeSessionFactory(){
+    public void closeSessionFactory() {
         sessionFactory.close();
         sessionFactory = null;
     }

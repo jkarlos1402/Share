@@ -104,8 +104,8 @@ public class RollingDAO {
             mainBean.setPorcentajeAvance((int) ((++cont * 100) / (dailys.size() + (distribuciones != null ? distribuciones.size() : 0))));
             queryNativo = session.createSQLQuery("DELETE FROM RVVD_RECLASIF_DIAS_OP_TMP");
             queryNativo.executeUpdate();
-            mainBean.setPorcentajeAvance((int) ((++cont * 100) / (dailys.size() + (distribuciones != null ? distribuciones.size() : 0))));
-            if ("CAM".equalsIgnoreCase(pais)) {
+            mainBean.setPorcentajeAvance((int) ((++cont * 100) / (dailys.size() + (distribuciones != null ? distribuciones.size() : 0))));            
+            if ("CAM".equalsIgnoreCase(pais)) {                
                 queryNativo = session.createSQLQuery("DELETE FROM RVVD_ST_ROLLING WHERE PAIS = '" + pais + "' AND ZONA = '" + zona + "' AND FECHA IN (SELECT DISTINCT(FECHA) FROM RVVD_ST_ROLLING_TMP)");
             } else {
                 queryNativo = session.createSQLQuery("DELETE FROM RVVD_ST_ROLLING WHERE PAIS = '" + pais + "' AND FECHA IN (SELECT DISTINCT(FECHA) FROM RVVD_ST_ROLLING_TMP)");
