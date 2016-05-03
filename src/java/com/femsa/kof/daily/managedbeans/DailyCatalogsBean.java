@@ -34,6 +34,8 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 /**
+ * Permite el manejo de la capa de vista para la administración de catálogos
+ * correspondientes a daily dashboard
  *
  * @author TMXIDSJPINAM
  */
@@ -93,7 +95,7 @@ public class DailyCatalogsBean implements Serializable {
     private List<RvvdCatRetornabilidad> catRetornabilidadAll = new ArrayList<RvvdCatRetornabilidad>();
 
     /**
-     *
+     * Inicializa todos los catálogos obteniendolos de base de datos
      */
     public DailyCatalogsBean() {
         CatContCaloricoDAO contCaloricoDAO = new CatContCaloricoDAO();
@@ -682,7 +684,7 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Genera una nueva instancia de categoria oficial para un nuevo registro
      */
     public void newOfficialCategory() {
         categoriaOficialNueva = new RvvdCatCategoriaOficial();
@@ -690,7 +692,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Copia el contenido de la categoria oficial seleccionada en una nueva para
+     * poder ser modificada o en su caso eliminada
      */
     public void selectOfficialCategory() {
         categoriaOficialNueva.setIdCategoriaOficial(categoriaOficialSelected.getIdCategoriaOficial());
@@ -701,7 +704,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Guarda los cambios realizados a la categoria oficial seleccionada o en su
+     * caso genera un nuevo registro
      */
     public void saveOfficialCategory() {
         FacesMessage message;
@@ -739,7 +743,7 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Genera una nueva instancia de categoria para un nuevo registro
      */
     public void newCategory() {
         categoriaNueva = new RvvdCatCategoria();
@@ -747,7 +751,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Copia el contenido de la categoria seleccionada en una nueva para poder
+     * ser modificada o en su caso eliminada
      */
     public void selectCategory() {
         categoriaNueva.setIdCategoria(categoriaSelected.getIdCategoria());
@@ -758,7 +763,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Guarda los cambios realizados a la categoria seleccionada o en su caso
+     * genera un nuevo registro
      */
     public void saveCategory() {
         FacesMessage message;
@@ -796,7 +802,7 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Genera una nueva instancia de canal para un nuevo registro
      */
     public void newChannel() {
         canalNuevo = new RvvdCatCanal();
@@ -804,7 +810,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Copia el contenido del canal seleccionado en uno nuevo para poder ser
+     * modificado o en su caso eliminado
      */
     public void selectChannel() {
         canalNuevo.setIdCanal(canalSelected.getIdCanal());
@@ -815,7 +822,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Guarda los cambios realizados al canal seleccionado o en su caso genera
+     * un nuevo registro
      */
     public void saveChannel() {
         FacesMessage message;
@@ -853,7 +861,7 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Genera una nueva instancia de tipo de consumo para un nuevo registro
      */
     public void newConsumption() {
         tipoConsumoNuevo = new RvvdCatTipoConsumo();
@@ -861,7 +869,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Copia el contenido del tipo de consumo seleccionado a uno nuevo para
+     * poder ser modificado o en su caso eliminado
      */
     public void selectConsumption() {
         tipoConsumoNuevo.setIdTipoConsumo(tipoConsumoSelected.getIdTipoConsumo());
@@ -871,7 +880,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Guarda los cambios realizados al tipo de consumo seleccionado o en su
+     * caso genera un nuevo registro
      */
     public void saveConsumption() {
         FacesMessage message;
@@ -909,7 +919,7 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Genera una nueva instancia de empaque para un nuevo registro
      */
     public void newPacking() {
         empaqueNuevo = new RvvdCatEmpaque();
@@ -917,7 +927,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Copia el contenido del empaque seleccionado en un empaque nuevo para
+     * poder ser modificado o en su caso eliminado
      */
     public void selectPacking() {
         empaqueNuevo.setIdEmpaque(empaqueSelected.getIdEmpaque());
@@ -927,7 +938,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Guarda los cambios realizados al empaque seleccionado o en su caso guarda
+     * un nuevo registro
      */
     public void savePacking() {
         FacesMessage message;
@@ -965,7 +977,7 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Genera una nueva instancia de tipo de cliente para un nuevo registro
      */
     public void newGec() {
         gecNuevo = new RvvdCatGec();
@@ -973,7 +985,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Copia el contenido del tipo de cliente seelccionado a un tipo de cliente
+     * nuevo para poder ser modificado o en su caso eliminado
      */
     public void selectGec() {
         gecNuevo.setIdGec(gecSelected.getIdGec());
@@ -984,7 +997,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Guarda los cambios realizados al tipo de cliente o en su caso genera un
+     * nuevo registro
      */
     public void saveGec() {
         FacesMessage message;
@@ -1022,7 +1036,7 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Genera una nueva instancia de unidad de negocio para un nuevo registro
      */
     public void newBussinessUnit() {
         unidadNueva = new RvvdCatUnidadNegocio();
@@ -1030,7 +1044,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Copia el contenido de la unidad de negocio seleccionada en una unidad de
+     * negocio nueva para ser modificada o en su caso eliminada
      */
     public void selectBussinessUnit() {
         unidadNueva.setIdUnidadNegocio(unidadSelected.getIdUnidadNegocio());
@@ -1040,7 +1055,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Guarda los cambios realizado a la unidad de negocio seleccionada o en su
+     * caso guarda un nuevo registro
      */
     public void saveBussinessUnit() {
         FacesMessage message;
@@ -1078,7 +1094,7 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Genera una nueva instancia de marca para un nuevo registro
      */
     public void newTrademark() {
         marcaNueva = new RvvdCatMarca();
@@ -1086,7 +1102,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Copia el contenido de la marca seleccionada en una marca nueva para poder
+     * ser modificada o en su caso elimanada
      */
     public void selectTrademark() {
         marcaNueva.setIdMarca(marcaSelected.getIdMarca());
@@ -1096,7 +1113,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Guarda los cambios realizados a la marca seleccionada o en su caso guarda
+     * un nuevo registro
      */
     public void saveTrademark() {
         FacesMessage message;
@@ -1134,7 +1152,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Genera una nueva instancia de un contenido calórico para un nuevo
+     * registro
      */
     public void newCalorie() {
         contenidoNueva = new RvvdCatContenidoCalorico();
@@ -1142,7 +1161,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Copia el contenido del contenido calórico seleccionado para poder ser
+     * modificado o en su caso eliminado
      */
     public void selectCalorie() {
         contenidoNueva.setIdContenidoCalorico(contenidoSelected.getIdContenidoCalorico());
@@ -1152,7 +1172,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Guarda los cambios realizados al contenido calórico o en su caso guarda
+     * un nuevo registro
      */
     public void saveCalorie() {
         FacesMessage message;
@@ -1190,7 +1211,7 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Genera una nueva instancia de un subcanal para ingresar un nuevo registro
      */
     public void newSubCanal() {
         subCanalNuevo = new RvvdCatSubCanal();
@@ -1198,7 +1219,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Copia el contenido del subcanal seleccionado a un subcanal nuevo para ser
+     * modificado o en su caso eliminado
      */
     public void selectSubCanal() {
         subCanalNuevo.setIdSubCanal(subCanalSelected.getIdSubCanal());
@@ -1209,7 +1231,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Guarda los cambios realizados al subcanal seleccionado o en su caso
+     * genera un nuevo registro
      */
     public void saveSubCanal() {
         FacesMessage message;
@@ -1247,7 +1270,7 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Genera una nueva instancia de zona para generar un nuevo registro
      */
     public void newZona() {
         zonaNueva = new RvvdCatZona();
@@ -1255,7 +1278,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Copia el contenido de la zona seleccionada en una zona nueva para poder
+     * modificar el registro o en su caso eliminarlo
      */
     public void selectZona() {
         zonaNueva.setIdZona(zonaSelected.getIdZona());
@@ -1265,7 +1289,7 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Guarda la zona seleccionada, o en su caso ingresa un nuevo registro
      */
     public void saveZona() {
         FacesMessage message;
@@ -1303,7 +1327,7 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Genera nueva instancia para almacenar una nueva retornabilidad
      */
     public void newRetornabilidad() {
         retornabilidadNueva = new RvvdCatRetornabilidad();
@@ -1311,7 +1335,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Copia el contenido de la retornabilidad seleccionada con una
+     * retornabilidad nueva para ser modificada o en su caso eliminada
      */
     public void selectRetornabilidad() {
         retornabilidadNueva.setIdRetornabilidad(retornabilidadSelected.getIdRetornabilidad());
@@ -1320,7 +1345,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Guarda los cambios realizados a la retornabilidad seleccionada o ingresa
+     * un nuevo registro
      */
     public void saveRetornabilidad() {
         FacesMessage message;
@@ -1341,7 +1367,8 @@ public class DailyCatalogsBean implements Serializable {
     }
 
     /**
-     * Elimina la la retornabilidad seleccionada en la vista
+     * Elimina la la retornabilidad seleccionada en la vista, siempre y cuando
+     * ésta no haya sido utilizada para reclasificar
      */
     public void deleteRetornabilidad() {
         FacesMessage message;
@@ -1357,6 +1384,12 @@ public class DailyCatalogsBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
+    /**
+     * Refresca el catálogo deseado, utilizado para despues de realizar alguna
+     * modificación o haber incluido algun nuevo registro
+     *
+     * @param catalog Nombre del catálogo a refrescar
+     */
     private void refreshCatalog(String catalog) {
         if ("calorico".equalsIgnoreCase(catalog)) {
             CatContCaloricoDAO contCaloricoDAO = new CatContCaloricoDAO();

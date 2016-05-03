@@ -14,25 +14,21 @@ import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.component.behavior.ClientBehaviorContext;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.context.FacesContext;
-import javax.security.auth.callback.ConfirmationCallback;
 import javax.servlet.http.HttpSession;
-import org.primefaces.behavior.ajax.AjaxBehavior;
-import org.primefaces.behavior.confirm.ConfirmBehavior;
 import org.primefaces.component.commandbutton.CommandButton;
-import org.primefaces.component.confirmdialog.ConfirmDialogRenderer;
 import org.primefaces.component.dashboard.Dashboard;
 import org.primefaces.component.panel.Panel;
 import org.primefaces.component.panelgrid.PanelGrid;
-import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
 import org.primefaces.model.DashboardColumn;
 import org.primefaces.model.DashboardModel;
 import org.primefaces.model.DefaultDashboardColumn;
 import org.primefaces.model.DefaultDashboardModel;
 
 /**
+ * Bean administrado que se encarga del manejo de la vista para la validación de
+ * la información de Daily
  *
  * @author TMXIDSJPINAM
  */
@@ -52,6 +48,9 @@ public class DailyValidateBean {
         usuario = (ShareUsuario) httpSession.getAttribute("session_user");
     }
 
+    /**
+     * Obtiene el estatus de cada pais y genera la vista correspondiente
+     */
     @PostConstruct
     public void init() {
         FacesContext fc = FacesContext.getCurrentInstance();
@@ -76,7 +75,7 @@ public class DailyValidateBean {
 
                     panel.setId("panel" + pais.getNombre().replaceAll(" ", "") + System.currentTimeMillis());
                     panel.setHeader(pais.getNombre());
-                    HtmlOutputText outputText = (HtmlOutputText) fc.getApplication().createComponent(HtmlOutputText.COMPONENT_TYPE);                    
+                    HtmlOutputText outputText = (HtmlOutputText) fc.getApplication().createComponent(HtmlOutputText.COMPONENT_TYPE);
                     if (status) {
                         PanelGrid panelGrid = (PanelGrid) fc.getApplication().createComponent(PanelGrid.COMPONENT_TYPE);
                         panelGrid.setColumns(2);
@@ -84,12 +83,12 @@ public class DailyValidateBean {
                         textAceptado.setValue("CONFIRMED");
                         panelGrid.getChildren().add(textAceptado);
 //                        if (Calendar.getInstance().compareTo(calendario) <= 0) {
-                            CommandButton button = (CommandButton) fc.getApplication().createComponent(CommandButton.COMPONENT_TYPE);
-                            button.setValue("DECLINE");
-                            button.setActionExpression(ef.createMethodExpression(eLContext, "#{dailyValidateBean.declinarInfoPais('" + pais.getNombre() + "')}", null, new Class[]{String.class}));
-                            button.setConfirmationScript("PrimeFaces.confirm({source:this, header:'Decline information of " + pais.getNombre() + "', message:'Are you sure?', icon:'ui-icon-alert'});return false;");
-                            button.setUpdate("boardValidate");
-                            panelGrid.getChildren().add(button);
+                        CommandButton button = (CommandButton) fc.getApplication().createComponent(CommandButton.COMPONENT_TYPE);
+                        button.setValue("DECLINE");
+                        button.setActionExpression(ef.createMethodExpression(eLContext, "#{dailyValidateBean.declinarInfoPais('" + pais.getNombre() + "')}", null, new Class[]{String.class}));
+                        button.setConfirmationScript("PrimeFaces.confirm({source:this, header:'Decline information of " + pais.getNombre() + "', message:'Are you sure?', icon:'ui-icon-alert'});return false;");
+                        button.setUpdate("boardValidate");
+                        panelGrid.getChildren().add(button);
 //                        }
                         panel.getChildren().add(panelGrid);
                     } else {
@@ -112,10 +111,8 @@ public class DailyValidateBean {
                 }
             }
         }
-//        column1.addWidget("sports");
         model.addColumn(column1);
         model.addColumn(column2);
-        // model.addColumn(column3);
     }
 
     public DashboardModel getModel() {
@@ -126,6 +123,11 @@ public class DailyValidateBean {
         this.model = model;
     }
 
+    /**
+     * Cambia el estaus de la información del pais indicado a DECLINED
+     *
+     * @param nombrePais Nombre del pais al cual se declinará la información
+     */
     public void declinarInfoPais(String nombrePais) {
         ShareCatPaisDAO paisDAO = new ShareCatPaisDAO();
         paisDAO.setStatusInfoPais(nombrePais);

@@ -39,10 +39,12 @@ public class Rvvd445PhDAO {
     }
 
     /**
+     * Permite guardar los días operativos de Filipinas
      *
-     * @param diasOpPh
-     * @param mainBean
-     * @return
+     * @param diasOpPh Lista con el acodo de días operativos
+     * @param mainBean bean administrado principal para el manejo de la vista
+     * @return Regresa Verdadero en caso de éxito de lo contrario se retorna
+     * Falso
      */
     public boolean save445Ph(List<Rvvd445PhTmp> diasOpPh, MainBean mainBean) {
         HibernateUtil hibernateUtil = new HibernateUtil();
@@ -75,7 +77,7 @@ public class Rvvd445PhDAO {
             session.beginTransaction();
             query = session.createSQLQuery("SELECT DISTINCT(PK_TIEMPO),GD_FECHA_ACT FROM RVVD_445_PH_TMP WHERE SUBSTR(PK_TIEMPO,7,2) <> '00' AND PK_TIEMPO NOT IN(SELECT PK_TIEMPO FROM RVVD_DIM_TIEMPO)");
             resultado = query.list();
-            for (Object object : resultado) {                
+            for (Object object : resultado) {
                 pkTimempo = (Object[]) object;
                 idTiempo = pkTimempo[0].toString();
                 fecha = (Date) pkTimempo[1];
@@ -130,6 +132,11 @@ public class Rvvd445PhDAO {
         return flagOk;
     }
 
+    /**
+     * Permite obtener la lista de paises de la dim geografia
+     *
+     * @return Lista de descripciones de paises
+     */
     public List<String> getDescPaisGeografia() {
         HibernateUtil hibernateUtil = new HibernateUtil();
         SessionFactory sessionFactory = hibernateUtil.getSessionFactory();

@@ -53,7 +53,7 @@ public class DailyReclassCatalogsBean implements Serializable {
 
     private List<RvvdReclasifCanal> canalesReclasificados = new ArrayList<RvvdReclasifCanal>();
     private List<RvvdCatCanal> catCanales;
-    private RvvdCatCanal catCanalSelected;    
+    private RvvdCatCanal catCanalSelected;
     private List<RvvdCatSubCanal> catSubCanales;
     private RvvdCatSubCanal catSubCanalSelected;
 
@@ -88,7 +88,7 @@ public class DailyReclassCatalogsBean implements Serializable {
     private RvvdCatZona catZonaSelected;
 
     /**
-     *
+     * obtiene de base de datos los catalogos reclasificados y sin reclasificar
      */
     public DailyReclassCatalogsBean() {
         ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
@@ -116,7 +116,7 @@ public class DailyReclassCatalogsBean implements Serializable {
         zonasReclasificadas = reclasifZonaDAO.getReclasifZonasAll(usuario);
 
         catCategorias = (List<RvvdCatCategoria>) context.getAttribute("categoria_daily_catalog");
-        
+
         catCategoriasMarca = (List<RvvdCatCategoria>) context.getAttribute("categoria_daily_catalog");
 
         catMarcas = (List<RvvdCatMarca>) context.getAttribute("marca_daily_catalog");
@@ -134,7 +134,7 @@ public class DailyReclassCatalogsBean implements Serializable {
         catCanales = (List<RvvdCatCanal>) context.getAttribute("canal_daily_catalog");
 
         catZonas = (List<RvvdCatZona>) context.getAttribute("zona_daily_catalog");
-        
+
         catRetornabilidades = (List<RvvdCatRetornabilidad>) context.getAttribute("retornabilidad_daily_catalog");
     }
 
@@ -518,7 +518,7 @@ public class DailyReclassCatalogsBean implements Serializable {
      */
     public List<RvvdCatCanal> getCatCanales() {
         ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
-        catCanales = (List<RvvdCatCanal>) context.getAttribute("canal_daily_catalog");        
+        catCanales = (List<RvvdCatCanal>) context.getAttribute("canal_daily_catalog");
         return catCanales;
     }
 
@@ -597,6 +597,8 @@ public class DailyReclassCatalogsBean implements Serializable {
     }
 
     /**
+     * Actualiza la información de la categoria seleccionada para poder ser
+     * almacenada en base de datos
      *
      * @param event
      */
@@ -610,7 +612,7 @@ public class DailyReclassCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Refresca la lista de categorias reclasificadas y sin reclasificar
      */
     public void refreshCategoriasReclasificadas() {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
@@ -621,7 +623,7 @@ public class DailyReclassCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Guarda la lista actualizada de categorias reclasificadas
      */
     public void saveCategoriasReclasificadas() {
         FacesMessage message;
@@ -635,6 +637,8 @@ public class DailyReclassCatalogsBean implements Serializable {
     }
 
     /**
+     * Actualiza la información del canal seleccionada para poder ser almacenada
+     * en base de datos
      *
      * @param event
      */
@@ -649,7 +653,7 @@ public class DailyReclassCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Refresca la lista de canales reclasificadas y sin reclasificar
      */
     public void refreshCanalesReclasificados() {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
@@ -660,7 +664,7 @@ public class DailyReclassCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Guarda la lista actualizada de canales reclasificadas
      */
     public void saveCanalesReclasificados() {
         FacesMessage message;
@@ -674,6 +678,8 @@ public class DailyReclassCatalogsBean implements Serializable {
     }
 
     /**
+     * Actualiza la información del empaque seleccionado para poder ser
+     * almacenado en base de datos
      *
      * @param event
      */
@@ -690,7 +696,7 @@ public class DailyReclassCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Refresca la lista de empaques reclasificados y sin reclasificar
      */
     public void refreshEmpaquesReclasificados() {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
@@ -701,7 +707,7 @@ public class DailyReclassCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Guarda la lista actualizada de empaques reclasificados
      */
     public void saveEmpaquesReclasificados() {
         FacesMessage message;
@@ -715,6 +721,8 @@ public class DailyReclassCatalogsBean implements Serializable {
     }
 
     /**
+     * Actualiza la información de la marca seleccionada para poder ser
+     * almacenada en base de datos
      *
      * @param event
      */
@@ -734,7 +742,7 @@ public class DailyReclassCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Refresca la lista de marcas reclasificadas y sin reclasificar
      */
     public void refreshMarcasReclasificados() {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
@@ -745,7 +753,7 @@ public class DailyReclassCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Guarda la lista actualizada de marcas reclasificadas
      */
     public void saveMarcasReclasificados() {
         FacesMessage message;
@@ -759,6 +767,8 @@ public class DailyReclassCatalogsBean implements Serializable {
     }
 
     /**
+     * Actualiza la información del tipo de cliente seleccionado para poder ser
+     * almacenado en base de datos
      *
      * @param event
      */
@@ -773,7 +783,7 @@ public class DailyReclassCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Refresca la lista de tipos de cliente reclasificados y sin reclasificar
      */
     public void refreshGecsReclasificados() {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
@@ -784,7 +794,7 @@ public class DailyReclassCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Guarda la lista actualizada de tipos de cliente reclasificados
      */
     public void saveGecsReclasificados() {
         FacesMessage message;
@@ -798,7 +808,7 @@ public class DailyReclassCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Refresca la lista de dias operativos reclasificados y sin reclasificar
      */
     public void refreshDiasOpReclasificados() {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
@@ -809,7 +819,7 @@ public class DailyReclassCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Guarda la lista actualizada de dias operativos reclasificados
      */
     public void saveDiasOpReclasificados() {
         FacesMessage message;
@@ -823,6 +833,8 @@ public class DailyReclassCatalogsBean implements Serializable {
     }
 
     /**
+     * Actualiza la información de la zona seleccionada para poder ser
+     * almacenada en base de datos
      *
      * @param event
      */
@@ -834,7 +846,7 @@ public class DailyReclassCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Refresca la lista de zonas reclasificadas y sin reclasificar
      */
     public void refreshZonasReclasificadas() {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
@@ -845,7 +857,7 @@ public class DailyReclassCatalogsBean implements Serializable {
     }
 
     /**
-     *
+     * Guarda la lista actualizada de zonas reclasificadas
      */
     public void saveZonasReclasificados() {
         FacesMessage message;

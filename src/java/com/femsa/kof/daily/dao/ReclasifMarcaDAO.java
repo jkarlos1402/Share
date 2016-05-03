@@ -37,9 +37,11 @@ public class ReclasifMarcaDAO {
     }
 
     /**
+     * Obtiene una lista con las marcas reclasificadas y sin reclasificar para
+     * el usuario especificado
      *
-     * @param usuario
-     * @return
+     * @param usuario Usuario correspondiente
+     * @return Lista con las marcas reclasificadas
      */
     public List<RvvdReclasifMarca> getReclasifMarcasAll(ShareUsuario usuario) {
         HibernateUtil hibernateUtil = new HibernateUtil();

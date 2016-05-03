@@ -19,17 +19,21 @@ import javax.servlet.http.HttpSession;
 @ManagedBean
 @SessionScoped
 public class DailyUploadStatusBean implements Serializable {
-    
+
     private List<ShareLoadLog> cargasMes = new ArrayList<ShareLoadLog>();
     private SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
     private ShareUsuario usuario;
 
+    /**
+     * Se encarga de cargar la lista de logs de carga para el usuario que se
+     * encuetra en sesión
+     */
     public DailyUploadStatusBean() {
-        HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);        
+        HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
         usuario = (ShareUsuario) httpSession.getAttribute("session_user");
-        ShareLoadLogDAO logDAO = new ShareLoadLogDAO();          
-        cargasMes = usuario.getRol().getPkRol().equals(2) ? logDAO.getLogByUser(usuario,"daily") : logDAO.getLogAll("daily");
+        ShareLoadLogDAO logDAO = new ShareLoadLogDAO();
+        cargasMes = usuario.getRol().getPkRol().equals(2) ? logDAO.getLogByUser(usuario, "daily") : logDAO.getLogAll("daily");
     }
 
     public ShareUsuario getUsuario() {
@@ -89,8 +93,8 @@ public class DailyUploadStatusBean implements Serializable {
     }
 
     /**
+     * Refresca la lista de logs de carga para el usuario en sesión
      *
-     * 
      */
     public void refresh() {
         ShareLoadLogDAO logDAO = new ShareLoadLogDAO();
