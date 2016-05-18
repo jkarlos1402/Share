@@ -96,7 +96,11 @@ public class RollingDAO {
             errors.clear();
             session.getTransaction().commit();
             session.beginTransaction();
-            queryNativo = session.createSQLQuery("DELETE FROM RVVD_RECLASIF_DIAS_OP WHERE PAIS = '" + pais + "' AND FECHA IN (SELECT DISTINCT(FECHA) FROM RVVD_RECLASIF_DIAS_OP_TMP)");
+            if ("CAM".equalsIgnoreCase(pais)) {
+                queryNativo = session.createSQLQuery("DELETE FROM RVVD_RECLASIF_DIAS_OP WHERE PAIS = '" + zona + "' AND FECHA IN (SELECT DISTINCT(FECHA) FROM RVVD_RECLASIF_DIAS_OP_TMP)");
+            } else {
+                queryNativo = session.createSQLQuery("DELETE FROM RVVD_RECLASIF_DIAS_OP WHERE PAIS = '" + pais + "' AND FECHA IN (SELECT DISTINCT(FECHA) FROM RVVD_RECLASIF_DIAS_OP_TMP)");
+            }
             queryNativo.executeUpdate();
             mainBean.setPorcentajeAvance((int) ((++cont * 100) / (dailys.size() + (distribuciones != null ? distribuciones.size() : 0))));
             queryNativo = session.createSQLQuery("INSERT INTO RVVD_RECLASIF_DIAS_OP(ID_RECLASIF_DIAS_OP,PAIS,FECHA,ID_TIEMPO,FECHA_R,ID_TIEMPO_R) SELECT RVVD_SEQ_RECLASIF_DIAS_OP.NextVal,PAIS,FECHA,(SELECT PK_TIEMPO FROM RVVD_DIM_TIEMPO WHERE GD_FECHA = FECHA),FECHA_R,(SELECT PK_TIEMPO FROM RVVD_DIM_TIEMPO WHERE GD_FECHA = FECHA_R) FROM RVVD_RECLASIF_DIAS_OP_TMP");
@@ -104,8 +108,8 @@ public class RollingDAO {
             mainBean.setPorcentajeAvance((int) ((++cont * 100) / (dailys.size() + (distribuciones != null ? distribuciones.size() : 0))));
             queryNativo = session.createSQLQuery("DELETE FROM RVVD_RECLASIF_DIAS_OP_TMP");
             queryNativo.executeUpdate();
-            mainBean.setPorcentajeAvance((int) ((++cont * 100) / (dailys.size() + (distribuciones != null ? distribuciones.size() : 0))));            
-            if ("CAM".equalsIgnoreCase(pais)) {                
+            mainBean.setPorcentajeAvance((int) ((++cont * 100) / (dailys.size() + (distribuciones != null ? distribuciones.size() : 0))));
+            if ("CAM".equalsIgnoreCase(pais)) {
                 queryNativo = session.createSQLQuery("DELETE FROM RVVD_ST_ROLLING WHERE PAIS = '" + pais + "' AND ZONA = '" + zona + "' AND FECHA IN (SELECT DISTINCT(FECHA) FROM RVVD_ST_ROLLING_TMP)");
             } else {
                 queryNativo = session.createSQLQuery("DELETE FROM RVVD_ST_ROLLING WHERE PAIS = '" + pais + "' AND FECHA IN (SELECT DISTINCT(FECHA) FROM RVVD_ST_ROLLING_TMP)");
@@ -158,7 +162,7 @@ public class RollingDAO {
             }
             flagOk = false;
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, MSG_ERROR_TITULO, e);
-            errors.add("Error saving records: " + e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+            errors.add("Error saving records: " + e.getMessage());
             errors.add("One or more records are not valid, contact the administrator");
         } finally {
             session.flush();

@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-    <session-factory>
-        
-<!--         <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+    <session-factory>        
+        <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
         <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
         <property name="hibernate.connection.url">jdbc:oracle:thin:@localhost:1521:XE</property>
         <property name="hibernate.connection.username">kofuser</property>
-        <property name="hibernate.connection.password">kofuser</property>  -->
+        <property name="hibernate.connection.password">kofuser</property>  
     
-         <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+        <!--         <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
         <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
         <property name="hibernate.connection.url">jdbc:oracle:thin:@10.138.3.32:1527:DSE</property>
         <property name="hibernate.connection.username">BOE14DEVHA</property>
-        <property name="hibernate.connection.password">temporal</property> 
+        <property name="hibernate.connection.password">temporal</property> -->
     
         <!-- <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
         <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
@@ -21,13 +20,13 @@
         <property name="hibernate.connection.username">BOE14QASHA</property>
         <property name="hibernate.connection.password">B0EI4#QA5AH</property> -->
     
-<!--         <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+        <!--         <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
         <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
         <property name="hibernate.connection.url">jdbc:oracle:thin:@10.138.5.209:1527:DMP</property>
         <property name="hibernate.connection.username">DMPPRD</property> 
         <property name="hibernate.connection.password">pRD#Dm_P</property>-->
         
-<!--        <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+        <!--        <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
         <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
         <property name="hibernate.connection.url">jdbc:oracle:thin:@10.138.3.223:1527:BSE</property>
         <property name="hibernate.connection.username">BOE14PRDHA</property> 

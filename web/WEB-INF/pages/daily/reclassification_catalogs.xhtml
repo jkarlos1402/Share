@@ -150,7 +150,9 @@
                             <p:column headerText="Client type" filterBy="#{reclaGec.gec}" filterMatchMode="contains">
                                 <h:outputText value="#{reclaGec.gec}"/>
                             </p:column>  
-                            <!--AQUI VA LO DE SEDE-->
+                            <p:column headerText="SEDE" filterBy="#{reclaGec.sede}" filterMatchMode="contains">
+                                <h:outputText value="#{reclaGec.sede}"/>
+                            </p:column>                              
                             <p:column headerText="Reclassified Bussiness unit" sortBy="#{reclaGec.unidadNegocioR}">                                
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{reclaGec.unidadNegocioR}"/></f:facet>
